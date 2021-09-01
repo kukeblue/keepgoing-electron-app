@@ -1,0 +1,92 @@
+{
+    "name": "my-electron-app",
+    "version": "0.1.0",
+    "description": "My Electron app",
+    "main": "dist/main.js",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w",
+        "start": "electron ./dist/electron/main.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "package": "electron-builder",
+        "afterSign": "scripts/notarize.js"
+    },
+    "build": {
+        "productName": "chepp",
+        "appId": "com.chepp.kukechen",
+        "copyright": "kukechen",
+        "directories": {
+            "output": "build"
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowElevation": true,
+            "allowToChangeInstallationDirectory": true,
+            "installerIcon": "./build/icons/icon.jpg",
+            "uninstallerIcon": "./build/icons/icon.jpg",
+            "installerHeaderIcon": "./build/icons/icon.jpg",
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "chepp"
+        },
+        "publish": [
+            {
+                "provider": "github",
+                "url": "https://github.com/kukeblue/electron-project-template"
+            }
+        ],
+        "files": [
+            "dist",
+            "html",
+            "package.json"
+        ],
+        "dmg": {
+            "contents": [
+                {
+                    "x": 410,
+                    "y": 150,
+                    "type": "link",
+                    "path": "/Applications"
+                },
+                {
+                    "x": 130,
+                    "y": 150,
+                    "type": "file"
+                }
+            ]
+        },
+        "mac": {
+            "icon": "./build/icons/icon.jpg",
+            "gatekeeperAssess": false,
+            "identity": "Shanghai Shucai Network Technology Co., Ltd.",
+            "hardenedRuntime": true,
+            "entitlements": "scripts/entitlements.mac.plist",
+            "entitlementsInherit": "scripts/entitlements.mac.plist"
+        },
+        "win": {
+            "icon": "./build/icons/icon.jpg",
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "ia32"
+                    ]
+                }
+            ]
+        },
+        "linux": {
+            "icon": "build/icons"
+        }
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^12.0.8",
+        "electron-builder": "^22.10.5",
+        "webpack": "^5.38.1",
+        "webpack-cli": "^4.7.0"
+    },
+    "dependencies": {},
+    "config": {}
+}
