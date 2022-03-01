@@ -18,7 +18,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://123.60.0.46:8080',
+                target: 'http://localhost:3000',
                 changeOrigin: true,
                 pathRewrite: { '^/api': '/api' }
             }
@@ -81,9 +81,10 @@ module.exports = {
         ]
     },
     plugins: [
-        new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
         new HTMLWebpackPlugin({
-            template: path.join(SRC_DIRECTORY, 'index.html')
+            template: path.join(SRC_DIRECTORY, 'index.html'),
+            favicon: "./src/favicon.ico"
         }),
         new MiniCssExtractPlugin()
     ],

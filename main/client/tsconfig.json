@@ -14,5 +14,8 @@
         "strict": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-    }
+    },
+    "include": [
+        "src" //文件路径
+    ]
 }

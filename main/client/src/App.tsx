@@ -1,4 +1,5 @@
 import React from "react";
+import { ChUtils } from 'ch-ui'
 import Layout from './layout/index'
 import './index.less'
 import {
@@ -6,24 +7,51 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-import loadable from "@loadable/component";
-import Home from "./page/home";
+import Account from "./page/account";
+import Task from "./page/task";
+import Log from "./page/log";
+import Device from "./page/device";
+import Report from "./page/report";
+import {ConfigProvider} from "antd";
+ChUtils.Ajax.RequestConfig.config = {
+    headers: {
+        'Content-Type': 'application/json',
+    }
+}
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
-const HomePage = loadable(() => import('./page/home'), {
-    fallback: <Home></Home>
-})
+// const AccountPage = loadable(() => import('./page/account'), {
+//     fallback: <Account />
+// })
+// const DevicePage = loadable(() => import('./page/device'), {
+//     fallback:
+// })
 
 export function App() {
     return (
-        <Router>
-            <Layout>
-                <Switch>
-                    <Route path="/">
-                        <HomePage />
-                    </Route>
-                </Switch>
-            </Layout>
-        </Router>
+        <ConfigProvider locale={zh_CN}>
+            <Router>
+                <Layout>
+                    <Switch>
+                        <Route path="/account">
+                            <Account />
+                        </Route>
+                        <Route path="/device">
+                            <Device />
+                        </Route>
+                        <Route path="/task">
+                            <Task />
+                        </Route>
+                        <Route path="/log">
+                            <Log />
+                        </Route>
+                        <Route path="/report">
+                            <Report />
+                        </Route>
+                    </Switch>
+                </Layout>
+            </Router>
+        </ConfigProvider>
     );
 }
 
