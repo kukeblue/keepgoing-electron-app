@@ -53,8 +53,8 @@ function Header() {
             <Breadcrumb>
                 {
                     paths.map((item, index)=>{
-                        return  <Breadcrumb.Item>
-                            {routerConfigMap[item].text}{index + 1 < pathCount ? "/" : ""}
+                        return routerConfigMap[item] && <Breadcrumb.Item key={item}>
+                            {routerConfigMap[item] && routerConfigMap[item].text}{index + 1 < pathCount ? "/" : ""}
                         </Breadcrumb.Item>
                     })
                 }
@@ -74,7 +74,15 @@ function Layout(props: LayoutProps) {
     const history = useHistory()
     const sider = {
         currentItem: 1,
-        siderItems: [{
+        siderItems: [
+            {
+                text: '控制面板',
+                icon: <ContactsOutlined style={{ fontSize: 24 }} />,
+                click: () => {
+                    history.push('/')
+                },
+            },
+            {
                 text: '账号管理',
                 icon: <ContactsOutlined style={{ fontSize: 24 }} />,
                 click: () => {

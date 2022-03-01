@@ -13,6 +13,7 @@
         }
     },
     "include": [
+        "main/client/tsconfig.json",
         "main/electron/*"
     ]
 }

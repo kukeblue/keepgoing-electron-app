@@ -1,18 +1,33 @@
 import {Button, DatePicker, Dropdown, Menu, message} from 'antd';
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import './index.less'
 import {DownOutlined} from '@ant-design/icons';
 import {ChTablePanel, ChUtils, FormItemType} from "ch-ui";
 import {TTask} from "../../typing";
 import ChDatePicker from "../../components/ChDatePicker";
-
+import moment from 'moment'
 const { useOptionFormListHook } = ChUtils.chHooks
 const request = ChUtils.Ajax.request
+
+const taskTypeOptions = [
+    {
+        label: '主线打图',
+        value: '主线打图'
+    },{
+        label: '主线抓鬼',
+        value: '主线抓鬼'
+    },{
+        label: '主线封妖',
+        value: '主线封妖'
+    }
+]
+
 function task() {
     const pageStore = useTaskPageStore()
-    return <div className='task'>
+    return <div className='task page'>
         <ChTablePanel
             actions={[{
+                loading: pageStore.syncIncomeLoading,
                 type: 'primary',
                 text: '同步收益',
                 onClick: ()=>{pageStore.syncIncome()}
@@ -21,8 +36,27 @@ function task() {
                 {
                     label: '任务日期',
                     name: 'date',
+                    initialValue: moment().format('YYYY-MM-DD'),
                     type: FormItemType.date,
                     layout: {
+                        span:4
+                    }
+                },{
+                    label: '任务类型',
+                    name: 'name',
+                    type: FormItemType.select,
+                    options: taskTypeOptions,
+                    layout: {
+                        offset:1,
+                        span:4
+                    }
+                },{
+                    label: '设备',
+                    name: 'deviceId',
+                    type: FormItemType.select,
+                    options: pageStore.deviceOptions,
+                    layout: {
+                        offset:1,
                         span:4
                     }
                 }
@@ -33,73 +67,79 @@ function task() {
                     title: '任务日期',
                     dataIndex: 'date',
                     key: 'date',
+                    render: (v)=><div style={{width: '100px'}}>{v}</div>
                 },
                 {
                     title: '任务编号',
                     dataIndex: 'taskNo',
                     key: 'taskNo',
+                    render: (v)=><div style={{width: '100px'}}>{v}</div>
                 },
                 {
                     title: '任务名称',
                     dataIndex: 'name',
                     key: 'name',
+                    render: (v)=><div style={{width: '100px'}}>{v}</div>
                 },
                 {
                     title: '设备',
                     dataIndex: 'deviceId',
                     key: 'deviceId',
-                    render:(v)=><div>{pageStore.deviceMap[v].name}</div>
+                    render:(v)=><div style={{width: '100px'}}>{pageStore.deviceMap[v].name}</div>
                 },
                 {
                     title: '角色',
                     dataIndex: 'accountId',
                     key: 'accountId',
-                    render:(v)=><div>{pageStore.accountMap[v] && pageStore.accountMap[v].name}</div>
+                    render:(v)=><div style={{width: '100px'}}>{pageStore.accountMap[v] && pageStore.accountMap[v].name}</div>
                 },
-                {
-                    title: '开始时间',
-                    dataIndex: 'startTime',
-                    key: 'startTime',
-                    render: (_, o)=> <div>{!o.startTime ? "" : ChUtils.chFormats.formatDate(o.startTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
-                },
-                {
-                    title: '结束时间',
-                    dataIndex: 'endTime',
-                    key: 'endTime',
-                    render: (_, o)=> <div>{!o.endTime ? "" : ChUtils.chFormats.formatDate(o.endTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
-                },
-                {
-                    title: '最后更新时间',
-                    dataIndex: 'updateTime',
-                    key: 'updateTime',
-                    render: (_, o)=> <div>{!o.updateTime ? "" : ChUtils.chFormats.formatDate(o.updateTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
-                },
+                // {
+                //     title: '开始时间',
+                //     dataIndex: 'startTime',
+                //     key: 'startTime',
+                //     render: (_, o)=> <div style={{width: '100px'}}>{!o.startTime ? "" : ChUtils.chFormats.formatDate(o.startTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
+                // },
+                // {
+                //     title: '结束时间',
+                //     dataIndex: 'endTime',
+                //     key: 'endTime',
+                //     render: (_, o)=> <div style={{width: '100px'}}>{!o.endTime ? "" : ChUtils.chFormats.formatDate(o.endTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
+                // },
+                // {
+                //     title: '最后更新时间',
+                //     dataIndex: 'updateTime',
+                //     key: 'updateTime',
+                //     render: (_, o)=> <div style={{width: '100px'}}>{!o.updateTime ? "" : ChUtils.chFormats.formatDate(o.updateTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
+                // },
                 {
                     title: '状态',
                     dataIndex: 'status',
                     key: 'status',
+                    render: (v)=><div style={{width: '80px'}}>{v}</div>
                 },
                 {
                     title: '任务次数',
                     dataIndex: 'taskCount',
                     key: 'taskCount',
+                    render: (v)=><div style={{width: '80px'}}>{v}</div>
                 },
                 {
                     title: '预计收入',
                     dataIndex: 'income',
                     key: 'income',
+                    render: (v)=><div style={{width: '80px'}}>{v}</div>
                 },
-                {
-                    title: '任务日志',
-                    dataIndex: 'note',
-                    key: 'note',
-                },
+                // {
+                //     title: '任务日志',
+                //     dataIndex: 'note',
+                //     key: 'note',
+                // },
                 {
                     title: '操作',
                     dataIndex: 'option',
                     key: 'option',
                     render: (_, task: TTask)=>{
-                        return <div>
+                        return <div style={{width: '120px'}}>
                             {/*<Button type='link'>任务记录</Button>*/}
                             <Dropdown overlay={
                                 <Menu>
@@ -128,12 +168,7 @@ function task() {
                     label: '任务类型',
                     name: 'name',
                     key: 'name',
-                    options: [
-                        {
-                            label: '主线打图',
-                            value: '主线打图'
-                        }
-                    ]
+                    options: taskTypeOptions
                 },
                 {
                     type: FormItemType.select,
@@ -154,6 +189,7 @@ function task() {
 }
 
 function useTaskPageStore() {
+    const [syncIncomeLoading, setSyncIncomeLoading] = useState(false)
     const {optionsMap: accountMap, options: accountOptions} = useOptionFormListHook({url: '/api/game_account/get_game_account_options', query: {}})
     const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
     const tableRef = useRef<{
@@ -176,12 +212,14 @@ function useTaskPageStore() {
         })
     }
     const syncIncome = function() {
+        setSyncIncomeLoading(true)
         request({
             url: '/api/task/calculate_income',
             data: {},
             method: "get"
         }).then(res=>{
             if(res.status === 0) {
+                setSyncIncomeLoading(false)
                 message.success('同步收益成功！')
             }
         })
@@ -199,6 +237,8 @@ function useTaskPageStore() {
             if(res.status === 0) {
                 message.success('任务执行成功')
                 tableRef.current!.reload()
+            }else{
+                message.error(res.message || '未知错误')
             }
         })
     }
@@ -211,7 +251,9 @@ function useTaskPageStore() {
         accountMap,
         deviceMap,
         accountOptions,
-        deviceOptions
+        deviceOptions,
+        syncIncomeLoading,
+        setSyncIncomeLoading,
     }
 }
 

@@ -1,4 +1,4 @@
-import {Button, Dropdown, Menu, message, Modal} from 'antd';
+import {Button, Dropdown, Menu, message, Modal, Badge} from 'antd';
 import React, {useRef, useState} from "react";
 import './index.less'
 import {ChForm, ChTablePanel, FormItemType, ChUtils} from "ch-ui";
@@ -10,7 +10,7 @@ const request = ChUtils.Ajax.request
 
 function Device() {
     const pageStore = useDevicePageStore()
-    return <div className='device'>
+    return <div className='device page'>
         <ChTablePanel
             ref={pageStore.tableRef}
             disablePagination
@@ -19,6 +19,27 @@ function Device() {
                     title: '名称',
                     dataIndex: 'name',
                     key: 'name',
+                    render: (name, ob)=>{
+                        return  <div style={{width: '120px'}}>
+                            <Dropdown trigger={['click']} overlay={
+                                <Menu>
+                                    <Menu.Item>
+                                        <Button onClick={()=>pageStore.handleClickLinkDevice(ob)} type='link'> 连接设备 </Button>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <Button type='link'>停止进行的任务</Button>
+                                    </Menu.Item>
+                                </Menu>
+                            }>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                    <div style={{width: '150px'}}>{ob.status === '任务中'? <Badge status="success"/>: <Badge status="default"/>}
+                                        {name}
+                                    </div>
+                                </a>
+                            </Dropdown>
+                        </div>
+                    },
+                    fixed: true,
                 },
                 {
                     title: 'IMEI',
@@ -40,54 +61,30 @@ function Device() {
                     title: '品牌',
                     dataIndex: 'brand',
                     key: 'brand',
+                    render:(brand:string)=><div style={{width: '120px'}}>{brand}</div>
                 },
-                {
-                    title: '机器人',
-                    dataIndex: 'robotName',
-                    key: 'robotName',
-                },
-                {
-                    title: '机器人ID',
-                    dataIndex: 'robotId',
-                    key: 'robotId',
-                },
-                {
-                    title: '机器人是否在线',
-                    dataIndex: 'online',
-                    key: 'online',
-                    render: (online, ob)=> <div>{ob.online ? '在线': '离线'}</div>
-                },
+                // {
+                //     title: '机器人',
+                //     dataIndex: 'robotName',
+                //     key: 'robotName',
+                // },
+                // {
+                //     title: '机器人ID',
+                //     dataIndex: 'robotId',
+                //     key: 'robotId',
+                // },
+                // {
+                //     title: '机器人是否在线',
+                //     dataIndex: 'online',
+                //     key: 'online',
+                //     render: (online, ob)=> <div>{ob.online ? '在线': '离线'}</div>
+                // },
                 {
                     title: '状态',
                     dataIndex: 'status',
                     key: 'status',
+                    render:(status:string)=><div style={{width: '120px'}}>{status}</div>
                 },
-                {
-                    title: '操作',
-                    dataIndex: 'option',
-                    key: 'option',
-                    render: (_, ob: TDevice)=>{
-                        return <div>
-                            <Dropdown overlay={
-                                <Menu>
-                                    <Menu.Item>
-                                        <Button onClick={()=>pageStore.handleClickLinkDevice(ob)} type='link'> 连接设备 </Button>
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                        <Button type='link'> 暂停脚本 </Button>
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                        <Button type='link'> 终止脚本 </Button>
-                                    </Menu.Item>
-                                </Menu>
-                            }>
-                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                    脚本操作<DownOutlined />
-                                </a>
-                            </Dropdown>
-                        </div>
-                    }
-                }
             ]}
             url='/api/device/get_device_page'
             urlAdd='/api/device/save_device'

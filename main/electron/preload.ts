@@ -7,7 +7,4 @@ window.addEventListener("DOMContentLoaded", () => {
     ipcRenderer.on(resourcePaths.MESSAGE_INIT_REPLY, (event, arg) => {
         console.log(arg)
     })
-    //   document.getElementById('button').onclick = function() {
-    //     console.log('button');
-    //   }
 });

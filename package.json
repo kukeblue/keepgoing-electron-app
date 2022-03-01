@@ -2,7 +2,7 @@
     "name": "my-electron-app",
     "version": "0.1.0",
     "description": "My Electron app",
-    "main": "dist/main.js",
+    "main": "dist/electron/main.js",
     "scripts": {
         "build": "tsc",
         "watch": "tsc -w",
@@ -22,9 +22,9 @@
             "oneClick": false,
             "allowElevation": true,
             "allowToChangeInstallationDirectory": true,
-            "installerIcon": "./build/icons/icon.jpg",
-            "uninstallerIcon": "./build/icons/icon.jpg",
-            "installerHeaderIcon": "./build/icons/icon.jpg",
+            "installerIcon": "./dist/electron/public/icons/favicon.png",
+            "uninstallerIcon": "./dist/electron/public/icons/favicon.png",
+            "installerHeaderIcon": "./dist/electron/public/icons/favicon.png",
             "createDesktopShortcut": true,
             "createStartMenuShortcut": true,
             "shortcutName": "chepp"
@@ -56,7 +56,7 @@
             ]
         },
         "mac": {
-            "icon": "./build/icons/icon.jpg",
+            "icon": "./dist/electron/public/icons/icon.png",
             "gatekeeperAssess": false,
             "identity": "Shanghai Shucai Network Technology Co., Ltd.",
             "hardenedRuntime": true,
@@ -64,7 +64,7 @@
             "entitlementsInherit": "scripts/entitlements.mac.plist"
         },
         "win": {
-            "icon": "./build/icons/icon.jpg",
+            "icon": "./public/icons/icon.png",
             "target": [
                 {
                     "target": "nsis",
@@ -75,7 +75,7 @@
             ]
         },
         "linux": {
-            "icon": "build/icons"
+            "icon": "public/icons"
         }
     },
     "keywords": [],
@@ -87,6 +87,8 @@
         "webpack": "^5.38.1",
         "webpack-cli": "^4.7.0"
     },
-    "dependencies": {},
+    "dependencies": {
+        "moment": "^2.29.1"
+    },
     "config": {}
 }

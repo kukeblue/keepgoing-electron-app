@@ -12,12 +12,17 @@ import Task from "./page/task";
 import Log from "./page/log";
 import Device from "./page/device";
 import Report from "./page/report";
+import Home from "./page/home";
 import {ConfigProvider} from "antd";
+
+
 ChUtils.Ajax.RequestConfig.config = {
+    baseURL: 'http://103.100.210.203:3000',
     headers: {
         'Content-Type': 'application/json',
     }
 }
+
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
 // const AccountPage = loadable(() => import('./page/account'), {
@@ -47,6 +52,9 @@ export function App() {
                         </Route>
                         <Route path="/report">
                             <Report />
+                        </Route>
+                        <Route path="/">
+                            <Home/>
                         </Route>
                     </Switch>
                 </Layout>

@@ -7,6 +7,7 @@ let mainWindow: Electron.BrowserWindow;
 function createWindow(): void {
     // Create the browser window.
     mainWindow = new BrowserWindow({
+        icon: path.join(__dirname, 'public/icon/favicon.ico'),
         height: 800,
         webPreferences: {
             // nodeIntegration: true,
@@ -18,7 +19,6 @@ function createWindow(): void {
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, '../html/index.html'));
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {
         // Dereference the window object, usually you would store windows
