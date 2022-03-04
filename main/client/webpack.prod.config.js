@@ -4,6 +4,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const ROOT_DIRECTORY = path.join(__dirname)
 const SRC_DIRECTORY = path.join(ROOT_DIRECTORY, 'src')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack')
 
 module.exports = {
     mode: 'production',
@@ -68,7 +69,12 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            APP_ENV:  JSON.stringify('prod'),
+            VERSION: JSON.stringify('5fa3b9'),
+        }),
         new HTMLWebpackPlugin({
+
             template: path.join(SRC_DIRECTORY, 'index.html')
         }),
         new MiniCssExtractPlugin()

@@ -46,9 +46,9 @@ function Log() {
     )
     return <div className='home'>
         <audio id="tip">
-            <source src="//blackhole9527.oss-cn-zhangjiakou.aliyuncs.com/7xmeu-6d9ll.mp3"/>
-            <source  src="//blackhole9527.oss-cn-zhangjiakou.aliyuncs.com/7xmeu-6d9ll.mp3"/>
-            <embed height="50" width="100" src="//blackhole9527.oss-cn-zhangjiakou.aliyuncs.com/7xmeu-6d9ll.mp3"/>
+            <source src="https://blackhole9527.oss-cn-zhangjiakou.aliyuncs.com/7xmeu-6d9ll.mp3"/>
+            <source  src="https://blackhole9527.oss-cn-zhangjiakou.aliyuncs.com/7xmeu-6d9ll.mp3"/>
+            <embed height="50" width="100" src="https://blackhole9527.oss-cn-zhangjiakou.aliyuncs.com/7xmeu-6d9ll.mp3                                             "/>
         </audio>
 
         <ChTablePanel

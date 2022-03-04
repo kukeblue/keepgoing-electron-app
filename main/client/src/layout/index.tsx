@@ -3,7 +3,7 @@ import { UserStore } from "../store/userStore"
 import './index.less'
 import { ChLayout } from 'ch-ui'
 import { Breadcrumb } from 'antd';
-import image_robot from '../assets/images/robot.png';
+import image_robot from '../assets/images/icon.jpg';
 
 
 import {
@@ -119,7 +119,7 @@ function Layout(props: LayoutProps) {
             }
         ]
     }
-    return <ChLayout header={<Header/>} adminIcon={<img style={{width: '60px', height: 'auto'}} src={image_robot}/>} sider={sider}>
+    return <ChLayout header={<Header/>} adminIcon={<img style={{borderRadius: '50%' ,width: '60px', height: 'auto'}} src={image_robot}/>} sider={sider}>
         <div className='app-content'>
             {props.children}
         </div>

@@ -15,9 +15,13 @@ import Report from "./page/report";
 import Home from "./page/home";
 import {ConfigProvider} from "antd";
 
-
+// @ts-ignore
+const env = APP_ENV
+// @ts-ignore
+console.log('Running App version ' + APP_ENV);
 ChUtils.Ajax.RequestConfig.config = {
-    baseURL: 'http://103.100.210.203:3000',
+    // @ts-ignore
+    baseURL: env === 'dev' ? 'http://103.100.210.203:3000' : 'http://103.100.210.203:3000',
     headers: {
         'Content-Type': 'application/json',
     }

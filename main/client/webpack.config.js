@@ -1,6 +1,7 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require('webpack')
 const ROOT_DIRECTORY = path.join(__dirname)
 const SRC_DIRECTORY = path.join(ROOT_DIRECTORY, 'src')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -18,7 +19,8 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://localhost:3000',
+                // target: 'http://103.100.210.203:3000',
+                target: 'http://127.0.0.1:3000',
                 changeOrigin: true,
                 pathRewrite: { '^/api': '/api' }
             }
@@ -82,7 +84,12 @@ module.exports = {
     },
     plugins: [
         // new BundleAnalyzerPlugin(),
+        new webpack.DefinePlugin({
+            APP_ENV: JSON.stringify('dev'),
+            VERSION: JSON.stringify('5fa3b9'),
+        }),
         new HTMLWebpackPlugin({
+
             template: path.join(SRC_DIRECTORY, 'index.html'),
             favicon: "./src/favicon.ico"
         }),

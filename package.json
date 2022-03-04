@@ -12,7 +12,7 @@
         "afterSign": "scripts/notarize.js"
     },
     "build": {
-        "productName": "chepp",
+        "productName": "乾坤辅助",
         "appId": "com.chepp.kukechen",
         "copyright": "kukechen",
         "directories": {
@@ -22,9 +22,9 @@
             "oneClick": false,
             "allowElevation": true,
             "allowToChangeInstallationDirectory": true,
-            "installerIcon": "./dist/electron/public/icons/favicon.png",
-            "uninstallerIcon": "./dist/electron/public/icons/favicon.png",
-            "installerHeaderIcon": "./dist/electron/public/icons/favicon.png",
+            "installerIcon": "./build/icons/icon.jpg",
+            "uninstallerIcon": "./build/icons/icon.jpg",
+            "installerHeaderIcon": "./build/icons/icon.jpg",
             "createDesktopShortcut": true,
             "createStartMenuShortcut": true,
             "shortcutName": "chepp"
@@ -56,7 +56,7 @@
             ]
         },
         "mac": {
-            "icon": "./dist/electron/public/icons/icon.png",
+            "icon": "./build/icons/icon.jpg",
             "gatekeeperAssess": false,
             "identity": "Shanghai Shucai Network Technology Co., Ltd.",
             "hardenedRuntime": true,
@@ -64,7 +64,7 @@
             "entitlementsInherit": "scripts/entitlements.mac.plist"
         },
         "win": {
-            "icon": "./public/icons/icon.png",
+            "icon": "./build/icons/icon.jpg",
             "target": [
                 {
                     "target": "nsis",
@@ -75,7 +75,7 @@
             ]
         },
         "linux": {
-            "icon": "public/icons"
+            "icon": "build/icons"
         }
     },
     "keywords": [],

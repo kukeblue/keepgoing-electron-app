@@ -149,6 +149,14 @@ function task() {
                                     <Menu.Item>
                                         <Button onClick={()=>{pageStore.stopTask(task)}} type='link'> 停止任务 </Button>
                                     </Menu.Item>
+                                    <Menu.Item>
+                                        <Button onClick={()=>{
+                                            const ip = pageStore.deviceMap[task.deviceId].ip
+                                            const owurl = `http://vnc.kukechen.top/vnc.html?host=${ip}&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
+                                            const tmp:any = window.open(owurl, "",  'height=360, width=740, top=0, left=0')
+                                            tmp.focus();
+                                        }} type='link'> 连接设备 </Button>
+                                    </Menu.Item>
                                 </Menu>
                             }>
                                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
