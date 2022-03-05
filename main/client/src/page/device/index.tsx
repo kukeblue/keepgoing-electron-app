@@ -147,7 +147,6 @@ function Device() {
             {/*    <div>{pageStore.currentPhoneUrl}</div>*/}
             {/*</div>*/}
         </div>
-
     </div>
 }
 
