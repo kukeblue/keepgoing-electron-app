@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
+const electronReload = require('electron-reload')
 import * as path from 'path';
 import MessageHadle from './messageHandle'
-
 let mainWindow: Electron.BrowserWindow;
 
 function createWindow(): void {

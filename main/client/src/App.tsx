@@ -29,12 +29,6 @@ ChUtils.Ajax.RequestConfig.config = {
 
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
-// const AccountPage = loadable(() => import('./page/account'), {
-//     fallback: <Account />
-// })
-// const DevicePage = loadable(() => import('./page/device'), {
-//     fallback:
-// })
 
 export function App() {
     return (

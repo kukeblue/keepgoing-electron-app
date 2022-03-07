@@ -45,11 +45,12 @@ function usePageStore() {
                 const device: TDevice = deviceMap[res.deviceId]
                 handleClickLinkDevice(device)
                 setShowSelectDeviceModal(false)
+                message.success('导入将军令中，请稍后...')
                 setTimeout(()=>{
-                    const ret = getJiangjunCode({})
-                    if(ret && ret.code) {
-                        setCode(ret.code)
-                    }
+                    // const ret = getJiangjunCode({})
+                    // if(ret && ret.code) {
+                    //     setCode(ret.code)
+                    // }
                 }, 5000)
             }
         })
@@ -79,22 +80,22 @@ function Home() {
             <div className='flex-row-center'>
                 <div>
                     <div className='flex-row-center m-b-20'>
-                        <Button  type={"primary"} onClick={()=>{
+                        <Button className='fs-12' size="small" type={"primary"} onClick={()=>{
                             pageStore.setShowSelectDeviceModal(true)
-                        }}>获取将军令</Button>
-                        <Button className={'m-l-20'} type={"primary"} onClick={()=>{
-                            pageStore.logAllAccount(1)
-                        }}>一件启动1号队伍</Button>
-                        <Button className={'m-l-20'} type={"primary"} onClick={()=>{
-                            pageStore.logAllAccount(2)
-                        }}>一件启动2号队伍</Button>
+                        }}>导入将军令</Button>
+                        {/*<Button className={'m-l-20'} type={"primary"} onClick={()=>{*/}
+                        {/*    pageStore.logAllAccount(1)*/}
+                        {/*}}>一件启动1号队伍</Button>*/}
+                        {/*<Button className={'m-l-20'} type={"primary"} onClick={()=>{*/}
+                        {/*    pageStore.logAllAccount(2)*/}
+                        {/*}}>一件启动2号队伍</Button>*/}
                     </div>
                     <div className='home-device-preview'>
                         <div className='home-device-body'>
                             <iframe frameBorder={0} id='appBody' width='100%' height='100%' src={pageStore.currentPhoneUrl}/>
                         </div>
                         <Button  onClick={()=>{pageStore.setCurrentPhoneUrl(''); message.success('关闭成功')}} className='m-t-20'>关闭将军手机连接</Button>
-                        <div>{pageStore.currentPhoneUrl}</div>
+                        {/*<div>{pageStore.currentPhoneUrl}</div>*/}
                     </div>
                 </div>
             </div>
@@ -104,7 +105,7 @@ function Home() {
                 </div>
             </Modal>
         </div>
-        <div className='home-feature'></div>
+        <div className='home-feature'>开发中...</div>
     </div>
 }
 

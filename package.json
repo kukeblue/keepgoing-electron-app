@@ -31,8 +31,7 @@
             "createStartMenuShortcut": true,
             "shortcutName": "chepp"
         },
-        "publish": [
-        ],
+        "publish": [],
         "files": [
             "dist",
             "html",
@@ -56,6 +55,7 @@
     "devDependencies": {
         "electron": "^12.0.8",
         "electron-builder": "^22.10.5",
+        "electron-reload": "^2.0.0-alpha.1",
         "webpack": "^5.38.1",
         "webpack-cli": "^4.7.0"
     },
