@@ -121,13 +121,13 @@ function task() {
                     title: '任务次数',
                     dataIndex: 'taskCount',
                     key: 'taskCount',
-                    render: (v)=><div style={{width: '80px'}}>{v}</div>
+                    render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
                 },
                 {
                     title: '预计收入',
                     dataIndex: 'income',
                     key: 'income',
-                    render: (v)=><div style={{width: '80px'}}>{v}</div>
+                    render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
                 },
                 // {
                 //     title: '任务日志',
@@ -138,7 +138,7 @@ function task() {
                     title: '操作',
                     dataIndex: 'option',
                     key: 'option',
-                    render: (_, task: TTask)=>{
+                    render: (_: any, task: TTask)=>{
                         return <div style={{width: '120px'}}>
                             {/*<Button type='link'>任务记录</Button>*/}
                             <Dropdown overlay={
@@ -212,7 +212,7 @@ function useTaskPageStore() {
                 accountId: item.accountId,
             },
             method: "post"
-        }).then(res=>{
+        }).then((res: { status: number; })=>{
             if(res.status === 0) {
                 message.success('任务停止成功')
                 tableRef.current!.reload()
@@ -225,7 +225,7 @@ function useTaskPageStore() {
             url: '/api/task/calculate_income',
             data: {},
             method: "get"
-        }).then(res=>{
+        }).then((res: { status: number; })=>{
             if(res.status === 0) {
                 setSyncIncomeLoading(false)
                 message.success('同步收益成功！')
@@ -241,7 +241,7 @@ function useTaskPageStore() {
                 accountId: item.accountId,
             },
             method: "post"
-        }).then(res=>{
+        }).then((res:any)=>{
             if(res.status === 0) {
                 message.success('任务执行成功')
                 tableRef.current!.reload()

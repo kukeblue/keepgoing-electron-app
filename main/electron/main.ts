@@ -7,6 +7,8 @@ let mainWindow: Electron.BrowserWindow;
 function createWindow(): void {
     // Create the browser window.
     mainWindow = new BrowserWindow({
+        x: 0,
+        y: 0,
         icon: path.join(__dirname, 'public/icon/favicon.ico'),
         height: 800,
         webPreferences: {
