@@ -4,7 +4,6 @@ import baiduApi
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
 
-
 def writeText(text):
     if text == 'ch.1993.com':
         writeText('ch')

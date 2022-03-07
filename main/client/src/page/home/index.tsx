@@ -4,23 +4,38 @@ import {TDevice} from "../../typing";
 import "./index.less";
 import {ChForm, ChUtils, FormItemType} from "ch-ui";
 import {useForm} from "antd/es/form/Form";
-import {doStartGame, getJiangjunCode} from "../../call";
+import {doStartGame, doTest, getJiangjunCode} from "../../call";
+import {
+    ScanOutlined,
+    InsertRowBelowOutlined,
+    CloseCircleOutlined,
+    ToolOutlined
+} from '@ant-design/icons';
+
+type TPanelTask = 'test' | 'login' | ''
+
 const { useOptionFormListHook } = ChUtils.chHooks
 
 function usePageStore() {
     const [formRef] = useForm()
+    const [isTasking, setIsTasking] = useState<boolean>(false)
+    const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
     const [linkDeviceId, setLinkDeviceId] = useState<number|undefined>()
     const [showSelectDeviceModal, setShowSelectDeviceModal] = useState<boolean>(false)
     const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const handleClickPreviewDevice = (device: TDevice) => {
-        const owurl = `http://103.100.210.203:8888/vnc.html?host=192.168.8.120&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
+        const owurl = `http://103.100.210.203:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
     }
     const handleClickLinkDevice = (device: TDevice) => {
-        const owurl = `http://103.100.210.203:8888/vnc.html?host=${device.ip}&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
+        const owurl = `http://103.100.210.203:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
+        setTimeout(()=>{
+            // @ts-ignore
+            window.document.querySelector('.home-device-body').scrollTop = 64
+        }, 1000)
     }
     const logAllAccount = (type: number) => {
         setTimeout(()=>{
@@ -55,8 +70,23 @@ function usePageStore() {
             }
         })
     }
-
+    const handleTest = ()=>checkIsTasking(() => {
+        setCurrentTask('test')
+        setIsTasking(true)
+        doTest()
+    })
+    const checkIsTasking = (cb: Function) => {
+        if(!isTasking) {
+            cb()
+        }else {
+            message.warn('当前有任务进行中')
+        }
+    }
+    const getTaskLoading = (task: TPanelTask) => {
+        return isTasking && task === currentTask
+    }
     return {
+        isTasking,
         logAllAccount,
         handleClickPreviewDevice,
         formRef,
@@ -69,7 +99,9 @@ function usePageStore() {
         setShowSelectDeviceModal,
         currentPhoneUrl,
         setCurrentPhoneUrl,
-        code
+        code,
+        handleTest,
+        getTaskLoading
     }
 }
 
@@ -80,9 +112,11 @@ function Home() {
             <div className='flex-row-center'>
                 <div>
                     <div className='flex-row-center m-b-20'>
-                        <Button className='fs-12' size="small" type={"primary"} onClick={()=>{
+                        <Button icon={<ScanOutlined />} className='fs-12' size="small"  onClick={()=>{
                             pageStore.setShowSelectDeviceModal(true)
                         }}>导入将军令</Button>
+                        <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={()=>{pageStore.setCurrentPhoneUrl(''); message.success('关闭成功')}}>关闭连接</Button>
+                        {/*<div>{pageStore.currentPhoneUrl}</div>*/}
                         {/*<Button className={'m-l-20'} type={"primary"} onClick={()=>{*/}
                         {/*    pageStore.logAllAccount(1)*/}
                         {/*}}>一件启动1号队伍</Button>*/}
@@ -92,10 +126,11 @@ function Home() {
                     </div>
                     <div className='home-device-preview'>
                         <div className='home-device-body'>
-                            <iframe frameBorder={0} id='appBody' width='100%' height='100%' src={pageStore.currentPhoneUrl}/>
+                            <iframe frameBorder={0} id='appBody' src={pageStore.currentPhoneUrl}/>
                         </div>
-                        <Button  onClick={()=>{pageStore.setCurrentPhoneUrl(''); message.success('关闭成功')}} className='m-t-20'>关闭将军手机连接</Button>
-                        {/*<div>{pageStore.currentPhoneUrl}</div>*/}
+                    </div>
+                    <div className='home-log-panel'>
+                        <div>程序运行中,等待日志输入...</div>
                     </div>
                 </div>
             </div>
@@ -105,7 +140,17 @@ function Home() {
                 </div>
             </Modal>
         </div>
-        <div className='home-feature'>开发中...</div>
+        <div className='home-feature'>
+            <Row>
+                <Col>
+                    <Button type='primary' onClick={()=>{ pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
+                </Col>
+                <Col>
+                    <Button icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>一键起号</Button>
+                </Col>
+            </Row>
+
+        </div>
     </div>
 }
 

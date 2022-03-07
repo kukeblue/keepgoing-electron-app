@@ -14,10 +14,17 @@ const init = ()=>{
             status: 0
         }
     })
-
     ipcMain.on(resourcePaths.METHOD_LOGIN_GAME, (event, args: string[]) => {
         console.log('runPyScript getGameVerificationCode')
         const result = runPyScript('loginGame', args)
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    ipcMain.on(resourcePaths.METHOD_TEST, (event, args) => {
+        console.log('runPyScript 测试软件是否正常运行')
+        const result = runPyScript('test', args)
         event.returnValue = {
             code: result,
             status: 0

@@ -7,28 +7,38 @@
   height: 600px;
 }
 .device-preview {
-  //display: flex;
-  //align-items: center;
-  //justify-content: center;
-  //flex-direction: column;
+}
+.home-device-body::-webkit-scrollbar { width: 0 !important }
+.home-log-panel {
+  margin-top: 20px;
+  width: 280px;
+  height: 515px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  color: #666;
+  font-size: 12px;
 }
 .home-device-body {
-  width: 250px;
-  height: 500px;
+  background: #000;
+  width: 280px;
+  height: 70px;
+  border-radius: 10px;
   overflow: auto;
-  border: 1px solid #666;
-  border-radius: 20px;
-  overflow: hidden;
   iframe {
-    background: #fff;
-    border-radius: 20px;
+    border-radius: 10px;
+    width: 280px;
+    height: 520px;
+    background: #000;
   }
 }
 .home-feature {
   flex: 1;
-  margin-left: 30px;
+  margin-left: 20px;
   height:100%;
   //border-left: 1px solid #999;
   background: #fff;
   color: #eee;
+  border-radius: 5px;
+  padding: 10px;
 }
