@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { UserStore } from "../store/userStore"
 import './index.less'
 import { ChLayout } from 'ch-ui'
@@ -14,6 +14,7 @@ import {
     TransactionOutlined
 } from '@ant-design/icons';
 import {useHistory, useLocation} from "react-router-dom";
+import {MainThread} from "../call";
 interface LayoutProps {
     children: JSX.Element;
 }
@@ -71,6 +72,9 @@ function Header() {
 }
 
 function Layout(props: LayoutProps) {
+    useEffect(()=>{
+        MainThread.init()
+    }, [])
     const history = useHistory()
     const sider = {
         currentItem: 1,

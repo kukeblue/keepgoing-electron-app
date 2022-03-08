@@ -1,22 +1,26 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Col, message, Modal, Row} from 'antd'
 import {TDevice} from "../../typing";
 import "./index.less";
 import {ChForm, ChUtils, FormItemType} from "ch-ui";
 import {useForm} from "antd/es/form/Form";
-import {doStartGame, doTest, getJiangjunCode} from "../../call";
+import {doStartGame, doTest, MainThread} from "../../call";
 import {
     ScanOutlined,
     InsertRowBelowOutlined,
     CloseCircleOutlined,
-    ToolOutlined
+    ToolOutlined,
+    ClearOutlined
 } from '@ant-design/icons';
-
 type TPanelTask = 'test' | 'login' | ''
-
 const { useOptionFormListHook } = ChUtils.chHooks
 
 function usePageStore() {
+
+    useEffect(()=>{
+        MainThread.messageListener.pushLogHandles.push(handlePushLog)
+    }, [])
+    const [logs, setLogs] = useState<string[]>([])
     const [formRef] = useForm()
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
@@ -24,6 +28,9 @@ function usePageStore() {
     const [linkDeviceId, setLinkDeviceId] = useState<number|undefined>()
     const [showSelectDeviceModal, setShowSelectDeviceModal] = useState<boolean>(false)
     const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
+    const handlePushLog = (log: string) => {
+        setLogs((logs)=>[...logs, log])
+    }
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const handleClickPreviewDevice = (device: TDevice) => {
         const owurl = `http://103.100.210.203:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
@@ -79,6 +86,9 @@ function usePageStore() {
             setIsTasking(false)
         }
     })
+    const handleClearLog = () => {
+        setLogs([])
+    }
     const checkIsTasking = (cb: Function) => {
         if(!isTasking) {
             cb()
@@ -90,6 +100,7 @@ function usePageStore() {
         return isTasking && task === currentTask
     }
     return {
+        logs,
         isTasking,
         logAllAccount,
         handleClickPreviewDevice,
@@ -99,6 +110,7 @@ function usePageStore() {
         deviceOptions,
         handleClickLinkDevice,
         handleSelectJiangjunDevice,
+        handleClearLog,
         showSelectDeviceModal,
         setShowSelectDeviceModal,
         currentPhoneUrl,
@@ -120,6 +132,9 @@ function Home() {
                             pageStore.setShowSelectDeviceModal(true)
                         }}>导入将军令</Button>
                         <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={()=>{pageStore.setCurrentPhoneUrl(''); message.success('关闭成功')}}>关闭连接</Button>
+                        <Button icon={<ClearOutlined />} className='fs-12 m-l-5' size="small"  onClick={()=>{
+                            pageStore.handleClearLog()
+                        }}>清空日志</Button>
                         {/*<div>{pageStore.currentPhoneUrl}</div>*/}
 
                         {/*<Button className={'m-l-20'} type={"primary"} onClick={()=>{*/}
@@ -132,7 +147,9 @@ function Home() {
                         </div>
                     </div>
                     <div className='home-log-panel'>
-                        <div>程序运行中,等待日志输入...</div>
+                        {pageStore.logs.map((item: string, index: number)=>{
+                            return <div key={`_${index}`}>{item}</div>
+                        })}
                     </div>
                 </div>
             </div>

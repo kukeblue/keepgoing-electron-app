@@ -6,6 +6,7 @@ const resourcePaths = {
     METHOD_LOGIN_GAME: 'method_login_game',
     METHOD_LOGIN_GAME_REPLY: 'method_login_game_reply',
     METHOD_TEST: 'method_test',
+    MESSAGE_PUSH_LOG: 'message_push_log'
 }
 
 export default resourcePaths;
