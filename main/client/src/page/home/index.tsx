@@ -38,21 +38,21 @@ function usePageStore() {
         }, 1000)
     }
     const logAllAccount = (type: number) => {
+        message.success('启动成功')
         setTimeout(()=>{
             if(type === 1) {
-                const ret = doStartGame(['ch.1993.com', 'ch1993com2', 'ch1993com3', 'ch1993com4', 'ch1993com5'])
-                if(ret && ret.code) {
-                    setCode(ret.code)
+                const ret = doStartGame(['ch.1993.com'])
+                if(ret) {
+                    // setCode(ret.code)
                 }
             }
-            if(type === 1) {
+            if(type === 2) {
                 const ret = doStartGame(['ch1993com1', 'ch1993com6', 'ch1993com7', 'ch1993com8', 'mm1042061794'])
-                if(ret && ret.code) {
-                    setCode(ret.code)
+                if(ret) {
+                    // setCode(ret.code)
                 }
             }
-
-        }, 5000)
+        }, 1000)
     }
     const handleSelectJiangjunDevice = () => {
         formRef.validateFields().then((res: any) => {

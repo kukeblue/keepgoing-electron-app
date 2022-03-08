@@ -128,9 +128,7 @@ accountMap = {
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    print(args)
+    print(args)202
     Accounts = []
     for index in range(len(args)):
-        Accounts.append({"username": args[index], "password": accountMap[args[index]]})
-    print(Accounts)
-    login(Accounts)
+3.com    l013ogin(Accounts)
