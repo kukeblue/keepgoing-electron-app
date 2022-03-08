@@ -73,7 +73,11 @@ function usePageStore() {
     const handleTest = ()=>checkIsTasking(() => {
         setCurrentTask('test')
         setIsTasking(true)
-        doTest()
+        const res = doTest()
+        if(res.status == 0) {
+            message.success('连接成功')
+            setIsTasking(false)
+        }
     })
     const checkIsTasking = (cb: Function) => {
         if(!isTasking) {
@@ -117,9 +121,7 @@ function Home() {
                         }}>导入将军令</Button>
                         <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={()=>{pageStore.setCurrentPhoneUrl(''); message.success('关闭成功')}}>关闭连接</Button>
                         {/*<div>{pageStore.currentPhoneUrl}</div>*/}
-                        {/*<Button className={'m-l-20'} type={"primary"} onClick={()=>{*/}
-                        {/*    pageStore.logAllAccount(1)*/}
-                        {/*}}>一件启动1号队伍</Button>*/}
+
                         {/*<Button className={'m-l-20'} type={"primary"} onClick={()=>{*/}
                         {/*    pageStore.logAllAccount(2)*/}
                         {/*}}>一件启动2号队伍</Button>*/}
@@ -146,7 +148,7 @@ function Home() {
                     <Button type='primary' onClick={()=>{ pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
                 </Col>
                 <Col>
-                    <Button icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>一键起号</Button>
+                    <Button onClick={()=>{pageStore.logAllAccount(1)}} icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>一键起号</Button>
                 </Col>
             </Row>
 

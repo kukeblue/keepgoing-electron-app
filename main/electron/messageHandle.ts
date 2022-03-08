@@ -23,7 +23,7 @@ const init = ()=>{
         }
     })
     ipcMain.on(resourcePaths.METHOD_TEST, (event, args) => {
-        console.log('runPyScript 测试软件是否正常运行')
+        console.log('message handle: test')
         const result = runPyScript('test', args)
         event.returnValue = {
             code: result,
