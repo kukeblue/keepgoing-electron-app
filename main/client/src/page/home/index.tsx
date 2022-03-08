@@ -68,12 +68,12 @@ function usePageStore() {
                 handleClickLinkDevice(device)
                 setShowSelectDeviceModal(false)
                 message.success('导入将军令中，请稍后...')
-                setTimeout(()=>{
-                    // const ret = getJiangjunCode({})
-                    // if(ret && ret.code) {
-                    //     setCode(ret.code)
-                    // }
-                }, 5000)
+                // setTimeout(()=>{
+                //     const ret = getJiangjunCode({})
+                //     if(ret && ret.code) {
+                //         setCode(ret.code)
+                //     }
+                // }, 5000)
             }
         })
     }
