@@ -73,7 +73,9 @@ function Header() {
 
 function Layout(props: LayoutProps) {
     useEffect(()=>{
-        MainThread.init()
+        setTimeout(()=>{
+            MainThread.init()
+        }, 0)
     }, [])
     const history = useHistory()
     const sider = {

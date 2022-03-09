@@ -3,6 +3,8 @@ const electronReload = require('electron-reload')
 import * as path from 'path';
 import messageHandle from './messageHandle'
 import {listenLogs} from "./utils/logChangeHandle";
+import timer from "./timer"
+import MessageHandle from "./messageHandle";
 const fs = require("fs");
 let mainWindow: Electron.BrowserWindow;
 
@@ -27,6 +29,9 @@ function createWindow(): void {
         mainWindow = null;
     });
     messageHandle.init(mainWindow)
+    timer.initTimer({
+        secondCallbacks: [MessageHandle.messageSender.sendState]
+    })
     listenLogs('app.log')
 }
 

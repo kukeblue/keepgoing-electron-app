@@ -1,37 +1,40 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, message, Modal, Row} from 'antd'
+import {Button, Col, message, Modal, Row, Collapse, Popover} from 'antd'
 import {TDevice} from "../../typing";
 import "./index.less";
 import {ChForm, ChUtils, FormItemType} from "ch-ui";
 import {useForm} from "antd/es/form/Form";
-import {doStartGame, doTest, doTest2, MainThread} from "../../call";
+import {doKillProcess, doStartGame, doTest, doTest2, MainThread} from "../../call";
 import {
     ScanOutlined,
     InsertRowBelowOutlined,
     CloseCircleOutlined,
     ToolOutlined,
-    ClearOutlined
+    ClearOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
 type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook } = ChUtils.chHooks
 
 function usePageStore() {
-
     useEffect(()=>{
         MainThread.messageListener.pushLogHandles.push(handlePushLog)
+        MainThread.messageListener.pushStateHandles.push(handlePushState)
     }, [])
     const [logs, setLogs] = useState<string[]>([])
+    const [processState, setProcessState] = useState({
+        runningPyProcess: {}
+    })
     const [formRef] = useForm()
+    const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
     const [linkDeviceId, setLinkDeviceId] = useState<number|undefined>()
     const [showSelectDeviceModal, setShowSelectDeviceModal] = useState<boolean>(false)
     const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
-    const handlePushLog = (log: string) => {
-        setLogs((logs)=>[...logs, log])
-    }
-    const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
+    const handlePushLog = (log: string) => {setLogs((logs)=>[...logs, log])}
+    const handlePushState = (processState: any) => {setProcessState(processState)}
     const handleClickPreviewDevice = (device: TDevice) => {
         const owurl = `http://103.100.210.203:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
@@ -44,14 +47,9 @@ function usePageStore() {
             window.document.querySelector('.home-device-body').scrollTop = 64
         }, 1000)
     }
-    const logAllAccount = (type: number) => {
-        if(type === 1) {
-            doStartGame(['ch1993com5', 'ch.1993.com', 'ch1993com6', 'ch1993com8', 'ch1993com1'])
-            message.success('启动成功')
-        }else {
-            doStartGame(['ch1993com2', 'ch1993com3', 'ch1993com4', 'ch1993com7', 'mm1042061794'])
-            message.success('启动成功')
-        }
+    const handleKillProcess = (pid: string) => {
+        doKillProcess(pid)
+        message.success('操作成功')
     }
     const handleSelectJiangjunDevice = () => {
         formRef.validateFields().then((res: any) => {
@@ -100,7 +98,18 @@ function usePageStore() {
     const getTaskLoading = (task: TPanelTask) => {
         return isTasking && task === currentTask
     }
+    const logAllAccount = (type: number) => {
+        if(type === 1) {
+            doStartGame(['ch1993com5', 'ch.1993.com', 'ch1993com6', 'ch1993com8', 'ch1993com1'])
+            message.success('启动成功')
+        }else {
+            doStartGame(['ch1993com2', 'ch1993com3', 'ch1993com4', 'ch1993com7', 'mm1042061794'])
+            message.success('启动成功')
+        }
+    }
     return {
+        handleKillProcess,
+        processState,
         logs,
         isTasking,
         logAllAccount,
@@ -116,6 +125,7 @@ function usePageStore() {
         setShowSelectDeviceModal,
         currentPhoneUrl,
         setCurrentPhoneUrl,
+        setCode,
         code,
         handleTest,
         handleTest2,
@@ -125,6 +135,7 @@ function usePageStore() {
 
 function Home() {
     const pageStore = usePageStore()
+    const runningPyProcess = pageStore.processState.runningPyProcess || {}
     return <div className='flex home-page page'>
         <div className='login-game-area'>
             <div className='flex-row-center'>
@@ -149,6 +160,29 @@ function Home() {
                         </div>
                     </div>
                     <div className='home-log-panel'>
+                        <div className='home-log-panel-setting'>
+                            <Popover placement="bottom" title={'任务管理器'} content={
+                                <div style={{width: 300}}>
+                                    <p style={{color: '#666'}}>{Object.keys(runningPyProcess).length}进行中的python进程</p>
+                                    {Object.keys(runningPyProcess).map(key=>{
+                                        return <div key={key}  className='flex-between'>
+                                            <div>{key}</div>
+                                            <div>{
+                                                // @ts-ignore
+                                                runningPyProcess[key]
+                                            }</div>
+                                            <Button onClick={()=>pageStore.handleKillProcess(
+                                                    // @ts-ignore
+                                                    runningPyProcess[key]
+                                                )
+                                            } type={'link'}>结束进程</Button>
+                                        </div>
+                                    })}
+                                </div>
+                            } trigger="click">
+                                <SettingOutlined size={25}/>
+                            </Popover>
+                        </div>
                         {pageStore.logs.map((item: string, index: number)=>{
                             return <div key={`_${index}`}>{item}</div>
                         })}

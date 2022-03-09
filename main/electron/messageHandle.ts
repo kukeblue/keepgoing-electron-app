@@ -2,16 +2,20 @@ import {ipcMain } from 'electron';
 import resourcePaths from './resourcePaths'
 import {runPyScript, runPyScriptSync} from "./py/runPyScript";
 import {logger} from "./utils/logger";
-const fs = require('fs')
+import state from "./state";
 
 export let messageSender:{
     sendLog: Function
+    sendState: Function
 } = null
 
 function buildSender(mainWindow: Electron.BrowserWindow) {
     return {
         sendLog(log) {
             mainWindow.webContents.send(resourcePaths.MESSAGE_PUSH_LOG, log);
+        },
+        sendState() {
+            mainWindow.webContents.send(resourcePaths.MESSAGE_PUSH_MAIN_STATE, state);
         }
     }
 }
@@ -54,6 +58,14 @@ const init = (mainWindow: Electron.BrowserWindow)=>{
         const result = runPyScript('asyncTest', args)
         event.returnValue = {
             code: result,
+            status: 0
+        }
+    })
+    // 杀死进程
+    ipcMain.on(resourcePaths.METHOD_KILL_PROCESS, (event, args) => {
+        logger.info('run py script: ' + 'METHOD_KILL_PROCESS')
+        runPyScriptSync('killProcess', args)
+        event.returnValue = {
             status: 0
         }
     })

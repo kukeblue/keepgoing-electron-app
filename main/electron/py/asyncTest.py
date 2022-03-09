@@ -1,5 +1,6 @@
 import time
+import logUtil
 
 while True:
-    print('test2')
+    logUtil.chLog('test2')
     time.sleep(1)
