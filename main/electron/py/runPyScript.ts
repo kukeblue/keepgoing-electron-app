@@ -12,18 +12,21 @@ export function runPyScript(name, args=[]) {
     let argsStr = ''
     args.forEach((item, index)=> argsStr = argsStr + (index > 0 ? ' ' : '') + item)
     try {
-        const command = `python${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
+         const command = `python ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
+        logger.info(command)
          const pid = exec(command,  (error, stdout, stderr)=>{
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
             }
-            console.log(stderr.toString())
+            logger.info(stdout)
         })
-        runningProcess.push(pid)
+        if(pid) {
+            runningProcess.push(pid)
+        }
         return 0
     }catch (error) {
-        console.log(error.message)
+        logger.error('exec error runPyScript')
         return 0
     }
 }

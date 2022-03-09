@@ -1,4 +1,3 @@
-# coding:utf-8
 from aip import AipOcr
 
 APP_ID = '25713120'
