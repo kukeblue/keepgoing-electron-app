@@ -1,5 +1,5 @@
 // const exec = require('child_process').exec;
-import {exec} from "child_process";
+import {exec, spawn} from "child_process";
 import {logger} from "../utils/logger";
 
 const execSync = require('child_process').execSync;
@@ -12,21 +12,21 @@ export function runPyScript(name, args=[]) {
     let argsStr = ''
     args.forEach((item, index)=> argsStr = argsStr + (index > 0 ? ' ' : '') + item)
     try {
-         const command = `python ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
-        logger.info(command)
-         const pid = exec(command,  (error, stdout, stderr)=>{
+        const command = `python ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
+        console.log(command)
+        const process = exec(command,  (error, stdout, stderr)=>{
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
             }
-            logger.info(stdout)
+            const printText = stdout.toString().split(/\r?\n/)[0]
+            console.log(printText);
         })
-        if(pid) {
-            runningProcess.push(pid)
-        }
+        console.log(process.pid)
+        runningProcess.push(process.pid)
         return 0
     }catch (error) {
-        logger.error('exec error runPyScript')
+        console.log(error.message)
         return 0
     }
 }

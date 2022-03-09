@@ -8,7 +8,7 @@ logging.basicConfig(
 
 def chLog(message):
     print(message, end='')
-#     logging.info(message)
+    logging.info(message)
 
 if __name__ == '__main__':
     logging.debug

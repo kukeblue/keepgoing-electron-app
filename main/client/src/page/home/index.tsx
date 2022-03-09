@@ -4,7 +4,7 @@ import {TDevice} from "../../typing";
 import "./index.less";
 import {ChForm, ChUtils, FormItemType} from "ch-ui";
 import {useForm} from "antd/es/form/Form";
-import {doStartGame, doTest, MainThread} from "../../call";
+import {doStartGame, doTest, doTest2, MainThread} from "../../call";
 import {
     ScanOutlined,
     InsertRowBelowOutlined,
@@ -12,7 +12,7 @@ import {
     ToolOutlined,
     ClearOutlined
 } from '@ant-design/icons';
-type TPanelTask = 'test' | 'login' | ''
+type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook } = ChUtils.chHooks
 
 function usePageStore() {
@@ -78,6 +78,15 @@ function usePageStore() {
             setIsTasking(false)
         }
     })
+    const handleTest2 = ()=>checkIsTasking(() => {
+        setCurrentTask('test2')
+        setIsTasking(true)
+        const res = doTest2()
+        if(res.status == 0) {
+            message.success('测试已提交')
+            setIsTasking(false)
+        }
+    })
     const handleClearLog = () => {
         setLogs([])
     }
@@ -109,6 +118,7 @@ function usePageStore() {
         setCurrentPhoneUrl,
         code,
         handleTest,
+        handleTest2,
         getTaskLoading
     }
 }
@@ -157,10 +167,12 @@ function Home() {
                     <Button type='primary' onClick={()=>{ pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
                 </Col>
                 <Col>
+                    <Button loading={pageStore.getTaskLoading('test2')} onClick={()=>{pageStore.handleTest2()}} icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>异步测试脚本</Button>
+                </Col>
+                <Col>
                     <Button onClick={()=>{pageStore.logAllAccount(1)}} icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>一键起号</Button>
                 </Col>
             </Row>
-
         </div>
     </div>
 }

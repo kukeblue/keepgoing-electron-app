@@ -48,6 +48,15 @@ const init = (mainWindow: Electron.BrowserWindow)=>{
             status: 0
         }
     })
+    // 异步测试
+    ipcMain.on(resourcePaths.METHOD_TEST2, (event, args) => {
+        logger.info('run py script: test')
+        const result = runPyScript('asyncTest', args)
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
 }
 
 const MessageHandle = {
