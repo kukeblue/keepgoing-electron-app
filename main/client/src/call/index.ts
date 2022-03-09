@@ -17,7 +17,6 @@ const init = () => {
     });
     (window as any).ipcRenderer.on(resourcePaths.MESSAGE_PUSH_MAIN_STATE, (event: any, arg: any) => {
         messageListener.pushStateHandles.forEach(callback=>{
-            console.log(arg)
             callback(arg)
         })
     });
