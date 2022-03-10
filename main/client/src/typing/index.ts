@@ -79,3 +79,11 @@ export type TTaskLog = {
     type: TaskLogType
     time: number
 }
+
+// *********************** 用户相关 ******************************
+
+export type TUser = {
+    id?: number
+    username: string
+    password: string
+}

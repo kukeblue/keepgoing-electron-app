@@ -15,6 +15,7 @@ import {
 } from '@ant-design/icons';
 import {useHistory, useLocation} from "react-router-dom";
 import {MainThread} from "../call";
+import {useContainer} from "unstated-next";
 interface LayoutProps {
     children: JSX.Element;
 }
@@ -72,6 +73,8 @@ function Header() {
 }
 
 function Layout(props: LayoutProps) {
+    const userStore = UserStore.useContainer
+
     useEffect(()=>{
         setTimeout(()=>{
             MainThread.init()
@@ -132,4 +135,9 @@ function Layout(props: LayoutProps) {
     </ChLayout>
 }
 
-export default (props: LayoutProps) => <UserStore.Provider><Layout {...props}></Layout></UserStore.Provider>;
+export default (props: LayoutProps) => {
+    return <UserStore.Provider>
+        <Layout {...props}/>
+    </UserStore.Provider>
+}
+

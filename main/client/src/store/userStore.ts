@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { createContainer } from "unstated-next"
-// import { User } from "../typings";
+import { TUser } from "../typing";
 function useUserStore() {
-    // const [user, _setUser] = useState<User | undefined>()
-    // useEffect(() => {
-    // }, [])
-    // const setUser = (user: User | undefined) => {
-    // }
-    // return {
-    //     user,
-    //     setUser
-    // }
+    const [user, setUser] = useState<TUser>()
+    useEffect(() => {
+    }, [])
+    return {
+        user,
+        setUser
+    }
 }
 
 export const UserStore = createContainer(useUserStore)
