@@ -2,7 +2,7 @@ import {ipcMain } from 'electron';
 import resourcePaths from './resourcePaths'
 import {runPyScript, runPyScriptSync} from "./py/runPyScript";
 import {logger} from "./utils/logger";
-import state from "./state";
+import state, {AppChildProcess} from "./state";
 
 export let messageSender:{
     sendLog: Function
@@ -64,6 +64,20 @@ const init = (mainWindow: Electron.BrowserWindow)=>{
     // 杀死进程
     ipcMain.on(resourcePaths.METHOD_KILL_PROCESS, (event, args) => {
         logger.info('run py script: ' + 'METHOD_KILL_PROCESS')
+        const pid = Number(args[0])
+        const runningPyProcess = state.runningPyProcess
+        Object.keys(runningPyProcess).find((key)=>{
+            if(runningPyProcess[key] == pid) {
+                delete runningPyProcess[key]
+                if(AppChildProcess[key]) {
+                    logger.info('run py script: find python pid key:' + AppChildProcess[key])
+                    runPyScriptSync('killProcess',  [AppChildProcess[key]])
+                    delete AppChildProcess[key]
+                }
+                logger.info('run py script: find pid key:' + key)
+                return true
+            }
+        })
         runPyScriptSync('killProcess', args)
         event.returnValue = {
             status: 0

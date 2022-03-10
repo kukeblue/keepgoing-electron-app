@@ -3,7 +3,8 @@
 interface IState {
     runningPyProcess: {}
 }
-
+export const AppChildProcess = {
+}
 const state:IState = {
     runningPyProcess: {
     }

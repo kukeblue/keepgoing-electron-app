@@ -1,13 +1,11 @@
 // const exec = require('child_process').exec;
 import {exec, spawn} from "child_process";
 import {logger} from "../utils/logger";
-import state from "../state";
+import state, {AppChildProcess} from "../state";
 
 const execSync = require('child_process').execSync;
 const { resolve } = require('path')
 const decoder = new TextDecoder('gbk');
-
-
 
 
 export function runPyScript(name, args=[]) {
@@ -17,13 +15,14 @@ export function runPyScript(name, args=[]) {
         const command = `python ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
         logger.info('run py script ' + command)
         const process = exec(command,  (error, stdout, stderr)=>{
-            delete state.runningPyProcess[name]
+            const runningPyProcess = state.runningPyProcess
             if (error) {
                 logger.info(`exec error: ${error}`);
                 return;
             }else {
-                logger.info(`${name} run finish pid ${state.runningPyProcess[name]}`)
+                logger.info(`${name} run finish pid ${runningPyProcess[name]}`)
             }
+            delete runningPyProcess[name]
         })
         state.runningPyProcess[name] = process.pid
         logger.info('pid: ' + process.pid)

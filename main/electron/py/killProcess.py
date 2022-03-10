@@ -7,13 +7,7 @@ import signal
 
 
 def kill(pid):
-
-    try:
-        a = os.kill(int(pid), signal.SIGKILL)
-        # a = os.kill(pid, signal.9) #　与上等效
-        print("1")
-    except:
-        print("0")
+    os.kill(int(pid), signal.SIGINT)
 
 if __name__ == '__main__':
     args = sys.argv[1:]
