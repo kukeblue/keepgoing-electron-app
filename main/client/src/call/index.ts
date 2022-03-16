@@ -6,6 +6,7 @@ export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendS
 export const doTest = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
+export const doGetWatuInfo = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [])
 
 
 
@@ -20,14 +21,22 @@ const init = () => {
             callback(arg)
         })
     });
+
+    (window as any).ipcRenderer.on(resourcePaths.METHOD_GET_WATU_INFO_REPLY, (event: any, arg: any) => {
+        messageListener.methodGetWatuInfoReplyHandles.forEach(callback=>{
+            callback(arg)
+        })
+    });
 }
 
 export const messageListener: {
     pushLogHandles: Function[]
     pushStateHandles: Function[]
+    methodGetWatuInfoReplyHandles: Function[]
 } = {
     pushLogHandles: [],
-    pushStateHandles: []
+    pushStateHandles: [],
+    methodGetWatuInfoReplyHandles: []
 }
 
 

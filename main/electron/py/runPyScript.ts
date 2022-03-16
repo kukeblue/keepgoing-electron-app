@@ -12,7 +12,7 @@ export function runPyScript(name, args=[]) {
     let argsStr = ''
     args.forEach((item, index)=> argsStr = argsStr + (index > 0 ? ' ' : '') + item)
     try {
-        const command = `python ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
+        const command = `python3 ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
         logger.info('run py script ' + command)
         const process = exec(command,  (error, stdout, stderr)=>{
             const runningPyProcess = state.runningPyProcess
@@ -37,7 +37,7 @@ export function runPyScriptSync(name, args=[]) {
     let argsStr = ''
     args.forEach((item, index)=> argsStr = argsStr + (index > 0 ? ' ' : '') + item)
     try {
-        const output = execSync('python ' + resolve('./') + `/main/electron/py/${name}` + '.py' + (argsStr.length > 0 ? ` ${argsStr}` : ''))
+        const output = execSync('python3 ' + resolve('./') + `/main/electron/py/${name}` + '.py' + (argsStr.length > 0 ? ` ${argsStr}` : ''))
         const log = decoder.decode(output)
         logger.info(log)
         logger.info(`${name} run finish`)

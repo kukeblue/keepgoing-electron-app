@@ -4,10 +4,11 @@ import {TDevice} from "../../typing";
 import "./index.less";
 import {ChForm, ChUtils, FormItemType} from "ch-ui";
 import {useForm} from "antd/es/form/Form";
-import {doKillProcess, doStartGame, doTest, doTest2, MainThread} from "../../call";
+import {doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo} from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
+    DownCircleOutlined,
     ClearOutlined,
     CloseCircleOutlined,
     InsertRowBelowOutlined,
@@ -15,15 +16,21 @@ import {
     SettingOutlined,
     ToolOutlined
 } from '@ant-design/icons';
+import ChMhMapTool from "../../components/ChMhMapTool";
 
 type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook } = ChUtils.chHooks
 
+type TWatuInfo = {
+    mapName: string,
+    points: [number, number][] 
+}
 
 function usePageStore() {
     useEffect(()=>{
         MainThread.messageListener.pushLogHandles.push(handlePushLog)
         MainThread.messageListener.pushStateHandles.push(handlePushState)
+        MainThread.messageListener.methodGetWatuInfoReplyHandles.push(handleGetWatuInfoReply)
     }, [])
     const [logs, setLogs] = useState<string[]>([])
     const [processState, setProcessState] = useState({
@@ -35,6 +42,7 @@ function usePageStore() {
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
+    const [watuInfo, setWatuInfo] = useState<TWatuInfo>()
     const [linkDeviceId, setLinkDeviceId] = useState<number|undefined>()
     const [showSelectDeviceModal, setShowSelectDeviceModal] = useState<boolean>(false)
     const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
@@ -56,6 +64,22 @@ function usePageStore() {
     const handleKillProcess = (pid: string) => {
         doKillProcess(pid)
         message.success('操作成功')
+    }
+    const handleGetWatuInfo = () => {
+        doGetWatuInfo()
+    }
+    const handleGetWatuInfoReply = (data: any) => {
+        console.log('handleGetWatuInfoReply', data);
+        const result = data.result
+        const mapName = result[0][0] || result[1][0] || result[2][0]
+        const points = result.map((item:any)=>{
+           return item[1]
+        })
+        console.log('handleGetWatuInfoReply:', points);
+        setWatuInfo({
+            mapName,
+            points
+        })
     }
     const handleSelectJiangjunDevice = () => {
         formRef.validateFields().then((res: any) => {
@@ -127,6 +151,8 @@ function usePageStore() {
         formRef,
         linkDeviceId,
         setLinkDeviceId,
+        watuInfo,
+        setWatuInfo,
         deviceOptions,
         handleClickLinkDevice,
         handleSelectJiangjunDevice,
@@ -139,7 +165,8 @@ function usePageStore() {
         code,
         handleTest,
         handleTest2,
-        getTaskLoading
+        getTaskLoading,
+        handleGetWatuInfo
     }
 }
 
@@ -250,7 +277,15 @@ function HomeFeature() {
                     pageStore.setModalMultipleAccountSelectShow(true)
                 }} icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>一键起号</Button>
             </Col>
+            <Col>
+                <Button onClick={()=>{
+                    pageStore.handleGetWatuInfo()
+                }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>挖图位置解析</Button>
+            </Col>
         </Row>
+        <div className="home-feature-panel">
+           {pageStore.watuInfo && <ChMhMapTool mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool> }
+        </div>
     </div>
 
 }

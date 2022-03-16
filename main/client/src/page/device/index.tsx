@@ -50,6 +50,12 @@ function Device() {
                             // fixed: true,
                         },
                         {
+                            title: '设备类型',
+                            dataIndex: 'deviceType',
+                            key: 'deviceType',
+                            render: (deviceType:string)=><div style={{width: '100px'}}>{deviceType}</div>
+                        },
+                        {
                             title: 'IMEI',
                             dataIndex: 'imei',
                             key: 'imei',
@@ -88,6 +94,22 @@ function Device() {
                             label: '设备名称',
                             name: 'name',
                             key: 'name',
+                        },
+                        {
+                            type: FormItemType.select,
+                            label: '设备类型',
+                            name: 'deviceType',
+                            key: 'deviceType',
+                            options: [
+                                {
+                                    label: '手机',
+                                    value: '手机'
+                                },
+                                {
+                                    label: '电脑',
+                                    value: '电脑'
+                                }
+                            ]
                         },
                         {
                             type: FormItemType.input,

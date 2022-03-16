@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { UserStore } from "../store/userStore"
 import './index.less'
 import { ChLayout } from 'ch-ui'
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Popover, Menu } from 'antd';
 import image_robot from '../assets/images/icon.jpg';
-
 
 import {
     ContactsOutlined,
@@ -15,7 +14,7 @@ import {
 } from '@ant-design/icons';
 import {useHistory, useLocation} from "react-router-dom";
 import {MainThread} from "../call";
-import {useContainer} from "unstated-next";
+import Login from "../page/login";
 interface LayoutProps {
     children: JSX.Element;
 }
@@ -33,6 +32,14 @@ const routerConfigMap:any = {
         text: '任务',
         url: '',
     },
+    'task_list': {
+        text: '任务列表',
+        url: '',
+    },
+    'task_config': {
+        text: '任务配置',
+        url: '',
+    },
     'log': {
         text: '任务日志',
         url: '',
@@ -42,7 +49,6 @@ const routerConfigMap:any = {
         url: '',
     }
 }
-
 function Header() {
     const location = useLocation();
     const paths = location.pathname.split("/").filter(item=>{
@@ -56,7 +62,7 @@ function Header() {
                 {
                     paths.map((item, index)=>{
                         return routerConfigMap[item] && <Breadcrumb.Item key={item}>
-                            {routerConfigMap[item] && routerConfigMap[item].text}{index + 1 < pathCount ? "/" : ""}
+                            {routerConfigMap[item] && routerConfigMap[item].text}{index + 1 < pathCount ? "" : ""}
                         </Breadcrumb.Item>
                     })
                 }
@@ -73,13 +79,20 @@ function Header() {
 }
 
 function Layout(props: LayoutProps) {
-    const userStore = UserStore.useContainer
-
+    const userStore = UserStore.useContainer()
+    const [visiblePopoverId, setVisiblePopoverId] = useState<string>()
     useEffect(()=>{
         setTimeout(()=>{
             MainThread.init()
         }, 0)
     }, [])
+
+    const handleClickMenu = (e: any, url: string) => {
+        e.domEvent.stopPropagation();
+        setVisiblePopoverId((v)=>'')
+        history.push(url)
+    }
+
     const history = useHistory()
     const sider = {
         currentItem: 1,
@@ -107,9 +120,16 @@ function Layout(props: LayoutProps) {
             },
             {
                 text: '任务管理',
-                icon: <CalendarOutlined style={{ fontSize: 24 }} />,
+                icon: <Popover visible={visiblePopoverId == 'taskPopover'} className='layout-task-menu' placement="right" content={
+                    <Menu style={{width: 150, textAlign: 'center'}} mode="inline">
+                        <Menu.Item key="9" onClick={(e)=>{handleClickMenu(e, '/task/task_list')}}>任务列表</Menu.Item>
+                        <Menu.Item key="10" onClick={(e)=>{handleClickMenu(e, '/task/task_config')}}>任务配置</Menu.Item>
+                    </Menu>
+                } trigger="click">
+                    <CalendarOutlined style={{ fontSize: 24 }} />
+                </Popover>,
                 click: () => {
-                    history.push('/task')
+                    setVisiblePopoverId('taskPopover')
                 }
             },
             {
@@ -128,11 +148,12 @@ function Layout(props: LayoutProps) {
             }
         ]
     }
-    return <ChLayout header={<Header/>} adminIcon={<img style={{borderRadius: '50%' ,width: '60px', height: 'auto'}} src={image_robot}/>} sider={sider}>
+    console.log('Layout 刷新')
+    return userStore.isLogin ? <ChLayout header={<Header/>} adminIcon={<img style={{borderRadius: '50%' ,width: '60px', height: 'auto'}} src={image_robot}/>} sider={sider}>
         <div className='app-content'>
             {props.children}
         </div>
-    </ChLayout>
+    </ChLayout>: <Login/>
 }
 
 export default (props: LayoutProps) => {

@@ -35,10 +35,22 @@ export const listenLogs = function(filePath){
                         AppChildProcess[fileName] = pid
                         logger.info('add py id ' + fileName + pid)
                     }
+                    if(str.includes('mhWatu result')) {
+                        handleWutuFinish(str)
+                    }
                     MessageHandle.messageSender.sendLog(str)
                 }
             }
         }
     });
 }
+
+function handleWutuFinish(log: string) {
+    let result = log.match(/start(.*)end/)[1]
+    console.log('handleWutuFinish', result);
+    MessageHandle.messageSender.sendGetWutuInfo({
+        result: JSON.parse(result)
+    })
+}
+
 

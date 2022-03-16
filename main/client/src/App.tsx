@@ -3,7 +3,7 @@ import { ChUtils } from 'ch-ui'
 import Layout from './layout/index'
 import './index.less'
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route,
 } from "react-router-dom";
@@ -13,6 +13,7 @@ import Log from "./page/log";
 import Device from "./page/device";
 import Report from "./page/report";
 import Home from "./page/home";
+import TaskConfig from "./page/taskConfig";
 import {ConfigProvider} from "antd";
 
 // @ts-ignore
@@ -24,6 +25,7 @@ ChUtils.Ajax.RequestConfig.config = {
     baseURL: env === 'dev' ? 'http://127.0.0.1:3000' : 'http://103.100.210.203:3000',
     headers: {
         'Content-Type': 'application/json',
+         token: localStorage.getItem('token')
     }
 }
 
@@ -42,8 +44,11 @@ export function App() {
                         <Route path="/device">
                             <Device />
                         </Route>
-                        <Route path="/task">
+                        <Route path="/task/task_list">
                             <Task />
+                        </Route>
+                        <Route path="/task/task_config">
+                            <TaskConfig/>
                         </Route>
                         <Route path="/log">
                             <Log />

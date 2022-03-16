@@ -1,7 +1,8 @@
+import logUtil
 import pyautogui
 import sys
 from paddleocr import PaddleOCR
-ocr = PaddleOCR(use_angle_cls=False, lang="ch")
+ocr = PaddleOCR(use_angle_cls=False, lang="ch", show_log=False)
 
 class MHWindow:
     screenUnit = 2
@@ -50,11 +51,27 @@ class MHWindow:
     def findPicture(self, path):
         return pyautogui.locateOnScreen(self.pyImageDir + path)
 
-    def findImgInWindow(self, path, confidence=0.75):
-        location = pyautogui.locateOnScreen(self.pyImageDir + path, region=self.windowAreaGui, confidence=confidence)
+    def findImgInWindow(self, path, confidence = 0.75):
+        location = None
+        if(confidence == None):
+            location = pyautogui.locateOnScreen(self.pyImageDir + path, region=self.windowAreaGui, grayscale=False)
+        else:
+            location = pyautogui.locateOnScreen(self.pyImageDir + path, region=self.windowAreaGui, confidence=confidence)
+         
         if(location != None):
             return [int(location.left / self.screenUnit), int(location.top / self.screenUnit), int(location.width / self.screenUnit), int(location.height / self.screenUnit)]
         return location
+    
+    
+    def findImgsInWindow(self, path):
+        locations = pyautogui.locateAllOnScreen(self.pyImageDir + path, region = self.windowAreaGui, grayscale=False)
+        ponits = []
+        for location in locations:
+            ponits.append([int(location.left / self.screenUnit), int(location.top / self.screenUnit), int(location.width / self.screenUnit), int(location.height / self.screenUnit)])
+        return ponits
+        
+
+
 
     def checkpoint(self):
         imagePath = '/window_point.png'
@@ -71,14 +88,17 @@ class MHWindow:
         finished = False
         while not finished:
             point = self.checkpoint()
-            dx = point[0] - 30
-            dy = point[1] - 27
-            if mx - dx > 5 or mx - dx < -5 or my - dy > 5 or my - dy < -5:
-                cx = mx - dx
-                cy = my - dy
-                pyautogui.move(cx, cy)
+            if(point != None):
+                dx = point[0] - 30
+                dy = point[1] - 27
+                if mx - dx > 5 or mx - dx < -5 or my - dy > 5 or my - dy < -5:
+                    cx = mx - dx
+                    cy = my - dy
+                    pyautogui.move(cx, cy)
+                else:
+                    finished = True
             else:
-                finished = True
+                self.focusWindow()
 
 if __name__ == '__main__':
     window = MHWindow(2)

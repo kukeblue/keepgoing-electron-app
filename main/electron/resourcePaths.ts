@@ -12,10 +12,13 @@ const resourcePaths = {
     METHOD_TEST: 'method_test',
     METHOD_TEST2: 'method_test2',
     METHOD_KILL_PROCESS: 'method_kill_process',
+    METHOD_GET_WATU_INFO: 'method_get_watu_info', // 获取挖图地图消息
 
     /* *******   主服务消息    ******* */
     MESSAGE_PUSH_LOG: 'message_push_log',
-    MESSAGE_PUSH_MAIN_STATE: 'message_push_main_state'
+    MESSAGE_PUSH_MAIN_STATE: 'message_push_main_state',
+    METHOD_GET_WATU_INFO_REPLY: 'method_get_watu_info_reply', // 返回挖图消息结果
+
 
 }
 

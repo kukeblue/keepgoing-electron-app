@@ -7,6 +7,7 @@ import state, {AppChildProcess} from "./state";
 export let messageSender:{
     sendLog: Function
     sendState: Function
+    sendGetWutuInfo: Function
 } = null
 
 function buildSender(mainWindow: Electron.BrowserWindow) {
@@ -16,6 +17,10 @@ function buildSender(mainWindow: Electron.BrowserWindow) {
         },
         sendState() {
             mainWindow.webContents.send(resourcePaths.MESSAGE_PUSH_MAIN_STATE, state);
+        },
+        // 发送挖图结果
+        sendGetWutuInfo(body: {result: any[]}) {
+            mainWindow.webContents.send(resourcePaths.METHOD_GET_WATU_INFO_REPLY, body);
         }
     }
 }
@@ -56,6 +61,15 @@ const init = (mainWindow: Electron.BrowserWindow)=>{
     ipcMain.on(resourcePaths.METHOD_TEST2, (event, args) => {
         logger.info('run py script: test')
         const result = runPyScript('asyncTest', args)
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    // 读取宝图
+    ipcMain.on(resourcePaths.METHOD_GET_WATU_INFO, (event, args) => {
+        logger.info('run py script: METHOD_GET_WATU_INFO')
+        const result = runPyScript('mhWatu', args)
         event.returnValue = {
             code: result,
             status: 0
