@@ -9,7 +9,7 @@ import moment from 'moment'
 const { useOptionFormListHook } = ChUtils.chHooks
 const request = ChUtils.Ajax.request
 
-const taskTypeOptions = [
+export const taskTypeOptions = [
     {
         label: '主线打图',
         value: '主线打图'

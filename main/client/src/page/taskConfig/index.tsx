@@ -1,12 +1,45 @@
-import { ChTablePanel, FormItemType } from "ch-ui";
-import React from "react";
+import {ChTablePanel, ChUtils, FormItemType} from "ch-ui";
+import React, {useState} from "react";
 import './index.less'
+import {taskTypeOptions} from "../task";
+const { useOptionFormListHook } = ChUtils.chHooks
+
+function usePageStore() {
+
+    const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
+    return {
+        deviceMap,
+        deviceOptions
+    }
+}
 
 function TaskConfig() {
+    const [syncImageloading, setSyncImageloading] = useState(false)
+    const pageStore = usePageStore()
     return <div className="page config-page">
-        <ChTablePanel 
-            url="/api/config/get_config_image_page" 
+        <ChTablePanel
+            actions={[
+                {
+                    text: '同步图片到本地',
+                    type: "default",
+                    onClick: ()=> {
+                        if(!syncImageloading) {
+                            setSyncImageloading(true)
+                        }
+                    },
+                    loading: syncImageloading,
+
+                }
+            ]}
+            onEditBefore={(data)=>{
+                console.log(data);
+                if(data.url.file && data.url.file.response.data) {
+                    data.url = data.url.file.response.data
+                }
+            }}
+            url="/api/config/get_config_image_page"
             urlAdd="/api/config/create_config_image"
+            urlDelete="/api/config/delete_config_image_by_id"
             formData={[
                 {
                     type: FormItemType.input,
@@ -19,16 +52,19 @@ function TaskConfig() {
                     label: '路径'
                 },
                 {
-                    type: FormItemType.input,
+                    type: FormItemType.select,
+                    options: pageStore.deviceOptions,
                     name: 'deviceId',
                     label: '所属设备'
                 },
                 {
-                    type: FormItemType.input,
-                    name: 'taskId',
-                    label: '所属任务'
-                },{
-                    type: FormItemType.input,
+                    type: FormItemType.upload,
+                    uploadurl: 'http://localhost:3000/api/upload/upload_file',
+                    uploadname: 'file',
+                    uploadType: 'picture',
+                    uploadheader: {
+                        token: localStorage.getItem('token')
+                    },
                     name: 'url',
                     label: '图片'
                 }
@@ -47,25 +83,23 @@ function TaskConfig() {
                 {
                     title: '图片名称',
                     dataIndex: 'name',
-                    key: 'name', 
+                    key: 'name',
                 },
                 {
                     title: '路径',
                     dataIndex: 'path',
-                    key: 'path', 
+                    key: 'path',
                 },
                 {
-                    title: '所属任务',
-                    dataIndex: 'taskId',
-                    key: 'taskId', 
-                },{
                     title: '所属设备',
                     dataIndex: 'deviceId',
-                    key: 'deviceId', 
+                    key: 'deviceId',
+                    render: (v) => <span>{pageStore.deviceMap[v] && pageStore.deviceMap[v].name}</span>
                 }, {
                     title: '远程路径',
                     dataIndex: 'url',
-                    key: 'url', 
+                    key: 'url',
+                    render: (img) => <img alt='' width="auto" height={25} src={img}/>
                 }
             ]}
         />
