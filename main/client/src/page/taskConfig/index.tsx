@@ -1,12 +1,15 @@
-import {ChTablePanel, ChUtils, FormItemType} from "ch-ui";
-import React, {useState} from "react";
+import { ChTablePanel, ChUtils, FormItemType } from "ch-ui";
+import React, { useState } from "react";
 import './index.less'
-import {taskTypeOptions} from "../task";
+import { taskTypeOptions } from "../task";
+import { doSyncImages } from "../../call";
+import { message } from "antd";
 const { useOptionFormListHook } = ChUtils.chHooks
+
 
 function usePageStore() {
 
-    const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
+    const { optionsMap: deviceMap, options: deviceOptions } = useOptionFormListHook({ url: '/api/device/get_device_list', query: {} })
     return {
         deviceMap,
         deviceOptions
@@ -22,18 +25,34 @@ function TaskConfig() {
                 {
                     text: '同步图片到本地',
                     type: "default",
-                    onClick: ()=> {
-                        if(!syncImageloading) {
-                            setSyncImageloading(true)
+                    onClick: () => {
+                        if (!syncImageloading) {
+                            ChUtils.Ajax.request({
+                                url: '/api/config/get_all_config_image',
+                                data: {},
+                                method: "post"
+                            }).then(res => {
+                                if (res.status == 0) {
+                                    console.log(res);
+                                    setSyncImageloading(true)
+                                    const files = res.list.map((item: any) => item.path)
+                                    console.log('files', files);
+                                    res = doSyncImages(files)
+                                    if (res.status == 0) {
+                                        message.success('同步成功')
+                                        setSyncImageloading(false)
+                                    }
+                                }
+                            })
                         }
                     },
                     loading: syncImageloading,
 
                 }
             ]}
-            onEditBefore={(data)=>{
+            onEditBefore={(data) => {
                 console.log(data);
-                if(data.url.file && data.url.file.response.data) {
+                if (data.url.file && data.url.file.response.data) {
                     data.url = data.url.file.response.data
                 }
             }}
@@ -99,7 +118,7 @@ function TaskConfig() {
                     title: '远程路径',
                     dataIndex: 'url',
                     key: 'url',
-                    render: (img) => <img alt='' width="auto" height={25} src={img}/>
+                    render: (img) => <img alt='' width="auto" height={25} src={img} />
                 }
             ]}
         />

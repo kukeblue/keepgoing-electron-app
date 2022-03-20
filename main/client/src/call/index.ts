@@ -6,24 +6,25 @@ export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendS
 export const doTest = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
-export const doGetWatuInfo = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [])
+export const doGetWatuInfo = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [deviceId])
+export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
 
 
 
 const init = () => {
     (window as any).ipcRenderer.on(resourcePaths.MESSAGE_PUSH_LOG, (event: any, arg: any) => {
-        messageListener.pushLogHandles.forEach(callback=>{
+        messageListener.pushLogHandles.forEach(callback => {
             callback(arg)
         })
     });
     (window as any).ipcRenderer.on(resourcePaths.MESSAGE_PUSH_MAIN_STATE, (event: any, arg: any) => {
-        messageListener.pushStateHandles.forEach(callback=>{
+        messageListener.pushStateHandles.forEach(callback => {
             callback(arg)
         })
     });
 
     (window as any).ipcRenderer.on(resourcePaths.METHOD_GET_WATU_INFO_REPLY, (event: any, arg: any) => {
-        messageListener.methodGetWatuInfoReplyHandles.forEach(callback=>{
+        messageListener.methodGetWatuInfoReplyHandles.forEach(callback => {
             callback(arg)
         })
     });

@@ -3,6 +3,7 @@ import baiduApi
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
 
+
 def writeText(text):
     if text == 'ch.1993.com':
         writeText('ch')
@@ -27,6 +28,20 @@ def pressKeyGroup(key1, key2):
     time.sleep(0.1)
     op.KeyPress(key2)
     op.KeyUp(key1)
+
+
+def F_通用文字识别(path):
+    try:
+        baiduRetStr = baiduApi.getImageText(path)
+        print(baiduRetStr['words_result'])
+        str = ''
+        for item in baiduRetStr['words_result']:
+            str = str + item['words']
+        print(str)
+        return str
+    except IOError:
+        print(0)
+        return 0
 
 
 def getGameVerificationCode():

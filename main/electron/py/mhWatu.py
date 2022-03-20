@@ -1,10 +1,16 @@
+# coding=utf-8
 import logUtil
 import mhWindow
 import re
 import json
+import sys
+import io
+import time
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
+
 
 def F_获取任务位置和坐标(str):
-    map=""
+    map = ""
     if("花果山" in str):
         map = "花果山"
     elif("五庄观" in str):
@@ -31,11 +37,13 @@ def F_获取任务位置和坐标(str):
         map = "东海湾"
     elif("建" in str):
         map = "建邺城"
+    elif("朱紫国" in str):
+        map = "朱紫国"
     elif("长寿郊外" in str or ("外" in str and "长寿" in str)):
         map = "长寿郊外"
     else:
         print('未匹配地图', str)
-    
+
     str = str.replace(".", ",")
     str = str.replace("。", ",")
     str = str.replace("，", ",")
@@ -48,37 +56,38 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-
-    
-
-def F_获取宝图信息():
+def F_获取宝图信息(deviceId):
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(2)
+    window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
     point = window.checkpoint()
     print(point)
-    points = window.findImgsInWindow('/daoju_baotu.png')
+    points = window.findImgsInWindow('daoju_baotu.png')
     print(len(points))
     res = []
     for point in points:
         print(point)
         window.pointMove(point[0], point[1])
-        point = window.findImgInWindow('/daoju_baotu_large.png')
+        point = window.findImgInWindow('daoju_baotu_large.png')
         print('放大宝图位置', point)
         if(point != None):
             宝图位置信息 = [point[0], point[1], 255, 50]
             # 截图 + ocr识别
             path = window.F_窗口区域截图('temp_baotu_info.png', 宝图位置信息)
+            time.sleep(1)
+            print('放大宝图位置', path)
             ret = window.F_截图文字识别(path)
             if(ret != ''):
-                logUtil.chLog('mhWatu:' + ret) 
+                logUtil.chLog(ret)
                 mapAndpoint = F_获取任务位置和坐标(ret)
                 print(mapAndpoint)
                 res.append(mapAndpoint)
-    jsonArr = json.dumps(res,ensure_ascii=False)  
-    logUtil.chLog('mhWatu result:start' + jsonArr + 'end') 
+    jsonArr = json.dumps(res, ensure_ascii=False)
+    logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
 
 if __name__ == '__main__':
-    F_获取宝图信息()
+    args = sys.argv[1:]
+    deviceId = str(args[0])
+    F_获取宝图信息(deviceId)

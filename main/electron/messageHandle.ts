@@ -1,10 +1,11 @@
-import {ipcMain } from 'electron';
+import { ipcMain } from 'electron';
 import resourcePaths from './resourcePaths'
-import {runPyScript, runPyScriptSync} from "./py/runPyScript";
-import {logger} from "./utils/logger";
-import state, {AppChildProcess} from "./state";
+import { runPyScript, runPyScriptSync } from "./py/runPyScript";
+import { logger } from "./utils/logger";
+import state, { AppChildProcess } from "./state";
+import { syncServeImages } from './utils/resourceFileManage'
 
-export let messageSender:{
+export let messageSender: {
     sendLog: Function
     sendState: Function
     sendGetWutuInfo: Function
@@ -19,17 +20,17 @@ function buildSender(mainWindow: Electron.BrowserWindow) {
             mainWindow.webContents.send(resourcePaths.MESSAGE_PUSH_MAIN_STATE, state);
         },
         // 发送挖图结果
-        sendGetWutuInfo(body: {result: any[]}) {
+        sendGetWutuInfo(body: { result: any[] }) {
             mainWindow.webContents.send(resourcePaths.METHOD_GET_WATU_INFO_REPLY, body);
         }
     }
 }
 
-const init = (mainWindow: Electron.BrowserWindow)=>{
+const init = (mainWindow: Electron.BrowserWindow) => {
     // 注册信鸽
     MessageHandle.messageSender = buildSender(mainWindow)
 
-    ipcMain.on(resourcePaths.MESSAGE_INIT, (event, arg) => {})
+    ipcMain.on(resourcePaths.MESSAGE_INIT, (event, arg) => { })
     // 获取将军令
     ipcMain.on(resourcePaths.METHOD_START_GAME, (event, arg) => {
         logger.info('run py script: get game verificationCode')
@@ -75,17 +76,28 @@ const init = (mainWindow: Electron.BrowserWindow)=>{
             status: 0
         }
     })
+    // 同步图片到本地
+    ipcMain.on(resourcePaths.METHOD_SYNC_IMAGES, (event, args) => {
+        logger.info('run py script: METHOD_SYNC_IMAGES', args)
+        syncServeImages(args)
+        event.returnValue = {
+            data: {
+                success: true
+            },
+            status: 0
+        }
+    })
     // 杀死进程
     ipcMain.on(resourcePaths.METHOD_KILL_PROCESS, (event, args) => {
         logger.info('run py script: ' + 'METHOD_KILL_PROCESS')
         const pid = Number(args[0])
         const runningPyProcess = state.runningPyProcess
-        Object.keys(runningPyProcess).find((key)=>{
-            if(runningPyProcess[key] == pid) {
+        Object.keys(runningPyProcess).find((key) => {
+            if (runningPyProcess[key] == pid) {
                 delete runningPyProcess[key]
-                if(AppChildProcess[key]) {
+                if (AppChildProcess[key]) {
                     logger.info('run py script: find python pid key:' + AppChildProcess[key])
-                    runPyScriptSync('killProcess',  [AppChildProcess[key]])
+                    runPyScriptSync('killProcess', [AppChildProcess[key]])
                     delete AppChildProcess[key]
                 }
                 logger.info('run py script: find pid key:' + key)

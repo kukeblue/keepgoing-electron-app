@@ -14,7 +14,7 @@ import Device from "./page/device";
 import Report from "./page/report";
 import Home from "./page/home";
 import TaskConfig from "./page/taskConfig";
-import {ConfigProvider} from "antd";
+import { ConfigProvider } from "antd";
 
 // @ts-ignore
 const env = APP_ENV
@@ -25,7 +25,7 @@ ChUtils.Ajax.RequestConfig.config = {
     baseURL: env === 'dev' ? 'http://127.0.0.1:3000' : 'http://103.100.210.203:3000',
     headers: {
         'Content-Type': 'application/json',
-         token: localStorage.getItem('token')
+        token: localStorage.getItem('token')
     }
 }
 
@@ -48,7 +48,7 @@ export function App() {
                             <Task />
                         </Route>
                         <Route path="/task/task_config">
-                            <TaskConfig/>
+                            <TaskConfig />
                         </Route>
                         <Route path="/log">
                             <Log />
@@ -57,7 +57,7 @@ export function App() {
                             <Report />
                         </Route>
                         <Route path="/">
-                            <Home/>
+                            <Home />
                         </Route>
                     </Switch>
                 </Layout>

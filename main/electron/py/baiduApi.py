@@ -1,3 +1,4 @@
+# coding=utf-8
 from aip import AipOcr
 
 APP_ID = '25713120'
@@ -14,9 +15,19 @@ def get_file_content(filePath):
         return fp.read()
 
 
-options = {"language_type": "CHN_ENG", "detect_direction": "false", "detect_language": "false", "probability": "false"}
+options = {"language_type": "CHN_ENG", "detect_direction": "false",
+           "detect_language": "false", "probability": "false"}
 
 
 def getImageText(path):
     image = get_file_content(path)
     return client.basicAccurate(image, options)
+
+
+def F_通用文字识别(path):
+    baiduRetStr = getImageText(path)
+    str = ''
+    for item in baiduRetStr['words_result']:
+        str = str + item['words']
+    print(str)
+    return str
