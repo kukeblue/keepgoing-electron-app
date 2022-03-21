@@ -1,11 +1,12 @@
-import {Button, DatePicker, Dropdown, Menu, message} from 'antd';
+import {Button, DatePicker, Dropdown, Menu, message, Modal} from 'antd';
 import React, {useRef, useState} from "react";
 import './index.less'
 import {DownOutlined} from '@ant-design/icons';
-import {ChTablePanel, ChUtils, FormItemType} from "ch-ui";
+import {ChForm, ChTablePanel, ChUtils, FormItemType} from "ch-ui";
 import {TTask} from "../../typing";
 import ChDatePicker from "../../components/ChDatePicker";
 import moment from 'moment'
+import Ajax from "ch-ui/dist/chutils/request";
 const { useOptionFormListHook } = ChUtils.chHooks
 const request = ChUtils.Ajax.request
 
@@ -19,6 +20,12 @@ export const taskTypeOptions = [
     },{
         label: '主线封妖',
         value: '主线封妖'
+    },{
+        label: '主线师门',
+        value: '主线师门'
+    },{
+        label: '主线挖图',
+        value: '主线挖图'
     }
 ]
 
@@ -157,6 +164,12 @@ function task() {
                                             tmp.focus();
                                         }} type='link'> 连接设备 </Button>
                                     </Menu.Item>
+                                    <Menu.Item>
+                                        <Button onClick={()=>{
+                                            pageStore.setEditingTask(task)
+                                            pageStore.setShowEditTaskModal(true)
+                                        }} type='link'> 修改数据 </Button>
+                                    </Menu.Item>
                                 </Menu>
                             }>
                                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -170,6 +183,7 @@ function task() {
             url='/api/task/get_task_page'
             urlAdd='/api/task/create_task'
             urlDelete='/api/task/delete_task_by_id'
+            // urlUpdate='/api/task/edit_task'
             formData={[
                 {
                     type: FormItemType.select,
@@ -193,6 +207,48 @@ function task() {
                     options: pageStore.accountOptions
                 }
             ]}/>
+        <Modal visible={pageStore.showEditTaskModal} title='修改数据' footer={false} onCancel={()=>pageStore.setShowEditTaskModal(false)}>
+            <div>
+                <ChForm
+                    onFinish={(v)=>{
+                       ChUtils.Ajax.request({url: '/api/task/edit_task', data: {
+                                id: pageStore.editingTask!.id,
+                                taskCount: Number(v.taskCount),
+                                income: Number(v.income),
+                                status: v.status
+                            }}).then(()=>{
+                                pageStore.setShowEditTaskModal(false)
+                                pageStore.tableRef.current?.reload()
+                        })
+                    }}
+                    layout={{labelCol: { span: 24 }, wrapperCol: { span: 24 }}}
+                    formData={[
+                    {
+                        label: '任务次数',
+                        name: 'taskCount',
+                        type: FormItemType.input,
+                        inputtype: 'number',
+                    },
+                    {
+                        label: '预计收入',
+                        name: 'income',
+                        type: FormItemType.input,
+                        inputtype: 'number',
+                    },{
+                            label: '任务状态',
+                            name: 'status',
+                            type: FormItemType.select,
+                            options: [{
+                                label: '进行中',
+                                value: '进行中'
+                            },{
+                                label: '完成',
+                                value: '完成'
+                            }]
+                        }
+                ]}/>
+            </div>
+        </Modal>
     </div>
 }
 
@@ -200,6 +256,8 @@ function useTaskPageStore() {
     const [syncIncomeLoading, setSyncIncomeLoading] = useState(false)
     const {optionsMap: accountMap, options: accountOptions} = useOptionFormListHook({url: '/api/game_account/get_game_account_options', query: {}})
     const {optionsMap: deviceMap, options: deviceOptions} = useOptionFormListHook({url: '/api/device/get_device_list', query: {}})
+    const [showEditTaskModal, setShowEditTaskModal] = useState(false)
+    const [editingTask, setEditingTask] = useState<TTask>()
     const tableRef = useRef<{
         reload: Function
     }>()
@@ -252,6 +310,10 @@ function useTaskPageStore() {
     }
 
     return {
+        editingTask,
+        setEditingTask,
+        showEditTaskModal,
+        setShowEditTaskModal,
         syncIncome,
         stopTask,
         startTask,
