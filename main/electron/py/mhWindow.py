@@ -36,7 +36,7 @@ class MHWindow:
             self.windowAreaGui = (
                 leftx, topy, self.getTruthPx(800), self.getTruthPx(600))
             print(self.windowAreaGui)
-            # pyautogui.screenshot(self.pyImageDir + '/temp/screen.png', region=windowAreaGui)
+            pyautogui.screenshot(self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
         else:
             print('未找到前台梦幻窗口')
 
@@ -89,6 +89,9 @@ class MHWindow:
             self.focusWindow()
             point = self.findImgInWindow(imagePath)
         return point
+    def ClickInWindow(self, x, y):
+        self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
+        pyautogui.click()
 
     def pointMove(self, mx, my):
         finished = False
@@ -97,7 +100,7 @@ class MHWindow:
             if(point != None):
                 dx = point[0] - 30
                 dy = point[1] - 27
-                if mx - dx > 5 or mx - dx < -5 or my - dy > 5 or my - dy < -5:
+                if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
                     pyautogui.move(cx, cy)

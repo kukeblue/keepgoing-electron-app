@@ -33,12 +33,16 @@ def F_获取任务位置和坐标(str):
         map = "狮驼岭"
     elif("麒麟" in str):
         map = "麒麟山"
+    elif("麒山" in str):
+        map = "麒麟山"
     elif("东海" in str):
         map = "东海湾"
     elif("建" in str):
         map = "建邺城"
     elif("朱紫国" in str):
         map = "朱紫国"
+    elif("普陀山" in str):
+        map = "普陀山"
     elif("长寿郊外" in str or ("外" in str and "长寿" in str)):
         map = "长寿郊外"
     else:
@@ -86,8 +90,20 @@ def F_获取宝图信息(deviceId):
     jsonArr = json.dumps(res, ensure_ascii=False)
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
+def F_点击小地图():
+    print('点击小地图')
+    mapTopLeft = [190, 180]
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1, '11')
+    window.findMhWindow()
+    window.focusWindow()
+    # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
+    point = window.findImgInWindow('map_top_shituo.png')
+    window.pointMove(point[0] - 15 + 313, point[1] - 14 + 55)
+
 
 if __name__ == '__main__':
-    args = sys.argv[1:]
-    deviceId = str(args[0])
-    F_获取宝图信息(deviceId)
+    # args = sys.argv[1:]
+    # deviceId = str(args[0])
+    # F_获取宝图信息(deviceId)
+    F_点击小地图()

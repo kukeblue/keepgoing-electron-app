@@ -22,7 +22,7 @@ const env = APP_ENV
 console.log('Running App version ' + APP_ENV);
 ChUtils.Ajax.RequestConfig.config = {
     // @ts-ignore
-    baseURL: env === 'dev' ? 'http://103.100.210.203:3000' : 'http://103.100.210.203:3000',
+    baseURL: env === 'dev' ? 'http://127.0.0.1:3000' : 'http://103.100.210.203:3000',
     headers: {
         'Content-Type': 'application/json',
         token: localStorage.getItem('token')
@@ -30,8 +30,6 @@ ChUtils.Ajax.RequestConfig.config = {
 }
 
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
-
-
 export function App() {
     return (
         <ConfigProvider locale={zh_CN}>

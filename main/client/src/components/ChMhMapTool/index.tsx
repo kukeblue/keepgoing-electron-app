@@ -10,6 +10,9 @@ import image_map_jingwai from '../../assets/images/map_jingwai.png'
 import image_map_guojing from '../../assets/images/map_guojing.png'
 import image_map_mojiacun from '../../assets/images/map_mojiacun.png'
 import image_map_beiju from '../../assets/images/map_beiju.png'
+import image_map_putuo from '../../assets/images/map_putuo.png'
+import image_map_wuzhuan from '../../assets/images/map_wuzhuan.png'
+import image_map_shituo from '../../assets/images/map_shituo.png'
 
 
 
@@ -72,6 +75,24 @@ const MapConfigs = {
         width: 367,
         height: 279
     },
+    '普陀山': {
+        topLeft: [0, 71],
+        BottomRight: [95, 0],
+        width: 372,
+        height: 277
+    },
+    '五庄观': {
+        topLeft: [0, 74],
+        BottomRight: [99, 0],
+        width: 377,
+        height: 278
+    },
+    '狮驼岭': {
+        topLeft: [0, 98],
+        BottomRight: [131, 0],
+        width: 370,
+        height: 276
+    },
 }
 
 function ChMhMapTool({
@@ -124,6 +145,13 @@ function ChMhMapTool({
         } else if (mapName === '北俱芦洲') {
             return image_map_beiju
         }
+        else if (mapName === '普陀山') {
+            return image_map_putuo
+        }else if (mapName === '五庄观') {
+            return image_map_wuzhuan
+        }else if (mapName === '狮驼岭') {
+            return image_map_shituo
+        }
         else {
             return image_map_jianye
         }
@@ -136,13 +164,17 @@ function ChMhMapTool({
                 pointDatas.map((pointData: any, index) => {
                     let realPoint = pointData.realPoint
                     let orgPoint = pointData.orgPoint
-                    return <div onClick={() => {
+                    return <div id={`${mapName}${index}`} onClick={() => {
+                        const dom = window.document.querySelector(`#${mapName}${index}`)
+                        // @ts-ignore
+                        dom!.style['background-color'] = '#fff'
                         message.info(
-                            `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`)
+                            `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`, 20)
                     }
-                    } key={index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'> <div className='chMhMapTool-map-point-text'>
+                    } key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'> 
+                    {/* <div className='chMhMapTool-map-point-text'>
                             第{index + 1}张，坐标({orgPoint[0]}, {orgPoint[1]})
-                        </div>
+                        </div> */}
                     </div>
                 })
             }
