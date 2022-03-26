@@ -13,11 +13,8 @@ import image_map_beiju from '../../assets/images/map_beiju.png'
 import image_map_putuo from '../../assets/images/map_putuo.png'
 import image_map_wuzhuan from '../../assets/images/map_wuzhuan.png'
 import image_map_shituo from '../../assets/images/map_shituo.png'
-
-
-
-
-
+import image_map_zhuziguo from '../../assets/images/map_zhuziguo.png'
+import { doGetWatuClickMap } from "../../call";
 
 
 const MapConfigs = {
@@ -93,12 +90,20 @@ const MapConfigs = {
         width: 370,
         height: 276
     },
+    '朱紫国': {
+        topLeft: [0, 119],
+        BottomRight: [190, 0],
+        width: 440,
+        height: 276
+    },
 }
 
 function ChMhMapTool({
+    deviceId,
     mapName,
     points
 }: {
+    deviceId: number,
     mapName: string,
     points: [number, number][]
 }) {
@@ -151,13 +156,23 @@ function ChMhMapTool({
             return image_map_wuzhuan
         }else if (mapName === '狮驼岭') {
             return image_map_shituo
+        }else if (mapName === '朱紫国') {
+            return image_map_zhuziguo
         }
         else {
             return image_map_jianye
         }
     }
+
+    const handleClickPoint = (map: string, realX: number, realY: number) => {
+        const x = Math.round(realX)
+        const y = Math.round(realY)
+        console.log(map, x, y);
+        doGetWatuClickMap(deviceId, mapName, x, y)
+    }
+
     const pointDatas = getRealPoint()
-    return <div className='chMhMapTool flex-center'>
+    return <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
         <div className='chMhMapTool-map'>
             <img width={mapConfig.width} height={mapConfig.height} src={getMapImage()} className="mh_map_jianye" />
             {
@@ -165,6 +180,7 @@ function ChMhMapTool({
                     let realPoint = pointData.realPoint
                     let orgPoint = pointData.orgPoint
                     return <div id={`${mapName}${index}`} onClick={() => {
+                        handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1])
                         const dom = window.document.querySelector(`#${mapName}${index}`)
                         // @ts-ignore
                         dom!.style['background-color'] = '#fff'
@@ -172,9 +188,6 @@ function ChMhMapTool({
                             `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`, 20)
                     }
                     } key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'> 
-                    {/* <div className='chMhMapTool-map-point-text'>
-                            第{index + 1}张，坐标({orgPoint[0]}, {orgPoint[1]})
-                        </div> */}
                     </div>
                 })
             }

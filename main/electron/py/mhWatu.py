@@ -6,6 +6,8 @@ import json
 import sys
 import io
 import time
+import fire
+import pyautogui
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -61,6 +63,7 @@ def F_获取任务位置和坐标(str):
 
 
 def F_获取宝图信息(deviceId):
+    deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
@@ -79,7 +82,7 @@ def F_获取宝图信息(deviceId):
             宝图位置信息 = [point[0], point[1], 255, 50]
             # 截图 + ocr识别
             path = window.F_窗口区域截图('temp_baotu_info.png', 宝图位置信息)
-            time.sleep(1)
+            time.sleep(0.2)
             print('放大宝图位置', path)
             ret = window.F_截图文字识别(path)
             if(ret != ''):
@@ -90,20 +93,39 @@ def F_获取宝图信息(deviceId):
     jsonArr = json.dumps(res, ensure_ascii=False)
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
-def F_点击小地图():
-    print('点击小地图')
+mapDict = {
+    '狮驼岭': "map_top_shituo.png",
+    '建邺城': "map_top_jianye.png",
+    '北俱芦洲': "map_top_beiju.png",
+    '大唐境外': "map_top_jingwai.png",
+    '大唐国境': "map_top_guojing.png",
+    '朱紫国': "map_top_zhuziguo.png",
+    '五庄观': "map_top_wuzhuangguan.png",
+}
+
+
+def F_点击小地图(deviceId, map ,x, y):
+    deviceId = str(deviceId)
+    print('点击小地图', deviceId, x, y)
     mapTopLeft = [190, 180]
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, '11')
+    window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
     # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
-    point = window.findImgInWindow('map_top_shituo.png')
-    window.pointMove(point[0] - 15 + 313, point[1] - 14 + 55)
+    point = window.findImgInWindow(mapDict.get(map))
+    window.pointMove(point[0] - 15 + x, point[1] - 14 + y)
+    pyautogui.click()
+
+
+
 
 
 if __name__ == '__main__':
     # args = sys.argv[1:]
     # deviceId = str(args[0])
     # F_获取宝图信息(deviceId)
-    F_点击小地图()
+    fire.Fire({
+        'info': F_获取宝图信息,
+        'clickMap': F_点击小地图,
+    })

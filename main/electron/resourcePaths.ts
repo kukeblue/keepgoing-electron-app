@@ -13,6 +13,7 @@ const resourcePaths = {
     METHOD_TEST2: 'method_test2',
     METHOD_KILL_PROCESS: 'method_kill_process',
     METHOD_GET_WATU_INFO: 'method_get_watu_info', // 获取挖图地图消息
+    METHOD_CLICK_WATU_MAP: 'method_click_watu_map', // 点击挖图位置
     METHOD_SYNC_IMAGES: 'method_sync_images', // 同步任务图片
 
     /* *******   主服务消息    ******* */

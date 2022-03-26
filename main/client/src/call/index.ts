@@ -8,6 +8,7 @@ export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
 export const doGetWatuInfo = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [deviceId])
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
+export const doGetWatuClickMap = (deviceId: number, mapName: string, x: number, y: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [deviceId, mapName, x, y])
 
 
 
