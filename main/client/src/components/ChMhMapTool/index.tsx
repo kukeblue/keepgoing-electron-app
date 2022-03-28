@@ -14,6 +14,9 @@ import image_map_putuo from '../../assets/images/map_putuo.png'
 import image_map_wuzhuan from '../../assets/images/map_wuzhuan.png'
 import image_map_shituo from '../../assets/images/map_shituo.png'
 import image_map_zhuziguo from '../../assets/images/map_zhuziguo.png'
+import image_map_huaguoshan from '../../assets/images/map_huaguoshan.png'
+import image_map_aolaiguo from '../../assets/images/map_aolaiguo.png'
+
 import { doGetWatuClickMap } from "../../call";
 
 
@@ -95,6 +98,16 @@ const MapConfigs = {
         BottomRight: [190, 0],
         width: 440,
         height: 276
+    },'花果山': {
+        topLeft: [0, 119],
+        BottomRight: [159, 0],
+        width: 368,
+        height: 276
+    },'傲来国': {
+        topLeft: [0, 150],
+        BottomRight: [221, 0],
+        width: 410,
+        height: 277
     },
 }
 
@@ -158,17 +171,21 @@ function ChMhMapTool({
             return image_map_shituo
         }else if (mapName === '朱紫国') {
             return image_map_zhuziguo
+        }else if (mapName === '花果山') {
+            return image_map_huaguoshan
+        }else if (mapName === '傲来国') {
+            return image_map_aolaiguo
         }
         else {
             return image_map_jianye
         }
     }
 
-    const handleClickPoint = (map: string, realX: number, realY: number) => {
+    const handleClickPoint = (map: string, realX: number, realY: number, index: number) => {
         const x = Math.round(realX)
         const y = Math.round(realY)
         console.log(map, x, y);
-        doGetWatuClickMap(deviceId, mapName, x, y)
+        doGetWatuClickMap(deviceId, mapName, x, y, index)
     }
 
     const pointDatas = getRealPoint()
@@ -180,7 +197,7 @@ function ChMhMapTool({
                     let realPoint = pointData.realPoint
                     let orgPoint = pointData.orgPoint
                     return <div id={`${mapName}${index}`} onClick={() => {
-                        handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1])
+                        handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1)
                         const dom = window.document.querySelector(`#${mapName}${index}`)
                         // @ts-ignore
                         dom!.style['background-color'] = '#fff'

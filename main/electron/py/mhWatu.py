@@ -101,30 +101,50 @@ mapDict = {
     '大唐国境': "map_top_guojing.png",
     '朱紫国': "map_top_zhuziguo.png",
     '五庄观': "map_top_wuzhuangguan.png",
+    '花果山': "map_top_huoguoshan.png",
+    '傲来国': "map_top_aolaiguo.png",
+    '麒麟山': "map_top_qilingshan.png",
+    '普陀山': "map_top_putuo.png",
+    '墨家村': "map_top_mojiacun.png",
+    '长寿郊外': "map_top_jiaowai.png",
+    '江南野外': "map_top_jiangnanyewai.png",
 }
 
 
-def F_点击小地图(deviceId, map ,x, y):
+
+
+# x, y, num
+def F_点击小地图(deviceId, map, json):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
-    mapTopLeft = [190, 180]
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
     # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
+    pyautogui.press('tab')
+    time.sleep(1)
     point = window.findImgInWindow(mapDict.get(map))
-    window.pointMove(point[0] - 15 + x, point[1] - 14 + y)
+    window.pointMove(point[0] + x, point[1] + y)
     pyautogui.click()
-
-
+    pyautogui.click()
+    window.F_是否结束寻路()
+    pyautogui.press('tab')
+    pyautogui.hotkey('alt', 'e')
+    time.sleep(0.2)
+    window.F_选中道具格子(num)
+    pyautogui.rightClick()
+    pyautogui.rightClick()
+    window.F_自动战斗()
 
 
 
 if __name__ == '__main__':
-    # args = sys.argv[1:]
-    # deviceId = str(args[0])
-    # F_获取宝图信息(deviceId)
+    # deviceId = str(11)
+    # MHWindow = mhWindow.MHWindow
+    # window = MHWindow(1, deviceId)
+    # window.findMhWindow()
+    # window.focusWindow()
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,
