@@ -10,11 +10,14 @@ import image_map_jingwai from '../../assets/images/map_jingwai.png'
 import image_map_guojing from '../../assets/images/map_guojing.png'
 import image_map_mojiacun from '../../assets/images/map_mojiacun.png'
 import image_map_beiju from '../../assets/images/map_beiju.png'
+import image_map_putuo from '../../assets/images/map_putuo.png'
+import image_map_wuzhuan from '../../assets/images/map_wuzhuan.png'
+import image_map_shituo from '../../assets/images/map_shituo.png'
+import image_map_zhuziguo from '../../assets/images/map_zhuziguo.png'
+import image_map_huaguoshan from '../../assets/images/map_huaguoshan.png'
+import image_map_aolaiguo from '../../assets/images/map_aolaiguo.png'
 
-
-
-
-
+import { doGetWatuClickMap } from "../../call";
 
 
 const MapConfigs = {
@@ -72,12 +75,48 @@ const MapConfigs = {
         width: 367,
         height: 279
     },
+    '普陀山': {
+        topLeft: [0, 71],
+        BottomRight: [95, 0],
+        width: 372,
+        height: 277
+    },
+    '五庄观': {
+        topLeft: [0, 74],
+        BottomRight: [99, 0],
+        width: 377,
+        height: 278
+    },
+    '狮驼岭': {
+        topLeft: [0, 98],
+        BottomRight: [131, 0],
+        width: 370,
+        height: 276
+    },
+    '朱紫国': {
+        topLeft: [0, 119],
+        BottomRight: [190, 0],
+        width: 440,
+        height: 276
+    },'花果山': {
+        topLeft: [0, 119],
+        BottomRight: [159, 0],
+        width: 368,
+        height: 276
+    },'傲来国': {
+        topLeft: [0, 150],
+        BottomRight: [221, 0],
+        width: 410,
+        height: 277
+    },
 }
 
 function ChMhMapTool({
+    deviceId,
     mapName,
     points
 }: {
+    deviceId: number,
     mapName: string,
     points: [number, number][]
 }) {
@@ -124,25 +163,48 @@ function ChMhMapTool({
         } else if (mapName === '北俱芦洲') {
             return image_map_beiju
         }
+        else if (mapName === '普陀山') {
+            return image_map_putuo
+        }else if (mapName === '五庄观') {
+            return image_map_wuzhuan
+        }else if (mapName === '狮驼岭') {
+            return image_map_shituo
+        }else if (mapName === '朱紫国') {
+            return image_map_zhuziguo
+        }else if (mapName === '花果山') {
+            return image_map_huaguoshan
+        }else if (mapName === '傲来国') {
+            return image_map_aolaiguo
+        }
         else {
             return image_map_jianye
         }
     }
+
+    const handleClickPoint = (map: string, realX: number, realY: number, index: number) => {
+        const x = Math.round(realX)
+        const y = Math.round(realY)
+        console.log(map, x, y);
+        doGetWatuClickMap(deviceId, mapName, x, y, index)
+    }
+
     const pointDatas = getRealPoint()
-    return <div className='chMhMapTool flex-center'>
+    return <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
         <div className='chMhMapTool-map'>
             <img width={mapConfig.width} height={mapConfig.height} src={getMapImage()} className="mh_map_jianye" />
             {
                 pointDatas.map((pointData: any, index) => {
                     let realPoint = pointData.realPoint
                     let orgPoint = pointData.orgPoint
-                    return <div onClick={() => {
+                    return <div id={`${mapName}${index}`} onClick={() => {
+                        handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1)
+                        const dom = window.document.querySelector(`#${mapName}${index}`)
+                        // @ts-ignore
+                        dom!.style['background-color'] = '#fff'
                         message.info(
-                            `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`)
+                            `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`, 20)
                     }
-                    } key={index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'> <div className='chMhMapTool-map-point-text'>
-                            第{index + 1}张，坐标({orgPoint[0]}, {orgPoint[1]})
-                        </div>
+                    } key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'> 
                     </div>
                 })
             }

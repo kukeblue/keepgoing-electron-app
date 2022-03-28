@@ -24,10 +24,11 @@ const { useOptionFormListHook } = ChUtils.chHooks
 type TWatuInfo = {
     mapName: string,
     points: [number, number][]
+    deviceId?: number
 }
 
 let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice'
-
+let watuDeviceId = 0
 function usePageStore() {
     useEffect(() => {
         MainThread.messageListener.pushLogHandles.push(handlePushLog)
@@ -80,7 +81,8 @@ function usePageStore() {
         console.log('handleGetWatuInfoReply:', points);
         setWatuInfo({
             mapName,
-            points
+            points,
+            deviceId: watuDeviceId,
         })
     }
     const handleSelectJiangjunDevice = () => {
@@ -97,6 +99,7 @@ function usePageStore() {
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
+                watuDeviceId = res.deviceId
                 handleGetWatuInfo(res.deviceId)
                 setShowSelectDeviceModal(false)
             }
@@ -303,7 +306,7 @@ function HomeFeature() {
             </Col>
         </Row>
         <div className="home-feature-panel">
-            {pageStore.watuInfo && <ChMhMapTool mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
+            {pageStore.watuInfo && <ChMhMapTool deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
         </div>
     </div>
 

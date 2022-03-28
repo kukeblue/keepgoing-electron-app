@@ -70,7 +70,16 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 读取宝图
     ipcMain.on(resourcePaths.METHOD_GET_WATU_INFO, (event, args) => {
         logger.info('run py script: METHOD_GET_WATU_INFO')
-        const result = runPyScript('mhWatu', args)
+        const result = runPyScript('mhWatu', ['info', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    // 点击小地图
+    ipcMain.on(resourcePaths.METHOD_CLICK_WATU_MAP, (event, args) => {
+        logger.info('run py script: METHOD_CLICK_WATU_MAP')
+        const result = runPyScript('mhWatu', ['clickMap', ...args])
         event.returnValue = {
             code: result,
             status: 0
