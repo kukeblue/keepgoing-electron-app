@@ -108,13 +108,13 @@ mapDict = {
     '墨家村': "map_top_mojiacun.png",
     '长寿郊外': "map_top_jiaowai.png",
     '江南野外': "map_top_jiangnanyewai.png",
+    '江南野外': "map_top_jiangnanyewai.png",
+    '女儿村': "map_top_nvercun.png",
+    '东海湾': "map_top_donghaiwan.png",
 }
 
-
-
-
 # x, y, num
-def F_点击小地图(deviceId, map, json):
+def F_点击小地图(deviceId, map, x, y, num):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -128,15 +128,20 @@ def F_点击小地图(deviceId, map, json):
     window.pointMove(point[0] + x, point[1] + y)
     pyautogui.click()
     pyautogui.click()
-    window.F_是否结束寻路()
     pyautogui.press('tab')
-    pyautogui.hotkey('alt', 'e')
-    time.sleep(0.2)
-    window.F_选中道具格子(num)
-    pyautogui.rightClick()
-    pyautogui.rightClick()
-    window.F_自动战斗()
+    # window.F_是否结束寻路()
+    # pyautogui.press('tab')
+    # pyautogui.hotkey('alt', 'e')
+    # time.sleep(0.2)
+    # window.F_选中道具格子(num)
+    # pyautogui.rightClick()
+    # pyautogui.rightClick()
+    # window.F_自动战斗()
+    # pyautogui.hotkey('alt', 'e')
 
+# json = [[x, y, num], [x, y, num]]
+def F_循环挖图(deviceId, map, json): 
+    print('F_循环挖图')
 
 
 if __name__ == '__main__':

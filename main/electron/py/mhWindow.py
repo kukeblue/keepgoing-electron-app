@@ -7,7 +7,7 @@ import pyautogui
 import sys
 import baiduApi
 import time
-import utils
+# import utils
 import math
 
 
@@ -151,20 +151,20 @@ class MHWindow:
         # 截图 + ocr识别
         path = self.F_窗口区域截图('temp_zuobiao_info.png', 位置信息)
         time.sleep(1)
-        ret = utils.F_本地文字识别(path)
+        # ret = utils.F_本地文字识别(path)
         return ret
 
-    def F_是否结束寻路(self):
-        当前坐标 = self.F_识别当前坐标()
-        count = 0
-        while(True):
-            坐标 = self.F_识别当前坐标()
-            print('F_是否结束寻路', 当前坐标, 坐标)
-            if(当前坐标 == 坐标):
-                break
-            else:
-               当前坐标 = 坐标
-            count = count + 1
+    # def F_是否结束寻路(self):
+    #     当前坐标 = self.F_识别当前坐标()
+    #     count = 0
+    #     while(True):
+    #         坐标 = self.F_识别当前坐标()
+    #         print('F_是否结束寻路', 当前坐标, 坐标)
+    #         if(当前坐标 == 坐标):
+    #             break
+    #         else:
+    #            当前坐标 = 坐标
+    #         count = count + 1
 
 
     def F_自动战斗(self):
