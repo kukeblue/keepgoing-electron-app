@@ -1,4 +1,5 @@
 # coding=utf-8
+from cv2 import log
 import logUtil
 import mhWindow
 import re
@@ -93,6 +94,7 @@ def F_获取宝图信息(deviceId):
     jsonArr = json.dumps(res, ensure_ascii=False)
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
+
 mapDict = {
     '狮驼岭': "map_top_shituo.png",
     '建邺城': "map_top_jianye.png",
@@ -113,8 +115,8 @@ mapDict = {
     '东海湾': "map_top_donghaiwan.png",
 }
 
-# x, y, num
-def F_点击小地图(deviceId, map, x, y, num):
+
+def F_点击宝图(deviceId, map, x, y, num):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -129,19 +131,50 @@ def F_点击小地图(deviceId, map, x, y, num):
     pyautogui.click()
     pyautogui.click()
     pyautogui.press('tab')
-    # window.F_是否结束寻路()
-    # pyautogui.press('tab')
-    # pyautogui.hotkey('alt', 'e')
-    # time.sleep(0.2)
-    # window.F_选中道具格子(num)
-    # pyautogui.rightClick()
-    # pyautogui.rightClick()
-    # window.F_自动战斗()
-    # pyautogui.hotkey('alt', 'e')
 
-# json = [[x, y, num], [x, y, num]]
-def F_循环挖图(deviceId, map, json): 
-    print('F_循环挖图')
+
+def 排序(x, y):
+    return -1
+
+
+def F_获取最近的坐标点(x, y, other):
+    other.sort(排序)
+    logUtil.chLog(x, y, other)
+
+
+def F_点击宝图并寻路(deviceId, map, x, y, num, other):
+    deviceId = str(deviceId)
+    print('点击小地图', deviceId, x, y)
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1, deviceId)
+    window.findMhWindow()
+    window.focusWindow()
+    # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
+    pyautogui.press('tab')
+    time.sleep(1)
+    point = window.findImgInWindow(mapDict.get(map))
+    window.pointMove(point[0] + x, point[1] + y)
+    pyautogui.click()
+    pyautogui.click()
+    pyautogui.press('tab')
+    window.F_是否结束寻路()
+    pyautogui.press('tab')
+    pyautogui.hotkey('alt', 'e')
+    time.sleep(0.2)
+    window.F_选中道具格子(num)
+    pyautogui.rightClick()
+    pyautogui.rightClick()
+    window.F_自动战斗()
+    pyautogui.hotkey('alt', 'e')
+    F_获取最近的坐标点(x, y, other)
+
+
+def F_点击小地图(deviceId, map, x, y, num, other):
+    logUtil.chLog(other[0].get('realY'))
+    if(other == None):
+        F_点击宝图(deviceId, map, x, y, num)
+    else:
+        F_点击宝图并寻路(deviceId, map, x, y, num, other)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { message, Switch  } from 'antd'
+import { message, Switch } from 'antd'
 import './index.less'
 import image_map_jianye from '../../assets/images/map_jianye.png'
 import image_map_donghaiwan from '../../assets/images/map_donghaiwan.png'
@@ -100,17 +100,17 @@ const MapConfigs = {
         BottomRight: [190, 0],
         width: 440,
         height: 276
-    },'花果山': {
+    }, '花果山': {
         topLeft: [0, 119],
         BottomRight: [159, 0],
         width: 368,
         height: 276
-    },'傲来国': {
+    }, '傲来国': {
         topLeft: [0, 150],
         BottomRight: [221, 0],
         width: 410,
         height: 277
-    },'女儿村': {
+    }, '女儿村': {
         topLeft: [0, 143],
         BottomRight: [127, 0],
         width: 320,
@@ -171,59 +171,71 @@ function ChMhMapTool({
         }
         else if (mapName === '普陀山') {
             return image_map_putuo
-        }else if (mapName === '五庄观') {
+        } else if (mapName === '五庄观') {
             return image_map_wuzhuan
-        }else if (mapName === '狮驼岭') {
+        } else if (mapName === '狮驼岭') {
             return image_map_shituo
-        }else if (mapName === '朱紫国') {
+        } else if (mapName === '朱紫国') {
             return image_map_zhuziguo
-        }else if (mapName === '花果山') {
+        } else if (mapName === '花果山') {
             return image_map_huaguoshan
-        }else if (mapName === '傲来国') {
+        } else if (mapName === '傲来国') {
             return image_map_aolaiguo
-        }else if (mapName === '女儿村') {
+        } else if (mapName === '女儿村') {
             return image_map_nvercun
         }
         else {
             return image_map_jianye
         }
     }
+    const pointDatas = getRealPoint()
 
     const handleClickPoint = (map: string, realX: number, realY: number, index: number) => {
         const x = Math.round(realX)
         const y = Math.round(realY)
-        console.log(map, x, y);
-        doGetWatuClickMap(deviceId, mapName, x, y, index)
+        if (mulMode) {
+            let otherPoint = pointDatas.map((item, i) => {
+                return {
+                    realX: Math.round(item.realPoint[0]),
+                    realY: Math.round(item.realPoint[1]),
+                    index: i + 1,
+                }
+            })
+            otherPoint = otherPoint.splice(index - 1, 1)
+            let otherJson = JSON.stringify(otherPoint)
+            doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson)
+        } else {
+            doGetWatuClickMap(deviceId, mapName, x, y, index)
+        }
     }
 
-    const pointDatas = getRealPoint()
     return <div>
-        <br/>
+        <br />
         <div>
-        <span style={{color: '#000'}}>是否群挖</span>： <Switch checked={mulMode} onChange={(e)=>setMulMode(e)} />
+            <span style={{ color: '#000' }}>是否群挖</span>： <Switch checked={mulMode} onChange={(e) => setMulMode(e)} />
         </div>
-       <br/>
-    <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
-        <div className='chMhMapTool-map'>
-            <img width={mapConfig.width} height={mapConfig.height} src={getMapImage()} className="mh_map_jianye" />
-            {
-                pointDatas.map((pointData: any, index) => {
-                    let realPoint = pointData.realPoint
-                    let orgPoint = pointData.orgPoint
-                    return <div id={`${mapName}${index}`} onClick={() => {
-                        handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1)
-                        const dom = window.document.querySelector(`#${mapName}${index}`)
-                        // @ts-ignore
-                        dom!.style['background-color'] = '#fff'
-                        message.info(
-                            `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`, 20)
-                    }
-                    } key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'> 
-                    </div>
-                })
-            }
+        <br />
+        <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
+            <div className='chMhMapTool-map'>
+                <img width={mapConfig.width} height={mapConfig.height} src={getMapImage()} className="mh_map_jianye" />
+                {
+                    pointDatas.map((pointData: any, index) => {
+                        let realPoint = pointData.realPoint
+                        let orgPoint = pointData.orgPoint
+                        return <div id={`${mapName}${index}`} onClick={() => {
+                            handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1)
+                            const dom = window.document.querySelector(`#${mapName}${index}`)
+                            // @ts-ignore
+                            dom!.style['background-color'] = '#fff'
+                            message.info(
+                                `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`, 20)
+                        }
+                        } key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'>
+                        </div>
+                    })
+                }
+            </div>
         </div>
-    </div>
     </div>
 }
 
