@@ -35,10 +35,20 @@ import time
 
 # #打印所有文本信息
 # ret = ''
+<<<<<<< HEAD
 # while(True):
 #     pyautogui.press('up')
 #     pyautogui.press('enter')
 #     time.sleep(10)
+=======
+# for t in text:
+#     ret = ret + t[1][0]
+# print(ret)
+>>>>>>> fbcf2f4c8c82d1c671fb5d03d1395925845de43b
 
+import json
 
+str = '[ [ 15, 20 ], [ 5, 28 ], [ 17, 150 ] ]'
+data = json.loads(str)
+print(data[0])
 # if __name__ == "__main__":

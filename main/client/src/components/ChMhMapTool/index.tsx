@@ -1,5 +1,5 @@
-import React from 'react'
-import { message } from 'antd'
+import React, { useState } from 'react'
+import { message, Switch  } from 'antd'
 import './index.less'
 import image_map_jianye from '../../assets/images/map_jianye.png'
 import image_map_donghaiwan from '../../assets/images/map_donghaiwan.png'
@@ -16,6 +16,8 @@ import image_map_shituo from '../../assets/images/map_shituo.png'
 import image_map_zhuziguo from '../../assets/images/map_zhuziguo.png'
 import image_map_huaguoshan from '../../assets/images/map_huaguoshan.png'
 import image_map_aolaiguo from '../../assets/images/map_aolaiguo.png'
+import image_map_nvercun from '../../assets/images/map_nvercun.png'
+
 
 import { doGetWatuClickMap } from "../../call";
 
@@ -108,6 +110,11 @@ const MapConfigs = {
         BottomRight: [221, 0],
         width: 410,
         height: 277
+    },'女儿村': {
+        topLeft: [0, 143],
+        BottomRight: [127, 0],
+        width: 320,
+        height: 362
     },
 }
 
@@ -127,7 +134,7 @@ function ChMhMapTool({
         width: 557,
         height: 275
     }
-
+    const [mulMode, setMulMode] = useState(false)
     const getRealPoint = () => {
         return points.map(point => {
             let realPoint = [0, 0]
@@ -140,7 +147,6 @@ function ChMhMapTool({
             }
         })
     }
-
     const getMapImage = () => {
         if (mapName === '建邺城') {
             return image_map_jianye
@@ -175,6 +181,8 @@ function ChMhMapTool({
             return image_map_huaguoshan
         }else if (mapName === '傲来国') {
             return image_map_aolaiguo
+        }else if (mapName === '女儿村') {
+            return image_map_nvercun
         }
         else {
             return image_map_jianye
@@ -189,7 +197,13 @@ function ChMhMapTool({
     }
 
     const pointDatas = getRealPoint()
-    return <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
+    return <div>
+        <br/>
+        <div>
+        <span style={{color: '#000'}}>是否群挖</span>： <Switch checked={mulMode} onChange={(e)=>setMulMode(e)} />
+        </div>
+       <br/>
+    <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
         <div className='chMhMapTool-map'>
             <img width={mapConfig.width} height={mapConfig.height} src={getMapImage()} className="mh_map_jianye" />
             {
@@ -209,6 +223,7 @@ function ChMhMapTool({
                 })
             }
         </div>
+    </div>
     </div>
 }
 
