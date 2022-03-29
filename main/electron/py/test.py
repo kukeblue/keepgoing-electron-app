@@ -1,5 +1,7 @@
 # import logUtil
-# import pyautogui
+import pyautogui
+import time
+
 # pyautogui.FAILSAFE = False
 
 # # def slowMove(x1, y1, x2, y2):
@@ -26,16 +28,17 @@
 #     # need to run only once to download and load model into memory
 #     img_path = './config/images/temp/temp_baotu_info.png'
 #     baiduApi.F_通用文字识别(img_path)
-from paddleocr import PaddleOCR
+# from paddleocr import PaddleOCR
 
-ocr=PaddleOCR(use_angle_cls = True,use_gpu= True)
-text=ocr.ocr("D:\develop\project\keepgoing-electron-app\main\electron\py\config\images/temp/temp_zuobiao_info.png",cls=True)
+# ocr=PaddleOCR(use_angle_cls = True,use_gpu= True)
+# text=ocr.ocr("D:\develop\project\keepgoing-electron-app\main\electron\py\config\images/temp/temp_zuobiao_info.png",cls=True)
 
-#打印所有文本信息
-ret = ''
-for t in text:
-    ret = ret + t[1][0]
-print(ret)
+# #打印所有文本信息
+# ret = ''
+# while(True):
+#     pyautogui.press('up')
+#     pyautogui.press('enter')
+#     time.sleep(10)
 
 
 # if __name__ == "__main__":
