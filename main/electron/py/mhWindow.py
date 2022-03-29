@@ -7,7 +7,7 @@ import pyautogui
 import sys
 import baiduApi
 import time
-# import utils
+import utils
 import math
 
 
@@ -42,7 +42,8 @@ class MHWindow:
             self.windowAreaGui = (
                 leftx, topy, self.getTruthPx(800), self.getTruthPx(600))
             print(self.windowAreaGui)
-            pyautogui.screenshot(self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
+            pyautogui.screenshot(
+                self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
         else:
             print('未找到前台梦幻窗口')
 
@@ -59,7 +60,7 @@ class MHWindow:
 
     def F_截图文字识别(self, path):
         return baiduApi.F_通用文字识别(path)
-    
+
     def findPicture(self, img):
         return pyautogui.locateOnScreen(self.pyImageDir + self.F_获取设备图片(img))
 
@@ -78,7 +79,8 @@ class MHWindow:
             location = pyautogui.locateOnScreen(
                 self.pyImageDir + self.F_获取设备图片(img), region=windowArea, grayscale=False)
         else:
-            location = pyautogui.locateOnScreen(self.pyImageDir + self.F_获取设备图片(img), region=windowArea, confidence=confidence)
+            location = pyautogui.locateOnScreen(
+                self.pyImageDir + self.F_获取设备图片(img), region=windowArea, confidence=confidence)
 
         if(location != None):
             return [int(location.left / self.screenUnit), int(location.top / self.screenUnit), int(location.width / self.screenUnit), int(location.height / self.screenUnit)]
@@ -116,7 +118,7 @@ class MHWindow:
         pyautogui.click()
 
     def pointMove(self, x, y):
-        mx = x - 15
+        mx = x - 18
         my = y - 17
         finished = False
         while not finished:
@@ -135,7 +137,8 @@ class MHWindow:
 
     def F_是否在战斗(self):
         try:
-            point =self.findImgInWindow('window_zhandou_mask.png', area=(441, 561, 40, 40))
+            point = self.findImgInWindow(
+                'window_zhandou_mask.png', area=(441, 561, 40, 40))
             if point != None:
                 print('F_是否在战斗： 是')
                 return True
@@ -145,40 +148,48 @@ class MHWindow:
         except:
             print('F_是否在战斗： 是')
             return False
-    
+
     def F_识别当前坐标(self):
         位置信息 = [self.windowArea[0], self.windowArea[1] + 19, 124, 52]
         # 截图 + ocr识别
         path = self.F_窗口区域截图('temp_zuobiao_info.png', 位置信息)
         time.sleep(1)
-        # ret = utils.F_本地文字识别(path)
+        ret = utils.F_本地文字识别(path)
         return ret
 
-    # def F_是否结束寻路(self):
-    #     当前坐标 = self.F_识别当前坐标()
-    #     count = 0
-    #     while(True):
-    #         坐标 = self.F_识别当前坐标()
-    #         print('F_是否结束寻路', 当前坐标, 坐标)
-    #         if(当前坐标 == 坐标):
-    #             break
-    #         else:
-    #            当前坐标 = 坐标
-    #         count = count + 1
-
+    def F_是否结束寻路(self):
+        当前坐标颜色1 = utils.getPointColor(
+            self.windowArea[0] + 4, self.windowArea[1] + 55)
+        当前坐标颜色2 = utils.getPointColor(
+            self.windowArea[0] + 795, self.windowArea[1] + 558)
+        count = 0
+        while(True):
+            time.sleep(0.5)
+            坐标颜色1 = utils.getPointColor(
+                self.windowArea[0] + 4, self.windowArea[1] + 55)
+            坐标颜色2 = utils.getPointColor(
+                self.windowArea[0] + 795, self.windowArea[1] + 558)
+            if(当前坐标颜色1 == 坐标颜色1 or 当前坐标颜色2 == 坐标颜色2):
+                if(count > 2):
+                    break
+                count = count + 1
+            else:
+                count = 0
+                当前坐标颜色2 = 坐标颜色2
+                当前坐标颜色1 = 坐标颜色1
 
     def F_自动战斗(self):
-        for i in range(20):
+        for i in range(3):
             print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(1)
             if(self.F_是否在战斗()):
                 print('F_自动战斗：进入战斗')
                 while(True):
-                   time.sleep(1)
-                   if(self.F_是否在战斗() == False):
-                       print('F_自动战斗：结束战斗')
-                       break
-    
+                    time.sleep(1)
+                    if(self.F_是否在战斗() == False):
+                        print('F_自动战斗：结束战斗')
+                        break
+
     def F_选中道具格子(self, num):
         point = self.findImgInWindow('daoju_top.png')
         if(point != None):
@@ -187,6 +198,7 @@ class MHWindow:
             left = ((num-1) % 5) * 50
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
+
 
 if __name__ == '__main__':
     window = MHWindow(1, '11')

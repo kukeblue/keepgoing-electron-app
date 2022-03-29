@@ -1,6 +1,7 @@
 # import logUtil
 import pyautogui
 import time
+import utils
 
 # pyautogui.FAILSAFE = False
 
@@ -43,9 +44,10 @@ import time
 #     ret = ret + t[1][0]
 # print(ret)
 
-import json
+# import json
 
-str = '[ [ 15, 20 ], [ 5, 28 ], [ 17, 150 ] ]'
-data = json.loads(str)
-print(data[0])
+# str = '[ [ 15, 20 ], [ 5, 28 ], [ 17, 150 ] ]'
+# data = json.loads(str)
+# print(data[0])
 # if __name__ == "__main__":
+print()

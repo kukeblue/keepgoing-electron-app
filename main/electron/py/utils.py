@@ -1,10 +1,15 @@
+from paddleocr import PaddleOCR
 from pickle import TRUE
 import time
 import baiduApi
-# from win32com.client import Dispatch
-# op = Dispatch("op.opsoft")
-from paddleocr import PaddleOCR
-ocr=PaddleOCR(use_angle_cls = True, use_gpu= True, show_log=False)
+from win32com.client import Dispatch
+op = Dispatch("op.opsoft")
+ocr = PaddleOCR(use_angle_cls=True, use_gpu=True, show_log=False)
+
+
+def getPointColor(x, y):
+    return op.getColor(x, y)
+
 
 def writeText(text):
     if text == 'ch.1993.com':
@@ -31,12 +36,14 @@ def pressKeyGroup(key1, key2):
     op.KeyPress(key2)
     op.KeyUp(key1)
 
+
 def F_本地文字识别(path):
-    text=ocr.ocr(path, cls=True)
+    text = ocr.ocr(path, cls=True)
     ret = ''
     for t in text:
         ret = ret + t[1][0]
     return ret
+
 
 def F_通用文字识别(path):
     try:

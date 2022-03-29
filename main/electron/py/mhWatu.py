@@ -138,8 +138,15 @@ def 排序(x, y):
 
 
 def F_获取最近的坐标点(x, y, other):
-    other.sort(排序)
-    logUtil.chLog(x, y, other)
+    for item in other:
+        distance = (item.get('realX') - x) * (item.get('realX') -
+                                              x) + (item.get('realY') - y)*(item.get('realY') - y)
+        item['distance'] = distance
+    sortother = sorted(other, key=lambda item: item['distance'])
+    logUtil.chLog(sortother)
+    newOther = sortother[1:]
+    point = sortother[0]
+    return point, newOther
 
 
 def F_点击宝图并寻路(deviceId, map, x, y, num, other):
@@ -156,7 +163,6 @@ def F_点击宝图并寻路(deviceId, map, x, y, num, other):
     window.pointMove(point[0] + x, point[1] + y)
     pyautogui.click()
     pyautogui.click()
-    pyautogui.press('tab')
     window.F_是否结束寻路()
     pyautogui.press('tab')
     pyautogui.hotkey('alt', 'e')
@@ -166,11 +172,13 @@ def F_点击宝图并寻路(deviceId, map, x, y, num, other):
     pyautogui.rightClick()
     window.F_自动战斗()
     pyautogui.hotkey('alt', 'e')
-    F_获取最近的坐标点(x, y, other)
+    if(len(other) > 0):
+        point, newOther = F_获取最近的坐标点(x, y, other)
+        F_点击宝图并寻路(deviceId, map, point['realX'],
+                  point['realY'], point['index'], newOther)
 
 
 def F_点击小地图(deviceId, map, x, y, num, other):
-    logUtil.chLog(other[0].get('realY'))
     if(other == None):
         F_点击宝图(deviceId, map, x, y, num)
     else:

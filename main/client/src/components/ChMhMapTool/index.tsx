@@ -136,7 +136,8 @@ function ChMhMapTool({
     }
     const [mulMode, setMulMode] = useState(false)
     const getRealPoint = () => {
-        return points.map(point => {
+        let _points = points.filter(item => !(item[0] == 0 && item[1] == 0))
+        return _points.map(point => {
             let realPoint = [0, 0]
             let left = (mapConfig.width / (mapConfig.BottomRight[0] - mapConfig.topLeft[0])) * point[0]
             let top = (mapConfig.height / (mapConfig.topLeft[1] - mapConfig.BottomRight[1])) * point[1]
@@ -197,11 +198,11 @@ function ChMhMapTool({
             let otherPoint = pointDatas.map((item, i) => {
                 return {
                     realX: Math.round(item.realPoint[0]),
-                    realY: Math.round(item.realPoint[1]),
+                    realY: Math.round(mapConfig.height - item.realPoint[1]),
                     index: i + 1,
                 }
             })
-            otherPoint = otherPoint.splice(index - 1, 1)
+            otherPoint.splice(index - 1, 1)
             let otherJson = JSON.stringify(otherPoint)
             doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson)
         } else {
