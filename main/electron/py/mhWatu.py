@@ -77,13 +77,14 @@ def F_获取宝图信息(deviceId):
     for point in points:
         print(point)
         window.pointMove(point[0], point[1])
+        time.sleep(0.3)
         point = window.findImgInWindow('daoju_baotu_large.png')
         print('放大宝图位置', point)
         if(point != None):
             宝图位置信息 = [point[0], point[1], 255, 50]
             # 截图 + ocr识别
             path = window.F_窗口区域截图('temp_baotu_info.png', 宝图位置信息)
-            time.sleep(0.2)
+            time.sleep(0.5)
             print('放大宝图位置', path)
             ret = window.F_截图文字识别(path)
             if(ret != ''):
@@ -116,7 +117,7 @@ mapDict = {
 }
 
 
-def F_点击宝图(deviceId, map, x, y, num):
+def F_点击宝图(window, deviceId, map, x, y, num):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -131,10 +132,6 @@ def F_点击宝图(deviceId, map, x, y, num):
     pyautogui.click()
     pyautogui.click()
     pyautogui.press('tab')
-
-
-def 排序(x, y):
-    return -1
 
 
 def F_获取最近的坐标点(x, y, other):
@@ -149,13 +146,8 @@ def F_获取最近的坐标点(x, y, other):
     return point, newOther
 
 
-def F_点击宝图并寻路(deviceId, map, x, y, num, other):
-    deviceId = str(deviceId)
-    print('点击小地图', deviceId, x, y)
-    MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
-    window.findMhWindow()
-    window.focusWindow()
+def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
+    logUtil.chLog('F_点击宝图并寻路:' + str(num))
     # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
     pyautogui.press('tab')
     time.sleep(1)
@@ -169,20 +161,26 @@ def F_点击宝图并寻路(deviceId, map, x, y, num, other):
     time.sleep(0.2)
     window.F_选中道具格子(num)
     pyautogui.rightClick()
-    pyautogui.rightClick()
+    # pyautogui.rightClick()
     window.F_自动战斗()
     pyautogui.hotkey('alt', 'e')
     if(len(other) > 0):
         point, newOther = F_获取最近的坐标点(x, y, other)
-        F_点击宝图并寻路(deviceId, map, point['realX'],
+        F_点击宝图并寻路(window, deviceId, map, point['realX'],
                   point['realY'], point['index'], newOther)
 
 
 def F_点击小地图(deviceId, map, x, y, num, other):
+    deviceId = str(deviceId)
+    print('点击小地图', deviceId, x, y)
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1, deviceId)
+    window.findMhWindow()
+    window.focusWindow()
     if(other == None):
-        F_点击宝图(deviceId, map, x, y, num)
+        F_点击宝图(window, deviceId, map, x, y, num)
     else:
-        F_点击宝图并寻路(deviceId, map, x, y, num, other)
+        F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
 
 
 if __name__ == '__main__':
