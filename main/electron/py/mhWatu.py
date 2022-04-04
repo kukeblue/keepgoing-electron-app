@@ -147,27 +147,32 @@ def F_获取最近的坐标点(x, y, other):
 
 
 def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
-    logUtil.chLog('F_点击宝图并寻路:' + str(num))
-    # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
-    pyautogui.press('tab')
-    time.sleep(1)
-    point = window.findImgInWindow(mapDict.get(map))
-    window.pointMove(point[0] + x, point[1] + y)
-    pyautogui.click()
-    pyautogui.click()
-    window.F_是否结束寻路()
-    pyautogui.press('tab')
-    pyautogui.hotkey('alt', 'e')
-    time.sleep(0.2)
-    window.F_选中道具格子(num)
-    pyautogui.rightClick()
-    # pyautogui.rightClick()
-    window.F_自动战斗()
-    pyautogui.hotkey('alt', 'e')
-    if(len(other) > 0):
+    if(x == 0 or y == 0):
         point, newOther = F_获取最近的坐标点(x, y, other)
         F_点击宝图并寻路(window, deviceId, map, point['realX'],
                   point['realY'], point['index'], newOther)
+    else:   
+        logUtil.chLog('F_点击宝图并寻路:' + str(num))
+        # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
+        pyautogui.press('tab')
+        time.sleep(1)
+        point = window.findImgInWindow(mapDict.get(map))
+        window.pointMove(point[0] + x, point[1] + y)
+        pyautogui.click()
+        pyautogui.click()
+        window.F_是否结束寻路()
+        pyautogui.press('tab')
+        pyautogui.hotkey('alt', 'e')
+        time.sleep(0.2)
+        window.F_选中道具格子(num)
+        pyautogui.rightClick()
+        # pyautogui.rightClick()
+        window.F_自动战斗()
+        pyautogui.hotkey('alt', 'e')
+        if(len(other) > 0):
+            point, newOther = F_获取最近的坐标点(x, y, other)
+            F_点击宝图并寻路(window, deviceId, map, point['realX'],
+                    point['realY'], point['index'], newOther)
 
 
 def F_点击小地图(deviceId, map, x, y, num, other):

@@ -136,7 +136,8 @@ function ChMhMapTool({
     }
     const [mulMode, setMulMode] = useState(false)
     const getRealPoint = () => {
-        let _points = points.filter(item => !(item[0] == 0 && item[1] == 0))
+        // let _points = points.filter(item => !(item[0] == 0 && item[1] == 0))
+        let _points = points
         return _points.map(point => {
             let realPoint = [0, 0]
             let left = (mapConfig.width / (mapConfig.BottomRight[0] - mapConfig.topLeft[0])) * point[0]
