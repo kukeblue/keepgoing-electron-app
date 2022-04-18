@@ -118,8 +118,8 @@ class MHWindow:
         pyautogui.click()
 
     def pointMove(self, x, y):
-        mx = x - 18
-        my = y - 17
+        mx = x - 20
+        my = y - 16
         finished = False
         while not finished:
             point = self.checkpoint()
@@ -191,6 +191,8 @@ class MHWindow:
                         break
 
     def F_选中道具格子(self, num):
+        pyautogui.hotkey('alt', 'e')
+        time.sleep(0.2)
         point = self.findImgInWindow('daoju_top.png')
         if(point != None):
             firstBlockX = point[0] + 26
