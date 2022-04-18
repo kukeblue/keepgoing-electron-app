@@ -277,7 +277,12 @@ function HomeGameArea() {
             hadleSubmitDevice()
         }} visible={pageStore.showSelectDeviceModal}>
             <div>
-                <ChForm form={pageStore.formRef} formData={[{ type: FormItemType.select, label: '选择设备', name: 'deviceId', options: pageStore.deviceOptions }]} />
+                <ChForm form={pageStore.formRef} formData={[{
+                    type: FormItemType.select, label: '选择设备', name: 'deviceId', options: [{
+                        label: '我的电脑',
+                        value: '9'
+                    }]
+                }]} />
             </div>
         </Modal>
     </div>
