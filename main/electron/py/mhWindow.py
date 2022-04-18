@@ -49,7 +49,6 @@ class MHWindow:
 
     def focusWindow(self):
         pyautogui.moveTo(self.windowArea[0] + 400, self.windowArea[1] + 300)
-        pyautogui.click()
 
     def F_窗口区域截图(self, fileName, windowRegion):
         region = (windowRegion[0] * self.screenUnit, windowRegion[1] * self.screenUnit,
@@ -60,6 +59,9 @@ class MHWindow:
 
     def F_截图文字识别(self, path):
         return baiduApi.F_通用文字识别(path)
+
+    def F_宝图文字识别(self, area):
+        return baiduApi.F_大漠宝图文字识别(area)
 
     def findPicture(self, img):
         return pyautogui.locateOnScreen(self.pyImageDir + self.F_获取设备图片(img))
@@ -124,7 +126,7 @@ class MHWindow:
         while not finished:
             point = self.checkpoint()
             if(point != None):
-                dx = point[0] - 30
+                dx = point[0] - 27
                 dy = point[1] - 27
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx

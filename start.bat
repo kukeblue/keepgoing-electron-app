@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @ECHO OFF
 setlocal EnableDelayedExpansion
 color 3e
@@ -15,3 +16,6 @@ echo 执行完毕,任意键退出
  
 pause >nul
 exit
+=======
+yarn start
+>>>>>>> eaed92dbbf846d24a5d5ded0f24b6dd37beb2886

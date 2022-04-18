@@ -56,8 +56,8 @@ const MapConfigs = {
     '大唐境外': {
         topLeft: [0, 119],
         BottomRight: [638, 0],
-        width: 583,
-        height: 109
+        width: 585,
+        height: 108
     },
     '大唐国境': {
         topLeft: [0, 335],

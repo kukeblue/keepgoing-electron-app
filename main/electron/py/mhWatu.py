@@ -75,25 +75,26 @@ def F_获取宝图信息(deviceId):
     print(len(points))
     res = []
     for point in points:
-        print(point)
-        window.pointMove(point[0], point[1])
-        time.sleep(0.3)
-        point = window.findImgInWindow('daoju_baotu_large.png')
-        print('放大宝图位置', point)
-        if(point != None):
-            宝图位置信息 = [point[0], point[1], 255, 50]
-            # 截图 + ocr识别
-            path = window.F_窗口区域截图('temp_baotu_info.png', 宝图位置信息)
-            time.sleep(0.5)
-            print('放大宝图位置', path)
-            ret = window.F_截图文字识别(path)
-            if(ret != ''):
-                logUtil.chLog(ret)
-                mapAndpoint = F_获取任务位置和坐标(ret)
-                print(mapAndpoint)
-                res.append(mapAndpoint)
+        mapAndpoint = 识别位置信息(window, point)
+        if(mapAndpoint != None or mapAndpoint[1][0] == 0):
+            mapAndpoint = 识别位置信息(window, point)
+        print(mapAndpoint)
+        res.append(mapAndpoint)
     jsonArr = json.dumps(res, ensure_ascii=False)
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
+
+
+def 识别位置信息(window, point):
+    print(point)
+    window.pointMove(point[0], point[1])
+    time.sleep(0.2)
+    if(point != None):
+        宝图位置信息 = [window.windowArea[0], window.windowArea[1],
+                  window.windowArea[0] + 600, window.windowArea[1] + 600]
+        ret = window.F_宝图文字识别(宝图位置信息)
+        logUtil.chLog(ret)
+        mapAndpoint = F_获取任务位置和坐标(ret)
+        return mapAndpoint
 
 
 mapDict = {
@@ -151,7 +152,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         point, newOther = F_获取最近的坐标点(x, y, other)
         F_点击宝图并寻路(window, deviceId, map, point['realX'],
                   point['realY'], point['index'], newOther)
-    else:   
+    else:
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
         # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
         pyautogui.moveTo(window.windowArea[0] + 400, window.windowArea[1] + 300)
@@ -172,7 +173,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)
             F_点击宝图并寻路(window, deviceId, map, point['realX'],
-                    point['realY'], point['index'], newOther)
+                      point['realY'], point['index'], newOther)
 
 
 def F_点击小地图(deviceId, map, x, y, num, other):
