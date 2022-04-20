@@ -155,18 +155,20 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
     else:
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
         # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
-        pyautogui.moveTo(window.windowArea[0] + 400, window.windowArea[1] + 300)
+        pyautogui.moveTo(
+            window.windowArea[0] + 400, window.windowArea[1] + 300)
         pyautogui.press('tab')
         time.sleep(1)
         point = window.findImgInWindow(mapDict.get(map))
         window.pointMove(point[0] + x, point[1] + y)
         pyautogui.click()
         pyautogui.click()
-        pyautogui.moveTo(window.windowArea[0] + 400, window.windowArea[1] + 300)
+        pyautogui.moveTo(
+            window.windowArea[0] + 400, window.windowArea[1] + 300)
         window.F_是否结束寻路()
         pyautogui.press('tab')
         window.F_选中道具格子(int(num))
-        pyautogui.rightClick()  
+        pyautogui.rightClick()
         # pyautogui.rightClick()
         window.F_自动战斗()
         pyautogui.hotkey('alt', 'e')
@@ -190,14 +192,14 @@ def F_点击小地图(deviceId, map, x, y, num, other):
 
 
 if __name__ == '__main__':
-    # deviceId = str(11)
+    # deviceId = str(9)
     # MHWindow = mhWindow.MHWindow
     # window = MHWindow(1, deviceId)
     # window.findMhWindow()
     # window.focusWindow()
     # pyautogui.hotkey('alt', 'e')
     # time.sleep(0.5)
-    # window.F_选中道具格子(5)
+    # window.checkpoint()
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,

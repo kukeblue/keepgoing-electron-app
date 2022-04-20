@@ -14,6 +14,7 @@ import math
 class MHWindow:
     screenUnit = 2
     windowArea = [0, 0, 0, 0]
+    windowArea2 = [0, 0, 0, 0]
     windowAreaGui = (0, 0, 0, 0)
     pyHome = __file__.strip('mhWindow.py')
     pyImageDir = pyHome + 'config\images'
@@ -39,6 +40,8 @@ class MHWindow:
             topy = y - self.getTruthPx(7)
             self.windowArea = [int(leftx / self.screenUnit),
                                int(topy / self.screenUnit), 800, 600]
+            self.windowArea2 = [int(leftx / self.screenUnit),
+                                int(topy / self.screenUnit), int(leftx / self.screenUnit) + 800, int(topy / self.screenUnit) + 600]
             self.windowAreaGui = (
                 leftx, topy, self.getTruthPx(800), self.getTruthPx(600))
             print(self.windowAreaGui)
@@ -105,15 +108,14 @@ class MHWindow:
         return ponits
 
     def checkpoint(self):
-        imagePath = 'window_point.png'
-        point = self.findImgInWindow(imagePath)
-        if point is None:
-            self.focusWindow()
-            point = self.findImgInWindow(imagePath)
-        if point is None:
-            self.focusWindow()
-            point = self.findImgInWindow(imagePath)
-        return point
+        for x in range(10):
+            time.sleep(0.1)
+            print(self.windowArea2)
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205c98', '2|1|285490,3|0|284c78', 0.6, 0)
+            print(ret)
+            if(ret[1] > 0):
+                return (ret[1], ret[2])
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
@@ -126,8 +128,8 @@ class MHWindow:
         while not finished:
             point = self.checkpoint()
             if(point != None):
-                dx = point[0] - 27
-                dy = point[1] - 27
+                dx = point[0] - 48
+                dy = point[1] - 38
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
