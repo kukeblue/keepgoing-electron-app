@@ -10,24 +10,28 @@ function Login() {
     const userStore = UserStore.useContainer()
     const [formRef] = useForm()
     const handleClickLoginButton = () => {
-        formRef.validateFields().then(
-            (user)=>  ChUtils.Ajax.request({
-                url: '/api/user/login',
-                data: user,
-                method: 'post'
-            }).then((res:{
-                data: string,
-                status: number,
-            })=> {
-                if(res.data) {
+        const user = {
+            id: 1,
+            username: 'ch',
+            password: '123456',
+        }
+        // formRef.validateFields().then(
+        //     (user)=>  ChUtils.Ajax.request({
+        //         url: '/api/user/login',
+        //         data: user,
+        //         method: 'post'
+        //     }).then((res:{
+        //         data: string,
+        //         status: number,
+        //     })=> {
+        //         if(res.data) {
                     userStore.setUser(user)
                     userStore.setIsLogin(true)
-                    userStore.setToken(res.data)
-                    // @ts-ignore
-
-                }
-            })
-        )
+                    userStore.setToken('1213123')
+        //             // @ts-ignore
+        //         }
+        //     })
+        // )
     }
     return <div className='login-page page flex-column-all-center'>
         <div className='login-form'>
