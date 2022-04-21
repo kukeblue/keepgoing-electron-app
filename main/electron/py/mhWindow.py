@@ -112,7 +112,7 @@ class MHWindow:
             time.sleep(0.1)
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '284c80', '-2|2|183860,-1|0|184060', 0.6, 0)
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '284c80', '-2|2|183860,-1|0|184060', 0.8, 0)
             print(ret)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
