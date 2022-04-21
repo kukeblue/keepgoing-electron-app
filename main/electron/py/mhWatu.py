@@ -64,6 +64,7 @@ def F_获取任务位置和坐标(str):
 
 
 def F_获取宝图信息(deviceId):
+    pyautogui.hotkey('alt', 'e')
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
@@ -82,6 +83,7 @@ def F_获取宝图信息(deviceId):
         res.append(mapAndpoint)
     jsonArr = json.dumps(res, ensure_ascii=False)
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
+    pyautogui.hotkey('alt', 'e')
 
 
 def 识别位置信息(window, point):
@@ -189,7 +191,7 @@ def F_点击小地图(deviceId, map, x, y, num, other):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
-    window.F_回天台放东西()
+    window.F_回天台放东西(map)
 
 def F_回天台放物品(window):
     window.F_选中道具格子(int(20))
