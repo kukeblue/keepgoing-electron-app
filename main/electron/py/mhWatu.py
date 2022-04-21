@@ -190,16 +190,29 @@ def F_点击小地图(deviceId, map, x, y, num, other):
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
 
+def F_回天台放物品(window):
+    window.F_选中道具格子(int(20))
+    pyautogui.rightClick()
+    window.pointMove(window.windowArea[0] + 480, window.windowArea[1] + 280)
+    pyautogui.click()
+    time.sleep(1)
+    pyautogui.press('f9')
+    pyautogui.hotkey('alt', 'e')
+    window.pointMove(window.windowArea[0] + 271, window.windowArea[1] + 200)
+    pyautogui.click()
+    time.sleep(3)
+    pyautogui.press('f9')
+    window.pointMove(window.windowArea[0] + 269, window.windowArea[1] + 356)
+    pyautogui.click()
+
 
 if __name__ == '__main__':
-    # deviceId = str(9)
+    # deviceId = str(11)
     # MHWindow = mhWindow.MHWindow
     # window = MHWindow(1, deviceId)
     # window.findMhWindow()
     # window.focusWindow()
-    # pyautogui.hotkey('alt', 'e')
-    # time.sleep(0.5)
-    # window.checkpoint()
+    # F_回天台放物品(window)
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,

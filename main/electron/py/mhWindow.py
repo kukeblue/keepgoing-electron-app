@@ -112,7 +112,7 @@ class MHWindow:
             time.sleep(0.1)
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205c98', '2|1|285490,3|0|284c78', 0.6, 0)
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '284c80', '-2|2|183860,-1|0|184060', 0.6, 0)
             print(ret)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
@@ -204,6 +204,14 @@ class MHWindow:
             left = ((num-1) % 5) * 50
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
+
+    def F_使用长安城飞行棋(self, path):
+        self.F_选中道具格子(16)
+        pyautogui.rightClick()
+        time.sleep(1)
+        if(path == '大唐国境出口'):
+            self.pointMove(139, 435)
+            pyautogui.click
 
 
 if __name__ == '__main__':
