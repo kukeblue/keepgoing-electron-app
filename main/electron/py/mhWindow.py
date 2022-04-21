@@ -133,11 +133,11 @@ class MHWindow:
         for x in range(10):
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '284c80', '-2|2|183860,-1|0|184060', 0.6, 0)
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '306ca8', '1|0|285490,1|1|285490', 0.6, 0)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
             ret2 = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '103460', '0|-1|204880', 0.6, 0)
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205890', '0|0|205890', 0.6, 0)
             if(ret2[1] > 0):
                 return (ret2[1], ret2[2])
 
