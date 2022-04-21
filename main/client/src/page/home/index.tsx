@@ -280,7 +280,9 @@ function HomeGameArea() {
                 <ChForm form={pageStore.formRef} formData={[
                     { type: FormItemType.select, label: '选择设备', name: 'deviceId', options: [
                         {label: '林雅文的电脑', value: '11'},
-                        {label: '我的电脑',value: '9'}] }]} />
+                        {label: '我的电脑',value: '9'},
+                        {label: '我的电脑2', value:'12'}] },
+                       ]} />
             </div>
         </Modal>
     </div>
