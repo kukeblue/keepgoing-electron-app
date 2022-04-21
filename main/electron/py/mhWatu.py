@@ -189,6 +189,7 @@ def F_点击小地图(deviceId, map, x, y, num, other):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
+    window.F_回天台放东西()
 
 def F_回天台放物品(window):
     window.F_选中道具格子(int(20))
