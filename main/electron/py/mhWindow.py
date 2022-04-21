@@ -12,6 +12,26 @@ import time
 import utils
 import math
 
+mapCangkuDict = {
+    '花果山': 25,
+    '傲来国': 24,
+    '狮驼岭': 23,
+    '大唐境外': 22,
+    '普陀山': 21,
+    '墨家村': 20,
+    '北俱芦洲': 19,
+    '朱紫国': 18,
+    '大唐国境': 17,
+    '麒麟山': 16,
+    '长寿郊外': 15,
+    '东海湾': 14,
+    '五庄观': 13,
+    '江南野外': 12,
+    '建邺城': 11,
+    '女儿村': 10,
+    # '东海湾': 9,
+}
+
 
 class MHWindow:
     screenUnit = 2
@@ -53,7 +73,7 @@ class MHWindow:
             print('未找到前台梦幻窗口')
 
     def focusWindow(self):
-        pyautogui.moveTo(self.windowArea[0] + 400, self.windowArea[1] + 300)
+        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
 
     def F_窗口区域截图(self, fileName, windowRegion):
         region = (windowRegion[0] * self.screenUnit, windowRegion[1] * self.screenUnit,
@@ -111,14 +131,13 @@ class MHWindow:
 
     def checkpoint(self):
         for x in range(10):
-            time.sleep(0.1)
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '284c80', '-2|2|183860,-1|0|184060', 0.6, 0)
-            ret2 = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '103460', '0|-1|204880', 0.6, 0)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
+            ret2 = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '103460', '0|-1|204880', 0.6, 0)
             if(ret2[1] > 0):
                 return (ret2[1], ret2[2])
 
@@ -210,6 +229,13 @@ class MHWindow:
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
 
+    def F_选中仓库道具格子(self, num):
+        firstBlockX = self.windowArea[0] + 457
+        firstBlockY = self.windowArea[1] + 225
+        left = ((num-1) % 5) * 50
+        height = math.floor((num-1) / 5) * 50
+        self.pointMove(firstBlockX + left, firstBlockY + height)
+
     def F_使用长安城飞行棋(self, path):
         self.F_选中道具格子(16)
         pyautogui.rightClick()
@@ -232,14 +258,43 @@ class MHWindow:
         if(num == 8):
             self.F_移动到游戏区域坐标(136, 458)
         elif(num == 9):
-            self.F_移动到游戏区域坐标(136, 460)
+            self.F_移动到游戏区域坐标(158, 460)
         elif(num == 10):
-            self.F_移动到游戏区域坐标(136, 463)
+            self.F_移动到游戏区域坐标(180, 460)
         elif(num == 11):
-            self.F_移动到游戏区域坐标(136, 466)
+            self.F_移动到游戏区域坐标(200, 460)
+        elif(num == 12):
+            self.F_移动到游戏区域坐标(220, 460)
+        elif(num == 13):
+            self.F_移动到游戏区域坐标(240, 460)
+        elif(num == 14):
+            self.F_移动到游戏区域坐标(260, 460)
+        elif(num == 15):
+            self.F_移动到游戏区域坐标(280, 460)
+        elif(num == 16):
+            self.F_移动到游戏区域坐标(300, 460)
+        elif(num == 17):
+            self.F_移动到游戏区域坐标(135, 481)
+        elif(num == 18):
+            self.F_移动到游戏区域坐标(155, 481)
+        elif(num == 19):
+            self.F_移动到游戏区域坐标(177, 481)
+        elif(num == 20):
+            self.F_移动到游戏区域坐标(197, 481)
+        elif(num == 21):
+            self.F_移动到游戏区域坐标(217, 481)
+        elif(num == 22):
+            self.F_移动到游戏区域坐标(240, 481)
+        elif(num == 23):
+            self.F_移动到游戏区域坐标(260, 481)
+        elif(num == 24):
+            self.F_移动到游戏区域坐标(280, 481)
+        elif(num == 25):
+            self.F_移动到游戏区域坐标(300, 481)
+        pyautogui.click()
 
-    def F_回天台放东西(self):
-        self.F_选中道具格子(19)
+    def F_回天台放东西(self, map):
+        self.F_选中道具格子(20)
         pyautogui.rightClick()
         self.pointMove(self.windowArea[0] + 507, self.windowArea[1] + 282)
         pyautogui.click()
@@ -248,13 +303,20 @@ class MHWindow:
         self.F_移动到游戏区域坐标(267, 188)
         pyautogui.click()
         time.sleep(3)
-        self.F_移动到游戏区域坐标(280, 352)
+        self.F_移动到游戏区域坐标(283, 352)
         pyautogui.click()
         self.F_移动到游戏区域坐标(227, 379)
         pyautogui.click()
         # 8号仓库
-        self.F_移动到游戏区域坐标(136, 458)
-        pyautogui.click()
+        time.sleep(1)
+        num = mapCangkuDict.get(map)
+        self.F_选择仓库号(num)
+        time.sleep(1)
+        for x in range(15):
+            self.F_选中仓库道具格子(x + 1)
+            pyautogui.rightClick()
+        self.F_移动到游戏区域坐标(662, 157)
+        pyautogui.rightClick()
 
 
 if __name__ == '__main__':
@@ -262,4 +324,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_回天台放东西()
+    window.F_选择仓库号(16)
