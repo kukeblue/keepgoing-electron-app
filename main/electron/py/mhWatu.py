@@ -189,17 +189,10 @@ def F_点击小地图(deviceId, map, x, y, num, other):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
+    window.F_回天台放东西()
 
 
 if __name__ == '__main__':
-    # deviceId = str(9)
-    # MHWindow = mhWindow.MHWindow
-    # window = MHWindow(1, deviceId)
-    # window.findMhWindow()
-    # window.focusWindow()
-    # pyautogui.hotkey('alt', 'e')
-    # time.sleep(0.5)
-    # window.checkpoint()
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,

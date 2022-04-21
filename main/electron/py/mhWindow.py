@@ -1,7 +1,9 @@
 # coding=utf-8
+from asyncio import sleep
 from typing_extensions import Self
 
 from cv2 import log
+from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
 import sys
@@ -113,9 +115,12 @@ class MHWindow:
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '284c80', '-2|2|183860,-1|0|184060', 0.6, 0)
-            print(ret)
+            ret2 = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '103460', '0|-1|204880', 0.6, 0)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
+            if(ret2[1] > 0):
+                return (ret2[1], ret2[2])
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
@@ -210,12 +215,51 @@ class MHWindow:
         pyautogui.rightClick()
         time.sleep(1)
         if(path == '大唐国境出口'):
-            self.pointMove(139, 435)
-            pyautogui.click
+            self.pointMove(self.windowArea[0] + 139, self.windowArea[1] + 435)
+            pyautogui.click()
+            pyautogui.hotkey('alt', 'e')
+
+    def F_导航到大唐国境(self):
+        self.F_使用长安城飞行棋('大唐国境出口')
+        self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
+        pyautogui.click()
+        time.sleep(3)
+
+    def F_移动到游戏区域坐标(self, x, y):
+        self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
+
+    def F_选择仓库号(self, num):
+        if(num == 8):
+            self.F_移动到游戏区域坐标(136, 458)
+        elif(num == 9):
+            self.F_移动到游戏区域坐标(136, 460)
+        elif(num == 10):
+            self.F_移动到游戏区域坐标(136, 463)
+        elif(num == 11):
+            self.F_移动到游戏区域坐标(136, 466)
+
+    def F_回天台放东西(self):
+        self.F_选中道具格子(19)
+        pyautogui.rightClick()
+        self.pointMove(self.windowArea[0] + 507, self.windowArea[1] + 282)
+        pyautogui.click()
+        time.sleep(1)
+        pyautogui.hotkey('alt', 'e')
+        self.F_移动到游戏区域坐标(267, 188)
+        pyautogui.click()
+        time.sleep(3)
+        self.F_移动到游戏区域坐标(280, 352)
+        pyautogui.click()
+        self.F_移动到游戏区域坐标(227, 379)
+        pyautogui.click()
+        # 8号仓库
+        self.F_移动到游戏区域坐标(136, 458)
+        pyautogui.click()
 
 
 if __name__ == '__main__':
-    window = MHWindow(1, '11')
+    window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
+    window.F_回天台放东西()
