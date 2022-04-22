@@ -88,9 +88,22 @@ def F_获取宝图信息(deviceId):
     print(map)
     if(map == '江南野外'):
         window.F_导航到江南野外()
+    elif(map == '狮驼岭'):
+        window.F_导航到狮驼岭()
     elif(map == '大唐国境'):
         window.F_导航到大唐国境()
-
+    elif(map == '朱紫国'):
+        window.F_导航到朱紫国()
+    elif(map == '北俱芦洲'):
+        window.F_导航到北俱芦洲()
+    elif(map == '长寿郊外'):
+        window.F_导航到长寿郊外()
+    elif(map == '麒麟山'):
+        window.F_导航到麒麟山()
+    elif(map == '普陀山'):
+        window.F_导航到普陀山()
+        
+        
 
 def 识别位置信息(window, point):
     print(point)
@@ -103,7 +116,6 @@ def 识别位置信息(window, point):
         logUtil.chLog(ret)
         mapAndpoint = F_获取任务位置和坐标(ret)
         return mapAndpoint
-
 
 mapDict = {
     '狮驼岭': "map_top_shituo.png",
@@ -124,7 +136,6 @@ mapDict = {
     '女儿村': "map_top_nvercun.png",
     '东海湾': "map_top_donghaiwan.png",
 }
-
 
 def F_点击宝图(window, deviceId, map, x, y, num):
     deviceId = str(deviceId)
@@ -198,22 +209,8 @@ def F_点击小地图(deviceId, map, x, y, num, other):
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
     window.F_回天台放东西(map)
-
-
-def F_回天台放物品(window):
-    window.F_选中道具格子(int(20))
-    pyautogui.rightClick()
-    window.pointMove(window.windowArea[0] + 480, window.windowArea[1] + 280)
-    pyautogui.click()
-    time.sleep(1)
-    pyautogui.press('f9')
     pyautogui.hotkey('alt', 'e')
-    window.pointMove(window.windowArea[0] + 271, window.windowArea[1] + 200)
-    pyautogui.click()
-    time.sleep(3)
-    pyautogui.press('f9')
-    window.pointMove(window.windowArea[0] + 269, window.windowArea[1] + 356)
-    pyautogui.click()
+
 
 
 if __name__ == '__main__':
@@ -222,7 +219,7 @@ if __name__ == '__main__':
     # window = MHWindow(1, deviceId)
     # window.findMhWindow()
     # window.focusWindow()
-    # F_回天台放物品(window)
+    # window.F_回天台放东西('长寿郊外')
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,

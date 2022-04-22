@@ -230,8 +230,8 @@ class MHWindow:
             self.pointMove(firstBlockX + left, firstBlockY + height)
 
     def F_选中仓库道具格子(self, num):
-        firstBlockX = self.windowArea[0] + 355
-        firstBlockY = self.windowArea[1] + 269
+        firstBlockX = self.windowArea[0] + 500
+        firstBlockY = self.windowArea[1] + 113
         left = ((num-1) % 5) * 50
         height = math.floor((num-1) / 5) * 50
         self.pointMove(firstBlockX + left, firstBlockY + height)
@@ -245,6 +245,27 @@ class MHWindow:
             pyautogui.click()
         elif(path == '江南野外出口'):
             self.pointMove(self.windowArea[0] + 657, self.windowArea[1] + 435)
+            pyautogui.click()
+        pyautogui.hotkey('alt', 'e')
+
+    def F_使用朱紫国飞行棋(self, path):
+        self.F_选中道具格子(19)
+        pyautogui.rightClick()
+        time.sleep(1)
+        if(path == '大唐境外出口'):
+            self.pointMove(self.windowArea[0] + 198, self.windowArea[1] + 423)
+            pyautogui.click()
+        if(path == '麒麟山出口'):
+            self.pointMove(self.windowArea[0] + 195, self.windowArea[1] + 187)
+            pyautogui.click()
+        pyautogui.hotkey('alt', 'e')
+
+    def F_使用长寿村飞行棋(self, path):
+        self.F_选中道具格子(17)
+        pyautogui.rightClick()
+        time.sleep(1)
+        if(path == '长寿郊外出口'):
+            self.pointMove(self.windowArea[0] + 503, self.windowArea[1] + 465)
             pyautogui.click()
         pyautogui.hotkey('alt', 'e')
 
@@ -262,46 +283,112 @@ class MHWindow:
         pyautogui.click()
         time.sleep(3)
 
+    def F_导航到狮驼岭(self):
+        self.F_使用朱紫国飞行棋('大唐境外出口')
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        pyautogui.click()
+        time.sleep()
+        self.pointMove(self.windowArea[0] + 80, self.windowArea[1] + 565)
+        pyautogui.click()
+        time.sleep(5)
+
+    def F_导航到麒麟山(self):
+        self.F_使用朱紫国飞行棋('麒麟山出口')
+        time.sleep(1)
+        pyautogui.press('f9')
+        self.pointMove(self.windowArea[0] + 35, self.windowArea[1] + 125)
+        pyautogui.click()
+        time.sleep(3)
+    
+    def F_导航到长寿郊外(self):
+        self.F_使用长寿村飞行棋('长寿郊外出口')
+        time.sleep(1)
+        pyautogui.press('f9')
+        self.pointMove(self.windowArea[0] + 634, self.windowArea[1] + 518)
+        pyautogui.click()
+        time.sleep(4)
+    
+    def F_导航到北俱芦洲(self):
+        self.F_导航到长寿郊外()
+
+        pyautogui.press('tab')
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 303, self.windowArea[1] + 344)
+        pyautogui.click()
+        time.sleep(26)
+        pyautogui.press('tab')
+        pyautogui.press('f9')
+        self.pointMove(self.windowArea[0] + 402, self.windowArea[1] + 273)
+        pyautogui.doubleClick()
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 207, self.windowArea[1] + 340)
+        pyautogui.click()
+        time.sleep(1)
+        
+
+       
+
+    def F_导航到朱紫国(self):
+        self.F_使用朱紫国飞行棋('大唐境外出口')
+        time.sleep(1)
+
+    def F_导航到普陀山(self):
+        self.F_导航到大唐国境()
+        pyautogui.press('tab')
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 416, self.windowArea[1] + 426)
+        pyautogui.click()
+        time.sleep(30)
+        pyautogui.press('tab')
+        pyautogui.press('f9')
+        self.pointMove(self.windowArea[0] + 402, self.windowArea[1] + 304)
+        pyautogui.doubleClick()
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 206, self.windowArea[1] + 339)
+        pyautogui.click()
+        time.sleep(1)
+
     def F_移动到游戏区域坐标(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
 
     def F_选择仓库号(self, num):
         if(num == 8):
-            self.F_移动到游戏区域坐标(31, 502)
+            self.F_移动到游戏区域坐标(180, 350)
         elif(num == 9):
-            self.F_移动到游戏区域坐标(50, 502)
+            self.F_移动到游戏区域坐标(200, 350)
         elif(num == 10):
-            self.F_移动到游戏区域坐标(70, 502)
+            self.F_移动到游戏区域坐标(220, 350)
         elif(num == 11):
-            self.F_移动到游戏区域坐标(90, 502)
+            self.F_移动到游戏区域坐标(240, 350)
         elif(num == 12):
-            self.F_移动到游戏区域坐标(110, 502)
+            self.F_移动到游戏区域坐标(260, 350)
         elif(num == 13):
-            self.F_移动到游戏区域坐标(130, 502)
+            self.F_移动到游戏区域坐标(280, 350)
         elif(num == 14):
-            self.F_移动到游戏区域坐标(150, 502)
+            self.F_移动到游戏区域坐标(300, 350)
         elif(num == 15):
-            self.F_移动到游戏区域坐标(170, 502)
+            self.F_移动到游戏区域坐标(320, 350)
         elif(num == 16):
-            self.F_移动到游戏区域坐标(190, 502)
+            self.F_移动到游戏区域坐标(340, 350)
         elif(num == 17):
-            self.F_移动到游戏区域坐标(29, 529)
+            self.F_移动到游戏区域坐标(180, 374)
         elif(num == 18):
-            self.F_移动到游戏区域坐标(50, 529)
+            self.F_移动到游戏区域坐标(200, 374)
         elif(num == 19):
-            self.F_移动到游戏区域坐标(70, 529)
+            self.F_移动到游戏区域坐标(228, 374)
         elif(num == 20):
-            self.F_移动到游戏区域坐标(90, 529)
+            self.F_移动到游戏区域坐标(248, 374)
         elif(num == 21):
-            self.F_移动到游戏区域坐标(110, 529)
+            self.F_移动到游戏区域坐标(268, 374)
         elif(num == 22):
-            self.F_移动到游戏区域坐标(130, 529)
+            self.F_移动到游戏区域坐标(288, 374)
         elif(num == 23):
-            self.F_移动到游戏区域坐标(150, 529)
+            self.F_移动到游戏区域坐标(308, 374)
         elif(num == 24):
-            self.F_移动到游戏区域坐标(170, 529)
+            self.F_移动到游戏区域坐标(329, 374)
         elif(num == 25):
-            self.F_移动到游戏区域坐标(190, 529)
+            self.F_移动到游戏区域坐标(348, 374)
         pyautogui.click()
 
     def F_回天台放东西(self, map):
@@ -339,4 +426,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_回天台放东西('女儿村')
+    window.F_回天台放东西('狮驼岭')
