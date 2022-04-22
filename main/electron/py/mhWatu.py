@@ -84,6 +84,12 @@ def F_获取宝图信息(deviceId):
     jsonArr = json.dumps(res, ensure_ascii=False)
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
     pyautogui.hotkey('alt', 'e')
+    map = res[0][0]
+    print(map)
+    if(map == '江南野外'):
+        window.F_导航到江南野外()
+    elif(map == '大唐国境'):
+        window.F_导航到大唐国境()
 
 
 def 识别位置信息(window, point):
@@ -192,6 +198,7 @@ def F_点击小地图(deviceId, map, x, y, num, other):
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
     window.F_回天台放东西(map)
+
 
 def F_回天台放物品(window):
     window.F_选中道具格子(int(20))
