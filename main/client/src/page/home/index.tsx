@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, message, Modal, Popover, Row } from 'antd'
+import { Button, Col, message, Modal, Popover, Row, Switch } from 'antd'
 import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
@@ -43,6 +43,7 @@ function usePageStore() {
     const [modalMultipleAccountSelectShow, setModalMultipleAccountSelectShow] = useState(false)
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const [isTasking, setIsTasking] = useState<boolean>(false)
+    const [isBee, setIsBee] = useState<boolean>(false)
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
     const [watuInfo, setWatuInfo] = useState<TWatuInfo>()
@@ -146,7 +147,14 @@ function usePageStore() {
             message.success('启动成功')
         }
     }
+
+    const handleChangeIsBeen = (check: boolean) => {
+        setIsBee(check);
+    }
+
     return {
+        isBee,
+        setIsBee,
         setModalMultipleAccountSelectShow,
         modalMultipleAccountSelectShow,
         accountMap,
@@ -176,7 +184,8 @@ function usePageStore() {
         handleTest,
         handleTest2,
         getTaskLoading,
-        handleGetWatuInfo
+        handleGetWatuInfo,
+        handleChangeIsBeen
     }
 }
 
@@ -278,11 +287,13 @@ function HomeGameArea() {
         }} visible={pageStore.showSelectDeviceModal}>
             <div>
                 <ChForm form={pageStore.formRef} formData={[
-                    { type: FormItemType.select, label: '选择设备', name: 'deviceId', options: [
-                        {label: '林雅文的电脑', value: '11'},
-                        {label: '我的电脑',value: '9'},
-                        {label: '我的电脑2', value:'12'}] },
-                       ]} />
+                    {
+                        type: FormItemType.select, label: '选择设备', name: 'deviceId', options: [
+                            { label: '林雅文的电脑', value: '11' },
+                            { label: '我的电脑', value: '9' },
+                            { label: '我的电脑2', value: '12' }]
+                    },
+                ]} />
             </div>
         </Modal>
     </div>
@@ -309,6 +320,14 @@ function HomeFeature() {
                     pageStore.setShowSelectDeviceModal(true)
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>挖图位置解析</Button>
             </Col>
+            <Col>
+                <div style={{ marginLeft: 20 }}>
+                    <span style={{ color: '#000' }}>小蜜蜂模式</span>： <Switch checked={pageStore.isBee} onChange={(e) => {
+                        pageStore.handleChangeIsBeen(e);
+                    }} />
+                </div>
+            </Col>
+
         </Row>
         <div className="home-feature-panel">
             {pageStore.watuInfo && <ChMhMapTool deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}

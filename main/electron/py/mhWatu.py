@@ -64,7 +64,6 @@ def F_获取任务位置和坐标(str):
 
 
 def F_获取宝图信息(deviceId):
-    pyautogui.hotkey('alt', 'e')
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
@@ -74,6 +73,7 @@ def F_获取宝图信息(deviceId):
     print(point)
     points = window.findImgsInWindow('daoju_baotu.png')
     print(len(points))
+    pyautogui.hotkey('alt', 'e')
     res = []
     for point in points:
         mapAndpoint = 识别位置信息(window, point)
@@ -216,6 +216,23 @@ def F_回天台放物品(window):
     pyautogui.click()
 
 
+def F_小蜜蜂模式(deviceId):
+    deviceId = str(deviceId)
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1, deviceId)
+    window.findMhWindow()
+    window.focusWindow()
+    point = window.checkpoint()
+    window.F_选中道具格子(int(15))
+    宝图位置信息 = [window.windowArea[0], window.windowArea[1],
+              window.windowArea[0] + 600, window.windowArea[1] + 600]
+    ret = window.F_宝图文字识别(宝图位置信息)
+    logUtil.chLog(ret)
+    mapAndpoint = F_获取任务位置和坐标(ret)
+    if(mapAndpoint(0) != ''):
+        F_获取宝图信息(deviceId)
+
+
 if __name__ == '__main__':
     # deviceId = str(11)
     # MHWindow = mhWindow.MHWindow
@@ -226,4 +243,5 @@ if __name__ == '__main__':
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,
+        'bee': F_小蜜蜂模式
     })

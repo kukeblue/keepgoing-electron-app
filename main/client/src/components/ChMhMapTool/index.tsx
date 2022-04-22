@@ -216,6 +216,7 @@ function ChMhMapTool({
         <div>
             <span style={{ color: '#000' }}>是否群挖</span>： <Switch checked={mulMode} onChange={(e) => setMulMode(e)} />
         </div>
+
         <br />
         <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
             <div className='chMhMapTool-map'>
