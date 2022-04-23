@@ -71,9 +71,7 @@ def F_获取宝图信息(deviceId):
     window.findMhWindow()
     window.focusWindow()
     point = window.checkpoint()
-    print(point)
     points = window.findImgsInWindow('daoju_baotu.png')
-    print(len(points))
     res = []
     for point in points:
         mapAndpoint = 识别位置信息(window, point)
@@ -85,6 +83,7 @@ def F_获取宝图信息(deviceId):
     pyautogui.hotkey('alt', 'e')
     map = res[0][0]
     print(map)
+    time.sleep(3)
     if(map == '江南野外'):
         window.F_导航到江南野外()
     elif(map == '狮驼岭'):
@@ -103,6 +102,14 @@ def F_获取宝图信息(deviceId):
         window.F_导航到普陀山()
     elif(map == '花果山'):
         window.F_导航到花果山()
+    elif(map == '傲来国'):
+        window.F_导航到傲来国()
+    elif(map == '女儿村'):
+        window.F_导航到女儿村()
+    elif(map == '建邺城'):
+        window.F_导航到建邺城()
+    elif(map == '东海湾'):
+        window.F_导航到东海湾()
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
@@ -201,6 +208,9 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
                       point['realY'], point['index'], newOther)
 
 
+num = 1
+
+
 def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
@@ -214,7 +224,25 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
     window.F_回天台放东西(map)
     if(isBeen):
-        F_小蜜蜂模式(deviceId)
+        # 小蜜蜂模式必须图满了才能发车
+        window.F_选中道具格子(15)
+        while(True):
+            if(num > 5):
+                break
+            num = num + 1
+
+            # 关闭打开
+            pyautogui.hotkey('alt', 'e')
+            time.sleep(0.1)
+            pyautogui.hotkey('alt', 'e')
+            point = window.findImgInWindow('daoju_baotu_large.png')
+            if(point != None and point[0] > 0):
+
+                pyautogui.hotkey('alt', 'e')
+                F_小蜜蜂模式(deviceId)
+                break
+            print('等待宝图')
+            time.sleep(10)
 
 
 def F_小蜜蜂模式(deviceId):

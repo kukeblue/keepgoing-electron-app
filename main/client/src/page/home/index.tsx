@@ -90,19 +90,16 @@ function usePageStore() {
             deviceId: watuDeviceId,
         })
         // @ts-ignore
-        alert(window.isBee)
         // @ts-ignore
         if (window.isBee) {
-            alert('????')
             setTimeout(() => {
                 console.log('直接开始挖图');
                 // @ts-ignore
                 if (window.isBee) {
-                    alert('开始挖图')
                     // @ts-ignore
                     doGetWatuClickMap(...window.beeData)
                 }
-            }, 3000)
+            }, 1000)
         }
 
     }
@@ -169,7 +166,6 @@ function usePageStore() {
     }
 
     const handleChangeIsBeen = (check: boolean) => {
-        alert(check)
         setIsBee(check);
         // @ts-ignore
         window.isBee = check;
