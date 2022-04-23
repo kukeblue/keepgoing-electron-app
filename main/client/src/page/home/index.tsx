@@ -4,7 +4,7 @@ import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doBee, doGetWatuClickMap } from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
@@ -70,7 +70,11 @@ function usePageStore() {
         message.success('操作成功')
     }
     const handleGetWatuInfo = (deviceId: number) => {
-        doGetWatuInfo(deviceId)
+        if (isBee) {
+            doBee(deviceId)
+        } else {
+            doGetWatuInfo(deviceId)
+        }
     }
     const handleGetWatuInfoReply = (data: any) => {
         console.log('handleGetWatuInfoReply', data);
@@ -85,6 +89,22 @@ function usePageStore() {
             points,
             deviceId: watuDeviceId,
         })
+        // @ts-ignore
+        alert(window.isBee)
+        // @ts-ignore
+        if (window.isBee) {
+            alert('????')
+            setTimeout(() => {
+                console.log('直接开始挖图');
+                // @ts-ignore
+                if (window.isBee) {
+                    alert('开始挖图')
+                    // @ts-ignore
+                    doGetWatuClickMap(...window.beeData)
+                }
+            }, 3000)
+        }
+
     }
     const handleSelectJiangjunDevice = () => {
         formRef.validateFields().then((res: any) => {
@@ -149,7 +169,10 @@ function usePageStore() {
     }
 
     const handleChangeIsBeen = (check: boolean) => {
+        alert(check)
         setIsBee(check);
+        // @ts-ignore
+        window.isBee = check;
     }
 
     return {

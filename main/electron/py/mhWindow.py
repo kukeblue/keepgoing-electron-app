@@ -162,6 +162,12 @@ class MHWindow:
                     finished = True
             else:
                 self.focusWindow()
+            real = pyautogui.position()
+            realX = real[0]
+            realY = real[1]
+            if(realX > (self.windowArea[0] + 800) or realX < self.windowArea[0] or realY > (self.windowArea[0] + 600) or realY < (self.windowArea[0])):
+                pyautogui.moveTo(
+                    self.windowArea[0] + 400, self.windowArea[1] + 300)
 
     def F_是否在战斗(self):
         try:
@@ -269,6 +275,15 @@ class MHWindow:
             pyautogui.click()
         pyautogui.hotkey('alt', 'e')
 
+    def F_使用傲来国飞行棋(self, path):
+        self.F_选中道具格子(18)
+        pyautogui.rightClick()
+        time.sleep(1)
+        if(path == '花果山出口'):
+            self.pointMove(self.windowArea[0] + 584, self.windowArea[1] + 180)
+            pyautogui.click()
+        pyautogui.hotkey('alt', 'e')
+
     def F_导航到大唐国境(self):
         self.F_使用长安城飞行棋('大唐国境出口')
         time.sleep(1)
@@ -300,7 +315,7 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 35, self.windowArea[1] + 125)
         pyautogui.click()
         time.sleep(3)
-    
+
     def F_导航到长寿郊外(self):
         self.F_使用长寿村飞行棋('长寿郊外出口')
         time.sleep(1)
@@ -308,7 +323,15 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 634, self.windowArea[1] + 518)
         pyautogui.click()
         time.sleep(4)
-    
+
+    def F_导航到花果山(self):
+        self.F_使用傲来国飞行棋('花果山出口')
+        time.sleep(1)
+        pyautogui.press('f9')
+        self.pointMove(self.windowArea[0] + 768, self.windowArea[1] + 84)
+        pyautogui.click()
+        time.sleep(4)
+
     def F_导航到北俱芦洲(self):
         self.F_导航到长寿郊外()
 
@@ -325,9 +348,6 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 207, self.windowArea[1] + 340)
         pyautogui.click()
         time.sleep(1)
-        
-
-       
 
     def F_导航到朱紫国(self):
         self.F_使用朱紫国飞行棋('大唐境外出口')

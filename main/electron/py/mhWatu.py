@@ -64,6 +64,7 @@ def F_获取任务位置和坐标(str):
 
 
 def F_获取宝图信息(deviceId):
+    pyautogui.hotkey('alt', 'e')
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
@@ -73,7 +74,6 @@ def F_获取宝图信息(deviceId):
     print(point)
     points = window.findImgsInWindow('daoju_baotu.png')
     print(len(points))
-    pyautogui.hotkey('alt', 'e')
     res = []
     for point in points:
         mapAndpoint = 识别位置信息(window, point)
@@ -82,7 +82,6 @@ def F_获取宝图信息(deviceId):
         print(mapAndpoint)
         res.append(mapAndpoint)
     jsonArr = json.dumps(res, ensure_ascii=False)
-    logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
     pyautogui.hotkey('alt', 'e')
     map = res[0][0]
     print(map)
@@ -102,8 +101,11 @@ def F_获取宝图信息(deviceId):
         window.F_导航到麒麟山()
     elif(map == '普陀山'):
         window.F_导航到普陀山()
-        
-        
+    elif(map == '花果山'):
+        window.F_导航到花果山()
+
+    logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
+
 
 def 识别位置信息(window, point):
     print(point)
@@ -116,6 +118,7 @@ def 识别位置信息(window, point):
         logUtil.chLog(ret)
         mapAndpoint = F_获取任务位置和坐标(ret)
         return mapAndpoint
+
 
 mapDict = {
     '狮驼岭': "map_top_shituo.png",
@@ -136,6 +139,7 @@ mapDict = {
     '女儿村': "map_top_nvercun.png",
     '东海湾': "map_top_donghaiwan.png",
 }
+
 
 def F_点击宝图(window, deviceId, map, x, y, num):
     deviceId = str(deviceId)
@@ -197,7 +201,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
                       point['realY'], point['index'], newOther)
 
 
-def F_点击小地图(deviceId, map, x, y, num, other):
+def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -209,25 +213,26 @@ def F_点击小地图(deviceId, map, x, y, num, other):
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
     window.F_回天台放东西(map)
-    pyautogui.hotkey('alt', 'e')
-
+    if(isBeen):
+        F_小蜜蜂模式(deviceId)
 
 
 def F_小蜜蜂模式(deviceId):
-    deviceId = str(deviceId)
-    MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
-    window.findMhWindow()
-    window.focusWindow()
-    point = window.checkpoint()
-    window.F_选中道具格子(int(15))
-    宝图位置信息 = [window.windowArea[0], window.windowArea[1],
-              window.windowArea[0] + 600, window.windowArea[1] + 600]
-    ret = window.F_宝图文字识别(宝图位置信息)
-    logUtil.chLog(ret)
-    mapAndpoint = F_获取任务位置和坐标(ret)
-    if(mapAndpoint(0) != ''):
-        F_获取宝图信息(deviceId)
+    F_获取宝图信息(deviceId)
+    # deviceId = str(deviceId)
+    # MHWindow = mhWindow.MHWindow
+    # window = MHWindow(1, deviceId)
+    # window.findMhWindow()
+    # window.focusWindow()
+    # point = window.checkpoint()
+    # window.F_选中道具格子(int(15))
+    # 宝图位置信息 = [window.windowArea[0], window.windowArea[1],
+    #           window.windowArea[0] + 600, window.windowArea[1] + 600]
+    # ret = window.F_宝图文字识别(宝图位置信息)
+    # logUtil.chLog(ret)
+    # mapAndpoint = F_获取任务位置和坐标(ret)
+    # if(mapAndpoint(0) != ''):
+    # F_获取宝图信息(deviceId)
 
 
 if __name__ == '__main__':

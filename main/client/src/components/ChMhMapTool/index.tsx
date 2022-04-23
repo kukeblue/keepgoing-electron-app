@@ -22,7 +22,7 @@ import image_map_nvercun from '../../assets/images/map_nvercun.png'
 import { doGetWatuClickMap } from "../../call";
 
 
-const MapConfigs = {
+export const MapConfigs = {
     '建邺城': {
         topLeft: [1, 143],
         BottomRight: [286, 0],
@@ -211,6 +211,21 @@ function ChMhMapTool({
         }
     }
 
+    const handleClickArgs = (map: string, realX: number, realY: number, index: number) => {
+        const x = Math.round(realX)
+        const y = Math.round(realY)
+        let otherPoint = pointDatas.map((item, i) => {
+            return {
+                realX: Math.round(item.realPoint[0]),
+                realY: Math.round(mapConfig.height - item.realPoint[1]),
+                index: i + 1,
+            }
+        })
+        otherPoint.splice(index - 1, 1)
+        let otherJson = JSON.stringify(otherPoint)
+        return [deviceId, mapName, x, y, index, otherJson]
+    }
+
     return <div>
         <br />
         <div>
@@ -224,6 +239,10 @@ function ChMhMapTool({
                 {
                     pointDatas.map((pointData: any, index) => {
                         let realPoint = pointData.realPoint
+                        if (index == 0) {
+                            // @ts-ignore
+                            window.beeData = handleClickArgs(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1, true)
+                        }
                         let orgPoint = pointData.orgPoint
                         return <div id={`${mapName}${index}`} onClick={() => {
                             handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1)
@@ -232,8 +251,7 @@ function ChMhMapTool({
                             dom!.style['background-color'] = '#fff'
                             message.info(
                                 `第${index + 1}张，坐标(${orgPoint[0]}, ${orgPoint[1]})`, 20)
-                        }
-                        } key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'>
+                        }} key={mapName + index + '_'} style={{ left: realPoint[0], bottom: realPoint[1] }} className='chMhMapTool-map-point'>
                         </div>
                     })
                 }
