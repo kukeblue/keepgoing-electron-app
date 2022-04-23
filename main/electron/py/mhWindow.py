@@ -3,7 +3,7 @@ from asyncio import sleep
 from typing_extensions import Self
 
 from cv2 import log
-from matplotlib.pyplot import switch_backend
+# from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
 import sys
