@@ -65,6 +65,7 @@ def F_获取任务位置和坐标(str):
 
 def F_获取宝图信息(deviceId):
     pyautogui.hotkey('alt', 'e')
+    time.sleep(1)
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
