@@ -113,6 +113,9 @@ def F_获取宝图信息(deviceId):
         window.F_导航到建邺城()
     elif(map == '东海湾'):
         window.F_导航到东海湾()
+    elif(map == '大唐境外'):
+        window.F_导航到大唐境外()
+        
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
@@ -230,7 +233,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
         # 小蜜蜂模式必须图满了才能发车
         window.F_选中道具格子(15)
         while(True):
-            if(num > 5):
+            if(num > 30):
                 break
             num = num + 1
 
