@@ -157,7 +157,7 @@ class MHWindow:
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
-                    pyautogui.move(cx / 1.5, cy / 1.5)
+                    pyautogui.move(cx / 1.1, cy / 1.1)
                 else:   
                     finished = True
             else:
@@ -297,7 +297,10 @@ class MHWindow:
             self.pointMove(self.windowArea[0] + 584, self.windowArea[1] + 180)
             pyautogui.click()
         if(path == '女儿村出口'):
-            self.pointMove(self.windowArea[0] + 168, self.windowArea[1] + 206)
+            self.pointMove(self.windowArea[0] + 208, self.windowArea[1] + 188)
+            pyautogui.click()
+        if(path == '东海湾出口'):
+            self.pointMove(self.windowArea[0] + 519, self.windowArea[1] + 399)
             pyautogui.click()
         pyautogui.hotkey('alt', 'e')
 
@@ -325,6 +328,13 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 80, self.windowArea[1] + 565)
         pyautogui.click()
         time.sleep(5)
+
+    def F_导航到大唐境外(self):
+        self.F_使用朱紫国飞行棋('大唐境外出口')
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        pyautogui.click()
+        time.sleep(1)
 
 
     def F_导航到墨家村(self):
@@ -383,7 +393,7 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 221, self.windowArea[1] + 362)
         pyautogui.click()
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 201, self.windowArea[1] + 362)
+        self.pointMove(self.windowArea[0] + 208, self.windowArea[1] + 336)
         pyautogui.click()
         time.sleep(1)
 
@@ -479,7 +489,7 @@ class MHWindow:
         elif(num == 20):
             self.F_移动到游戏区域坐标(248, 374)
         elif(num == 21):
-            self.F_移动到游戏区域坐标(268, 374)
+            self.F_移动到游戏区域坐标(263, 371)
         elif(num == 22):
             self.F_移动到游戏区域坐标(288, 374)
         elif(num == 23):
@@ -525,4 +535,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到墨家村()
+    window.F_回天台放东西('普陀山')
