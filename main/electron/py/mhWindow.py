@@ -150,16 +150,15 @@ class MHWindow:
         my = y - 16
         finished = False
         while not finished:
-            sleep(0.5)
             point = self.checkpoint()
             if(point != None):
                 dx = point[0] - 48
-                dy = point[1] - 38
+                dy = point[1] - 38  
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
-                    pyautogui.move(cx, cy)
-                else:
+                    pyautogui.move(cx / 1.5, cy / 1.5)
+                else:   
                     finished = True
             else:
                 self.focusWindow()
@@ -169,6 +168,7 @@ class MHWindow:
             if(realX > (self.windowArea[0] + 800) or realX < self.windowArea[0] or realY > (self.windowArea[1] + 600) or realY < (self.windowArea[1])):
                 pyautogui.moveTo(
                     self.windowArea[0] + 400, self.windowArea[1] + 300)
+                time.sleep(1)
 
     def F_是否在战斗(self):
         try:
@@ -335,20 +335,22 @@ class MHWindow:
         time.sleep(1)
         pyautogui.press('tab')
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 322, self.windowArea[1] + 257)
+        self.pointMove(self.windowArea[0] + 322, self.windowArea[1] + 259)
         pyautogui.click()
         time.sleep(1)
         pyautogui.press('tab')
-        time.sleep(38)
-        self.pointMove(self.windowArea[0] + 516, self.windowArea[1] + 138)
+        time.sleep(40)
+        self.pointMove(self.windowArea[0] + 403, self.windowArea[1] + 137)
+        pyautogui.press('f9')
+        time.sleep(1)
         pyautogui.click()
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 205, self.windowArea[1] + 336)
+        self.pointMove(self.windowArea[0] + 386, self.windowArea[1] + 143)
         pyautogui.click()
         time.sleep(1)
-        # self.pointMove(self.windowArea[0] + 80, self.windowArea[1] + 565)
-        # pyautogui.click()
-        # time.sleep(5)
+        self.pointMove(self.windowArea[0] + 211, self.windowArea[1] + 337)
+        pyautogui.click()
+        time.sleep(1)
 
     def F_导航到麒麟山(self):
         self.F_使用朱紫国飞行棋('麒麟山出口')
@@ -523,8 +525,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-<<<<<<< HEAD
     window.F_导航到墨家村()
-=======
-    window.F_选中道具格子(12)
->>>>>>> 2222c37ca32ba77505a022fb99294892c2a738cb
