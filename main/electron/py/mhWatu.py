@@ -100,6 +100,8 @@ def F_获取宝图信息(deviceId):
         window.F_导航到麒麟山()
     elif(map == '普陀山'):
         window.F_导航到普陀山()
+    elif(map == '墨家村'):
+        window.F_导航到墨家村()
     elif(map == '花果山'):
         window.F_导航到花果山()
     elif(map == '傲来国'):

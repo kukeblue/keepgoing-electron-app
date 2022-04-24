@@ -1,10 +1,10 @@
-from paddleocr import PaddleOCR
+# from paddleocr import PaddleOCR
 from pickle import TRUE
 import time
 import baiduApi
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
-ocr = PaddleOCR(use_angle_cls=True, use_gpu=True, show_log=False)
+# ocr = PaddleOCR(use_angle_cls=True, use_gpu=True, show_log=False)
 
 
 def getPointColor(x, y):
