@@ -157,19 +157,16 @@ class MHWindow:
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
-                    pyautogui.move(cx / 1.1, cy / 1.1)
+                    pyautogui.move(cx / 1.5, cy / 1.5)
                 else:   
                     finished = True
-            else:
-                self.focusWindow()
+                # self.focusWindow()
             real = pyautogui.position()
             realX = real[0]
             realY = real[1]
             if(realX > (self.windowArea[0] + 800) or realX < self.windowArea[0] or realY > (self.windowArea[1] + 600) or realY < (self.windowArea[1])):
-                pyautogui.moveTo(
-                    self.windowArea[0] + 400, self.windowArea[1] + 300)
-                time.sleep(1)
-
+                pyautogui.moveTo(self.windowArea[0] + 400, self.windowArea[1] + 300)
+                pyautogui.click()
     def F_是否在战斗(self):
         try:
             point = self.findImgInWindow(
@@ -535,4 +532,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_回天台放东西('普陀山')
+    window.F_回天台放东西('麒麟山')
