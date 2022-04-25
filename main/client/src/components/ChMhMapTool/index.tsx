@@ -142,6 +142,12 @@ function ChMhMapTool({
             let realPoint = [0, 0]
             let left = (mapConfig.width / (mapConfig.BottomRight[0] - mapConfig.topLeft[0])) * point[0]
             let top = (mapConfig.height / (mapConfig.topLeft[1] - mapConfig.BottomRight[1])) * point[1]
+            if (left < 0 || left > mapConfig.width) {
+                left = 0
+            }
+            if (top < 0 || top > mapConfig.height) {
+                left = 0
+            }
             realPoint = [left, top]
             return {
                 orgPoint: point,
