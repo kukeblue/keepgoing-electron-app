@@ -245,6 +245,24 @@ class MHWindow:
         height = math.floor((num-1) / 5) * 50
         self.pointMove(firstBlockX + left, firstBlockY + height)
 
+    def F_选中收购商格子(self, num):
+        firstBlockX = self.windowArea[0] + 306
+        firstBlockY = self.windowArea[1] + 178
+        left = ((num-1) % 5) * 50
+        height = math.floor((num-1) / 5) * 50
+        self.pointMove(firstBlockX + left, firstBlockY + height)
+
+    def F_卖装备(self, num):
+        for x in range(num):
+            self.F_选中收购商格子(x + 1)
+            pyautogui.click()
+            self.F_移动到游戏区域坐标(404, 444)
+            pyautogui.click()
+            self.F_移动到游戏区域坐标(206, 338)
+            pyautogui.click()
+            time.sleep(1)
+            pyautogui.click()
+
     def F_使用飞行符(self, path):
         self.F_选中道具格子(20)
         pyautogui.rightClick()
@@ -466,6 +484,8 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
 
     def F_选择仓库号(self, num):
+        if(num == 1):
+            self.F_移动到游戏区域坐标(180, 307)
         if(num == 8):
             self.F_移动到游戏区域坐标(180, 350)
         elif(num == 9):
@@ -529,8 +549,19 @@ class MHWindow:
         for x in range(15):
             self.F_选中仓库道具格子(x + 1)
             pyautogui.rightClick()
-        self.F_移动到游戏区域坐标(720, 35)
+        self.F_选择仓库号(1)
         time.sleep(1)
+        self.F_移动到游戏区域坐标(198, 110)
+        pyautogui.rightClick()
+        time.sleep(1)
+        self.F_选中道具格子(1)
+        pyautogui.rightClick()
+        time.sleep(1)
+        pyautogui.hotkey('alt', 'e')
+        time.sleep(1)
+        self.F_选中仓库道具格子(1)
+        pyautogui.rightClick()
+        self.F_移动到游戏区域坐标(720, 35)
         pyautogui.rightClick()
 
 
@@ -539,4 +570,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_回天台放东西('麒麟山')
+    window.F_卖装备(10)

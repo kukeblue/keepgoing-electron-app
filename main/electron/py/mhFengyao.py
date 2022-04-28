@@ -21,4 +21,5 @@ def F_碗子山封妖(deviceId):
     window.focusWindow()
     pyautogui.hotkey('alt', 'e')
     time.sleep(1)
+
     time.sleep(25)
