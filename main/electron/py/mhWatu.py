@@ -64,12 +64,15 @@ def F_获取任务位置和坐标(str):
 
 
 def F_获取宝图信息(deviceId):
-    pyautogui.hotkey('alt', 'e')
+    time.sleep(3)
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
+    window.F_使用长安城飞行棋('化生寺出口')
+    pyautogui.hotkey('alt', 'e')
+    time.sleep(1)
     point = window.checkpoint()
     points = window.findImgsInWindow('daoju_baotu.png')
     res = []
@@ -112,6 +115,8 @@ def F_获取宝图信息(deviceId):
         window.F_导航到建邺城()
     elif(map == '东海湾'):
         window.F_导航到东海湾()
+    elif(map == '大唐境外'):
+        window.F_导航到大唐境外()
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
@@ -192,6 +197,8 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         pyautogui.press('tab')
         time.sleep(1)
         point = window.findImgInWindow(mapDict.get(map))
+        if(point == None):
+            point = window.findImgInWindow(mapDict.get(map))
         window.pointMove(point[0] + x, point[1] + y)
         pyautogui.click()
         pyautogui.click()
@@ -229,7 +236,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
         # 小蜜蜂模式必须图满了才能发车
         window.F_选中道具格子(15)
         while(True):
-            if(num > 5):
+            if(num > 30):
                 break
             num = num + 1
 

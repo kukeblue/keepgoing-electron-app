@@ -146,6 +146,7 @@ class MHWindow:
         pyautogui.click()
 
     def pointMove(self, x, y):
+        isFirstMove = True
         mx = x - 20
         my = y - 16
         finished = False
@@ -153,22 +154,23 @@ class MHWindow:
             point = self.checkpoint()
             if(point != None):
                 dx = point[0] - 48
-                dy = point[1] - 38  
+                dy = point[1] - 38
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
-                    pyautogui.move(cx / 1.5, cy / 1.5)
-                else:   
+                    if(isFirstMove):
+                        pyautogui.move(cx / 1.5, cy / 1.5)
+                        isFirstMove = False
+                    else:
+                        pyautogui.move(cx, cy)
+                else:
                     finished = True
-            else:
-                self.focusWindow()
             real = pyautogui.position()
             realX = real[0]
             realY = real[1]
             if(realX > (self.windowArea[0] + 800) or realX < self.windowArea[0] or realY > (self.windowArea[1] + 600) or realY < (self.windowArea[1])):
-                pyautogui.moveTo(
+                baiduApi.op.MoveTo(
                     self.windowArea[0] + 400, self.windowArea[1] + 300)
-                time.sleep(1)
 
     def F_是否在战斗(self):
         try:
@@ -266,6 +268,9 @@ class MHWindow:
         elif(path == '江南野外出口'):
             self.pointMove(self.windowArea[0] + 657, self.windowArea[1] + 435)
             pyautogui.click()
+        elif(path == '化生寺出口'):
+            self.pointMove(self.windowArea[0] + 627, self.windowArea[1] + 169)
+            pyautogui.click()
         pyautogui.hotkey('alt', 'e')
 
     def F_使用朱紫国飞行棋(self, path):
@@ -297,7 +302,10 @@ class MHWindow:
             self.pointMove(self.windowArea[0] + 584, self.windowArea[1] + 180)
             pyautogui.click()
         if(path == '女儿村出口'):
-            self.pointMove(self.windowArea[0] + 168, self.windowArea[1] + 206)
+            self.pointMove(self.windowArea[0] + 208, self.windowArea[1] + 188)
+            pyautogui.click()
+        if(path == '东海湾出口'):
+            self.pointMove(self.windowArea[0] + 519, self.windowArea[1] + 399)
             pyautogui.click()
         pyautogui.hotkey('alt', 'e')
 
@@ -326,6 +334,12 @@ class MHWindow:
         pyautogui.click()
         time.sleep(5)
 
+    def F_导航到大唐境外(self):
+        self.F_使用朱紫国飞行棋('大唐境外出口')
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        pyautogui.click()
+        time.sleep(1)
 
     def F_导航到墨家村(self):
         self.F_使用朱紫国飞行棋('大唐境外出口')
@@ -383,7 +397,7 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 221, self.windowArea[1] + 362)
         pyautogui.click()
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 201, self.windowArea[1] + 362)
+        self.pointMove(self.windowArea[0] + 208, self.windowArea[1] + 336)
         pyautogui.click()
         time.sleep(1)
 
@@ -479,7 +493,7 @@ class MHWindow:
         elif(num == 20):
             self.F_移动到游戏区域坐标(248, 374)
         elif(num == 21):
-            self.F_移动到游戏区域坐标(268, 374)
+            self.F_移动到游戏区域坐标(263, 371)
         elif(num == 22):
             self.F_移动到游戏区域坐标(288, 374)
         elif(num == 23):
@@ -525,4 +539,4 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到墨家村()
+    window.F_回天台放东西('麒麟山')
