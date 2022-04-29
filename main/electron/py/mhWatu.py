@@ -236,11 +236,11 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
         while(True):
-            F_邀请发图(window)
-            pyautogui.hotkey('alt', 'e')
-            time.sleep(0.1)
-            window.F_选中道具格子(15)
-            time.sleep(1)
+            # F_邀请发图(window)
+            # pyautogui.hotkey('alt', 'e')
+            # time.sleep(0.1)
+            # window.F_选中道具格子(15)
+            # time.sleep(1)
             time.sleep(20)
             if(num > 30):
                 break

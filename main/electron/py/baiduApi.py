@@ -12,8 +12,6 @@ op = Dispatch("op.opsoft")
 pyHome = __file__.strip('baiduApi.py')
 pyZhikuDir = pyHome + 'config\zhiku'
 
-op.SetDict(0, pyZhikuDir + '\\baotuzuobiao.txt')
-
 
 APP_ID = '25713120'
 API_KEY = 'GOkNrLxVH3cV8I7DVpXx67mh'
@@ -48,6 +46,15 @@ def F_通用文字识别(path, area):
 
 
 def F_大漠宝图文字识别(area):
+    op.SetDict(0, pyZhikuDir + '\\baotuzuobiao.txt')
     str = op.Ocr(area[0], area[1], area[2], area[3],
                  "00ff00-000000", 0.98)
     return str
+
+
+def F_大漠红色文字位置识别(area):
+    op.SetDict(0, pyZhikuDir + '\\red.txt')
+    ret = op.FindStr(area[0], area[1], area[2], area[3],
+                     "我要休息", "ff0000-000000", 1.0)
+    if(ret[0] > -1):
+        return [ret[1], ret[2]]
