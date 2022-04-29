@@ -232,11 +232,15 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     else:
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
     window.F_回天台放东西(map)
+    window.F_选中道具格子(15)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
         while(True):
-            F_邀请发图(window)
-            window.F_选中道具格子(15)
+            # F_邀请发图(window)
+            # pyautogui.hotkey('alt', 'e')
+            # time.sleep(0.1)
+            # window.F_选中道具格子(15)
+            # time.sleep(1)
             time.sleep(20)
             if(num > 30):
                 break
@@ -257,14 +261,14 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
 def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
     time.sleep(0.5)
-    window.F_移动到游戏区域坐标(703, 263)
+    window.F_移动到游戏区域坐标(694, 384)
     pyautogui.rightClick()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(355, 440)
     pyautogui.click()
     window.F_移动到游戏区域坐标(403, 250)
     pyautogui.rightClick()
-    window.F_移动到游戏区域坐标(703, 263)
+    window.F_移动到游戏区域坐标(694, 384)
     pyautogui.click()
     pyautogui.press('1')
     pyautogui.press('enter')
@@ -290,11 +294,6 @@ def F_小蜜蜂模式(deviceId):
 
 
 if __name__ == '__main__':
-    # deviceId = str(11)
-    # MHWindow = mhWindow.MHWindow
-    # window = MHWindow(1, deviceId)
-    # window.findMhWindow()
-    # F_邀请发图(window)
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,
