@@ -195,25 +195,18 @@ class MHWindow:
         return ret
 
     def F_是否结束寻路(self):
-        当前坐标颜色1 = utils.getPointColor(
-            self.windowArea[0] + 4, self.windowArea[1] + 55)
-        当前坐标颜色2 = utils.getPointColor(
-            self.windowArea[0] + 795, self.windowArea[1] + 558)
+        坐标 = self.获取当前坐标()
         count = 0
         while(True):
             time.sleep(0.5)
-            坐标颜色1 = utils.getPointColor(
-                self.windowArea[0] + 4, self.windowArea[1] + 55)
-            坐标颜色2 = utils.getPointColor(
-                self.windowArea[0] + 795, self.windowArea[1] + 558)
-            if(当前坐标颜色1 == 坐标颜色1 or 当前坐标颜色2 == 坐标颜色2):
+            坐标2 = self.获取当前坐标()
+            if(坐标2 != None and 坐标 != None and 坐标 == 坐标2):
                 if(count > 2):
                     break
                 count = count + 1
             else:
                 count = 0
-                当前坐标颜色2 = 坐标颜色2
-                当前坐标颜色1 = 坐标颜色1
+                坐标 = 坐标2
 
     def F_自动战斗(self):
         for i in range(3):
@@ -564,10 +557,22 @@ class MHWindow:
         self.F_移动到游戏区域坐标(720, 35)
         pyautogui.rightClick()
 
+    def 获取当前坐标(self):
+        ret = baiduApi.F_大漠坐标文字识别([self.windowArea[0], self.windowArea[1],
+                                   self.windowArea[0] + 143,  self.windowArea[1] + 47])
+        point = []
+        if(ret != None):
+            list = ret.split(',')
+            for str in list:
+                if(str != ''):
+                    point.append(str)
+        if(len(point) > 1):
+            return point[0] + ',' + point[1]
+
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_卖装备(10)
+    print(window.F_是否结束寻路())

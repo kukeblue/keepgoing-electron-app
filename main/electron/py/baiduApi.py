@@ -58,3 +58,10 @@ def F_大漠红色文字位置识别(area):
                      "我要休息", "ff0000-000000", 1.0)
     if(ret[0] > -1):
         return [ret[1], ret[2]]
+
+
+def F_大漠坐标文字识别(area):
+    op.SetDict(0, pyZhikuDir + '\\zuobiao.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffffff-000000|f8f8f8-000000", 1.0)
+    return ret
