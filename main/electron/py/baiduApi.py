@@ -64,4 +64,5 @@ def F_大漠坐标文字识别(area):
     op.SetDict(0, pyZhikuDir + '\\zuobiao.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
                  "ffffff-000000|f8f8f8-000000", 1.0)
+    print(ret)
     return ret

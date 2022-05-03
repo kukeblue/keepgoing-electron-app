@@ -23,7 +23,7 @@ def F_碗子山守护者(deviceId):
     while True:
         pyautogui.press('f2')
         time.sleep(2)
-        for x in range(5):
+        for x in range(4):
             ret = baiduApi.F_大漠红色文字位置识别([window.windowArea[0], window.windowArea[1],
                                         window.windowArea[0] + 600, window.windowArea[1] + 800])
             print(ret)
