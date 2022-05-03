@@ -560,14 +560,9 @@ class MHWindow:
     def 获取当前坐标(self):
         ret = baiduApi.F_大漠坐标文字识别([self.windowArea[0], self.windowArea[1],
                                    self.windowArea[0] + 143,  self.windowArea[1] + 47])
-        point = []
         if(ret != None):
-            list = ret.split(',')
-            for str in list:
-                if(str != ''):
-                    point.append(str)
-        if(len(point) > 1):
-            return point[0] + ',' + point[1]
+            str = ret.replace(",", "")
+            return str
 
 
 if __name__ == '__main__':
@@ -575,4 +570,5 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    print(window.F_卖装备(19))
+    window.F_卖装备(15)
+    # print(window.F_是否结束寻路())

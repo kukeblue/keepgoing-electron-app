@@ -174,8 +174,7 @@ def F_点击宝图(window, deviceId, map, x, y, num):
 
 def F_获取最近的坐标点(x, y, other):
     for item in other:
-        distance = (item.get('realX') - x) * (item.get('realX') -
-                                              x) + (item.get('realY') - y)*(item.get('realY') - y)
+        distance = (item.get('realX') - x) * (item.get('realX') - x) + (item.get('realY') - y)*(item.get('realY') - y)
         item['distance'] = distance
     sortother = sorted(other, key=lambda item: item['distance'])
     logUtil.chLog(sortother)
@@ -227,10 +226,15 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
+    if(map == '花果山' or map == '麒麟山' or map == '大唐境外'):
+        pyautogui.press('f7')
     if(other == None):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
+
         F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
+    if(map == '花果山' or map == '麒麟山' or map == '大唐境外'):
+        pyautogui.press('f7')
     window.F_回天台放东西(map)
     window.F_选中道具格子(15)
     if(isBeen):
