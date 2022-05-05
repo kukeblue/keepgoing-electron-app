@@ -13,7 +13,17 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def F_领取抓鬼任务():
-    print(F_领取抓鬼任务)
+    print('F_领取抓鬼任务')
+    time.sleep(3)
+    deviceId = str(deviceId)
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1, deviceId)
+    window.findMhWindow()
+    window.focusWindow()
+
+
+def F_点击驿站老板():
+    print('')
 
 
 if __name__ == '__main__':
