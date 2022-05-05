@@ -251,6 +251,7 @@ class MHWindow:
             pyautogui.click()
             self.F_移动到游戏区域坐标(404, 444)
             pyautogui.click()
+            time.sleep(0.2)
             self.F_移动到游戏区域坐标(206, 338)
             pyautogui.click()
             time.sleep(1)
