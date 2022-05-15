@@ -52,12 +52,28 @@ def F_大漠宝图文字识别(area):
     return str
 
 
-def F_大漠红色文字位置识别(area):
+def F_大漠红色文字位置识别(area, text):
     op.SetDict(0, pyZhikuDir + '\\red.txt')
     ret = op.FindStr(area[0], area[1], area[2], area[3],
-                     "我要休息", "ff0000-000000", 1.0)
+                     text, "ff0000-000000", 1.0)
     if(ret[0] > -1):
         return [ret[1], ret[2]]
+
+
+def F_大漠小地图识别(area):
+    op.SetDict(0, pyZhikuDir + '\\small_map.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffffff-000000", 1.0)
+    print(ret)
+    return ret
+
+
+def F_大漠小地图寻路坐标识别(area):
+    op.SetDict(0, pyZhikuDir + '\\zuobiao_map.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffff00-000000", 1.0)
+    print(ret)
+    return ret
 
 
 def F_大漠坐标文字识别(area):
