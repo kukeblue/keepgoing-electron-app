@@ -171,7 +171,8 @@ class MHWindow:
             if(realX > (self.windowArea[0] + 800) or realX < self.windowArea[0] or realY > (self.windowArea[1] + 600) or realY < (self.windowArea[1])):
                 baiduApi.op.MoveTo(
                     self.windowArea[0] + 400, self.windowArea[1] + 300)
-
+                time.sleep(1)
+    
     def F_是否在战斗(self):
         try:
             point = self.findImgInWindow(
@@ -231,6 +232,16 @@ class MHWindow:
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
 
+    def F_选中道具格子2(self, num):
+        
+        point = self.findImgInWindow('daoju_top.png')
+        if(point != None):
+            firstBlockX = point[0] + 26
+            firstBlockY = point[1] + 83
+            left = ((num-1) % 5) * 50
+            height = math.floor((num-1) / 5) * 50
+            self.pointMove(firstBlockX + left, firstBlockY + height)
+
     def F_选中仓库道具格子(self, num):
         firstBlockX = self.windowArea[0] + 500
         firstBlockY = self.windowArea[1] + 113
@@ -249,13 +260,27 @@ class MHWindow:
         for x in range(num):
             self.F_选中收购商格子(x + 1)
             pyautogui.click()
-            self.F_移动到游戏区域坐标(404, 444)
+            self.F_移动到游戏区域坐标(404, 440)
             pyautogui.click()
-            time.sleep(0.2)
+            time.sleep(0.5)
             self.F_移动到游戏区域坐标(206, 338)
             pyautogui.click()
             time.sleep(1)
             pyautogui.click()
+    
+    def F_丢垃圾(self, num):
+        self.focusWindow()
+        pyautogui.hotkey('alt', 'e')
+        time.sleep(1)
+        for x in range(num):
+            self.F_选中道具格子2(x + 1)
+            pyautogui.click()
+            self.F_移动到游戏区域坐标(376, 344)
+            pyautogui.click()
+            time.sleep(0.5)
+            self.F_移动到游戏区域坐标(356, 344)
+            pyautogui.click()
+           
 
     def F_使用飞行符(self, path):
         self.F_选中道具格子(20)
@@ -571,5 +596,5 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_卖装备(15)
+    window.F_卖装备(20)
     # print(window.F_是否结束寻路())
