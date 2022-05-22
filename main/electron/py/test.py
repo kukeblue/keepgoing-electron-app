@@ -11,7 +11,7 @@ import pyautogui
 # pyHome = __file__.strip('test.py')
 # pyZhikuDir = pyHome + 'config/zhiku'
 
-# op.SetDict(0, pyZhikuDir + '/baotuzuobiao.txt')
+# op.SetDict(0, pyZhikuDir + '/baotuzuobiao.txa's'dat')
 # s = op.Ocr(283, 29, 968, 614, "00ff00-000000", 1.0)
 # print(s)
 time.sleep(3)
