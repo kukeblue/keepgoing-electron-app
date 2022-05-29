@@ -31,7 +31,7 @@ def F_碗子山守护者(deviceId):
                     #                             window.windowArea[0] + 600, window.windowArea[1] + 800])
                     # print(ret)
                     # if(ret != None):
-                    window.pointMove(189, 394)
+                    window.F_移动到游戏区域坐标(189, 394)
                     pyautogui.click()
                     window.F_移动到游戏区域坐标(331, 549)
                     pyautogui.click()

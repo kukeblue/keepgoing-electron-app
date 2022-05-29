@@ -222,7 +222,7 @@ class MHWindow:
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
-                self.pointMove(point[0], point[1] + 100)
+                self.pointMove(point[0], point[1] + 110)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -302,6 +302,9 @@ class MHWindow:
         if(path == '宝象国'):
             self.pointMove(self.windowArea[0] + 286, self.windowArea[1] + 328)
             pyautogui.click()
+        if(path == '长寿村'):
+            self.pointMove(self.windowArea[0] + 306, self.windowArea[1] + 187)
+            pyautogui.click()
         if(path == '西凉女国'):
             self.pointMove(self.windowArea[0] + 297, self.windowArea[1] + 249)
             pyautogui.click()
@@ -343,6 +346,9 @@ class MHWindow:
         pyautogui.rightClick()
         time.sleep(1)
         if(path == '长寿郊外出口'):
+            self.pointMove(self.windowArea[0] + 503, self.windowArea[1] + 465)
+            pyautogui.click()
+        if(path == None):
             self.pointMove(self.windowArea[0] + 503, self.windowArea[1] + 465)
             pyautogui.click()
         pyautogui.hotkey('alt', 'e')
@@ -390,9 +396,7 @@ class MHWindow:
                 pyautogui.press('tab')
                 # 点击地府入口圈圈
                 time.sleep(0.5)
-                self.F_移动到游戏区域坐标(227, 145)
-                time.sleep(0.5)
-                pyautogui.click()
+                self.F_移动到游戏区域坐标(235, 144)
                 pyautogui.click()
                 time.sleep(1)
                 pyautogui.press('tab')
@@ -508,6 +512,10 @@ class MHWindow:
         self.F_使用飞行符('傲来国')
         time.sleep(1)
 
+    def F_导航到长寿村(self):
+        self.F_使用飞行符('长寿村')
+        time.sleep(1)
+
     def F_导航到西凉女国(self):
         self.F_使用飞行符('西凉女国')
         time.sleep(1)
@@ -593,6 +601,7 @@ class MHWindow:
         time.sleep(1)
 
     def F_小地图寻路器(self, 目标坐标):
+        time.sleep(1)
         pyautogui.press('tab')
         time.sleep(1)
         self.focusWindow()
@@ -631,10 +640,12 @@ class MHWindow:
             self.F_导航到大唐境外()
         if('普陀山' in 任务):
             self.F_导航到普陀山()
-        if('西凉女国' in 任务):
+        if('西梁女国' in 任务):
             self.F_导航到西凉女国()
         if('江南野外' in 任务):
             self.F_导航到江南野外()
+        if('长寿村' in 任务):
+            self.F_导航到长寿村()
         if('朱紫国' in 任务):
             self.F_导航到朱紫国()
 
@@ -778,8 +789,14 @@ class MHWindow:
             map = "朱紫国"
         elif("普陀山" in str):
             map = "普陀山"
+        elif("西梁女国" in str):
+            map = "西梁女国"
+        elif("宝象国" in str):
+            map = "宝象国"
         elif("长寿郊外" in str or ("外" in str and "长寿" in str)):
             map = "长寿郊外"
+        elif("长寿村" in str):
+            map = "长寿村"
         else:
             print('未匹配地图', str)
 

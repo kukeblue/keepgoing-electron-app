@@ -21,6 +21,7 @@ def 抓鬼(deviceId):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
+    pyautogui.click()
     while True:
         F_领取抓鬼任务(window)
 
