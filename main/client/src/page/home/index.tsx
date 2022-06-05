@@ -82,10 +82,6 @@ function usePageStore() {
         doCloseAllTask()
     }
 
-    const handleZhuaGuiTask = (deviceId: number) => {
-        doZhuaGuiTask(deviceId)
-    }
-
     const handleGetWatuInfoReply = (data: any) => {
         console.log('handleGetWatuInfoReply', data);
         const result = data.result
@@ -138,7 +134,7 @@ function usePageStore() {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
                 watuDeviceId = res.deviceId
-                handleGetWatuInfo(res.deviceId)
+                doZhuaGuiTask(res.deviceId)
                 setShowSelectDeviceModal(false)
             }
         })
@@ -214,6 +210,7 @@ function usePageStore() {
         handleClickLinkDevice,
         handleSelectJiangjunDevice,
         handleSelectWatuDevice,
+        handleSelectZhuaGuiDevice,
         handleClearLog,
         showSelectDeviceModal,
         setShowSelectDeviceModal,
@@ -263,8 +260,10 @@ function HomeGameArea() {
     const hadleSubmitDevice = () => {
         if (selectDeviceFunc === 'handleSelectJiangjunDevice') {
             pageStore.handleSelectJiangjunDevice()
-        } else {
+        } else if (selectDeviceFunc === 'handleSelectWatuDevice') {
             pageStore.handleSelectWatuDevice()
+        }else if (selectDeviceFunc === 'handleSelectZhuaGuiDevice') {
+            pageStore.handleSelectZhuaGuiDevice()
         }
 
     }
@@ -371,7 +370,7 @@ function HomeFeature() {
         <Row className='m-t-10'>
             <Col>
                 <Button onClick={() => {
-                    selectDeviceFunc = 'handleSelectWatuDevice'
+                    selectDeviceFunc = 'handleSelectZhuaGuiDevice'
                     pageStore.setShowSelectDeviceModal(true)
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
             </Col>
