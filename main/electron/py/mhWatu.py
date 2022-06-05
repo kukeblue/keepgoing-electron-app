@@ -16,6 +16,8 @@ def F_获取任务位置和坐标(str):
     map = ""
     if("花果山" in str):
         map = "花果山"
+    if("宝象国" in str):
+        map = "宝象国"
     elif("五庄观" in str):
         map = "五庄观"
     elif("江南野外" in str):
