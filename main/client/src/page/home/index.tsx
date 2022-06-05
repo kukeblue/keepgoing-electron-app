@@ -4,7 +4,7 @@ import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doBee, doGetWatuClickMap } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask } from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
@@ -27,8 +27,9 @@ type TWatuInfo = {
     deviceId?: number
 }
 
-let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice'
+let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice' | 'handleSelectZhuaGuiDevice'
 let watuDeviceId = 0
+let zhuaGuiDeviceId = 0
 function usePageStore() {
     useEffect(() => {
         MainThread.messageListener.pushLogHandles.push(handlePushLog)
@@ -76,6 +77,11 @@ function usePageStore() {
             doGetWatuInfo(deviceId)
         }
     }
+
+    const closeAllTask = () => {
+        doCloseAllTask()
+    }
+
     const handleGetWatuInfoReply = (data: any) => {
         console.log('handleGetWatuInfoReply', data);
         const result = data.result
@@ -117,8 +123,18 @@ function usePageStore() {
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
-                watuDeviceId = res.deviceId
+                zhuaGuiDeviceId = res.deviceId
                 handleGetWatuInfo(res.deviceId)
+                setShowSelectDeviceModal(false)
+            }
+        })
+    }
+
+    const handleSelectZhuaGuiDevice = () => {
+        formRef.validateFields().then((res: any) => {
+            if (res.deviceId) {
+                watuDeviceId = res.deviceId
+                doZhuaGuiTask(res.deviceId)
                 setShowSelectDeviceModal(false)
             }
         })
@@ -172,6 +188,7 @@ function usePageStore() {
     }
 
     return {
+        closeAllTask,
         isBee,
         setIsBee,
         setModalMultipleAccountSelectShow,
@@ -193,6 +210,7 @@ function usePageStore() {
         handleClickLinkDevice,
         handleSelectJiangjunDevice,
         handleSelectWatuDevice,
+        handleSelectZhuaGuiDevice,
         handleClearLog,
         showSelectDeviceModal,
         setShowSelectDeviceModal,
@@ -242,8 +260,10 @@ function HomeGameArea() {
     const hadleSubmitDevice = () => {
         if (selectDeviceFunc === 'handleSelectJiangjunDevice') {
             pageStore.handleSelectJiangjunDevice()
-        } else {
+        } else if (selectDeviceFunc === 'handleSelectWatuDevice') {
             pageStore.handleSelectWatuDevice()
+        }else if (selectDeviceFunc === 'handleSelectZhuaGuiDevice') {
+            pageStore.handleSelectZhuaGuiDevice()
         }
 
     }
@@ -346,7 +366,17 @@ function HomeFeature() {
                     }} />
                 </div>
             </Col>
-
+        </Row>
+        <Row className='m-t-10'>
+            <Col>
+                <Button onClick={() => {
+                    selectDeviceFunc = 'handleSelectZhuaGuiDevice'
+                    pageStore.setShowSelectDeviceModal(true)
+                }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
+            </Col>
+            <Col offset={1}>
+                <Button onClick={() => {pageStore.closeAllTask()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>关闭全部脚本</Button>
+            </Col>
         </Row>
         <div className="home-feature-panel">
             {pageStore.watuInfo && <ChMhMapTool deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}

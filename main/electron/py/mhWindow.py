@@ -174,6 +174,7 @@ class MHWindow:
                 baiduApi.op.MoveTo(
                     self.windowArea[0] + 400, self.windowArea[1] + 300)
                 time.sleep(1)
+
     def F_是否在战斗(self):
         try:
             point = self.findImgInWindow(
@@ -217,7 +218,6 @@ class MHWindow:
                 坐标 = 坐标2
 
     def F_点击战斗(self):
-
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
@@ -263,7 +263,7 @@ class MHWindow:
             self.pointMove(firstBlockX + left, firstBlockY + height)
 
     def F_选中道具格子2(self, num):
-        
+
         point = self.findImgInWindow('daoju_top.png')
         if(point != None):
             firstBlockX = point[0] + 26
@@ -297,7 +297,7 @@ class MHWindow:
             pyautogui.click()
             time.sleep(0.5)
             pyautogui.click()
-    
+
     def F_丢垃圾(self, num):
         self.focusWindow()
         pyautogui.hotkey('alt', 'e')
@@ -310,7 +310,6 @@ class MHWindow:
             time.sleep(0.5)
             self.F_移动到游戏区域坐标(356, 344)
             pyautogui.click()
-           
 
     def F_使用飞行符(self, path):
         self.F_选中道具格子(20)
@@ -370,6 +369,9 @@ class MHWindow:
         if(path == '长寿郊外出口'):
             self.pointMove(self.windowArea[0] + 503, self.windowArea[1] + 465)
             pyautogui.click()
+        if(path == None):
+            self.pointMove(self.windowArea[0] + 503, self.windowArea[1] + 465)
+            pyautogui.click()
         pyautogui.hotkey('alt', 'e')
 
     def F_使用傲来国飞行棋(self, path):
@@ -415,9 +417,7 @@ class MHWindow:
                 pyautogui.press('tab')
                 # 点击地府入口圈圈
                 time.sleep(0.5)
-                self.F_移动到游戏区域坐标(227, 145)
-                time.sleep(0.5)
-                pyautogui.click()
+                self.F_移动到游戏区域坐标(235, 144)
                 pyautogui.click()
                 time.sleep(1)
                 pyautogui.press('tab')
@@ -532,7 +532,11 @@ class MHWindow:
     def F_导航到傲来国(self):
         self.F_使用飞行符('傲来国')
         time.sleep(1)
-    
+
+    def F_导航到长寿村(self):
+        self.F_使用飞行符('长寿村')
+        time.sleep(1)
+
     def F_导航到长寿村(self):
         self.F_使用飞行符('长寿村')
         time.sleep(1)
@@ -622,6 +626,7 @@ class MHWindow:
         time.sleep(1)
 
     def F_小地图寻路器(self, 目标坐标):
+        time.sleep(1)
         pyautogui.press('tab')
         time.sleep(1)
         self.focusWindow()
@@ -809,6 +814,10 @@ class MHWindow:
             map = "朱紫国"
         elif("普陀山" in str):
             map = "普陀山"
+        elif("西梁女国" in str):
+            map = "西梁女国"
+        elif("宝象国" in str):
+            map = "宝象国"
         elif("长寿村" in str):
             map = "长寿村"
         elif("长寿郊外" in str or ("外" in str and "长寿" in str)):

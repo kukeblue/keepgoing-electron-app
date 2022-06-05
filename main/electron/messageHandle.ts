@@ -76,6 +76,25 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+    // 抓鬼
+    ipcMain.on(resourcePaths.METHOD_ZHUAGUI_TASK, (event, args) => {
+        logger.info('run py script: METHOD_ZHUAGUI_TASK')
+        const result = runPyScript('mhZhuaGui', ['zg', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+
+    // 关闭所有进程
+    ipcMain.on(resourcePaths.METHOD_CLOSE_ALL_TASK, (event, args) => {
+        logger.info('run py script: METHOD_CLOSE_ALL_TASK')
+        const result = runPyScript('closeAllMhTask', [])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')
