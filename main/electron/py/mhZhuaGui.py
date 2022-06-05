@@ -38,6 +38,7 @@ def F_领取抓鬼任务(window):
     pyautogui.hotkey('f9')
     window.F_点击战斗()
     window.F_自动战斗2()
+    pyautogui.click()
 
 
 def F_领取钟馗任务(window):
@@ -72,5 +73,5 @@ def F_使用天眼(window):
 
 if __name__ == '__main__':
     fire.Fire({
-        'zhuaGui': 抓鬼,
+        'zg': 抓鬼,
     })
