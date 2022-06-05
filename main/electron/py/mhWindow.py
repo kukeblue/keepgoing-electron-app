@@ -221,7 +221,7 @@ class MHWindow:
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
-                self.pointMove(point[0], point[1] + 100)
+                self.pointMove(point[0], point[1] + 25)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -626,7 +626,7 @@ class MHWindow:
         time.sleep(1)
         self.focusWindow()
         目标坐标x = int(目标坐标[0])
-        目标坐标y = int(目标坐标[1]) + 2
+        目标坐标y = int(目标坐标[1])
         while True:
             time.sleep(0.1)
             point = self.F_获取小地图寻路坐标()
@@ -836,5 +836,6 @@ if __name__ == '__main__':
     window.focusWindow()
     time.sleep(1)
     window.F_丢垃圾(15)
+    
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
