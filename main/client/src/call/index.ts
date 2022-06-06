@@ -9,6 +9,9 @@ export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSy
 export const doGetWatuInfo = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [deviceId])
 export const doZhuaGuiTask = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHUAGUI_TASK, [deviceId])
 export const doCloseAllTask = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLOSE_ALL_TASK, [])
+export const doThrowLitter = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_THROW_LITTER, [deviceId])
+export const doSellEquipment = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SELL_EQUIPMENT, [deviceId])
+
 
 
 
