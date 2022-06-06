@@ -123,7 +123,7 @@ function usePageStore() {
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
-                zhuaGuiDeviceId = res.deviceId
+                watuDeviceId = res.deviceId
                 handleGetWatuInfo(res.deviceId)
                 setShowSelectDeviceModal(false)
             }
