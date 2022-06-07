@@ -98,7 +98,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 丢垃圾
     ipcMain.on(resourcePaths.METHOD_THROW_LITTER, (event, args) => {
         logger.info('run py script: METHOD_THROW_LITTER')
-        const result = runPyScript('hmThrowLitter', ['start', args[0]])
+        const result = runPyScript('mhThrowLitter', ['start', args[0]])
         event.returnValue = {
             code: result,
             status: 0
@@ -107,7 +107,16 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 卖装备
     ipcMain.on(resourcePaths.METHOD_SELL_EQUIPMENT, (event, args) => {
         logger.info('run py script: METHOD_SELL_EQUIPMENT')
-        const result = runPyScript('hmSellEquipment', ['start', args[0]])
+        const result = runPyScript('mhSellEquipment', ['start', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    // 连点器
+    ipcMain.on(resourcePaths.METHOD_CONNECTOR, (event, args) => {
+        logger.info('run py script: METHOD_CONNECTOR')
+        const result = runPyScript('mhLianDIan', ['start', args[0]])
         event.returnValue = {
             code: result,
             status: 0
