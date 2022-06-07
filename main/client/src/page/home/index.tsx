@@ -4,7 +4,7 @@ import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector } from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
@@ -193,7 +193,12 @@ function usePageStore() {
         window.isBee = check;
     }
 
+    const connector = () => {
+        doConnector(watuDeviceId)
+    }
+
     return {
+        connector,
         sellEquipment,
         throwLitter,
         closeAllTask,
@@ -390,6 +395,9 @@ function HomeFeature() {
             </Col>
             <Col offset={1}>
                 <Button onClick={() => {pageStore.throwLitter()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
+            </Col>
+            <Col offset={1}>
+                <Button onClick={() => {pageStore.connector()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
             </Col>
         </Row>
         <div className="home-feature-panel">
