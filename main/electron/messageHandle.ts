@@ -95,6 +95,24 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+    // 丢垃圾
+    ipcMain.on(resourcePaths.METHOD_THROW_LITTER, (event, args) => {
+        logger.info('run py script: METHOD_THROW_LITTER')
+        const result = runPyScript('hmThrowLitter', ['start', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    // 卖装备
+    ipcMain.on(resourcePaths.METHOD_SELL_EQUIPMENT, (event, args) => {
+        logger.info('run py script: METHOD_SELL_EQUIPMENT')
+        const result = runPyScript('hmSellEquipment', ['start', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')

@@ -4,7 +4,7 @@ import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment } from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
@@ -81,6 +81,12 @@ function usePageStore() {
     const closeAllTask = () => {
         doCloseAllTask()
     }
+    const throwLitter = () => {
+        doThrowLitter(watuDeviceId)
+    }
+    const sellEquipment = () => {
+        doSellEquipment(watuDeviceId)
+    }
 
     const handleGetWatuInfoReply = (data: any) => {
         console.log('handleGetWatuInfoReply', data);
@@ -133,7 +139,7 @@ function usePageStore() {
     const handleSelectZhuaGuiDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
-                watuDeviceId = res.deviceId
+                zhuaGuiDeviceId = res.deviceId
                 doZhuaGuiTask(res.deviceId)
                 setShowSelectDeviceModal(false)
             }
@@ -188,6 +194,8 @@ function usePageStore() {
     }
 
     return {
+        sellEquipment,
+        throwLitter,
         closeAllTask,
         isBee,
         setIsBee,
@@ -376,6 +384,12 @@ function HomeFeature() {
             </Col>
             <Col offset={1}>
                 <Button onClick={() => {pageStore.closeAllTask()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>关闭全部脚本</Button>
+            </Col>
+            <Col offset={1}>
+                <Button onClick={() => {pageStore.sellEquipment()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
+            </Col>
+            <Col offset={1}>
+                <Button onClick={() => {pageStore.throwLitter()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
             </Col>
         </Row>
         <div className="home-feature-panel">
