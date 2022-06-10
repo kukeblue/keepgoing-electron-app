@@ -195,7 +195,10 @@ function usePageStore() {
 
     const connector = () => {
         message.success('操作成功')
-        doConnector(watuDeviceId)
+        if (watuDeviceId > 0) {
+            doConnector(watuDeviceId)
+        }
+
     }
 
     return {
