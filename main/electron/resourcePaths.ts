@@ -1,4 +1,4 @@
-import {doConnector} from "../client/src/call";
+import { doConnector } from "../client/src/call";
 
 const resourcePaths = {
     MESSAGE_INIT: 'message_init',
@@ -22,7 +22,7 @@ const resourcePaths = {
     METHOD_CLOSE_ALL_TASK: 'method_close_all_task',
     METHOD_THROW_LITTER: 'throw_litter',
     METHOD_SELL_EQUIPMENT: 'sell_equipment',
-    METHOD_CONNECTOR: 'sell_connector',
+    METHOD_CONNECTOR: 'method_connector',
 
 
 
