@@ -35,6 +35,10 @@ mapCangkuDict = {
     # '东海湾': 9,
 }
 
+傲来国坐标点 = {
+    '女儿村出口': [6, 138],
+}
+
 
 class MHWindow:
     screenUnit = 2
@@ -148,7 +152,7 @@ class MHWindow:
         pyautogui.click()
 
     def pointMove(self, x, y):
-        isFirstMove = True
+        isFirstMove = 0
         mx = x - 20
         my = y - 16
         finished = False
@@ -160,10 +164,18 @@ class MHWindow:
                 if mx - dx > 3 or mx - dx < -3 or my - dy > 3 or my - dy < -3:
                     cx = mx - dx
                     cy = my - dy
-                    if(isFirstMove):
+                    if(isFirstMove < 2):
                         pyautogui.move(cx / 2, cy / 2)
-                        isFirstMove = False
+                        isFirstMove = isFirstMove + 1
                     else:
+                        if(cx > 40):
+                            cx = 40
+                        elif(cx < -40):
+                            cx = -40
+                        if(dy > 30):
+                            dy = 30
+                        elif(dy < -30):
+                            dy = -30
                         pyautogui.move(cx, cy)
                 else:
                     finished = True
@@ -463,6 +475,14 @@ class MHWindow:
                 pyautogui.click()
         time.sleep(1)
 
+    def F_红色文字位置点击(self, str):
+        ret = baiduApi.F_大漠红色文字位置识别([self.windowArea[0], self.windowArea[1],
+                                     self.windowArea[0] + 600, self.windowArea[1] + 800], str)
+
+        if(ret != None):
+            self.pointMove(ret[0], ret[1])
+            pyautogui.click()
+
     def F_导航到江南野外(self):
         self.F_使用长安城飞行棋('江南野外出口')
         time.sleep(1)
@@ -496,17 +516,14 @@ class MHWindow:
         time.sleep(1)
         pyautogui.press('tab')
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 322, self.windowArea[1] + 259)
+        self.pointMove(self.windowArea[0] + 316, self.windowArea[1] + 250)
         pyautogui.click()
         time.sleep(1)
         pyautogui.press('tab')
-        time.sleep(40)
-        self.pointMove(self.windowArea[0] + 403, self.windowArea[1] + 137)
+        time.sleep(38)
+        self.pointMove(self.windowArea[0] + 517, self.windowArea[1] + 135)
         pyautogui.press('f9')
-        time.sleep(1)
-        pyautogui.click()
-        time.sleep(1)
-        self.pointMove(self.windowArea[0] + 386, self.windowArea[1] + 143)
+        time.sleep(0.5)
         pyautogui.click()
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 211, self.windowArea[1] + 337)
@@ -531,6 +548,22 @@ class MHWindow:
 
     def F_导航到傲来国(self):
         self.F_使用飞行符('傲来国')
+        time.sleep(1)
+
+    def F_位置分析器(self, 坐标集合, 坐标):
+        距离集合 = []
+        地点集合 = []
+        for key in 坐标集合:
+            currentPoint = 坐标集合[key]
+            distance = abs(坐标[0] - currentPoint[0]) + \
+                abs(坐标[1] - currentPoint[1])
+            距离集合.append(distance)
+            地点集合.append(key)
+        retIndex = 距离集合.index(min(距离集合))
+        return 地点集合[retIndex]
+
+    def F_导航到傲来国智能(self, x, y):
+        self.F_使用傲来国飞行棋(self.F_位置分析器(傲来国坐标点, [x, y]))
         time.sleep(1)
 
     def F_导航到长寿村(self):
@@ -615,7 +648,7 @@ class MHWindow:
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 416, self.windowArea[1] + 426)
         pyautogui.click()
-        time.sleep(30)
+        time.sleep(28)
         pyautogui.press('tab')
         pyautogui.press('f9')
         self.pointMove(self.windowArea[0] + 402, self.windowArea[1] + 304)
@@ -656,7 +689,7 @@ class MHWindow:
         if('宝象国' in 任务):
             self.F_导航到宝象国()
         elif('傲来国' in 任务):
-            self.F_导航到傲来国()
+            self.F_导航到傲来国智能(point[0], point[1])
         elif('女儿村' in 任务):
             self.F_导航到女儿村()
         elif('建邺城' in 任务):
@@ -840,11 +873,10 @@ class MHWindow:
 
 
 if __name__ == '__main__':
-    window = MHWindow(1, '12')
+    window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_丢垃圾(15)
-    
+    window.F_导航到墨家村()
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
