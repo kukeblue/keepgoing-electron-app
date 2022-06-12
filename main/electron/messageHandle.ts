@@ -116,7 +116,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 连点器
     ipcMain.on(resourcePaths.METHOD_CONNECTOR, (event, args) => {
         logger.info('run py script: METHOD_CONNECTOR')
-        const result = runPyScript('mhLianDIan', ['start', args[0]])
+        const result = runPyScript('mhLianDian', ['start', args[0]])
         event.returnValue = {
             code: result,
             status: 0

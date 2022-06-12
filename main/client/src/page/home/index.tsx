@@ -194,7 +194,11 @@ function usePageStore() {
     }
 
     const connector = () => {
-        doConnector(watuDeviceId)
+        message.success('操作成功')
+        if (watuDeviceId > 0) {
+            doConnector(watuDeviceId)
+        }
+
     }
 
     return {
@@ -275,7 +279,7 @@ function HomeGameArea() {
             pageStore.handleSelectJiangjunDevice()
         } else if (selectDeviceFunc === 'handleSelectWatuDevice') {
             pageStore.handleSelectWatuDevice()
-        }else if (selectDeviceFunc === 'handleSelectZhuaGuiDevice') {
+        } else if (selectDeviceFunc === 'handleSelectZhuaGuiDevice') {
             pageStore.handleSelectZhuaGuiDevice()
         }
 
@@ -388,16 +392,16 @@ function HomeFeature() {
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
             </Col>
             <Col offset={1}>
-                <Button onClick={() => {pageStore.closeAllTask()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>关闭全部脚本</Button>
+                <Button onClick={() => { pageStore.closeAllTask() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>关闭全部脚本</Button>
             </Col>
             <Col offset={1}>
-                <Button onClick={() => {pageStore.sellEquipment()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
+                <Button onClick={() => { pageStore.sellEquipment() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
             </Col>
             <Col offset={1}>
-                <Button onClick={() => {pageStore.throwLitter()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
+                <Button onClick={() => { pageStore.throwLitter() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
             </Col>
             <Col offset={1}>
-                <Button onClick={() => {pageStore.connector()}} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
+                <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
             </Col>
         </Row>
         <div className="home-feature-panel">
