@@ -156,6 +156,14 @@ mapDict = {
     '东海湾': "map_top_donghaiwan.png",
 }
 
+mapDictEntrance = {
+    '五庄观': [26, 73],
+    '江南野外': [26, 108],
+    '普陀山': [87, 4],
+    '北俱芦洲': [306, 263],
+    '东海湾': [222, 263],
+}
+
 
 def F_点击宝图(window, deviceId, map, x, y, num):
     deviceId = str(deviceId)
@@ -224,21 +232,25 @@ num = 1
 
 
 def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
+
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    if(map == '花果山' or map == '麒麟山' or map == '大唐境外' or map == '普陀山'):
-        pyautogui.press('f2')
+#     if(map == '花果山' or map == '麒麟山' or map == '大唐境外' or map == '普陀山'):
+#         pyautogui.press('f2')
     if(other == None):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
-
-        F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
-    if(map == '花果山' or map == '麒麟山' or map == '大唐境外' or map == '普陀山'):
-        pyautogui.press('f2')
+        if num == 1:
+                firstPoint = {"realX":x,"realY":y,"index":num}
+                if other != None:
+                    other.append(firstPoint)
+                    entrancePoint = mapDictEntrance.get(map)
+                    point, newOther = F_获取最近的坐标点(entrancePoint[0], entrancePoint[1], other)
+                    F_点击宝图并寻路(window, deviceId, map, point['realX'], point['realY'], point['index'], newOther)
     window.F_回天台放东西(map)
     window.F_选中道具格子(15)
     if(isBeen):
