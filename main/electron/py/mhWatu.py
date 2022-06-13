@@ -258,7 +258,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     window.F_选中道具格子(15)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
-        doReadyWatuTask()
+        doReadyWatuTask(deviceId)
         while(True):
             # F_邀请发图(window)
             # pyautogui.hotkey('alt', 'e')
