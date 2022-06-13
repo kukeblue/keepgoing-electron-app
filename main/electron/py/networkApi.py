@@ -56,4 +56,4 @@ def doReadyWatuTask(deviceId):
 
 
 
-
+doReadyWatuTask('1')
