@@ -9,6 +9,7 @@ import io
 import time
 import fire
 import pyautogui
+import networkApi
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -257,6 +258,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     window.F_选中道具格子(15)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
+        doReadyWatuTask(deviceId)
         while(True):
             # F_邀请发图(window)
             # pyautogui.hotkey('alt', 'e')
@@ -273,7 +275,6 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
             pyautogui.hotkey('alt', 'e')
             point = window.findImgInWindow('daoju_baotu_large.png')
             if(point != None and point[0] > 0):
-
                 pyautogui.hotkey('alt', 'e')
                 F_小蜜蜂模式(deviceId)
                 break

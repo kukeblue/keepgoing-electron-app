@@ -44,6 +44,7 @@
         "webpack-dev-server": "^3.11.2"
     },
     "dependencies": {
+        "@ant-design/icons": "^4.7.0",
         "@loadable/component": "^5.15.0",
         "antd": "^4.16.8",
         "axios": "^0.21.1",

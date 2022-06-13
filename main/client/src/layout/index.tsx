@@ -4,14 +4,8 @@ import './index.less'
 import { ChLayout } from 'ch-ui'
 import { Breadcrumb, Popover, Menu } from 'antd';
 import image_robot from '../assets/images/icon.jpg';
-
-import {
-    ContactsOutlined,
-    MobileOutlined,
-    CalendarOutlined,
-    DashboardOutlined,
-    TransactionOutlined
-} from '@ant-design/icons';
+// @ts-ignore
+import {ContactsOutlined,MobileOutlined, CalendarOutlined,DashboardOutlined, TransactionOutlined} from '@ant-design/icons';
 import {useHistory, useLocation} from "react-router-dom";
 import {MainThread} from "../call";
 import Login from "../page/login";
@@ -145,6 +139,13 @@ function Layout(props: LayoutProps) {
                 click: () => {
                     history.push('/report')
                 }
+            },
+            {
+                text: '退出登录',
+                icon: <TransactionOutlined style={{ fontSize: 24 }} />,
+                click: () => {
+                    history.push('/login')
+                }
             }
         ]
     }
@@ -157,6 +158,7 @@ function Layout(props: LayoutProps) {
 }
 
 export default (props: LayoutProps) => {
+    // @ts-ignore
     return <UserStore.Provider>
         <Layout {...props}/>
     </UserStore.Provider>
