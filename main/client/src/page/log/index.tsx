@@ -102,13 +102,13 @@ function Log() {
                     title: '设备',
                     dataIndex: 'deviceId',
                     key: 'deviceId',
-                    render:(v)=><div>{pageStore.deviceMap[v].name}</div>
+                    render:(v)=><div>{pageStore.deviceMap[v] && pageStore.deviceMap[v].name}</div>
                 },
                 {
                     title: '角色',
                     dataIndex: 'accountId',
                     key: 'accountId',
-                    render:(v)=><div>{pageStore.accountMap[v].name}</div>
+                    render:(v)=><div>{pageStore.accountMap[v] && pageStore.accountMap[v].name}</div>
                 },
                 {
                     title: '类型',

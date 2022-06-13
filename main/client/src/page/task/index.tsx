@@ -1,6 +1,7 @@
 import {Button, DatePicker, Dropdown, Menu, message, Modal} from 'antd';
 import React, {useRef, useState} from "react";
 import './index.less'
+// @ts-ignore
 import {DownOutlined} from '@ant-design/icons';
 import {ChForm, ChTablePanel, ChUtils, FormItemType} from "ch-ui";
 import {TTask} from "../../typing";
@@ -92,7 +93,7 @@ function task() {
                     title: '设备',
                     dataIndex: 'deviceId',
                     key: 'deviceId',
-                    render:(v)=><div style={{width: '100px'}}>{pageStore.deviceMap[v].name}</div>
+                    render:(v)=><div style={{width: '100px'}}>{pageStore.deviceMap[v] && pageStore.deviceMap[v].name}</div>
                 },
                 {
                     title: '角色',
@@ -122,7 +123,9 @@ function task() {
                     title: '状态',
                     dataIndex: 'status',
                     key: 'status',
-                    render: (v)=><div style={{width: '80px'}}>{v}</div>
+                    render: (v)=><div style={{width: '80px'}}>
+                        {v}
+                        </div>
                 },
                 {
                     title: '任务次数',

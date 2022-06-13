@@ -15,6 +15,7 @@ import {
     ScanOutlined,
     SettingOutlined,
     ToolOutlined
+    // @ts-ignore
 } from '@ant-design/icons';
 import ChMhMapTool from "../../components/ChMhMapTool";
 
@@ -79,12 +80,15 @@ function usePageStore() {
     }
 
     const closeAllTask = () => {
+        message.success('操作成功');
         doCloseAllTask()
     }
     const throwLitter = () => {
+        message.success('操作成功');
         doThrowLitter(watuDeviceId)
     }
     const sellEquipment = () => {
+        message.success('操作成功');
         doSellEquipment(watuDeviceId)
     }
 
@@ -391,16 +395,16 @@ function HomeFeature() {
                     pageStore.setShowSelectDeviceModal(true)
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
             </Col>
-            <Col offset={1}>
+            <Col className="m-l-10">
                 <Button onClick={() => { pageStore.closeAllTask() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>关闭全部脚本</Button>
             </Col>
-            <Col offset={1}>
+            <Col className="m-l-10">
                 <Button onClick={() => { pageStore.sellEquipment() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
             </Col>
-            <Col offset={1}>
+            <Col className="m-l-10">
                 <Button onClick={() => { pageStore.throwLitter() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
             </Col>
-            <Col offset={1}>
+            <Col className="m-l-10">
                 <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
             </Col>
         </Row>
@@ -411,6 +415,7 @@ function HomeFeature() {
 
 }
 function Home() {
+    // @ts-ignore
     return <PageStore.Provider><div className='flex home-page page'>
         <ModalMultipleAccountSelect />
         <HomeGameArea />
