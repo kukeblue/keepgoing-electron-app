@@ -2,8 +2,13 @@
 
 import json
 import requests
+<<<<<<< HEAD
 host = 'http://192.168.8.114:3000/api/client/'
 nickName = ""
+=======
+host = 'http://103.100.210.203:3000/api/client/'
+
+>>>>>>> de4bb2c (~)
 def sendWatuLog(taskNo , deviceId, note):
     url = host + "add_task_log"
     payload = "{\"imei\": \"0\",\"nickName\": \"" + nickName + "\",  \"taskNo\": \"" + taskNo + "\",  \"deviceId\": 1,  \"accountId\": "+ deviceId +",  \"taskName\": \"主线挖图\",  \"note\":  \"" + note + "\",  \"type\": \"info\",  \"time\": 1655084688}"
