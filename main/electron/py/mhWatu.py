@@ -131,7 +131,7 @@ def 识别位置信息(window, point):
     if(point != None):
         宝图位置信息 = [window.windowArea[0], window.windowArea[1],
                   window.windowArea[0] + 600, window.windowArea[1] + 600]
-        ret = window.F_宝图文字识别(宝图位置信息)rtsgregfxzcgsdffdss
+        ret = window.F_宝图文字识别(宝图位置信息)
         logUtil.chLog(ret)
         mapAndpoint = F_获取任务位置和坐标(ret)
         return mapAndpoint
@@ -217,7 +217,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
         # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
         pyautogui.moveTo(
-       window.windowArea[0] + 400, window.windowArea[1] + 300)
+            window.windowArea[0] + 400, window.windowArea[1] + 300)
         pyautogui.press('tab')
         time.sleep(1)
         point = window.findImgInWindow(mapDict.get(map))
@@ -255,12 +255,14 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
         if num == 1:
-                firstPoint = {"realX":x,"realY":y,"index":num}
-                if other != None:
-                    other.append(firstPoint)
-                    entrancePoint = mapDictEntrance.get(map)
-                    point, newOther = F_获取最近的坐标点(entrancePoint[0], entrancePoint[1], other)
-                    F_点击宝图并寻路(window, deviceId, map, point['realX'], point['realY'], point['index'], newOther)
+            firstPoint = {"realX": x, "realY": y, "index": num}
+            if other != None:
+                other.append(firstPoint)
+                entrancePoint = mapDictEntrance.get(map)
+                point, newOther = F_获取最近的坐标点(
+                    entrancePoint[0], entrancePoint[1], other)
+                F_点击宝图并寻路(window, deviceId, map,
+                          point['realX'], point['realY'], point['index'], newOther)
     window.F_回天台放东西(map)
     window.F_选中道具格子(15)
     if(isBeen):
