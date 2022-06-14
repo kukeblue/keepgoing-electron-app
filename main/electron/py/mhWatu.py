@@ -69,7 +69,6 @@ def F_获取任务位置和坐标(str):
 def F_获取宝图信息(deviceId):
     time.sleep(3)
     deviceId = str(deviceId)
-    networkApi.doStartWatuTask(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
