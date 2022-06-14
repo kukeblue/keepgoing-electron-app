@@ -2,11 +2,11 @@
 
 import json
 import requests
-host = 'http://192.168.0.13:3000/api/client/'
-
+host = 'http://192.168.8.114:3000/api/client/'
+nickName = ""
 def sendWatuLog(taskNo , deviceId, note):
     url = host + "add_task_log"
-    payload = "{\"imei\": \"9028790410648701\",\"nickName\": \"红提\",  \"taskNo\": \"" + taskNo + "\",  \"deviceId\": 1,  \"accountId\": "+ deviceId +",  \"taskName\": \"主线挖图\",  \"note\":  \"" + note + "\",  \"type\": \"info\",  \"time\": 1655084688}"
+    payload = "{\"imei\": \"0\",\"nickName\": \"" + nickName + "\",  \"taskNo\": \"" + taskNo + "\",  \"deviceId\": 1,  \"accountId\": "+ deviceId +",  \"taskName\": \"主线挖图\",  \"note\":  \"" + note + "\",  \"type\": \"info\",  \"time\": 1655084688}"
     headers = {
         'content-type': "application/json",
         'cache-control': "no-cache",
@@ -25,6 +25,8 @@ def getDeviceOneWatuTask(deviceId):
     res = json.loads(response.text)
     if(res.get('status') == 0):
         print(res.get('data').get("taskName"))
+        global nickName
+        nickName = res.get('data').get("accountNickName")
         sendWatuLog(res.get('data').get("taskNo"), deviceId, "准备完毕")
 
 def doReadyWatuTask(deviceId):
@@ -37,9 +39,22 @@ def doReadyWatuTask(deviceId):
     res = json.loads(response.text)
     if(res.get('status') == 0):
         print(res.get('data').get("taskName"))
+        global nickName
+        nickName = res.get('data').get("accountNickName")
         sendWatuLog(res.get('data').get("taskNo"), deviceId, "准备完毕")
 
+def doStartWatuTask(deviceId):
+    url = host + "get_one_task"
+    payload = "{\"deviceId\":" + deviceId +",\"name\": \"主线挖图\"}"
+    headers = {
+        'content-type': "application/json",
+    }
+    response = requests.request("POST", url, data=payload.encode(), headers=headers)
+    res = json.loads(response.text)
+    if(res.get('status') == 0):
+        print(res.get('data').get("taskName"))
+        global nickName
+        nickName = res.get('data').get("accountNickName")
+        sendWatuLog(res.get('data').get("taskNo"), deviceId, "开始挖图")
 
-
-
-doReadyWatuTask('1')
+doStartWatuTask('9')
