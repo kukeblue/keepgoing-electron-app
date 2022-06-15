@@ -349,7 +349,9 @@ function HomeGameArea() {
                 <ChForm form={pageStore.formRef} formData={[
                     {
                         type: FormItemType.select, label: '选择设备', name: 'deviceId', options: [
+                            { label: '公司电脑1号', value: '1' },
                             { label: '林雅文的电脑', value: '11' },
+                            { label: '黄琪的电脑', value: '10' },
                             { label: '我的电脑', value: '9' },
                             { label: '我的电脑2', value: '12' }]
                     },

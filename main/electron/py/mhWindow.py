@@ -1,9 +1,8 @@
 # coding=utf-8
 from asyncio import sleep
 from distutils.log import error
-from typing_extensions import Self
 
-from cv2 import log
+
 # from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui

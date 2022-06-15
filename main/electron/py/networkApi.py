@@ -2,7 +2,7 @@
 
 import json
 import requests
-host = 'http://192.168.8.114:3000/api/client/'
+host = 'http://192.168.0.13:3000/api/client/'
 nickName = ""
 def sendWatuLog(taskNo , deviceId, note):
     url = host + "add_task_log"

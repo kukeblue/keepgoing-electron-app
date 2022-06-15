@@ -1,5 +1,5 @@
 # coding=utf-8
-from cv2 import log
+
 import logUtil
 import mhWindow
 import re
@@ -217,7 +217,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
         # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
         pyautogui.moveTo(
-       window.windowArea[0] + 400, window.windowArea[1] + 300)
+        window.windowArea[0] + 400, window.windowArea[1] + 300)
         pyautogui.press('tab')
         time.sleep(1)
         point = window.findImgInWindow(mapDict.get(map))
