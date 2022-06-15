@@ -120,6 +120,8 @@ def F_获取宝图信息(deviceId):
         window.F_导航到东海湾()
     elif(map == '大唐境外'):
         window.F_导航到大唐境外()
+    elif(map == '五庄观'):
+        window.F_导航到五庄观()
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
