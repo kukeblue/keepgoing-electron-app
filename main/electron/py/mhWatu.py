@@ -89,7 +89,7 @@ def F_获取宝图信息(deviceId):
     pyautogui.hotkey('alt', 'e')
     map = res[0][0]
     print(map)
-    time.sleep(3)
+    time.sleep(2)
     if(map == '江南野外'):
         window.F_导航到江南野外()
     elif(map == '狮驼岭'):
@@ -122,6 +122,7 @@ def F_获取宝图信息(deviceId):
         window.F_导航到大唐境外()
     elif(map == '五庄观'):
         window.F_导航到五庄观()
+    time.sleep(1)
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
