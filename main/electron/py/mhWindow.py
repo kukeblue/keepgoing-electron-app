@@ -233,7 +233,8 @@ class MHWindow:
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
-                self.pointMove(point[0], point[1] + 25)
+                pyautogui.hotkey('alt', '7')
+                self.pointMove(point[0], point[1] + 40)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
