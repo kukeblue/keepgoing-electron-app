@@ -894,12 +894,26 @@ class MHWindow:
             return [map, [0, 0]]
             print("An exception occurred")
 
+    def F_打开地图(self):
+        while(True):
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '001c28', '-7|-5|d8ece0,-3|-8|20c0d0,-7|-5|d8ece0', 0.9, 0)
+            if(ret[1] > 0):
+                break
+            else:
+                pyautogui.press('tab')
+                time.sleep(2)
+
+    def F_点击自动(self):
+        self.F_移动到游戏区域坐标(339, 552)
+        pyautogui.click()
+
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到五庄观()
+    window.F_点击自动()
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
