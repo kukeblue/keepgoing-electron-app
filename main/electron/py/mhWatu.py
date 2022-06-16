@@ -120,6 +120,8 @@ def F_获取宝图信息(deviceId):
         window.F_导航到东海湾()
     elif(map == '大唐境外'):
         window.F_导航到大唐境外()
+    elif(map == '五庄观'):
+        window.F_导航到五庄观()
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
@@ -172,7 +174,7 @@ mapDictEntrance = {
     '狮驼岭': [347, 19],
     '东海湾': [186, 235],
     '大唐境外': [0, 0],
-    '朱紫国': [200, 200],
+    '朱紫国': [26, 256],
     '花果山': [0, 200],
     '墨家村': [50, 200],
     '傲来国': [0, 0],
@@ -265,6 +267,9 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
                     entrancePoint[0], entrancePoint[1], other)
                 F_点击宝图并寻路(window, deviceId, map,
                           point['realX'], point['realY'], point['index'], newOther)
+        else:
+            F_点击宝图并寻路(window, deviceId, map,
+                      x, y, num, other)
     window.F_回天台放东西(map)
     window.F_选中道具格子(15)
     if(isBeen):

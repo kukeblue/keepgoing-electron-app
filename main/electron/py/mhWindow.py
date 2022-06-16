@@ -549,6 +549,28 @@ class MHWindow:
         self.F_使用飞行符('傲来国')
         time.sleep(1)
 
+    def F_导航到五庄观(self):
+        self.F_导航到大唐国境驿站出口()
+        pyautogui.press('tab')
+        # 点击地府入口圈圈
+        time.sleep(0.5)
+        self.F_移动到游戏区域坐标(180, 412)
+        pyautogui.click()
+        time.sleep(1)
+        pyautogui.press('tab')
+        self.F_是否结束寻路()
+        pyautogui.press('f9')
+        self.F_移动到游戏区域坐标(40, 222)
+        pyautogui.click(clicks=2)
+        time.sleep(2)
+        pyautogui.press('tab')
+        self.F_移动到游戏区域坐标(689, 286)
+        pyautogui.click(clicks=2)
+        pyautogui.press('tab')
+        self.F_是否结束寻路()
+        self.F_移动到游戏区域坐标(680, 222)
+        pyautogui.click(clicks=2)
+
     def F_位置分析器(self, 坐标集合, 坐标):
         距离集合 = []
         地点集合 = []
@@ -876,6 +898,6 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到墨家村()
+    window.F_导航到五庄观()
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
