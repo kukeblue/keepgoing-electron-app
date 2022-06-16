@@ -232,7 +232,8 @@ class MHWindow:
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
-                self.pointMove(point[0], point[1] + 25)
+                pyautogui.hotkey('alt', '7')
+                self.pointMove(point[0], point[1] + 40)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -710,7 +711,7 @@ class MHWindow:
         if('宝象国' in 任务):
             self.F_导航到宝象国()
         elif('傲来国' in 任务):
-            self.F_导航到傲来国智能(point[0], point[1])
+            self.F_导航到傲来国()
         elif('女儿村' in 任务):
             self.F_导航到女儿村()
         elif('建邺城' in 任务):

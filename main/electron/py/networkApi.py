@@ -7,7 +7,7 @@ host = 'http://192.168.0.13:3000/api/client/'
 
 def sendWatuLog(taskNo, deviceId, note):
     url = host + "add_task_log"
-    payload = "{\"imei\": \"0\",\"nickName\": \"" + nickName + "\",  \"taskNo\": \"" + taskNo + "\",  \"deviceId\": 1,  \"accountId\": " + \
+    payload = "{\"imei\": \"0\",\"nickName\": \"" + nickName + "\",  \"taskNo\": \"" + taskNo + "\",  \"deviceId\": " + deviceId + ",  \"accountId\": " + \
         deviceId + ",  \"taskName\": \"主线挖图\",  \"note\":  \"" + \
         note + "\",  \"type\": \"info\",  \"time\": 1655084688}"
     headers = {
