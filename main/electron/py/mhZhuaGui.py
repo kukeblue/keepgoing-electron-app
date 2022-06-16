@@ -21,6 +21,7 @@ def 抓鬼(deviceId):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
+    pyautogui.click()
     while True:
         F_领取抓鬼任务(window)
 
@@ -43,7 +44,7 @@ def F_领取抓鬼任务(window):
 def F_领取钟馗任务(window):
     pyautogui.press('tab')
     time.sleep(0.5)
-    window.F_移动到游戏区域坐标(283, 321)
+    window.F_移动到游戏区域坐标(283, 319)
     time.sleep(0.5)
     pyautogui.click()
     time.sleep(1)
@@ -52,12 +53,12 @@ def F_领取钟馗任务(window):
     pyautogui.press('f9')
     # 点击钟馗
     window.F_移动到游戏区域坐标(344, 317)
-    pyautogui.click()
-    pyautogui.click()
+    pyautogui.doubleClick()
     time.sleep(1)
     # 好的我帮你
-    window.F_移动到游戏区域坐标(211, 340)
-    pyautogui.click()
+    window.F_红色文字位置点击('我帮你')
+    # window.F_移动到游戏区域坐标(211, 340)
+    # pyautogui.click()
     time.sleep(1)
     pyautogui.click()
     F_使用天眼(window)
@@ -66,6 +67,7 @@ def F_领取钟馗任务(window):
 
 def F_使用天眼(window):
     window.F_选中道具格子(15)
+    time.sleep(0.3)
     pyautogui.rightClick()
     pyautogui.hotkey('alt', 'e')
 

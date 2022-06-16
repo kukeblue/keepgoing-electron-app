@@ -9,6 +9,7 @@ import io
 import time
 import fire
 import pyautogui
+import networkApi
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -88,7 +89,7 @@ def F_获取宝图信息(deviceId):
     pyautogui.hotkey('alt', 'e')
     map = res[0][0]
     print(map)
-    time.sleep(3)
+    time.sleep(2)
     if(map == '江南野外'):
         window.F_导航到江南野外()
     elif(map == '狮驼岭'):
@@ -119,6 +120,9 @@ def F_获取宝图信息(deviceId):
         window.F_导航到东海湾()
     elif(map == '大唐境外'):
         window.F_导航到大唐境外()
+    elif(map == '五庄观'):
+        window.F_导航到五庄观()
+    time.sleep(1)
 
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
@@ -154,6 +158,28 @@ mapDict = {
     '江南野外': "map_top_jiangnanyewai.png",
     '女儿村': "map_top_nvercun.png",
     '东海湾': "map_top_donghaiwan.png",
+}
+
+mapDictEntrance = {
+    '五庄观': [26, 73],
+    '江南野外': [26, 108],
+    '普陀山': [87, 4],
+    '北俱芦洲': [306, 263],
+    '东海湾': [222, 263],
+    '大唐境外': [14, 53],
+    '建邺城': [31, 267],
+    '长寿郊外': [272, 32],
+    '女儿村': [292, 322],
+    '大唐国境': [361, 199],
+    '麒麟山': [347, 266],
+    '狮驼岭': [347, 19],
+    '东海湾': [186, 235],
+    '大唐境外': [0, 0],
+    '朱紫国': [26, 256],
+    '花果山': [0, 200],
+    '墨家村': [50, 200],
+    '傲来国': [0, 0],
+    '长寿村': [0, 0],
 }
 
 
@@ -230,25 +256,27 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    if(map == '花果山' or map == '麒麟山' or map == '大唐境外' or map == '普陀山'):
-        pyautogui.press('f2')
     if(other == None):
         F_点击宝图(window, deviceId, map, x, y, num)
     else:
-
-        F_点击宝图并寻路(window, deviceId, map, x, y, num, other)
-    if(map == '花果山' or map == '麒麟山' or map == '大唐境外' or map == '普陀山'):
-        pyautogui.press('f2')
+        if num == 1:
+            firstPoint = {"realX": x, "realY": y, "index": num}
+            if other != None:
+                other.append(firstPoint)
+                entrancePoint = mapDictEntrance.get(map)
+                point, newOther = F_获取最近的坐标点(
+                    entrancePoint[0], entrancePoint[1], other)
+                F_点击宝图并寻路(window, deviceId, map,
+                          point['realX'], point['realY'], point['index'], newOther)
+        else:
+            F_点击宝图并寻路(window, deviceId, map,
+                      x, y, num, other)
     window.F_回天台放东西(map)
     window.F_选中道具格子(15)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
+        networkApi.doReadyWatuTask(deviceId)
         while(True):
-            # F_邀请发图(window)
-            # pyautogui.hotkey('alt', 'e')
-            # time.sleep(0.1)
-            # window.F_选中道具格子(15)
-            # time.sleep(1)
             time.sleep(20)
             if(num > 30):
                 break
@@ -259,8 +287,9 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
             pyautogui.hotkey('alt', 'e')
             point = window.findImgInWindow('daoju_baotu_large.png')
             if(point != None and point[0] > 0):
-
                 pyautogui.hotkey('alt', 'e')
+                window.F_移动到游戏区域坐标(376, 344)
+                pyautogui.click()
                 F_小蜜蜂模式(deviceId)
                 break
             print('等待宝图')
@@ -285,20 +314,6 @@ def F_邀请发图(window):
 
 def F_小蜜蜂模式(deviceId):
     F_获取宝图信息(deviceId)
-    # deviceId = str(deviceId)
-    # MHWindow = mhWindow.MHWindow
-    # window = MHWindow(1, deviceId)
-    # window.findMhWindow()
-    # window.focusWindow()
-    # point = window.checkpoint()
-    # window.F_选中道具格子(int(15))
-    # 宝图位置信息 = [window.windowArea[0], window.windowArea[1],
-    #           window.windowArea[0] + 600, window.windowArea[1] + 600]
-    # ret = window.F_宝图文字识别(宝图位置信息)
-    # logUtil.chLog(ret)
-    # mapAndpoint = F_获取任务位置和坐标(ret)
-    # if(mapAndpoint(0) != ''):
-    # F_获取宝图信息(deviceId)
 
 
 if __name__ == '__main__':

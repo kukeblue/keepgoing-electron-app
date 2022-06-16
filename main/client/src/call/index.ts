@@ -7,6 +7,16 @@ export const doTest = () => (window as any).ipcRenderer.sendSync(resourcePaths.M
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
 export const doGetWatuInfo = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [deviceId])
+export const doZhuaGuiTask = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHUAGUI_TASK, [deviceId])
+export const doCloseAllTask = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLOSE_ALL_TASK, [])
+export const doThrowLitter = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_THROW_LITTER, [deviceId])
+export const doSellEquipment = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SELL_EQUIPMENT, [deviceId])
+export const doConnector = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CONNECTOR, [deviceId])
+
+
+
+
+
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
 export const doGetWatuClickMap = (deviceId: number, mapName: string, x: number, y: number, index: number, otherPoint?: string, isBeen?: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [deviceId, mapName, x, y, index, otherPoint, isBeen])
 export const doBee = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [deviceId])
