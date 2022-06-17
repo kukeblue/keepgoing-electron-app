@@ -35,9 +35,8 @@ const init = () => {
     });
 
     (window as any).ipcRenderer.on(resourcePaths.METHOD_GET_WATU_INFO_REPLY, (event: any, arg: any) => {
-        messageListener.methodGetWatuInfoReplyHandles.forEach(callback => {
-            callback(arg)
-        })
+        console.log('methodGetWatuInfoReplyHandles ?????')
+        messageListener.methodGetWatuInfoReplyHandles[0](arg)
     });
 }
 
