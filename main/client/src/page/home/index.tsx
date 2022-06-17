@@ -33,9 +33,9 @@ let watuDeviceId = 0
 let zhuaGuiDeviceId = 0
 function usePageStore() {
     useEffect(() => {
-        MainThread.messageListener.pushLogHandles.push(handlePushLog)
-        MainThread.messageListener.pushStateHandles.push(handlePushState)
-        MainThread.messageListener.methodGetWatuInfoReplyHandles.push(handleGetWatuInfoReply)
+        MainThread.messageListener.pushLogHandles = [handlePushLog]
+        MainThread.messageListener.pushStateHandles = [handlePushState]
+        MainThread.messageListener.methodGetWatuInfoReplyHandles = [handleGetWatuInfoReply]
     }, [])
     const [logs, setLogs] = useState<string[]>([])
     const [processState, setProcessState] = useState({
@@ -117,7 +117,6 @@ function usePageStore() {
                 }
             }, 1000)
         }
-
     }
     const handleSelectJiangjunDevice = () => {
         formRef.validateFields().then((res: any) => {
