@@ -191,6 +191,8 @@ def F_点击宝图(window, deviceId, map, x, y, num):
     window.findMhWindow()
     window.focusWindow()
     # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
+    # window.F_打开地图()
+    time.sleep(0.3)
     pyautogui.press('tab')
     time.sleep(1)
     point = window.findImgInWindow(mapDict.get(map))
@@ -288,8 +290,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
             point = window.findImgInWindow('daoju_baotu_large.png')
             if(point != None and point[0] > 0):
                 pyautogui.hotkey('alt', 'e')
-                window.F_移动到游戏区域坐标(376, 344)
-                pyautogui.click()
+                window.F_点击自动()
                 F_小蜜蜂模式(deviceId)
                 break
             print('等待宝图')
