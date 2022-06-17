@@ -13,7 +13,7 @@ export const listenLogs = function (filePath) {
             persistent: true,
             interval: 1000
         }, function (curr, prev) {
-            if (curr.mtime > prev.mtime && curr.size - prev.size > 0) {
+            if (curr.mtime > prev.mtime) {
                 buffer = Buffer.alloc(curr.size - prev.size);
                 fs.read(fd, buffer, 0, (curr.size - prev.size), prev.size, function (err, bytesRead, buffer) {
                     generateTxt(buffer.toString())
@@ -22,8 +22,8 @@ export const listenLogs = function (filePath) {
             }
         });
         function generateTxt(str) {
-            logger.info(str)
             let temp = str.split('\r\n');
+            let mhWatuCount = 0
             for (let s in temp) {
                 if (MessageHandle.messageSender) {
                     const str = temp[s]
@@ -36,8 +36,11 @@ export const listenLogs = function (filePath) {
                         logger.info('add py id ' + fileName + pid)
                     }
                     if (str.includes('mhWatu result')) {
-                        handleWutuFinish(str)
-                        fs.writeFileSync(filePath, '------')
+                        if (mhWatuCount == 0) {
+                            handleWutuFinish(str)
+                            mhWatuCount = mhWatuCount + 1
+                        }
+                        // fs.writeFileSync(filePath, '------')
                     }
                     MessageHandle.messageSender.sendLog(str)
                 }
