@@ -6,7 +6,7 @@
     "scripts": {
         "build": "tsc",
         "watch": "tsc -w",
-        "start": "chcp 65001 && electron ./dist/electron/electron/main.js",
+        "start": "electron ./dist/electron/electron/main.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "package": "electron-builder",
         "win32": "electron-builder --win --x32",
