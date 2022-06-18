@@ -46,7 +46,7 @@ def F_领取抓鬼任务(window):
 def F_领取钟馗任务(window):
     pyautogui.press('tab')
     time.sleep(0.5)
-    window.F_移动到游戏区域坐标(283, 321)
+    window.F_移动到游戏区域坐标(283, 319)
     time.sleep(0.5)
     pyautogui.click()
     time.sleep(1)

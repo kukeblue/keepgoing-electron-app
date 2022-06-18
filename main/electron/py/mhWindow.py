@@ -233,7 +233,8 @@ class MHWindow:
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
-                self.pointMove(point[0], point[1] + 25)
+                pyautogui.hotkey('alt', '7')
+                self.pointMove(point[0], point[1] + 40)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -550,6 +551,28 @@ class MHWindow:
         self.F_使用飞行符('傲来国')
         time.sleep(1)
 
+    def F_导航到五庄观(self):
+        self.F_导航到大唐国境驿站出口()
+        pyautogui.press('tab')
+        # 点击地府入口圈圈
+        time.sleep(0.5)
+        self.F_移动到游戏区域坐标(180, 412)
+        pyautogui.click()
+        time.sleep(1)
+        pyautogui.press('tab')
+        self.F_是否结束寻路()
+        pyautogui.press('f9')
+        self.F_移动到游戏区域坐标(40, 222)
+        pyautogui.click(clicks=2)
+        time.sleep(2)
+        pyautogui.press('tab')
+        self.F_移动到游戏区域坐标(689, 286)
+        pyautogui.click(clicks=2)
+        pyautogui.press('tab')
+        self.F_是否结束寻路()
+        self.F_移动到游戏区域坐标(680, 222)
+        pyautogui.click(clicks=2)
+
     def F_位置分析器(self, 坐标集合, 坐标):
         距离集合 = []
         地点集合 = []
@@ -689,7 +712,7 @@ class MHWindow:
         if('宝象国' in 任务):
             self.F_导航到宝象国()
         elif('傲来国' in 任务):
-            self.F_导航到傲来国智能(point[0], point[1])
+            self.F_导航到傲来国()
         elif('女儿村' in 任务):
             self.F_导航到女儿村()
         elif('建邺城' in 任务):
@@ -871,12 +894,26 @@ class MHWindow:
             return [map, [0, 0]]
             print("An exception occurred")
 
+    def F_打开地图(self):
+        while(True):
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '001c28', '-7|-5|d8ece0,-3|-8|20c0d0,-7|-5|d8ece0', 0.9, 0)
+            if(ret[1] > 0):
+                break
+            else:
+                pyautogui.press('tab')
+                time.sleep(2)
+
+    def F_点击自动(self):
+        self.F_移动到游戏区域坐标(339, 552)
+        pyautogui.click()
+
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到墨家村()
+    window.F_点击自动()
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
