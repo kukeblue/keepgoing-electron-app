@@ -371,7 +371,7 @@ class MHWindow:
         pyautogui.rightClick()
         time.sleep(1)
         if(path == '大唐境外出口'):
-            self.pointMove(self.windowArea[0] + 198, self.windowArea[1] + 423)
+            self.pointMove(self.windowArea[0] + 198, self.windowArea[1] + 425)
             pyautogui.click()
         if(path == '麒麟山出口'):
             self.pointMove(self.windowArea[0] + 195, self.windowArea[1] + 187)
