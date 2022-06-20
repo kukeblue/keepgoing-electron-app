@@ -37,4 +37,4 @@ def doReadyWatuTask(deviceId):
         sendWatuLog(res.get('data').get("taskNo"), deviceId, "准备完毕")
 
 
-doReadyWatuTask('1')
+# doReadyWatuTask('1')
