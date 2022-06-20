@@ -66,7 +66,7 @@ def F_领取钟馗任务(window):
         F_使用天眼(window)
         time.sleep(1)
     else:
-        F_领取钟馗任务()
+        F_领取钟馗任务(window)
 
 
 def F_使用天眼(window):
