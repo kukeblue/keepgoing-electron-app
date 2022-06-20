@@ -20,23 +20,6 @@ def sendWatuLog(taskNo, deviceId, note):
     print(response.text)
 
 
-def getDeviceOneWatuTask(deviceId):
-    url = host + "get_one_task"
-    payload = "{\"deviceId\":" + deviceId + \
-        ",\"name\": \"主线挖图\",\"status\": \"进行中\"}"
-    headers = {
-        'content-type': "application/json",
-    }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
-    res = json.loads(response.text)
-    if(res.get('status') == 0):
-        print(res.get('data').get("taskName"))
-        global nickName
-        nickName = res.get('data').get("accountNickName")
-        sendWatuLog(res.get('data').get("taskNo"), deviceId, "准备完毕")
-
-
 def doReadyWatuTask(deviceId):
     url = host + "get_one_task"
     payload = "{\"deviceId\":" + deviceId + \
@@ -48,23 +31,10 @@ def doReadyWatuTask(deviceId):
         "POST", url, data=payload.encode(), headers=headers)
     res = json.loads(response.text)
     if(res.get('status') == 0):
-        print(res.get('data').get("taskName"))
+        print(res.get('data').get("accountNickName"))
         global nickName
         nickName = res.get('data').get("accountNickName")
         sendWatuLog(res.get('data').get("taskNo"), deviceId, "准备完毕")
 
 
-def doStartWatuTask(deviceId):
-    url = host + "get_one_task"
-    payload = "{\"deviceId\":" + deviceId + ",\"name\": \"主线挖图\"}"
-    headers = {
-        'content-type': "application/json",
-    }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
-    res = json.loads(response.text)
-    if(res.get('status') == 0):
-        print(res.get('data').get("taskName"))
-        global nickName
-        nickName = res.get('data').get("accountNickName")
-        sendWatuLog(res.get('data').get("taskNo"), deviceId, "开始挖图")
+# doReadyWatuTask('1')
