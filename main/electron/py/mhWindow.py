@@ -73,8 +73,8 @@ class MHWindow:
                                 int(topy / self.screenUnit), int(leftx / self.screenUnit) + 800, int(topy / self.screenUnit) + 600]
             self.windowAreaGui = (
                 leftx, topy, self.getTruthPx(800), self.getTruthPx(600))
-            pyautogui.screenshot(
-                self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
+            # pyautogui.screenshot(
+            #     self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
         else:
             print('未找到前台梦幻窗口')
 
@@ -234,7 +234,7 @@ class MHWindow:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
                 pyautogui.hotkey('alt', '7')
-                self.pointMove(point[0], point[1] + 40)
+                self.pointMove(point[0], point[1] + 60)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -742,21 +742,21 @@ class MHWindow:
         if(num == 8):
             self.F_移动到游戏区域坐标(180, 350)
         elif(num == 9):
-            self.F_移动到游戏区域坐标(200, 350)
+            self.F_移动到游戏区域坐标(200, 348)
         elif(num == 10):
-            self.F_移动到游戏区域坐标(220, 350)
+            self.F_移动到游戏区域坐标(220, 348)
         elif(num == 11):
-            self.F_移动到游戏区域坐标(240, 350)
+            self.F_移动到游戏区域坐标(243, 348)
         elif(num == 12):
-            self.F_移动到游戏区域坐标(260, 350)
+            self.F_移动到游戏区域坐标(263, 348)
         elif(num == 13):
-            self.F_移动到游戏区域坐标(280, 350)
+            self.F_移动到游戏区域坐标(285, 348)
         elif(num == 14):
-            self.F_移动到游戏区域坐标(300, 350)
+            self.F_移动到游戏区域坐标(305, 348)
         elif(num == 15):
-            self.F_移动到游戏区域坐标(320, 350)
+            self.F_移动到游戏区域坐标(325, 348)
         elif(num == 16):
-            self.F_移动到游戏区域坐标(340, 350)
+            self.F_移动到游戏区域坐标(347, 348)
         elif(num == 17):
             self.F_移动到游戏区域坐标(180, 374)
         elif(num == 18):
@@ -934,6 +934,21 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_回到天台()
+    window.F_选择仓库号(11)
+    window.F_选择仓库号(12)
+    window.F_选择仓库号(13)
+    window.F_选择仓库号(14)
+    window.F_选择仓库号(15)
+    window.F_选择仓库号(16)
+    window.F_选择仓库号(17)
+    window.F_选择仓库号(18)
+    window.F_选择仓库号(19)
+    window.F_选择仓库号(20)
+    window.F_选择仓库号(21)
+    window.F_选择仓库号(22)
+    window.F_选择仓库号(23)
+    window.F_选择仓库号(24)
+    window.F_选择仓库号(25)
+
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
