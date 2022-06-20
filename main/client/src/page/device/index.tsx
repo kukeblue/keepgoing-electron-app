@@ -182,12 +182,12 @@ function useDevicePageStore() {
     }>()
     const [formRef] = useForm()
     const handleClickLinkDevice = (device: TDevice) => {
-        const owurl = `http://192.168.0.13:8888/vnc.html?host=${device.ip}&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
+        const owurl = `http://103.100.210.203:8888/vnc.html?host=${device.ip}&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
         const tmp: any = window.open(owurl, "", 'height=1920, width=1080, top=0, left=0')
         tmp.focus();
     }
     const handleClickPreviewDevice = (device: TDevice) => {
-        const owurl = `http://192.168.0.13:8888/vnc.html?host=${device.ip}&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
+        const owurl = `http://103.100.210.203:8888/vnc.html?host=${device.ip}&port=5900&autoconnect=true&resize=scale&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
     }
     const handleClickReadToken = () => {
