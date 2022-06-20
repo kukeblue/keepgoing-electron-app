@@ -4,6 +4,7 @@ from distutils.log import error
 from typing_extensions import Self
 
 from cv2 import log
+from numpy import False_
 # from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
@@ -234,7 +235,7 @@ class MHWindow:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
                 pyautogui.hotkey('alt', '7')
-                self.pointMove(point[0], point[1] + 60)
+                self.pointMove(point[0], point[1] + 65)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -486,6 +487,9 @@ class MHWindow:
         if(ret != None):
             self.pointMove(ret[0], ret[1])
             pyautogui.click()
+            return True
+        else:
+            return False
 
     def F_导航到江南野外(self):
         self.F_使用长安城飞行棋('江南野外出口')
@@ -707,6 +711,7 @@ class MHWindow:
                 break
             else:
                 pyautogui.move(目标坐标x - 当前坐标x,  当前坐标y - 目标坐标y)
+                pyautogui.click()
         time.sleep(2)
         pyautogui.press('tab')
         self.F_是否结束寻路()
