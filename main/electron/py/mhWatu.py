@@ -222,7 +222,6 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
                   point['realY'], point['index'], newOther)
     else:
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
-        # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
         pyautogui.press('tab')

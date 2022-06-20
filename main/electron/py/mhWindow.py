@@ -4,6 +4,7 @@ from distutils.log import error
 from typing_extensions import Self
 
 from cv2 import log
+from numpy import False_
 # from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
@@ -73,8 +74,8 @@ class MHWindow:
                                 int(topy / self.screenUnit), int(leftx / self.screenUnit) + 800, int(topy / self.screenUnit) + 600]
             self.windowAreaGui = (
                 leftx, topy, self.getTruthPx(800), self.getTruthPx(600))
-            pyautogui.screenshot(
-                self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
+            # pyautogui.screenshot(
+            #     self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
         else:
             print('未找到前台梦幻窗口')
 
@@ -234,7 +235,7 @@ class MHWindow:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
                 pyautogui.hotkey('alt', '7')
-                self.pointMove(point[0], point[1] + 40)
+                self.pointMove(point[0], point[1] + 70)
                 pyautogui.hotkey('alt', 'a')
                 pyautogui.click()
                 break
@@ -266,14 +267,17 @@ class MHWindow:
 
     def F_选中道具格子(self, num):
         self.focusWindow()
-        pyautogui.hotkey('alt', 'e')
         point = self.findImgInWindow('daoju_top.png')
-        if(point != None):
-            firstBlockX = point[0] + 26
-            firstBlockY = point[1] + 83
-            left = ((num-1) % 5) * 50
-            height = math.floor((num-1) / 5) * 50
-            self.pointMove(firstBlockX + left, firstBlockY + height)
+        if(point == None):
+            pyautogui.hotkey('alt', 'e')
+            time.sleep(0.5)
+        point = self.findImgInWindow('daoju_top.png')
+        firstBlockX = point[0] + 26
+        firstBlockY = point[1] + 83
+        left = ((num-1) % 5) * 50
+        height = math.floor((num-1) / 5) * 50
+        self.pointMove(firstBlockX + left, firstBlockY + height)
+        return
 
     def F_选中道具格子2(self, num):
 
@@ -483,6 +487,9 @@ class MHWindow:
         if(ret != None):
             self.pointMove(ret[0], ret[1])
             pyautogui.click()
+            return True
+        else:
+            return False
 
     def F_导航到江南野外(self):
         self.F_使用长安城飞行棋('江南野外出口')
@@ -704,6 +711,7 @@ class MHWindow:
                 break
             else:
                 pyautogui.move(目标坐标x - 当前坐标x,  当前坐标y - 目标坐标y)
+                pyautogui.click()
         time.sleep(2)
         pyautogui.press('tab')
         self.F_是否结束寻路()
@@ -739,21 +747,21 @@ class MHWindow:
         if(num == 8):
             self.F_移动到游戏区域坐标(180, 350)
         elif(num == 9):
-            self.F_移动到游戏区域坐标(200, 350)
+            self.F_移动到游戏区域坐标(200, 348)
         elif(num == 10):
-            self.F_移动到游戏区域坐标(220, 350)
+            self.F_移动到游戏区域坐标(220, 348)
         elif(num == 11):
-            self.F_移动到游戏区域坐标(240, 350)
+            self.F_移动到游戏区域坐标(243, 348)
         elif(num == 12):
-            self.F_移动到游戏区域坐标(260, 350)
+            self.F_移动到游戏区域坐标(263, 348)
         elif(num == 13):
-            self.F_移动到游戏区域坐标(280, 350)
+            self.F_移动到游戏区域坐标(285, 348)
         elif(num == 14):
-            self.F_移动到游戏区域坐标(300, 350)
+            self.F_移动到游戏区域坐标(305, 348)
         elif(num == 15):
-            self.F_移动到游戏区域坐标(320, 350)
+            self.F_移动到游戏区域坐标(325, 348)
         elif(num == 16):
-            self.F_移动到游戏区域坐标(340, 350)
+            self.F_移动到游戏区域坐标(347, 348)
         elif(num == 17):
             self.F_移动到游戏区域坐标(180, 374)
         elif(num == 18):
@@ -773,6 +781,23 @@ class MHWindow:
         elif(num == 25):
             self.F_移动到游戏区域坐标(348, 374)
         pyautogui.click()
+
+    def F_回到天台(self):
+        while True:
+            self.F_选中道具格子(20)
+            pyautogui.rightClick()
+            time.sleep(0.5)
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], 'c08800', '2|-3|b04000,4|-5|400800,5|5|a01800', 0.8, 0)
+            if(ret[1] > 0):
+                self.pointMove(
+                    self.windowArea[0] + 507, self.windowArea[1] + 282)
+                time.sleep(0.5)
+                pyautogui.click()
+                time.sleep(1.5)
+                if(self.获取当前地图() == '长安城'):
+                    break
+        pyautogui.hotkey('alt', 'e')
 
     def F_回天台放东西(self, map):
         self.F_选中道具格子(20)
@@ -914,6 +939,21 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_点击自动()
+    window.F_选择仓库号(11)
+    window.F_选择仓库号(12)
+    window.F_选择仓库号(13)
+    window.F_选择仓库号(14)
+    window.F_选择仓库号(15)
+    window.F_选择仓库号(16)
+    window.F_选择仓库号(17)
+    window.F_选择仓库号(18)
+    window.F_选择仓库号(19)
+    window.F_选择仓库号(20)
+    window.F_选择仓库号(21)
+    window.F_选择仓库号(22)
+    window.F_选择仓库号(23)
+    window.F_选择仓库号(24)
+    window.F_选择仓库号(25)
+
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
