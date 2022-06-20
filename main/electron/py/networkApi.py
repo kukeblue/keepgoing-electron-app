@@ -2,7 +2,7 @@
 
 import json
 import requests
-host = 'http://103.100.210.203:3000/api/client/'
+host = 'http://192.168.0.13:3000/api/client/'
 
 
 def sendWatuLog(taskNo, deviceId, note):
@@ -68,6 +68,3 @@ def doStartWatuTask(deviceId):
         global nickName
         nickName = res.get('data').get("accountNickName")
         sendWatuLog(res.get('data').get("taskNo"), deviceId, "开始挖图")
-
-
-doStartWatuTask('9')
