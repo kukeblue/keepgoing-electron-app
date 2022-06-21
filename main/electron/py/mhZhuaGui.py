@@ -37,7 +37,7 @@ def F_领取抓鬼任务(window):
     window.F_小地图寻路器(ret[1])
     pyautogui.press('f9')
     pyautogui.hotkey('alt', '7')
-    time.sleep(1)
+    time.sleep(0.5)
     window.F_点击战斗()
     window.F_自动战斗2()
     pyautogui.click()
@@ -58,13 +58,15 @@ def F_领取钟馗任务(window):
     pyautogui.doubleClick()
     time.sleep(1)
     # 好的我帮你
-    window.F_红色文字位置点击('我帮你')
-    # window.F_移动到游戏区域坐标(211, 340)
-    # pyautogui.click()
-    time.sleep(1)
-    pyautogui.click()
-    F_使用天眼(window)
-    time.sleep(1)
+    if window.F_红色文字位置点击('我帮你'):
+        # window.F_移动到游戏区域坐标(211, 340)
+        # pyautogui.click()
+        time.sleep(1)
+        pyautogui.click()
+        F_使用天眼(window)
+        time.sleep(1)
+    else:
+        F_领取钟馗任务(window)
 
 
 def F_使用天眼(window):
