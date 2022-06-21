@@ -1,91 +1,55 @@
-import wmi
-import os
-import time
+#encoding=UTF-8
+
 import sys
-
-def printCmd(process):
-    print(process)
-    print(f'{process.Handle} | {process.Caption} | {process.CommandLine}')
-
-def monirtor(prop1,par=None):
-    tmpmon = []
-    c = wmi.WMI()
-    for process in c.Win32_Process(name=prop1):
-        if par is None:
-            # printCmd(process)
-            tmpmon.append(process)
-            # print(f'{process.Handle} | {process.Caption} | {process.CommandLine}')
-        else:
-            if str(process.CommandLine).find(par) >= 0:
-                # print(f'{process.Handle} | {process.Caption} | {process.CommandLine}')
-                # printCmd(process)
-                tmpmon.append(process)
-    return tmpmon
-
-def killtask(pid):
-    os.system(f"taskkill /F /pid {pid} -t")
-
-def show(par):
-    print(f"pid | exe | cmd")
-
-    tmp1 = monirtor('pythonw.exe',par)
-    tmp2 = monirtor('python.exe',par)
-    for v in tmp1:
-        printCmd(v)
-    for v in tmp2:
-        printCmd(v)
+import os
+import string
+import win32com					#要下载对应的扩展程序,不明白的话，百度一下
+import win32com.client				#要下载对应的扩展程序,不明白的话，百度一下
+import pythoncom
+import time
+from ctypes import *
+from win32com.client import Dispatch
 
 
+#osapi_dll = windll.LoadLibrary('OLE32')
+#osapi_dll.CoUninitialize()
+#osapi_dll.CoInitializeEx(0,0)
 
-def findKill(par):
-    print(f"pid | exe | cmd")
-
-    tmp1 = monirtor('pythonw.exe',par)
-    tmp2 = monirtor('python.exe',par)
-    for v in tmp1:
-        printCmd(v)
-    for v in tmp2:
-        printCmd(v)
-
-    istr = input("请输入(y/n)，终止查询到的程序：")
-    if istr == 'y':
-        for v in tmp1:
-            killtask(v.Handle)
-        for v in tmp2:
-            killtask(v.Handle)
+#注册好爱插件
+a=os.system('regsvr32 haoi.dll')
+if a:
+	print("注册 haoi.dll 成功!")
+else:
+	print("注册 haoi.dll 失败!")
 
 
-def help():
-    print('qpy query python bakserver')
-    print('\t-l par query par')
-    print('\t-a show all')
-    print('\t-lk par 终止查询到的程序')
+	
+haoi = Dispatch('haoi.dt')
 
-if __name__ == "__main__":
-    alen = len(sys.argv)
-    if alen > 1:
-        if sys.argv[1] == '-l':
-            if alen <= 2:
-                print('-l par is none','demo: qpy -l index')
-                exit()
-            else:
-                show(sys.argv[2])
-        elif sys.argv[1] == '-a':
-            show(None)
-        elif sys.argv[1] == '-k':
-            if alen <= 2:
-                print('-k pid is none','demo: qpy -k 121212')
-                exit()
-            killtask(sys.argv[2])
-        elif sys.argv[1] == '-lk':
-            if alen <= 2:
-                print('-lk par is none','demo: qpy -lk index')
-                exit()
-            else:
-                findKill(sys.argv[2])
 
-        else:
-            print('CommandLine no fount')
-            help()
-    else:
-        help()
+# soft_key = '1001|9A42B0F1BD994C75'											# 软件Key，用于设置作者返利
+# haoi.SetRebate(soft_key)													# 设置返利
+
+
+# pic_file_path = os.path.join(os.path.dirname(__file__), 'test_pics', 'test1.jpg')
+
+# #此处指的当前路径下的test_pics文件夹下面的test.jpg
+# #可以修改成你想要的文件路径
+
+
+# reply=haoi.SendFileEx('密码串','1001',pic_file_path,int(60),int(1),int(20),'',int(0),'beizhu')
+# TID=haoi.TID #获取题目流水号，用于申诉错题
+
+# if haoi.IsRight(reply): #判断是否为正常的答案格式
+	
+# 	print("返回的答案是:%s " % str(ret_id))
+#     #输入内容提交 并判断验证码是否正确
+#     #如果错误应调用SendError
+#     #haoi.SendError(TID)  提交错误题目，进行申诉
+#     #后再重新发送
+# else:
+# 	print("错误")
+# 	# 应该延迟1秒后 重新截图 再重新发送
+	
+
+# raw_input('按任意键退出')
