@@ -1,5 +1,4 @@
 # coding=utf-8
-from asyncio import sleep
 from distutils.log import error
 from typing_extensions import Self
 
@@ -10,6 +9,7 @@ import logUtil
 import pyautogui
 import sys
 import baiduApi
+import networkApi
 import time
 import utils
 import math
@@ -199,6 +199,17 @@ class MHWindow:
         except:
             return False
 
+    def F_是否结束战斗(self):
+        try:
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0]+380, self.windowArea2[1]+520, self.windowArea2[0]+545, self.windowArea2[1]+600, 'c80000', '5|3|882800,8|2|881400,5|4|882800', 0.8, 0)
+            if ret[1] > 0:
+                return True
+            else:
+                return False
+        except:
+            return False
+
     def F_识别当前坐标(self):
         位置信息 = [self.windowArea[0], self.windowArea[1] + 19, 124, 52]
         # 截图 + ocr识别
@@ -216,6 +227,28 @@ class MHWindow:
         ret = utils.F_通用文字识别(path)
         return ret
 
+    def F_识别4小人(self):
+        ret = baiduApi.F_大漠红色4小人弹框识别([self.windowArea[0], self.windowArea[1],
+                                     self.windowArea[0] + 600, self.windowArea[1] + 800])
+        if(ret != None):
+            x = ret[0]-30
+            y = ret[1]-30
+            位置信息 = [x, y,
+                    400, 200]
+            print("找到")
+            path = self.F_窗口区域截图('temp_4_person_info.png', 位置信息)
+            time.sleep(1)
+            data = networkApi.getPicPoint(path)
+            if(data != '' and "," in data):
+                clickPoints = data.split(',')
+                if(clickPoints[1]):
+                    print('success')
+                    return True
+            else:
+                print("识别失败")
+        else:
+            print("未找到")
+
     def F_是否结束寻路(self):
         坐标 = self.获取当前坐标()
         count = 0
@@ -231,15 +264,20 @@ class MHWindow:
                 坐标 = 坐标2
 
     def F_点击战斗(self):
+        pyautogui.hotkey('alt', 'a')
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
+                pyautogui.rightClick()
+                time.sleep(0.1)
                 pyautogui.hotkey('alt', '7')
+                time.sleep(0.2)
                 self.pointMove(point[0], point[1] + 70)
                 pyautogui.hotkey('alt', 'a')
+                time.sleep(0.1)
                 pyautogui.click()
                 break
-            time.sleep(1)
+            time.sleep(0.5)
 
     def F_自动战斗(self):
         pyautogui.press('f9')
@@ -250,7 +288,7 @@ class MHWindow:
                 print('F_自动战斗：进入战斗')
                 while(True):
                     time.sleep(1)
-                    if(self.F_是否在战斗() == False):
+                    if(self.F_是否结束战斗()):
                         print('F_自动战斗：结束战斗')
                         break
 
@@ -688,7 +726,7 @@ class MHWindow:
         pyautogui.click()
         time.sleep(1)
 
-    def F_小地图寻路器(self, 目标坐标):
+    def F_小地图寻路器(self, 目标坐标, 是否模糊查询):
         time.sleep(1)
         pyautogui.press('tab')
         time.sleep(1)
@@ -705,13 +743,22 @@ class MHWindow:
                 continue
             当前坐标x = int(point[0])
             当前坐标y = int(point[1])
-            if(目标坐标x == 当前坐标x and 目标坐标y == 当前坐标y):
-                pyautogui.click()
-                pyautogui.click()
-                break
+            if(是否模糊查询 == None):
+                if(目标坐标x == 当前坐标x and 目标坐标y == 当前坐标y):
+                    pyautogui.click()
+                    pyautogui.click()
+                    break
+                else:
+                    pyautogui.move(目标坐标x - 当前坐标x,  当前坐标y - 目标坐标y)
+                    pyautogui.click()
             else:
-                pyautogui.move(目标坐标x - 当前坐标x,  当前坐标y - 目标坐标y)
-                pyautogui.click()
+                if 目标坐标x - 当前坐标x > 1 or 目标坐标x - 当前坐标x < -1 or 目标坐标y - 当前坐标y > 1 or 目标坐标y - 当前坐标y < -1:
+                    pyautogui.move(目标坐标x - 当前坐标x,  当前坐标y - 目标坐标y)
+                    pyautogui.click()
+                else:
+                    pyautogui.click()
+                    pyautogui.click()
+                    break
         time.sleep(2)
         pyautogui.press('tab')
         self.F_是否结束寻路()
@@ -725,7 +772,7 @@ class MHWindow:
             self.F_导航到女儿村()
         elif('建邺城' in 任务):
             self.F_导航到建邺城()
-        elif('大唐境外' in 任务):
+        elif('境外' in 任务):
             self.F_导航到大唐境外()
         elif('普陀山' in 任务):
             self.F_导航到普陀山()
@@ -939,21 +986,8 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_选择仓库号(11)
-    window.F_选择仓库号(12)
-    window.F_选择仓库号(13)
-    window.F_选择仓库号(14)
-    window.F_选择仓库号(15)
-    window.F_选择仓库号(16)
-    window.F_选择仓库号(17)
-    window.F_选择仓库号(18)
-    window.F_选择仓库号(19)
-    window.F_选择仓库号(20)
-    window.F_选择仓库号(21)
-    window.F_选择仓库号(22)
-    window.F_选择仓库号(23)
-    window.F_选择仓库号(24)
-    window.F_选择仓库号(25)
+    if(window.F_识别4小人()):
+    time.sleep(3)
 
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
