@@ -128,7 +128,6 @@ def F_获取宝图信息(deviceId):
 
 
 def 识别位置信息(window, point):
-    print(point)
     window.pointMove(point[0], point[1])
     time.sleep(0.2)
     if(point != None):
