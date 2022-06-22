@@ -987,7 +987,7 @@ if __name__ == '__main__':
     window.focusWindow()
     time.sleep(1)
     if(window.F_识别4小人()):
-    time.sleep(3)
+        time.sleep(3)
 
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())
