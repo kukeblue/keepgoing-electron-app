@@ -2,7 +2,7 @@
     "name": "my-electron-app",
     "version": "0.1.0",
     "description": "My Electron app",
-    "main": "dist/electron/main.js",
+    "main": "dist/electron/electron/main.js",
     "scripts": {
         "build": "tsc",
         "watch": "tsc -w",
@@ -24,9 +24,9 @@
             "oneClick": false,
             "allowElevation": true,
             "allowToChangeInstallationDirectory": true,
-            "installerIcon": "./build/icons/icon.jpg",
-            "uninstallerIcon": "./build/icons/icon.jpg",
-            "installerHeaderIcon": "./build/icons/icon.jpg",
+            "installerIcon": "./build/icons/icon.ico",
+            "uninstallerIcon": "./build/icons/icon.ico",
+            "installerHeaderIcon": "./build/icons/icon.ico",
             "createDesktopShortcut": true,
             "createStartMenuShortcut": true,
             "shortcutName": "chepp"
@@ -38,7 +38,7 @@
             "package.json"
         ],
         "win": {
-            "icon": "./build/icons/icon.jpg",
+            "icon": "./build/icons/icon.ico",
             "target": [
                 {
                     "target": "nsis",
@@ -47,6 +47,11 @@
                     ]
                 }
             ]
+        },
+        "electronDownload": {
+            "cache": "download/electron/Cache",
+            "mirror": "https://cdn.npmmirror.com/binaries/electron/",
+            "customDir": "17.4.1"
         }
     },
     "keywords": [],
@@ -60,6 +65,8 @@
         "webpack-cli": "^4.7.0"
     },
     "dependencies": {
+        "@electron/get": "^1.14.1",
+        "iconv-lite": "^0.6.3",
         "log4js": "^6.4.2",
         "moment": "^2.29.1",
         "typescript": "^4.6.2"
