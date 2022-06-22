@@ -56,8 +56,8 @@ class MHWindow:
         self.deviceId = deviceId
 
     def F_获取设备图片(self, img):
-        print('\\' + self.deviceId + '-' + img)
-        return '\\' + self.deviceId + '-' + img
+        print('\\' + '1' + '-' + img)
+        return '\\' + '1' + '-' + img
 
     def getTruthPx(self, num):
         return num * self.screenUnit
