@@ -1,7 +1,7 @@
 # coding=utf-8
 from tkinter import NO
 import baiduApi
-from cv2 import log
+
 import logUtil
 import mhWindow
 import re

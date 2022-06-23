@@ -1,5 +1,5 @@
 # coding=utf-8
-from cv2 import log
+
 import logUtil
 import mhWindow
 import re
