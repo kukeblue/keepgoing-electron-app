@@ -1,9 +1,7 @@
 # coding=utf-8
 from distutils.log import error
-from typing_extensions import Self
-
 from cv2 import log
-from numpy import False_
+from matplotlib.pyplot import switch_backend
 # from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
@@ -14,8 +12,7 @@ import time
 import utils
 import math
 import re
-
-
+import pointUtil
 mapCangkuDict = {
     '花果山': 25,
     '傲来国': 24,
@@ -56,8 +53,10 @@ class MHWindow:
         self.deviceId = deviceId
 
     def F_获取设备图片(self, img):
-        print('\\' + '9' + '-' + img)
-        return '\\' + '9' + '-' + img
+        if('all' in img):
+            return '\\' + img
+        print('\\' + self.deviceId + '-' + img)
+        return '\\' + self.deviceId + '-' + img
 
     def getTruthPx(self, num):
         return num * self.screenUnit
@@ -367,24 +366,61 @@ class MHWindow:
             pyautogui.click()
 
     def F_使用飞行符(self, path):
-        self.F_选中道具格子(20)
-        pyautogui.rightClick()
-        time.sleep(1)
+        desLocation = ""
         if(path == '傲来国'):
-            self.pointMove(self.windowArea[0] + 678, self.windowArea[1] + 423)
-            pyautogui.click()
+            desLocation = pointUtil.傲来国飞行符坐标_飞行棋Str
         elif(path == '建邺城'):
-            self.pointMove(self.windowArea[0] + 527, self.windowArea[1] + 358)
-            pyautogui.click()
+            desLocation = pointUtil.建邺城飞行符坐标_飞行棋Str
         elif(path == '宝象国'):
-            self.pointMove(self.windowArea[0] + 286, self.windowArea[1] + 328)
-            pyautogui.click()
-        elif(path == '西梁女国'):
-            self.pointMove(self.windowArea[0] + 297, self.windowArea[1] + 249)
+            desLocation = pointUtil.宝象国飞行符坐标_飞行棋Str
         elif(path == '长寿村'):
-            self.pointMove(self.windowArea[0] + 301, self.windowArea[1] + 184)
-        pyautogui.click()
+            desLocation = pointUtil.长寿村飞行符坐标_飞行棋Str
+        elif(path == '西梁女国'):
+            desLocation = pointUtil.西凉女国飞行符坐标_飞行棋Str
+        elif(path == '长安城'):
+            desLocation = pointUtil.长安城飞行符坐标_飞行棋Str
+        elif(path == '朱紫国'):
+            desLocation = pointUtil.朱紫国飞行符坐标_飞行棋Str
+        while(True):
+            curLocation = self.获取当前坐标()
+            if(curLocation == desLocation):
 
+                break
+            else:
+                if (self.findImgInWindow("wind.png") != None):
+                    if(path == '傲来国'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.傲来国飞行符坐标_屏幕xy[0], pointUtil.傲来国飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    if(path == '长安城'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.长安城飞行符坐标_屏幕xy[0], pointUtil.长安城飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    if(path == '朱紫国'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.朱紫国飞行符坐标_屏幕xy[0], pointUtil.朱紫国飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    elif(path == '建邺城'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.建邺城飞行符坐标_屏幕xy[0], pointUtil.建邺城飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    elif(path == '宝象国'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.宝象国飞行符坐标_屏幕xy[0], pointUtil.宝象国飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    elif(path == '西梁女国'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.西凉女国飞行符坐标_屏幕xy[0], pointUtil.西凉女国飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    elif(path == '长寿村'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.长寿村飞行符坐标_屏幕xy[0], pointUtil.长寿村飞行符坐标_屏幕xy[1])
+                        pyautogui.click()
+                    time.sleep(1)
+                else:
+                    self.F_选中道具格子(20)
+                    pyautogui.rightClick()
+                    time.sleep(1)
         pyautogui.hotkey('alt', 'e')
 
     def F_使用长安城飞行棋(self, path):
@@ -430,19 +466,53 @@ class MHWindow:
         pyautogui.hotkey('alt', 'e')
 
     def F_使用傲来国飞行棋(self, path):
-        self.F_选中道具格子(18)
-        pyautogui.rightClick()
-        time.sleep(1)
-        if(path == '花果山出口'):
-            self.pointMove(self.windowArea[0] + 584, self.windowArea[1] + 180)
-            pyautogui.click()
-        if(path == '女儿村出口'):
-            self.pointMove(self.windowArea[0] + 208, self.windowArea[1] + 188)
-            pyautogui.click()
-        if(path == '东海湾出口'):
-            self.pointMove(self.windowArea[0] + 519, self.windowArea[1] + 399)
-            pyautogui.click()
+        desLocation = ""
+        if(path == '花果山入口'):
+            desLocation = pointUtil.黄色傲来国导标旗坐标_花果山Str
+        elif(path == '女儿村入口'):
+            desLocation = pointUtil.黄色傲来国导标旗坐标_女儿村Str
+        elif(path == '东海湾入口'):
+            desLocation = pointUtil.黄色傲来国导标旗坐标_东海湾Str
+        print("des"+desLocation)
+        while(True):
+            curLocation = self.获取当前坐标()
+            print("cur"+curLocation)
+            if(curLocation == desLocation):
+                break
+            else:
+                if (self.findImgInWindow("feixing-al.png") != None):
+                    if(path == '花果山入口'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.黄色傲来国导标旗坐标_花果山屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_花果山屏幕xy[1])
+                        pyautogui.click()
+                    elif(path == '女儿村入口'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[1])
+                        pyautogui.click()
+                    elif(path == '东海湾入口'):
+                        self.F_移动到游戏区域坐标(
+                            pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[1])
+                        pyautogui.click()
+                    time.sleep(1)
+                else:
+                    self.F_选中道具格子(18)
+                    pyautogui.rightClick()
+                    time.sleep(1)
         pyautogui.hotkey('alt', 'e')
+        # self.F_选中道具格子(18)
+        # pyautogui.rightClick()
+        # time.sleep(1)
+        # if(path == '花果山出口'):
+        #     self.pointMove(self.windowArea[0] + 584, self.windowArea[1] + 180)
+        #     pyautogui.click()
+        # if(path == '女儿村出口'):
+        #     self.pointMove(self.windowArea[0] + 208, self.windowArea[1] + 188)
+        #     pyautogui.click()
+        #     pointUtil.黄色傲来国导标旗坐标_女儿村Str == danqian
+        # if(path == '东海湾出口'):
+        #     self.pointMove(self.windowArea[0] + 519, self.windowArea[1] + 399)
+        #     pyautogui.click()
+        # pyautogui.hotkey('alt', 'e')
 
     def F_导航到大唐国境(self):
         self.F_使用长安城飞行棋('大唐国境出口')
@@ -784,6 +854,8 @@ class MHWindow:
             self.F_导航到长寿村()
         elif('朱紫国' in 任务):
             self.F_导航到朱紫国()
+        elif('五庄观' in 任务):
+            self.F_导航到五庄观()
 
     def F_移动到游戏区域坐标(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
@@ -980,14 +1052,22 @@ class MHWindow:
         self.F_移动到游戏区域坐标(339, 552)
         pyautogui.click()
 
+    def F_点击小地图出入口按钮(self):
+        pyautogui.press('tab')
+        time.sleep(1)
+        point = self.findImgInWindowReturnWindowPoint('all_font_intro.png')
+        if(point):
+            self.F_移动到游戏区域坐标(point[0], point[1])
+            pyautogui.click()
+        pyautogui.press('tab')
+
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    if(window.F_识别4小人()):
-        time.sleep(3)
+    window.F_使用傲来国飞行棋('东海湾入口')
 
-    # window.F_卖装备(15)
-    # print(window.F_是否结束寻路())
+# window.F_卖装备(15)
+# print(window.F_是否结束寻路())

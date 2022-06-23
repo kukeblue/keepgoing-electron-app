@@ -1,5 +1,5 @@
 # coding=utf-8
-from cv2 import log
+
 import logUtil
 import mhWindow
 import re
@@ -123,7 +123,7 @@ def F_获取宝图信息(deviceId):
     elif(map == '五庄观'):
         window.F_导航到五庄观()
     time.sleep(1)
-
+    window.F_点击小地图出入口按钮()
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
 
@@ -271,6 +271,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
         else:
             F_点击宝图并寻路(window, deviceId, map,
                       x, y, num, other)
+    window.F_点击小地图出入口按钮()
     window.F_回天台放东西(map)
     window.F_选中道具格子(15)
     if(isBeen):
