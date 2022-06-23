@@ -1067,11 +1067,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-<< << << < HEAD
-window.F_使用飞行符('长安城')
-== == == =
-window.F_使用傲来国飞行棋('东海湾入口')
+    window.F_使用傲来国飞行棋('东海湾入口')
 
->>>>>> > ced3b55d73108b73253d6f18e76de0151ae3170a
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
