@@ -1,9 +1,6 @@
 # coding=utf-8
 from distutils.log import error
-from typing_extensions import Self
-
 from cv2 import log
-from numpy import False_
 # from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui

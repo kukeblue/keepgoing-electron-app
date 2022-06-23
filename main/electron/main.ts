@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from 'electron';
-const electronReload = require('electron-reload')
 import * as path from 'path';
 import messageHandle from './messageHandle'
 import { listenLogs } from "./utils/logChangeHandle";

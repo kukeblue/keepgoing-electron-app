@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserStore } from "../store/userStore"
 import './index.less'
 import { ChLayout } from 'ch-ui'
 import { Breadcrumb, Popover, Menu } from 'antd';
 import image_robot from '../assets/images/icon.jpg';
 // @ts-ignore
-import {ContactsOutlined,MobileOutlined, CalendarOutlined,DashboardOutlined, TransactionOutlined} from '@ant-design/icons';
-import {useHistory, useLocation} from "react-router-dom";
-import {MainThread} from "../call";
+import { ContactsOutlined, MobileOutlined, CalendarOutlined, DashboardOutlined, TransactionOutlined } from '@ant-design/icons';
+import { useHistory, useLocation } from "react-router-dom";
+import { MainThread } from "../call";
 import Login from "../page/login";
 interface LayoutProps {
     children: JSX.Element;
 }
 
-const routerConfigMap:any = {
+const routerConfigMap: any = {
     'device': {
         text: '设备',
         url: '',
@@ -45,7 +45,7 @@ const routerConfigMap:any = {
 }
 function Header() {
     const location = useLocation();
-    const paths = location.pathname.split("/").filter(item=>{
+    const paths = location.pathname.split("/").filter(item => {
         return item && item != ""
     })
     const pathCount = paths.length
@@ -54,7 +54,7 @@ function Header() {
         <div>
             <Breadcrumb>
                 {
-                    paths.map((item, index)=>{
+                    paths.map((item, index) => {
                         return routerConfigMap[item] && <Breadcrumb.Item key={item}>
                             {routerConfigMap[item] && routerConfigMap[item].text}{index + 1 < pathCount ? "" : ""}
                         </Breadcrumb.Item>
@@ -75,15 +75,15 @@ function Header() {
 function Layout(props: LayoutProps) {
     const userStore = UserStore.useContainer()
     const [visiblePopoverId, setVisiblePopoverId] = useState<string>()
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(() => {
+        setTimeout(() => {
             MainThread.init()
         }, 0)
     }, [])
 
     const handleClickMenu = (e: any, url: string) => {
         e.domEvent.stopPropagation();
-        setVisiblePopoverId((v)=>'')
+        setVisiblePopoverId((v) => '')
         history.push(url)
     }
 
@@ -115,9 +115,9 @@ function Layout(props: LayoutProps) {
             {
                 text: '任务管理',
                 icon: <Popover visible={visiblePopoverId == 'taskPopover'} className='layout-task-menu' placement="right" content={
-                    <Menu style={{width: 150, textAlign: 'center'}} mode="inline">
-                        <Menu.Item key="9" onClick={(e)=>{handleClickMenu(e, '/task/task_list')}}>任务列表</Menu.Item>
-                        <Menu.Item key="10" onClick={(e)=>{handleClickMenu(e, '/task/task_config')}}>任务配置</Menu.Item>
+                    <Menu style={{ width: 150, textAlign: 'center' }} mode="inline">
+                        <Menu.Item key="9" onClick={(e) => { handleClickMenu(e, '/task/task_list') }}>任务列表</Menu.Item>
+                        <Menu.Item key="10" onClick={(e) => { handleClickMenu(e, '/task/task_config') }}>任务配置</Menu.Item>
                     </Menu>
                 } trigger="click">
                     <CalendarOutlined style={{ fontSize: 24 }} />
@@ -150,17 +150,17 @@ function Layout(props: LayoutProps) {
         ]
     }
     console.log('Layout 刷新')
-    return userStore.isLogin ? <ChLayout header={<Header/>} adminIcon={<img style={{borderRadius: '50%' ,width: '60px', height: 'auto'}} src={image_robot}/>} sider={sider}>
+    return userStore.isLogin ? <ChLayout header={<Header />} adminIcon={<img style={{ borderRadius: '50%', width: '60px', height: 'auto' }} src={image_robot} />} sider={sider}>
         <div className='app-content'>
             {props.children}
         </div>
-    </ChLayout>: <Login/>
+    </ChLayout> : <Login />
 }
 
 export default (props: LayoutProps) => {
     // @ts-ignore
     return <UserStore.Provider>
-        <Layout {...props}/>
+        <Layout {...props} />
     </UserStore.Provider>
 }
 
