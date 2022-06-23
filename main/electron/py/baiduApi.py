@@ -7,6 +7,7 @@ import utils
 import sys
 import os
 import logUtil
+
 op = Dispatch("op.opsoft")
 
 pyHome = __file__.strip('baiduApi.py')
@@ -55,7 +56,16 @@ def F_大漠宝图文字识别(area):
 def F_大漠红色文字位置识别(area, text):
     op.SetDict(0, pyZhikuDir + '\\red.txt')
     ret = op.FindStr(area[0], area[1], area[2], area[3],
-                     text, "ff0000-000000", 1.0)
+                     text, "ff0000-000000", 0.8)
+    if(ret[0] > -1):
+        return [ret[1], ret[2]]
+
+
+def F_大漠红色4小人弹框识别(area):
+    op.SetDict(0, pyZhikuDir + '\\4p.txt')
+    ret = op.FindStr(area[0], area[1], area[2], area[3],
+                     '锟斤拷', "ffffff-000000", 0.8)
+    print(ret)
     if(ret[0] > -1):
         return [ret[1], ret[2]]
 
