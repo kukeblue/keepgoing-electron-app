@@ -56,6 +56,8 @@ class MHWindow:
         self.deviceId = deviceId
 
     def F_获取设备图片(self, img):
+        if('all' in img):
+            return '\\' + img
         print('\\' + self.deviceId + '-' + img)
         return '\\' + self.deviceId + '-' + img
 
@@ -784,6 +786,8 @@ class MHWindow:
             self.F_导航到长寿村()
         elif('朱紫国' in 任务):
             self.F_导航到朱紫国()
+        elif('五庄观' in 任务):
+            self.F_导航到五庄观()
 
     def F_移动到游戏区域坐标(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
@@ -980,14 +984,22 @@ class MHWindow:
         self.F_移动到游戏区域坐标(339, 552)
         pyautogui.click()
 
+    def F_点击小地图出入口按钮(self):
+        pyautogui.press('tab')
+        time.sleep(1)
+        point = self.findImgInWindowReturnWindowPoint('all_font_intro.png')
+        if(point):
+            self.F_移动到游戏区域坐标(point[0], point[1])
+            pyautogui.click()
+        pyautogui.press('tab')
+
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    if(window.F_识别4小人()):
-        time.sleep(3)
+    point = window.F_点击小地图出入口按钮()
 
     # window.F_卖装备(15)
     # print(window.F_是否结束寻路())

@@ -70,6 +70,15 @@ def F_大漠红色4小人弹框识别(area):
         return [ret[1], ret[2]]
 
 
+def F_小地图出入口按钮识别(area):
+    op.SetDict(0, pyZhikuDir + '\\map_intro.txt')
+    ret = op.FindStr(area[0], area[1], area[2], area[3],
+                     '1', "e706eb-000000|e706eb-000000|bc05bf-000000|ff01ff-000000|b013be-000000|e302e5-000000", 0.6)
+    print(ret)
+    if(ret[0] > -1):
+        return [ret[1], ret[2]]
+
+
 def F_大漠小地图识别(area):
     op.SetDict(0, pyZhikuDir + '\\small_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
