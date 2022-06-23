@@ -473,14 +473,15 @@ class MHWindow:
             desLocation = pointUtil.黄色傲来国导标旗坐标_女儿村Str
         elif(path == '东海湾入口'):
             desLocation = pointUtil.黄色傲来国导标旗坐标_东海湾Str
-
+        print("des"+desLocation)
         while(True):
             curLocation = self.获取当前坐标()
+            print("cur"+curLocation)
             if(curLocation == desLocation):
                 break
             else:
                 if (self.findImgInWindow("feixing-al.png") != None):
-                    if(path == '花果山出口'):
+                    if(path == '花果山入口'):
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_花果山屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_花果山屏幕xy[1])
                         pyautogui.click()
@@ -1066,6 +1067,11 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_使用飞行符('长安城')
-    # window.F_卖装备(15)
-    # print(window.F_是否结束寻路())
+<< << << < HEAD
+window.F_使用飞行符('长安城')
+== == == =
+window.F_使用傲来国飞行棋('东海湾入口')
+
+>>>>>> > ced3b55d73108b73253d6f18e76de0151ae3170a
+# window.F_卖装备(15)
+# print(window.F_是否结束寻路())
