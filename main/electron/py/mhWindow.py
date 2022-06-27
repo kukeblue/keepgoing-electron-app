@@ -55,8 +55,8 @@ class MHWindow:
     def F_获取设备图片(self, img):
         if('all' in img):
             return '\\' + img
-        print('\\' + self.deviceId + '-' + img)
-        return '\\' + self.deviceId + '-' + img
+        print('\\' + '9' + '-' + img)
+        return '\\' + '9' + '-' + img
 
     def getTruthPx(self, num):
         return num * self.screenUnit
@@ -383,7 +383,7 @@ class MHWindow:
             desLocation = pointUtil.朱紫国飞行符坐标_飞行棋Str
         while(True):
             curLocation = self.获取当前坐标()
-            if(curLocation == desLocation):
+            if(desLocation in curLocation):
                 break
             else:
                 if (self.findImgInWindow("all-wind.png") != None):
