@@ -53,8 +53,8 @@ class MHWindow:
     def F_获取设备图片(self, img):
         if('all' in img):
             return '\\' + img
-        print('\\' + self.deviceId + '-' + img)
-        return '\\' + self.deviceId + '-' + img
+        print('\\' + '9' + '-' + img)
+        return '\\' + '9' + '-' + img
 
     def getTruthPx(self, num):
         return num * self.screenUnit
@@ -381,11 +381,10 @@ class MHWindow:
             desLocation = pointUtil.朱紫国飞行符坐标_飞行棋Str
         while(True):
             curLocation = self.获取当前坐标()
-            if(curLocation == desLocation):
-
+            if(desLocation in curLocation):
                 break
             else:
-                if (self.findImgInWindow("wind.png") != None):
+                if (self.findImgInWindow("all-wind.png") != None):
                     if(path == '傲来国'):
                         self.F_移动到游戏区域坐标(
                             pointUtil.傲来国飞行符坐标_屏幕xy[0], pointUtil.傲来国飞行符坐标_屏幕xy[1])
@@ -465,11 +464,11 @@ class MHWindow:
 
     def F_使用傲来国飞行棋(self, path):
         desLocation = ""
-        if(path == '花果山入口'):
+        if(path == '花果山出口'):
             desLocation = pointUtil.黄色傲来国导标旗坐标_花果山Str
-        elif(path == '女儿村入口'):
+        elif(path == '女儿村出口'):
             desLocation = pointUtil.黄色傲来国导标旗坐标_女儿村Str
-        elif(path == '东海湾入口'):
+        elif(path == '东海湾出口'):
             desLocation = pointUtil.黄色傲来国导标旗坐标_东海湾Str
         print("des"+desLocation)
         while(True):
@@ -478,16 +477,16 @@ class MHWindow:
             if(curLocation in desLocation):
                 break
             else:
-                if (self.findImgInWindow("feixing-al.png") != None):
-                    if(path == '花果山入口'):
+                if (self.findImgInWindow("all-feixing-al.png") != None):
+                    if(path == '花果山出口'):
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_花果山屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_花果山屏幕xy[1])
                         pyautogui.click()
-                    elif(path == '女儿村入口'):
+                    elif(path == '女儿村出口'):
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[1])
                         pyautogui.click()
-                    elif(path == '东海湾入口'):
+                    elif(path == '东海湾出口'):
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[1])
                         pyautogui.click()
