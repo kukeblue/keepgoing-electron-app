@@ -1,8 +1,6 @@
 # coding=utf-8
 from distutils.log import error
 from cv2 import log
-from matplotlib.pyplot import switch_backend
-# from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
 import sys
@@ -477,7 +475,7 @@ class MHWindow:
         while(True):
             curLocation = self.获取当前坐标()
             print("cur"+curLocation)
-            if(curLocation == desLocation):
+            if(curLocation in desLocation):
                 break
             else:
                 if (self.findImgInWindow("feixing-al.png") != None):
@@ -1067,7 +1065,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_使用傲来国飞行棋('东海湾入口')
-
+    window.F_使用傲来国飞行棋('女儿村入口')
+                                                                                                                                              
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
