@@ -923,17 +923,20 @@ class MHWindow:
         time.sleep(1)
         pyautogui.hotkey('alt', 'e')
         time.sleep(1)
-        self.F_移动到游戏区域坐标(267, 188)
-        pyautogui.click()
-        pyautogui.click()
-        time.sleep(3)
-        self.F_移动到游戏区域坐标(283, 352)
-        pyautogui.click()
-        time.sleep(1)
-        self.F_移动到游戏区域坐标(227, 373)
-        pyautogui.click()
-        # # 8号仓库
-        time.sleep(1)
+        while True:
+            point = self.findImgInWindowReturnWindowPoint('all_tiantai_text.png')
+            if(point):
+                self.F_移动到游戏区域坐标(227, 373)
+                pyautogui.click()
+                time.sleep(1)
+                break
+            else:
+                self.F_小地图寻路器([354, 247], None)
+                pyautogui.press('f9')
+                self.F_移动到游戏区域坐标(284, 333)
+                pyautogui.click()
+                pyautogui.click()
+                time.sleep(1)
         num = mapCangkuDict.get(map)
         self.F_选择仓库号(num)
         time.sleep(1)
@@ -1064,7 +1067,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_使用傲来国飞行棋('女儿村入口')
+    window.F_回天台放东西('女儿村')
                                                                                                                                               
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
