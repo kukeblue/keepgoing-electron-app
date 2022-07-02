@@ -19,11 +19,11 @@ def 飞机队四人模式挂机(deviceId):
     pyautogui.click()
     回合数 = 0
     while True: 
-        time.sleep(1)
+        time.sleep(0.5)
         if window.F_是否在战斗():
             print('进入战斗')
             while True:
-                time.sleep(1)
+                time.sleep(0.5)
                 if window.F_是否战斗操作():
                     if( 回合数 == 0):
                         飞机队操作(window)
