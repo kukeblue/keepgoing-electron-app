@@ -108,4 +108,4 @@ def encode_base64(file):
         return base64_str
 
 
-suanGetHost()
+# suanGetHost()

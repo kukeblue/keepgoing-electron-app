@@ -133,8 +133,8 @@ class MHWindow:
                           int(location.width / self.screenUnit), int(location.height / self.screenUnit)])
         return ponits
 
-    def checkpoint(self):
-        for x in range(5):
+    def checkpoint(self, 战斗操作模式):
+        for x in range(3):
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '306ca8', '1|0|285490,1|1|285490', 0.6, 0)
@@ -144,18 +144,23 @@ class MHWindow:
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205890', '0|0|205890', 0.6, 0)
             if(ret2[1] > 0):
                 return (ret2[1], ret2[2])
+        if(战斗操作模式):
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '884448' , '4|4|f0ecb8,1|2|401c28,-1|-2|a84048,-4|-3|f0f8f0', 0.6, 0)
+            if(ret[1] > 0):
+                return (ret[1], ret[2])
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
         pyautogui.click()
 
-    def pointMove(self, x, y):
+    def pointMove(self, x, y, 战斗操作模式 = False):
         isFirstMove = 0
         mx = x - 20
         my = y - 16
         finished = False
         while not finished:
-            point = self.checkpoint()
+            point = self.checkpoint(战斗操作模式 = 战斗操作模式)
             if(point != None):
                 dx = point[0] - 48
                 dy = point[1] - 38
@@ -189,6 +194,27 @@ class MHWindow:
         try:
             point = self.findImgInWindow(
                 'window_zhandou_mask.png', area=(441, 561, 40, 40))
+            if point != None:
+                return True
+            else:
+                return False
+        except:
+            return False
+    def F_是否在战斗(self):
+        try:
+            point = self.findImgInWindow(
+                'window_zhandou_mask.png', area=(441, 561, 40, 40))
+            if point != None:
+                return True
+            else:
+                return False
+        except:
+            return False
+    
+    def F_是否战斗操作(self):
+        try:
+            point = self.findImgInWindow(
+                'all-zhandou-taopao.png', area=(600, 101, 200, 469))
             if point != None:
                 return True
             else:
@@ -854,8 +880,8 @@ class MHWindow:
         elif('五庄观' in 任务):
             self.F_导航到五庄观()
 
-    def F_移动到游戏区域坐标(self, x, y):
-        self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
+    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式 = False):
+        self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y, 是否战斗操作模式)
 
     def F_选择仓库号(self, num):
         if(num == 1):
