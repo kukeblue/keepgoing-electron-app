@@ -1,8 +1,6 @@
 # coding=utf-8
 from distutils.log import error
 from cv2 import log
-from matplotlib.pyplot import switch_backend
-# from matplotlib.pyplot import switch_backend
 import logUtil
 import pyautogui
 import sys
@@ -135,8 +133,8 @@ class MHWindow:
                           int(location.width / self.screenUnit), int(location.height / self.screenUnit)])
         return ponits
 
-    def checkpoint(self):
-        for x in range(5):
+    def checkpoint(self, 战斗操作模式):
+        for x in range(3):
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '306ca8', '1|0|285490,1|1|285490', 0.6, 0)
@@ -146,18 +144,23 @@ class MHWindow:
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205890', '0|0|205890', 0.6, 0)
             if(ret2[1] > 0):
                 return (ret2[1], ret2[2])
+        if(战斗操作模式):
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '884448' , '4|4|f0ecb8,1|2|401c28,-1|-2|a84048,-4|-3|f0f8f0', 0.6, 0)
+            if(ret[1] > 0):
+                return (ret[1], ret[2])
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
         pyautogui.click()
 
-    def pointMove(self, x, y):
+    def pointMove(self, x, y, 战斗操作模式 = False):
         isFirstMove = 0
         mx = x - 20
         my = y - 16
         finished = False
         while not finished:
-            point = self.checkpoint()
+            point = self.checkpoint(战斗操作模式 = 战斗操作模式)
             if(point != None):
                 dx = point[0] - 48
                 dy = point[1] - 38
@@ -191,6 +194,27 @@ class MHWindow:
         try:
             point = self.findImgInWindow(
                 'window_zhandou_mask.png', area=(441, 561, 40, 40))
+            if point != None:
+                return True
+            else:
+                return False
+        except:
+            return False
+    def F_是否在战斗(self):
+        try:
+            point = self.findImgInWindow(
+                'window_zhandou_mask.png', area=(441, 561, 40, 40))
+            if point != None:
+                return True
+            else:
+                return False
+        except:
+            return False
+    
+    def F_是否战斗操作(self):
+        try:
+            point = self.findImgInWindow(
+                'all-zhandou-taopao.png', area=(600, 101, 200, 469))
             if point != None:
                 return True
             else:
@@ -476,7 +500,7 @@ class MHWindow:
         while(True):
             curLocation = self.获取当前坐标()
             print("cur"+curLocation)
-            if(curLocation == desLocation):
+            if(curLocation in desLocation):
                 break
             else:
                 if (self.findImgInWindow("all-feixing-al.png") != None):
@@ -856,8 +880,8 @@ class MHWindow:
         elif('五庄观' in 任务):
             self.F_导航到五庄观()
 
-    def F_移动到游戏区域坐标(self, x, y):
-        self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
+    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式 = False):
+        self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y, 是否战斗操作模式)
 
     def F_选择仓库号(self, num):
         if(num == 1):
@@ -925,17 +949,20 @@ class MHWindow:
         time.sleep(1)
         pyautogui.hotkey('alt', 'e')
         time.sleep(1)
-        self.F_移动到游戏区域坐标(267, 188)
-        pyautogui.click()
-        pyautogui.click()
-        time.sleep(3)
-        self.F_移动到游戏区域坐标(283, 352)
-        pyautogui.click()
-        time.sleep(1)
-        self.F_移动到游戏区域坐标(227, 373)
-        pyautogui.click()
-        # # 8号仓库
-        time.sleep(1)
+        while True:
+            point = self.findImgInWindowReturnWindowPoint('all_tiantai_text.png')
+            if(point):
+                self.F_移动到游戏区域坐标(227, 373)
+                pyautogui.click()
+                time.sleep(1)
+                break
+            else:
+                self.F_小地图寻路器([354, 247], None)
+                pyautogui.press('f9')
+                self.F_移动到游戏区域坐标(284, 333)
+                pyautogui.click()
+                pyautogui.click()
+                time.sleep(1)
         num = mapCangkuDict.get(map)
         self.F_选择仓库号(num)
         time.sleep(1)
@@ -1066,7 +1093,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_使用傲来国飞行棋('东海湾入口')
-
+    window.F_回天台放东西('女儿村')
+                                                                                                                                              
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
