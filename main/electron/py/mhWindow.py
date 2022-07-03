@@ -133,7 +133,7 @@ class MHWindow:
                           int(location.width / self.screenUnit), int(location.height / self.screenUnit)])
         return ponits
 
-    def checkpoint(self, 战斗操作模式):
+    def checkpoint(self, 战斗操作模式 = False):
         for x in range(3):
             print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
@@ -957,7 +957,7 @@ class MHWindow:
                 time.sleep(1)
                 break
             else:
-                self.F_小地图寻路器([354, 247], None)
+                self.F_小地图寻路器([354, 247], True)
                 pyautogui.press('f9')
                 self.F_移动到游戏区域坐标(284, 333)
                 pyautogui.click()
