@@ -1049,7 +1049,7 @@ class MHWindow:
                 time.sleep(1)
                 break
             else:
-                self.F_小地图寻路器([354, 247], None)
+                self.F_小地图寻路器([354, 247], True)
                 pyautogui.press('f9')
                 self.F_移动到游戏区域坐标(284, 333)
                 pyautogui.click()
