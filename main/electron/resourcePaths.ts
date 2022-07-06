@@ -23,6 +23,8 @@ const resourcePaths = {
     METHOD_THROW_LITTER: 'throw_litter',
     METHOD_SELL_EQUIPMENT: 'sell_equipment',
     METHOD_CONNECTOR: 'method_connector',
+    METHOD_ZHANDOU: 'method_zhandou',
+
 
 
 
