@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, message, Modal, Popover, Row, Switch } from 'antd'
+import { Button, Col, message, Modal, Popover, Row, Select, Switch } from 'antd'
 import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou } from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
@@ -46,6 +46,7 @@ function usePageStore() {
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(false)
+    const [cangkuPath, setCangkuPath] = useState<string>('长安城');
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
     const [watuInfo, setWatuInfo] = useState<TWatuInfo>()
@@ -73,9 +74,9 @@ function usePageStore() {
     }
     const handleGetWatuInfo = (deviceId: number) => {
         if (isBee) {
-            doBee(deviceId)
+            doBee(deviceId, cangkuPath)
         } else {
-            doGetWatuInfo(deviceId)
+            doGetWatuInfo(deviceId, cangkuPath)
         }
     }
 
@@ -113,7 +114,7 @@ function usePageStore() {
                 // @ts-ignore
                 if (window.isBee) {
                     // @ts-ignore
-                    doGetWatuClickMap(...window.beeData)
+                    doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
                 }
             }, 1000)
         }
@@ -204,7 +205,18 @@ function usePageStore() {
 
     }
 
+    const zhandou = () => {
+        message.success('操作成功')
+        if (watuDeviceId > 0) {
+            doZhandou(watuDeviceId)
+        }
+
+    }
+
     return {
+        setCangkuPath,
+        cangkuPath,
+        zhandou,
         connector,
         sellEquipment,
         throwLitter,
@@ -359,11 +371,9 @@ function HomeFeature() {
     return <div className='home-feature'>
         <Row>
             <Col>
-                <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
+                <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本1</Button>
             </Col>
-            <Col>
-                <Button loading={pageStore.getTaskLoading('test2')} onClick={() => { pageStore.handleTest2() }} icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>异步测试脚本</Button>
-            </Col>
+            
             <Col>
                 <Button onClick={() => {
                     pageStore.setModalMultipleAccountSelectShow(true)
@@ -375,12 +385,21 @@ function HomeFeature() {
                     pageStore.setShowSelectDeviceModal(true)
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>挖图位置解析</Button>
             </Col>
+            
             <Col>
                 <div style={{ marginLeft: 20 }}>
                     <span style={{ color: '#000' }}>小蜜蜂模式</span>： <Switch checked={pageStore.isBee} onChange={(e) => {
                         pageStore.handleChangeIsBeen(e);
                     }} />
                 </div>
+            </Col>
+            <Col>
+               <Select style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v)=>{
+                // @ts-ignore
+                window.cangkuPath = v; pageStore.setCangkuPath(v)}}>
+                    <Select.Option value="长安城">长安城</Select.Option>
+                    <Select.Option value="建邺城">建邺城</Select.Option>
+                </Select>
             </Col>
         </Row>
         <Row className='m-t-10'>
@@ -402,9 +421,13 @@ function HomeFeature() {
             <Col className="m-l-10">
                 <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
             </Col>
+            <Col className="m-l-10">
+                <Button onClick={() => { pageStore.zhandou() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>2凌波战斗模式</Button>
+            </Col>
+            
         </Row>
         <div className="home-feature-panel">
-            {pageStore.watuInfo && <ChMhMapTool deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
+            {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
         </div>
     </div>
 

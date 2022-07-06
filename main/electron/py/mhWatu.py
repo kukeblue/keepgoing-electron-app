@@ -66,14 +66,14 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(deviceId):
+def F_获取宝图信息(deviceId, 仓库位置):
     time.sleep(3)
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    window.F_使用长安城飞行棋('化生寺出口')
+    # window.F_使用长安城飞行棋('化生寺出口')
     pyautogui.hotkey('alt', 'e')
     time.sleep(1)
     point = window.checkpoint()
@@ -91,7 +91,7 @@ def F_获取宝图信息(deviceId):
     print(map)
     time.sleep(2)
     if(map == '江南野外'):
-        window.F_导航到江南野外()
+        window.F_导航到江南野外(仓库位置='长安城')
     elif(map == '狮驼岭'):
         window.F_导航到狮驼岭()
     elif(map == '大唐国境'):
@@ -249,7 +249,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
 num = 1
 
 
-def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
+def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长安城'):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -272,7 +272,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
             F_点击宝图并寻路(window, deviceId, map,
                       x, y, num, other)
     window.F_点击小地图出入口按钮()
-    window.F_回天台放东西(map)
+    window.F_回仓库放东西(map, 仓库位置)
     window.F_选中道具格子(15)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
@@ -290,7 +290,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen):
             if(point != None and point[0] > 0):
                 pyautogui.hotkey('alt', 'e')
                 window.F_点击自动()
-                F_小蜜蜂模式(deviceId)
+                F_小蜜蜂模式(deviceId, 仓库位置)
                 break
             print('等待宝图')
 
@@ -312,8 +312,8 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(deviceId):
-    F_获取宝图信息(deviceId)
+def F_小蜜蜂模式(deviceId, 仓库位置):
+    F_获取宝图信息(deviceId, 仓库位置)
 
 
 if __name__ == '__main__':

@@ -121,11 +121,13 @@ export const MapConfigs = {
 function ChMhMapTool({
     deviceId,
     mapName,
-    points
+    points,
+    cangkuPath
 }: {
     deviceId: number,
     mapName: string,
     points: [number, number][]
+    cangkuPath: string,
 }) {
     // @ts-ignore
     const mapConfig = MapConfigs[mapName] || {
@@ -211,9 +213,11 @@ function ChMhMapTool({
             })
             otherPoint.splice(index - 1, 1)
             let otherJson = JSON.stringify(otherPoint)
-            doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson)
+            // @ts-ignore
+            doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson, window.isBee, cangkuPath)
         } else {
-            doGetWatuClickMap(deviceId, mapName, x, y, index)
+            // @ts-ignore
+            doGetWatuClickMap(deviceId, mapName, x, y, index, undefined, window.isBee, cangkuPath)
         }
     }
 

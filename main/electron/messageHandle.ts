@@ -122,10 +122,19 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+    // 带队战斗
+    ipcMain.on(resourcePaths.METHOD_ZHANDOU, (event, args) => {
+        logger.info('run py script: METHOD_ZHANDOU')
+        const result = runPyScript('mhZhandou', ['lbc', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')
-        const result = runPyScript('mhWatu', ['bee', args[0]])
+        const result = runPyScript('mhWatu', ['bee', args[0], args[1]])
         event.returnValue = {
             code: result,
             status: 0
