@@ -12,7 +12,10 @@ export const doCloseAllTask = () => (window as any).ipcRenderer.sendSync(resourc
 export const doThrowLitter = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_THROW_LITTER, [deviceId])
 export const doSellEquipment = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SELL_EQUIPMENT, [deviceId])
 export const doConnector = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CONNECTOR, [deviceId])
-export const doZhandou = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHANDOU, [deviceId])
+export const doZhandou = (deviceId: number) => {
+    (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHANDOU, [deviceId])
+
+}
 
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
