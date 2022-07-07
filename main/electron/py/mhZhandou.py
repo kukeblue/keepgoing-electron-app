@@ -18,14 +18,14 @@ def 飞机队四人模式挂机(deviceId):
     window.focusWindow()
     pyautogui.click()
     回合数 = 0
-    while True: 
+    while True:
         time.sleep(0.5)
         if window.F_是否在战斗():
             print('进入战斗')
             while True:
                 time.sleep(0.5)
                 if window.F_是否战斗操作():
-                    if( 回合数 == 0):
+                    if(回合数 == 0):
                         飞机队操作(window)
                         回合数 = 回合数 + 1
                     else:
@@ -35,6 +35,7 @@ def 飞机队四人模式挂机(deviceId):
                 if window.F_是否结束战斗():
                     回合数 = 0
                     break
+
 
 def QQ操作(window):
     # 第一个号
@@ -55,7 +56,8 @@ def QQ操作(window):
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('ctrl', 'tab')
-    time.sleep(0.3)           
+    time.sleep(0.3)
+
 
 def 飞机队操作(window):
     # 第一个号
@@ -86,6 +88,7 @@ def 飞机队操作(window):
 
 
 if __name__ == '__main__':
-    fire.Fire({
-        'lbc': 飞机队四人模式挂机,
-    })
+    # fire.Fire({
+    #     'lbc': 飞机队四人模式挂机,
+    # })
+    飞机队四人模式挂机('9')
