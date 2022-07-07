@@ -732,7 +732,7 @@ class MHWindow:
         else:
             return False
 
-    def F_导航到江南野外(self, 仓库位置):
+    def F_导航到江南野外(self, 仓库位置 = '长安城'):
         if(仓库位置 == '建邺城'):
             self.F_导航到建邺城()
             self.F_小地图寻路器([11, 2])
