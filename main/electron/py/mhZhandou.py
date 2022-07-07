@@ -42,7 +42,7 @@ def QQ操作(window):
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('ctrl', 'tab')
-    time.sleep(0.3)
+    time.sleep(1)
     # 第二个号
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('alt', 'q')
