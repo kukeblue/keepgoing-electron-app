@@ -454,7 +454,7 @@ class MHWindow:
             self.pointMove(self.windowArea[0] + 139, self.windowArea[1] + 435)
             pyautogui.click()
         if(path == '长安驿站'):
-            self.pointMove(self.windowArea[0] + 403, self.windowArea[1] + 398)
+            self.pointMove(self.windowArea[0] + 405, self.windowArea[1] + 398)
             pyautogui.click()
         elif(path == '江南野外出口'):
             self.pointMove(self.windowArea[0] + 657, self.windowArea[1] + 435)
@@ -1093,7 +1093,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到花果山()
+    window.F_回天台放东西('女儿村')
                                                                                                                                               
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
