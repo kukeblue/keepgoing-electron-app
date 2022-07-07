@@ -1326,7 +1326,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到五庄观()
+    window.F_导航到大唐国境()
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
