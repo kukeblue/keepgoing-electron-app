@@ -36,6 +36,8 @@ function usePageStore() {
         MainThread.messageListener.pushLogHandles = [handlePushLog]
         MainThread.messageListener.pushStateHandles = [handlePushState]
         MainThread.messageListener.methodGetWatuInfoReplyHandles = [handleGetWatuInfoReply]
+        // @ts-ignore
+        window.cangkuPath = '长安城'
     }, [])
     const [logs, setLogs] = useState<string[]>([])
     const [processState, setProcessState] = useState({
@@ -373,7 +375,7 @@ function HomeFeature() {
             <Col>
                 <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本1</Button>
             </Col>
-            
+
             <Col>
                 <Button onClick={() => {
                     pageStore.setModalMultipleAccountSelectShow(true)
@@ -385,7 +387,7 @@ function HomeFeature() {
                     pageStore.setShowSelectDeviceModal(true)
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>挖图位置解析</Button>
             </Col>
-            
+
             <Col>
                 <div style={{ marginLeft: 20 }}>
                     <span style={{ color: '#000' }}>小蜜蜂模式</span>： <Switch checked={pageStore.isBee} onChange={(e) => {
@@ -394,9 +396,10 @@ function HomeFeature() {
                 </div>
             </Col>
             <Col>
-               <Select style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v)=>{
-                // @ts-ignore
-                window.cangkuPath = v; pageStore.setCangkuPath(v)}}>
+                <Select style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v) => {
+                    // @ts-ignore
+                    window.cangkuPath = v; pageStore.setCangkuPath(v)
+                }}>
                     <Select.Option value="长安城">长安城</Select.Option>
                     <Select.Option value="建邺城">建邺城</Select.Option>
                 </Select>
@@ -424,7 +427,7 @@ function HomeFeature() {
             <Col className="m-l-10">
                 <Button onClick={() => { pageStore.zhandou() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>2凌波战斗模式</Button>
             </Col>
-            
+
         </Row>
         <div className="home-feature-panel">
             {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
