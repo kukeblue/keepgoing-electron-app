@@ -139,9 +139,8 @@ class MHWindow:
                           int(location.width / self.screenUnit), int(location.height / self.screenUnit)])
         return ponits
 
-    def checkpoint(self, 战斗操作模式=False):
+    def checkpoint(self, 战斗操作模式=False, 手指操作模式=False):
         for x in range(3):
-            print(self.windowArea2)
             ret = baiduApi.op.FindMultiColor(
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '306ca8', '1|0|285490,1|1|285490', 0.6, 0)
             if(ret[1] > 0):
@@ -155,18 +154,24 @@ class MHWindow:
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '884448', '4|4|f0ecb8,1|2|401c28,-1|-2|a84048,-4|-3|f0f8f0', 0.6, 0)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
+        if(手指操作模式):
+            for x in range(2):
+                ret = baiduApi.op.FindMultiColor(
+                    self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], 'd86c30', '0|1|d86c30,1|4|c85030,6|-2|200000', 0.5, 0)
+                if(ret[1] > 0):
+                    return (ret[1], ret[2])
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
         pyautogui.click()
 
-    def pointMove(self, x, y, 战斗操作模式=False):
+    def pointMove(self, x, y, 战斗操作模式=False, 手指操作模式=False):
         isFirstMove = 0
         mx = x - 20
         my = y - 16
         finished = False
         while not finished:
-            point = self.checkpoint(战斗操作模式=战斗操作模式)
+            point = self.checkpoint(战斗操作模式=战斗操作模式, 手指操作模式=手指操作模式)
             if(point != None):
                 dx = point[0] - 48
                 dy = point[1] - 38
@@ -266,6 +271,15 @@ class MHWindow:
         ret = utils.F_通用文字识别(path)
         return ret
 
+    def F_识别自定义任务(self):
+        位置信息 = [self.windowArea[0] + 342, self.windowArea[1] + 76,
+                211, 105]
+        # 截图 + ocr识别
+        path = self.F_窗口区域截图('temp_zidingyi_renwu_info.png', 位置信息)
+        time.sleep(1)
+        ret = utils.F_通用文字识别(path)
+        return ret
+
     def F_识别4小人(self):
         ret = baiduApi.F_大漠红色4小人弹框识别([self.windowArea[0], self.windowArea[1],
                                      self.windowArea[0] + 600, self.windowArea[1] + 800])
@@ -302,20 +316,27 @@ class MHWindow:
                 count = 0
                 坐标 = 坐标2
 
-    def F_点击战斗(self):
+    def F_点击战斗(self, 多次点击=False):
         pyautogui.hotkey('alt', 'a')
         while True:
-            point = self.findImgInWindow('duibiao.png')
+            point = self.findImgInWindow('all-duibiao.png')
+            if(point == None):
+                point = self.findImgInWindow('all-duibiao-plus.png')
             if(point != None):
                 pyautogui.moveTo(self.windowArea[0] + 500, self.windowArea[1] + 150)
                 pyautogui.rightClick()
                 time.sleep(0.1)
                 pyautogui.hotkey('alt', '7')
-                time.sleep(0.5)
+                time.sleep(1)
                 self.pointMove(point[0]+5, point[1] + 78)
                 pyautogui.hotkey('alt', 'a')
                 time.sleep(0.1)
-                pyautogui.click()
+                if(多次点击):
+                    time.sleep(2)
+                    pyautogui.doubleClick()
+                    pyautogui.click()
+                else:
+                    pyautogui.click()
                 break
             time.sleep(0.5)
 
@@ -1028,9 +1049,9 @@ class MHWindow:
         elif('五庄观' in 任务):
             self.F_导航到五庄观()
 
-    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False):
+    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False):
         self.pointMove(self.windowArea[0] + x,
-                       self.windowArea[1] + y, 是否战斗操作模式)
+                       self.windowArea[1] + y, 是否战斗操作模式, 是否手指操作模式)
 
     def F_选择仓库号(self, num):
         if(num == 1):
