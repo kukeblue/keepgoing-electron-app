@@ -925,7 +925,7 @@ class MHWindow:
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 416, self.windowArea[1] + 426)
         pyautogui.click()
-        time.sleep(28)
+        time.sleep(25)
         pyautogui.press('tab')
         pyautogui.press('f9')
         self.pointMove(self.windowArea[0] + 402, self.windowArea[1] + 304)

@@ -73,7 +73,7 @@ def F_获取宝图信息(deviceId, 仓库位置):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    # window.F_使用长安城飞行棋('化生寺出口')
+    window.F_使用长安城飞行棋('化生寺出口')
     pyautogui.hotkey('alt', 'e')
     time.sleep(1)
     point = window.checkpoint()
