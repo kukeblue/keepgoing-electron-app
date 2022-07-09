@@ -83,7 +83,7 @@ class MHWindow:
             print('未找到前台梦幻窗口')
 
     def focusWindow(self):
-        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 350)
+        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
 
     def F_窗口区域截图(self, fileName, windowRegion):
         region = (windowRegion[0] * self.screenUnit, windowRegion[1] * self.screenUnit,
@@ -307,6 +307,7 @@ class MHWindow:
         while True:
             point = self.findImgInWindow('duibiao.png')
             if(point != None):
+                pyautogui.moveTo(self.windowArea[0] + 500, self.windowArea[1] + 150)
                 pyautogui.rightClick()
                 time.sleep(0.1)
                 pyautogui.hotkey('alt', '7')
