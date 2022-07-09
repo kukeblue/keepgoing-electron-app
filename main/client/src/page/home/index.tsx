@@ -209,10 +209,7 @@ function usePageStore() {
 
     const zhandou = () => {
         message.success('操作成功')
-        if (watuDeviceId > 0) {
-            doZhandou(watuDeviceId)
-        }
-
+        doZhandou(watuDeviceId)
     }
 
     return {

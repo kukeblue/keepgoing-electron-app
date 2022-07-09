@@ -83,7 +83,7 @@ class MHWindow:
             print('未找到前台梦幻窗口')
 
     def focusWindow(self):
-        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
+        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 350)
 
     def F_窗口区域截图(self, fileName, windowRegion):
         region = (windowRegion[0] * self.screenUnit, windowRegion[1] * self.screenUnit,
@@ -206,17 +206,7 @@ class MHWindow:
                 return False
         except:
             return False
-
-    def F_是否在战斗(self):
-        try:
-            point = self.findImgInWindow(
-                'window_zhandou_mask.png', area=(441, 561, 40, 40))
-            if point != None:
-                return True
-            else:
-                return False
-        except:
-            return False
+    
 
     def F_是否战斗操作(self):
         try:
@@ -239,6 +229,25 @@ class MHWindow:
                 return False
         except:
             return False
+
+    def F_吃药(self):
+        pyautogui.hotkey('alt', 'e')
+        try:
+            point = self.findImgInWindow(
+                'all_lanwan.png', area=(97, 438, 149, 495))
+            if point != None:
+                self.pointMove(point[0], point[1])
+                pyautogui.rightClick()
+            point = self.findImgInWindow(
+                'all_hongwan.png', area=(149, 438, 200, 495))
+            if point != None:
+                self.pointMove(point[0], point[1])
+                pyautogui.rightClick()
+        except:
+            print('F_吃药 error')
+        pyautogui.hotkey('alt', 'e')
+        
+        
 
     def F_识别当前坐标(self):
         位置信息 = [self.windowArea[0], self.windowArea[1] + 19, 124, 52]
@@ -488,6 +497,7 @@ class MHWindow:
                         pyautogui.click()
                     time.sleep(1)
                     pyautogui.hotkey('alt', 'e')
+                    break
                 elif(navWay == False):
                     self.F_使用飞行符('长安城')
                     if(path == '大唐国境出口'):
@@ -873,17 +883,10 @@ class MHWindow:
 
     def F_导航到花果山(self):
         self.F_使用傲来国飞行棋('花果山出口')
-        time.sleep(1)
+        time.sleep(0.5)
         pyautogui.press('f9')
-        self.pointMove(self.windowArea[0] + 768, self.windowArea[1] + 84)
-        pyautogui.click()
-        time.sleep(4)
-
-    def F_导航到花果山(self):
-        self.F_使用傲来国飞行棋('花果山出口')
-        time.sleep(1)
-        pyautogui.press('f9')
-        self.pointMove(self.windowArea[0] + 768, self.windowArea[1] + 84)
+        time.sleep(0.5)
+        self.pointMove(self.windowArea[0] + 632, self.windowArea[1] + 103)
         pyautogui.click()
         time.sleep(4)
 
@@ -922,7 +925,7 @@ class MHWindow:
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 416, self.windowArea[1] + 426)
         pyautogui.click()
-        time.sleep(28)
+        time.sleep(25)
         pyautogui.press('tab')
         pyautogui.press('f9')
         self.pointMove(self.windowArea[0] + 402, self.windowArea[1] + 304)
@@ -972,7 +975,8 @@ class MHWindow:
                         elif(cy < -10):
                             cy = -10
                         pyautogui.move(cx, cy)
-                    pyautogui.click()
+                        pyautogui.click()
+                    
             else:
                 if 目标坐标x - 当前坐标x > 1 or 目标坐标x - 当前坐标x < -1 or 目标坐标y - 当前坐标y > 1 or 目标坐标y - 当前坐标y < -1:
                     cx = 目标坐标x - 当前坐标x
@@ -1185,12 +1189,11 @@ class MHWindow:
         self.F_选择仓库号(num)
         time.sleep(1)
         # 判断当前仓库是否为空
-        if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
-            print("仓库已满，寻找空仓库")
-            self.切换有空仓库()
         for x in range(15):
             self.F_选中仓库道具格子(x + 1)
             pyautogui.rightClick()
+            if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
+                self.切换有空仓库()
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(198, 110)
@@ -1326,7 +1329,7 @@ if __name__ == '__main__':
     window.findMhWindow()
     window.focusWindow()
     time.sleep(1)
-    window.F_导航到五庄观()
+    window.F_吃药()
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
