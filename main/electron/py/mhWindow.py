@@ -694,19 +694,19 @@ class MHWindow:
         print('开始查找驿站老板')
         yz = None
         while yz is None:
-            yz1 = self.findImgInWindow('yz1.png')
+            yz1 = self.findImgInWindow('yz1.png', 0.75, (242, 76, 405, 210))
             if yz1 is not None:
                 yz = yz1
                 break
-            yz2 = self.findImgInWindow('yz2.png')
+            yz2 = self.findImgInWindow('yz2.png',0.75, (242, 76, 405, 210))
             if yz2 is not None:
                 yz = yz2
                 break
-            yz3 = self.findImgInWindow('yz3.png')
+            yz3 = self.findImgInWindow('yz3.png', 0.75, (242, 76, 405, 210))
             if yz3 is not None:
                 yz = yz3
                 break
-            yz4 = self.findImgInWindow('yz4.png')
+            yz4 = self.findImgInWindow('yz4.png', 0.75, (242, 76, 405, 210))
             if yz4 is not None:
                 yz = yz4
                 break
