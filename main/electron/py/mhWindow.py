@@ -83,7 +83,7 @@ class MHWindow:
             print('未找到前台梦幻窗口')
 
     def focusWindow(self):
-        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
+        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 350)
 
     def F_窗口区域截图(self, fileName, windowRegion):
         region = (windowRegion[0] * self.screenUnit, windowRegion[1] * self.screenUnit,
@@ -975,7 +975,8 @@ class MHWindow:
                         elif(cy < -10):
                             cy = -10
                         pyautogui.move(cx, cy)
-                    pyautogui.click()
+                        pyautogui.click()
+                    
             else:
                 if 目标坐标x - 当前坐标x > 1 or 目标坐标x - 当前坐标x < -1 or 目标坐标y - 当前坐标y > 1 or 目标坐标y - 当前坐标y < -1:
                     cx = 目标坐标x - 当前坐标x
@@ -1188,12 +1189,11 @@ class MHWindow:
         self.F_选择仓库号(num)
         time.sleep(1)
         # 判断当前仓库是否为空
-        if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
-            print("仓库已满，寻找空仓库")
-            self.切换有空仓库()
         for x in range(15):
             self.F_选中仓库道具格子(x + 1)
             pyautogui.rightClick()
+            if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
+                self.切换有空仓库()
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(198, 110)

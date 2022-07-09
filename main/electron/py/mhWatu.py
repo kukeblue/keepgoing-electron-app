@@ -66,14 +66,17 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(deviceId, 仓库位置):
+def F_获取宝图信息(deviceId, 仓库位置='长安城'):
     time.sleep(3)
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    window.F_使用长安城飞行棋('化生寺出口')
+    if(仓库位置 == '长安城'):
+        window.F_小地图寻路器(['391', '238'])
+    else:
+        window.F_小地图寻路器(['18', '25'])
     pyautogui.hotkey('alt', 'e')
     time.sleep(1)
     point = window.checkpoint()
