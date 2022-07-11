@@ -75,8 +75,8 @@ def F_获取宝图信息(deviceId, 仓库位置='长安城'):
     window.focusWindow()
     if(仓库位置 == '长安城'):
         window.F_小地图寻路器(['391', '238'])
-    else:
-        window.F_小地图寻路器(['18', '25'])
+  
+        # window.F_小地图寻路器(['18', '25'])
     pyautogui.hotkey('alt', 'e')
     time.sleep(1)
     point = window.checkpoint()

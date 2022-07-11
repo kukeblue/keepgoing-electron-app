@@ -1,7 +1,6 @@
 # coding=utf-8
 from distutils.log import error
 from tkinter.messagebox import NO
-from cv2 import log
 import logUtil
 import pyautogui
 import sys
@@ -647,6 +646,7 @@ class MHWindow:
                         pyautogui.click()
                     time.sleep(1)
                     pyautogui.hotkey('alt', 'e')
+                    break
                 elif(navWay == False):
                     self.F_导航到傲来国()
                     if(path == '花果山出口'):
@@ -656,7 +656,6 @@ class MHWindow:
                     elif(path == '东海湾出口'):
                         self.F_小地图寻路器([177, 20], None)
                     time.sleep(1)
-                    break
                 else:
                     pyautogui.hotkey('alt', 'e')
                     time.sleep(1)
