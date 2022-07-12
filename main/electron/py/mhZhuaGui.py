@@ -39,7 +39,6 @@ def F_领取抓鬼任务(window):
     else:
         window.F_小地图寻路器(ret[1], None)
     pyautogui.press('f9')
-    time.sleep(1)
     window.F_点击战斗()
     window.F_自动战斗2()
     pyautogui.click()
