@@ -634,6 +634,9 @@ class MHWindow:
             desLocation = pointUtil.绿色长寿村导标旗坐标_钟书生Str
         elif(path == '绿色长寿村导标旗坐标_酒店'):
             desLocation = pointUtil.绿色长寿村导标旗坐标_酒店Str
+        elif(path == '长寿村飞行符坐标_飞行符'):
+            self.F_导航到长寿村()
+            return
         while(True):
             curLocation = self.获取当前坐标()
             if(desLocation in curLocation):
@@ -968,7 +971,8 @@ class MHWindow:
             距离 = abs(x - item[0][0]) + abs(y - item[0][1])
             距离集.append(距离)
         地点 = pointUtil.长寿村点集[距离集.index(min(距离集))][1]
-        坐标 = pointUtil.长寿村点集[距离集.index(min(距离集))][0]
+        # 坐标 = pointUtil.长寿村点集[距离集.index(min(距离集))][0]
+        print(地点)
         self.F_使用长寿村飞行棋(地点)
         # self.F_小地图寻路器([x,y])
         time.sleep(1)

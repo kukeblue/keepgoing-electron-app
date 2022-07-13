@@ -71,16 +71,13 @@ def F_使用天眼(window):
     pyautogui.hotkey('alt', 'e')
 
 
-if __name__ == '__main__':
-    fire.Fire({
-        'zg': 抓鬼,
-    })
-
 # if __name__ == '__main__':
-#     print('F_领取抓鬼任务')
-#     time.sleep(3)
-#     deviceId = str(9)
-#     MHWindow = mhWindow.MHWindow
-#     window = MHWindow(1, deviceId)
-#     window.findMhWindow()
-#     window.focusWindow()
+#     fire.Fire({
+#         'zg': 抓鬼,
+#     })
+
+if __name__ == '__main__':
+    print('F_领取抓鬼任务')
+    time.sleep(3)
+    deviceId = str(9)
+    抓鬼(deviceId)
