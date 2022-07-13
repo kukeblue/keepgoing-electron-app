@@ -10,6 +10,7 @@ import io
 import time
 import fire
 import pyautogui
+import pydirectinput
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -21,8 +22,9 @@ def 丢垃圾(deviceId):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    pyautogui.click()
+    pydirectinput.click()
     window.F_丢垃圾(15)
+
 
 if __name__ == '__main__':
     fire.Fire({

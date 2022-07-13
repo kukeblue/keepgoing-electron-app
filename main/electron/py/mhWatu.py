@@ -9,6 +9,7 @@ import io
 import time
 import fire
 import pyautogui
+import pydirectinput
 import networkApi
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
@@ -66,14 +67,17 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(deviceId, 仓库位置):
+def F_获取宝图信息(deviceId, 仓库位置='长安城'):
     time.sleep(3)
     deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    # window.F_使用长安城飞行棋('化生寺出口')
+    if(仓库位置 == '长安城'):
+        window.F_小地图寻路器(['391', '238'])
+    # else:
+    #     window.F_小地图寻路器(['18', '25'])
     pyautogui.hotkey('alt', 'e')
     time.sleep(1)
     point = window.checkpoint()
@@ -174,9 +178,9 @@ mapDictEntrance = {
     '狮驼岭': [347, 19],
     '东海湾': [186, 235],
     '大唐境外': [0, 0],
-    '朱紫国': [26, 256],
+    '朱紫国': [314, 56],
     '花果山': [0, 200],
-    '墨家村': [50, 200],
+    '墨家村': [167, 324],
     '傲来国': [0, 0],
     '长寿村': [0, 0],
 }
@@ -196,8 +200,8 @@ def F_点击宝图(window, deviceId, map, x, y, num):
     time.sleep(1)
     point = window.findImgInWindow(mapDict.get(map))
     window.pointMove(point[0] + x, point[1] + y)
-    pyautogui.click()
-    pyautogui.click()
+    pydirectinput.click()
+    pydirectinput.click()
     pyautogui.press('tab')
 
 
@@ -229,15 +233,15 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         if(point == None):
             point = window.findImgInWindow(mapDict.get(map))
         window.pointMove(point[0] + x, point[1] + y)
-        pyautogui.click()
-        pyautogui.click()
+        pydirectinput.click()
+        pydirectinput.click()
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
         window.F_是否结束寻路()
         pyautogui.press('tab')
         window.F_选中道具格子(int(num))
-        pyautogui.rightClick()
-        # pyautogui.rightClick()
+        pydirectinput.click(button="right")
+        # pydirectinput.click(button="right")
         window.F_自动战斗()
         pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
@@ -299,14 +303,14 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(694, 384)
-    pyautogui.rightClick()
+    pydirectinput.click(button="right")
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(355, 440)
-    pyautogui.click()
+    pydirectinput.click()
     window.F_移动到游戏区域坐标(403, 250)
-    pyautogui.rightClick()
+    pydirectinput.click(button="right")
     window.F_移动到游戏区域坐标(694, 384)
-    pyautogui.click()
+    pydirectinput.click()
     pyautogui.press('1')
     pyautogui.press('enter')
     pyautogui.hotkey('alt', 'f')

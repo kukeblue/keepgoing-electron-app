@@ -10,12 +10,13 @@ import io
 import time
 import fire
 import pyautogui
+import pydirectinput
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def 连点器(deviceId):
     while True:
-        pyautogui.click()
+          pydirectinput.click()
         time.sleep(1)
 
 
