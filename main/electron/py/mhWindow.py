@@ -324,12 +324,9 @@ class MHWindow:
             if(point == None):
                 point = self.findImgInWindow('all-duibiao-plus.png')
             if(point != None):
-<<<<<<< HEAD
                 pyautogui.moveTo(self.windowArea[0] + 500, self.windowArea[1] + 150)
                 pyautogui.rightClick()
                 time.sleep(0.1)
-=======
->>>>>>> 44895a65118d79b9884f2b068338d956e7d09a3b
                 pyautogui.hotkey('alt', '7')
                 time.sleep(0.5)
                 self.pointMove(point[0]+5, point[1] + 78)
@@ -751,19 +748,9 @@ class MHWindow:
                     break
                 elif(navWay == False):
                     self.F_导航到傲来国()
-<<<<<<< HEAD
-                    if(path == '花果山出口'):
-                        self.F_小地图寻路器([211, 142], None)
-                    elif(path == '女儿村出口'):
-                        self.F_小地图寻路器([6, 138], None)
-                    elif(path == '东海湾出口'):
-                        self.F_小地图寻路器([177, 20], None)
-                    time.sleep(1)
-=======
                     if('傲来国飞行符坐标_飞行符' != path):
                         self.F_小地图寻路器(pointUtil[path], None)
                     break
->>>>>>> 44895a65118d79b9884f2b068338d956e7d09a3b
                 else:
                     pyautogui.hotkey('alt', 'e')
                     time.sleep(1)
