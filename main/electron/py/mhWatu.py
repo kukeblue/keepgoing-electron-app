@@ -75,12 +75,12 @@ def F_获取宝图信息(deviceId, 仓库位置='长安城'):
     window.findMhWindow()
     window.focusWindow()
     if(仓库位置 == '长安城'):
-        window.F_小地图寻路器(['391', '238'])
-    # else:
-    #     window.F_小地图寻路器(['18', '25'])
+        window.F_小地图寻路器(['391', '238'], True)
+    else:
+        window.F_小地图寻路器(['18', '25'], True)
     pyautogui.hotkey('alt', 'e')
+    window.focusWindow()
     time.sleep(1)
-    point = window.checkpoint()
     points = window.findImgsInWindow('daoju_baotu.png')
     res = []
     for point in points:

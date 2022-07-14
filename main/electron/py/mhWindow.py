@@ -39,7 +39,7 @@ mapCangkuDict = {
 
 记录值 = {
     '满仓库遍历值': 2,
-    '仓库位置': '长安城'
+    '仓库位置': '长安城',
 }
 
 
@@ -133,7 +133,7 @@ class MHWindow:
 
     def findImgsInWindow(self, img):
         locations = pyautogui.locateAllOnScreen(
-            self.pyImageDir + self.F_获取设备图片(img), region=self.windowAreaGui, grayscale=False)
+            self.pyImageDir + self.F_获取设备图片(img), region=self.windowAreaGui, grayscale=False, confidence=0.75)
         ponits = []
         for location in locations:
             ponits.append([int(location.left / self.screenUnit), int(location.top / self.screenUnit),
@@ -179,7 +179,7 @@ class MHWindow:
                 if mx - dx > 3 or mx - dx < -3 or my - dy > 3 or my - dy < -3:
                     cx = mx - dx
                     cy = my - dy
-                    if(isFirstMove < 2):
+                    if(isFirstMove < 1):
                         pyautogui.move(cx / 2, cy / 2)
                         isFirstMove = isFirstMove + 1
                     else:
@@ -598,7 +598,22 @@ class MHWindow:
                     break
                 elif(navWay == False):
                     self.F_导航到朱紫国()
-                    self.F_小地图寻路器(pointUtil[path])
+                    if('朱紫国飞行符坐标_飞行符' != path):
+                        if(path == '白色朱紫国导标旗坐标_大唐境外'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_大唐境外)
+                        elif(path == '白色朱紫国导标旗坐标_麒麟山'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_麒麟山)
+                        elif(path == '白色朱紫国导标旗坐标_妖怪亲信'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_妖怪亲信)
+                        elif(path == '白色朱紫国导标旗坐标_酒店'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_酒店)
+                        elif(path == '白色朱紫国导标旗坐标_申太公'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_申太公)
+                        elif(path == '白色朱紫国导标旗坐标_小团团'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_小团团)
+                        elif(path == '白色朱紫国导标旗坐标_紫阳药师附近'):
+                            self.F_小地图寻路器(pointUtil.白色朱紫国导标旗坐标_紫阳药师附近)
+                        break
                     break
                 else:
                     pyautogui.hotkey('alt', 'e')
@@ -748,8 +763,21 @@ class MHWindow:
                 elif(navWay == False):
                     self.F_导航到傲来国()
                     if('傲来国飞行符坐标_飞行符' != path):
-                        self.F_小地图寻路器(pointUtil[path], None)
-                    break
+                        if(path == '黄色傲来国导标旗坐标_花果山'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_花果山)
+                        elif(path == '黄色傲来国导标旗坐标_女儿村'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_女儿村)
+                        elif(path == '黄色傲来国导标旗坐标_东海湾'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_东海湾)
+                        elif(path == '黄色傲来国导标旗坐标_布店'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_布店)
+                        elif(path == '黄色傲来国导标旗坐标_药店'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_药店)
+                        elif(path == '黄色傲来国导标旗坐标_兵器店'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_兵器店)
+                        elif(path == '黄色傲来国导标旗坐标_捕鱼人'):
+                            self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_捕鱼人)
+                        break
                 else:
                     pyautogui.hotkey('alt', 'e')
                     time.sleep(1)
@@ -1125,7 +1153,8 @@ class MHWindow:
                         elif(cy < -10):
                             cy = -10
                         pyautogui.move(cx, cy)
-                    pydirectinput.click()
+                        if(abs(cx) < 20 and abs(cy) < 10):
+                            pydirectinput.click()
                 else:
                     pydirectinput.click()
                     pydirectinput.click()
@@ -1162,7 +1191,12 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + x,
                        self.windowArea[1] + y, 是否战斗操作模式, 是否手指操作模式)
 
+
+    当前仓库 = 0
     def F_选择仓库号(self, num):
+        if(self.当前仓库 == num):
+            return
+        self.当前仓库 = num
         if(num == 1):
             self.F_移动到游戏区域坐标(180, 307)
         elif(num == 8):
@@ -1259,12 +1293,13 @@ class MHWindow:
         self.F_选择仓库号(num)
         time.sleep(1)
         # 判断当前仓库是否为空
-        if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
-            print("仓库已满，寻找空仓库")
-            self.切换有空仓库()
         for x in range(15):
+            if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area= (372, 235, 81, 65)) == None):
+                print("仓库已满，寻找空仓库")
+                self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             pydirectinput.click(button="right")
+            
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(198, 110)
@@ -1317,14 +1352,17 @@ class MHWindow:
             pydirectinput.click()
             time.sleep(1)
         num = mapCangkuDict.get(map)
-        self.F_选择仓库号(num)
-        time.sleep(1)
+        if(num - 5 < 1):
+            num = 1
+        else:
+            num = num - 5
+        记录值['满仓库遍历值'] = num
         # 判断当前仓库是否为空
         for x in range(15):
+            self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             pydirectinput.click(button="right")
-            if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
-                self.切换有空仓库()
+            
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(198, 110)
@@ -1344,11 +1382,12 @@ class MHWindow:
         while (记录值['满仓库遍历值'] <= 25):
             print(记录值['满仓库遍历值'])
             self.F_选择仓库号(记录值['满仓库遍历值'])
-            time.sleep(1)
-            if(self.findImgInWindow("all-kongcangku.png", 0.9, (384, 235, 60, 60)) == None):
+            time.sleep(0.2)
+            if(self.findImgInWindow("all-cangku-gezi.png", confidence=0.99, area=(372, 235, 81, 65)) == None):
                 print("不是空仓库")
                 记录值['满仓库遍历值'] = 记录值['满仓库遍历值'] + 1
             else:
+                print("是空仓库")
                 return
 
     def 获取当前坐标(self):
@@ -1461,7 +1500,7 @@ if __name__ == '__main__':
     window.focusWindow()
     time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
-    window.F_导航到傲来国智能(142, 131)
+    window.F_回仓库放东西('女儿村')
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
