@@ -170,28 +170,38 @@ class MHWindow:
         isFirstMove = 0
         mx = x - 20
         my = y - 16
+        safeAreaLeft = self.windowArea2[0] + 100
+        safeAreaRight = self.windowArea2[0] + 700
+        safeAreaTop = self.windowArea2[1] + 100
+        safeAreaBottom = self.windowArea2[1] + 500
+        isSafeArea = False
+        if(mx > safeAreaLeft and mx > safeAreaRight and my < safeAreaBottom and my  > safeAreaTop):
+            isSafeArea = True
         finished = False
         while not finished:
             point = self.checkpoint(战斗操作模式=战斗操作模式, 手指操作模式=手指操作模式)
             if(point != None):
                 dx = point[0] - 48
                 dy = point[1] - 38
-                if mx - dx > 3 or mx - dx < -3 or my - dy > 3 or my - dy < -3:
+                if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
                     if(isFirstMove < 1):
                         pyautogui.move(cx / 2, cy / 2)
                         isFirstMove = isFirstMove + 1
                     else:
-                        if(cx > 40):
-                            cx = 40
-                        elif(cx < -40):
-                            cx = -40
-                        if(dy > 30):
-                            dy = 30
-                        elif(dy < -30):
-                            dy = -30
-                        pyautogui.move(cx, cy)
+                        if(isSafeArea):
+                            pyautogui.move(cx, cy)
+                        else:
+                            if(cx > 40):
+                                cx = 40
+                            elif(cx < -40):
+                                cx = -40
+                            if(dy > 30):
+                                dy = 30
+                            elif(dy < -30):
+                                dy = -30
+                            pyautogui.move(cx, cy)
                 else:
                     finished = True
             real = pyautogui.position()
