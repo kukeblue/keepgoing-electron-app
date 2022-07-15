@@ -742,6 +742,7 @@ class MHWindow:
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[1])
                     elif(path == '黄色傲来国导标旗坐标_东海湾'):
+                       
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[1])
                     elif(path == '黄色傲来国导标旗坐标_布店'):
@@ -768,7 +769,9 @@ class MHWindow:
                         elif(path == '黄色傲来国导标旗坐标_女儿村'):
                             self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_女儿村)
                         elif(path == '黄色傲来国导标旗坐标_东海湾'):
+                            self.F_点击小地图出入口按钮()
                             self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_东海湾)
+                            self.F_点击小地图出入口按钮()
                         elif(path == '黄色傲来国导标旗坐标_布店'):
                             self.F_小地图寻路器(pointUtil.黄色傲来国导标旗坐标_布店)
                         elif(path == '黄色傲来国导标旗坐标_药店'):
@@ -833,19 +836,19 @@ class MHWindow:
         print('开始查找驿站老板')
         yz = None
         while yz is None:
-            yz1 = self.findImgInWindow('yz1.png')
+            yz1 = self.findImgInWindow('yz1.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz1 is not None:
                 yz = yz1
                 break
-            yz2 = self.findImgInWindow('yz2.png')
+            yz2 = self.findImgInWindow('yz2.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz2 is not None:
                 yz = yz2
                 break
-            yz3 = self.findImgInWindow('yz3.png')
+            yz3 = self.findImgInWindow('yz3.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz3 is not None:
                 yz = yz3
                 break
-            yz4 = self.findImgInWindow('yz4.png')
+            yz4 = self.findImgInWindow('yz4.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz4 is not None:
                 yz = yz4
                 break
@@ -895,7 +898,7 @@ class MHWindow:
     def F_导航到狮驼岭(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_大唐境外')
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        self.pointMove(self.windowArea[0] + 23, self.windowArea[1] + 512)
         pydirectinput.click()
         time.sleep(1)
         time.sleep(2)
@@ -906,7 +909,7 @@ class MHWindow:
     def F_导航到大唐境外(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_大唐境外')
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        self.pointMove(self.windowArea[0] + 23, self.windowArea[1] + 512)
         pydirectinput.click()
         time.sleep(1)
 
@@ -1500,7 +1503,7 @@ if __name__ == '__main__':
     window.focusWindow()
     time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
-    window.F_回仓库放东西('女儿村')
+    window.F_使用傲来国飞行棋('黄色傲来国导标旗坐标_东海湾')
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
