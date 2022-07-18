@@ -141,26 +141,27 @@ class MHWindow:
         return ponits
 
     def checkpoint(self, 战斗操作模式=False, 手指操作模式=False):
-        for x in range(3):
-            ret = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '306ca8', '1|0|285490,1|1|285490', 0.6, 0)
-            if(ret[1] > 0):
-                return (ret[1], ret[2])
-            ret2 = baiduApi.op.FindMultiColor(
-                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205890', '0|0|205890', 0.6, 0)
-            if(ret2[1] > 0):
-                return (ret2[1], ret2[2])
         if(战斗操作模式):
             ret = baiduApi.op.FindMultiColor(
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '884448', '4|4|f0ecb8,1|2|401c28,-1|-2|a84048,-4|-3|f0f8f0', 0.6, 0)
             if(ret[1] > 0):
-                return (ret[1], ret[2])
+                return (ret[1], ret[2], True)
         if(手指操作模式):
             for x in range(2):
                 ret = baiduApi.op.FindMultiColor(
                     self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], 'd86c30', '0|1|d86c30,1|4|c85030,6|-2|200000', 0.5, 0)
                 if(ret[1] > 0):
-                    return (ret[1], ret[2])
+                    return (ret[1], ret[2], True)
+        for x in range(3):
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '306ca8', '1|0|285490,1|1|285490', 0.6, 0)
+            if(ret[1] > 0):
+                return (ret[1], ret[2], False)
+            ret2 = baiduApi.op.FindMultiColor(
+                self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205890', '0|0|205890', 0.6, 0)
+            if(ret2[1] > 0):
+                return (ret2[1], ret2[2], False)
+        
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
@@ -180,6 +181,9 @@ class MHWindow:
         finished = False
         while not finished:
             point = self.checkpoint(战斗操作模式=战斗操作模式, 手指操作模式=手指操作模式)
+            if(point[2]):
+                finished = True
+                return
             if(point != None):
                 dx = point[0] - 48
                 dy = point[1] - 38
@@ -244,6 +248,15 @@ class MHWindow:
                 return False
         except:
             return False
+    
+    def 导航到活动人(self):
+        self.F_选中道具格子(1)
+        pydirectinput.click(button="right")
+        self.F_移动到游戏区域坐标(357, 327)
+        pydirectinput.click()
+        pyautogui.hotkey('alt', 'e')
+        
+
 
     def F_吃药(self):
         pyautogui.hotkey('alt', 'e')
@@ -1199,6 +1212,8 @@ class MHWindow:
             self.F_导航到朱紫国智能(int(point[0]), int(point[1]))
         elif('五庄观' in 任务):
             self.F_导航到五庄观()
+        elif('东海湾' in 任务):
+            self.F_导航到东海湾()
 
     def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False):
         self.pointMove(self.windowArea[0] + x,
