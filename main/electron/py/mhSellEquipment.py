@@ -10,7 +10,7 @@ import io
 import time
 import fire
 import pyautogui
-import pydirectinput
+import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -22,7 +22,7 @@ def 卖装备(deviceId):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    pydirectinput.click()
+    utils.click()
     window.F_卖装备(15)
 
 

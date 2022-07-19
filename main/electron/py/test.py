@@ -3,28 +3,52 @@
 import sys
 import os
 import string
-import win32com					#要下载对应的扩展程序,不明白的话，百度一下
 import win32com.client				#要下载对应的扩展程序,不明白的话，百度一下
 import pythoncom
 import time
+import win32api
+import win32con
 from ctypes import *
 from win32com.client import Dispatch
+import baiduApi
 
 
+hwnds = baiduApi.op.EnumWindow(0,"记事本","",1+4+8+16)
+print(hwnds)
+# ret = baiduApi.op.BindWindow(hwnds, "normal", "windows", "windows", 1);
+# print(ret)
+# baiduApi.op.MoveTo(100, 200)
+# baiduApi.op.LeftClick()
+# time.sleep(1)
+# win32api.SetCursorPos([30,150])
+# win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP | win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+# cx = 1009
+# cy = 100
+# long_position = win32api.MAKELONG(cx, cy)  # 模拟鼠标指针 传送到指定坐标
+# win32api.SendMessage(hwnds, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, long_position)  # 模拟鼠标按下
+# win32api.SendMessage(hwnds, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, long_position)  # 模拟鼠标弹起
+# baiduApi.op.KeyPressChar('9')
+
+# hwnds = split(hwnds,",")
+
+# txt_hwnd=baiduApi.op.FindWindow("","新建文本文档.txt - 记事本")
+# print(txt_hwnd)
+# print(baiduApi.op.GetWindowProcessPath(txt_hwnd))
+# print(baiduApi.op.SetWindowState(txt_hwnd,4))
 #osapi_dll = windll.LoadLibrary('OLE32')
 #osapi_dll.CoUninitialize()
 #osapi_dll.CoInitializeEx(0,0)
 
 #注册好爱插件
-a=os.system('regsvr32 haoi.dll')
-if a:
-	print("注册 haoi.dll 成功!")
-else:
-	print("注册 haoi.dll 失败!")
+# a=os.system('regsvr32 haoi.dll')
+# if a:
+# 	print("注册 haoi.dll 成功!")
+# else:
+# 	print("注册 haoi.dll 失败!")
 
 
 	
-haoi = Dispatch('haoi.dt')
+# haoi = Dispatch('haoi.dt')
 
 
 # soft_key = '1001|9A42B0F1BD994C75'											# 软件Key，用于设置作者返利

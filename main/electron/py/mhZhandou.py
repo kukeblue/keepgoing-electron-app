@@ -6,7 +6,7 @@ import io
 import time
 import fire
 import pyautogui
-import pydirectinput
+import utils
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -18,7 +18,7 @@ def 飞机队四人模式挂机():
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    pydirectinput.click()
+    utils.click()
     回合数 = 0
     while True:
         time.sleep(0.5)
@@ -78,7 +78,7 @@ def 飞机队操作(window):
     # 第一个号
     window.F_移动到游戏区域坐标(320, 230, True)
     pyautogui.press('f3')
-    pydirectinput.click()
+    utils.click()
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('ctrl', 'tab')
@@ -86,7 +86,7 @@ def 飞机队操作(window):
     # 第二个号
     window.F_移动到游戏区域坐标(320, 230, True)
     pyautogui.press('f3')
-    pydirectinput.click()
+    utils.click()
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('alt', 'q')
     pyautogui.hotkey('ctrl', 'tab')
