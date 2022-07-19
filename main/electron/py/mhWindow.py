@@ -81,10 +81,8 @@ class MHWindow:
             # pyautogui.screenshot(
             #     self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
             self.focusWindow()
-            real = pyautogui.position()
-            realX = real[0]
-            realY = real[1]
-            
+            utils.bindOp()
+
         else:
             print('未找到前台梦幻窗口')
 
@@ -160,7 +158,8 @@ class MHWindow:
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '884448', '4|4|f0ecb8,1|2|401c28,-1|-2|a84048,-4|-3|f0f8f0', 0.6, 0)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
-        if(手指操作模式):
+        if(
+            手指操作模式):
             for x in range(2):
                 ret = baiduApi.op.FindMultiColor(
                     self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], 'd86c30', '0|1|d86c30,1|4|c85030,6|-2|200000', 0.5, 0)
@@ -180,7 +179,7 @@ class MHWindow:
         safeAreaTop = self.windowArea2[1] + 100
         safeAreaBottom = self.windowArea2[1] + 500
         isSafeArea = False
-        if(mx > safeAreaLeft and mx > safeAreaRight and my < safeAreaBottom and my  > safeAreaTop):
+        if(mx > safeAreaLeft and mx > safeAreaRight and my < safeAreaBottom and my > safeAreaTop):
             isSafeArea = True
         finished = False
         while not finished:
@@ -757,7 +756,7 @@ class MHWindow:
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[1])
                     elif(path == '黄色傲来国导标旗坐标_东海湾'):
-                       
+
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[1])
                     elif(path == '黄色傲来国导标旗坐标_布店'):
@@ -851,19 +850,23 @@ class MHWindow:
         print('开始查找驿站老板')
         yz = None
         while yz is None:
-            yz1 = self.findImgInWindow('yz1.png', confidence=0.65, area=(303, 54, 379, 197))
+            yz1 = self.findImgInWindow(
+                'yz1.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz1 is not None:
                 yz = yz1
                 break
-            yz2 = self.findImgInWindow('yz2.png', confidence=0.65, area=(303, 54, 379, 197))
+            yz2 = self.findImgInWindow(
+                'yz2.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz2 is not None:
                 yz = yz2
                 break
-            yz3 = self.findImgInWindow('yz3.png', confidence=0.65, area=(303, 54, 379, 197))
+            yz3 = self.findImgInWindow(
+                'yz3.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz3 is not None:
                 yz = yz3
                 break
-            yz4 = self.findImgInWindow('yz4.png', confidence=0.65, area=(303, 54, 379, 197))
+            yz4 = self.findImgInWindow(
+                'yz4.png', confidence=0.65, area=(303, 54, 379, 197))
             if yz4 is not None:
                 yz = yz4
                 break
@@ -1209,8 +1212,8 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + x,
                        self.windowArea[1] + y, 是否战斗操作模式, 是否手指操作模式)
 
-
     当前仓库 = 0
+
     def F_选择仓库号(self, num):
         if(self.当前仓库 == num):
             return
@@ -1312,12 +1315,12 @@ class MHWindow:
         time.sleep(1)
         # 判断当前仓库是否为空
         for x in range(15):
-            if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area= (372, 235, 81, 65)) == None):
+            if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area=(372, 235, 81, 65)) == None):
                 print("仓库已满，寻找空仓库")
                 self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             utils.rightClick()
-            
+
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(198, 110)
@@ -1380,7 +1383,7 @@ class MHWindow:
             self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             utils.rightClick()
-            
+
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(198, 110)
@@ -1517,7 +1520,8 @@ if __name__ == '__main__':
     window.findMhWindow()
     time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
-    window.F_使用傲来国飞行棋('黄色傲来国导标旗坐标_东海湾')
+    window.F_选中道具格子(16)
+    utils.rightClick()
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())

@@ -11,20 +11,26 @@ op = Dispatch("op.opsoft")
 
 handle = 0
 
+
 def bindOp():
     real = pyautogui.position()
     global handle
-    handle= win32gui.WindowFromPoint((real[0], real[1]))
+    handle = win32gui.WindowFromPoint((real[0], real[1]))
     op.BindWindow(handle, "normal", "windows", "windows", 1)
+
 
 def click():
     global handle
     if(handle == 0):
         pyautogui.click()
     else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,win32con.WA_ACTIVE,0)
-        win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN,win32con.MK_LBUTTON)
-        win32gui.SendMessage(handle, win32con.WM_LBUTTONUP,win32con.MK_LBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
+                             win32con.WA_ACTIVE, 0)
+        win32gui.SendMessage(
+            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
+        win32gui.SendMessage(
+            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
+
 
 def doubleClick():
     global handle
@@ -32,21 +38,28 @@ def doubleClick():
         pyautogui.click()
         pyautogui.click()
     else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,win32con.WA_ACTIVE,0)
-        win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN,win32con.MK_LBUTTON)
-        win32gui.SendMessage(handle, win32con.WM_LBUTTONUP,win32con.MK_LBUTTON)
-        win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN,win32con.MK_LBUTTON)
-        win32gui.SendMessage(handle, win32con.WM_LBUTTONUP,win32con.MK_LBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
+                             win32con.WA_ACTIVE, 0)
+        win32gui.SendMessage(
+            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
+        win32gui.SendMessage(
+            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
+        win32gui.SendMessage(
+            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
+        win32gui.SendMessage(
+            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
+
 
 def rightClick():
     global handle
     if(handle == 0):
-        pyautogui.click()
+        pyautogui.rightClick()
     else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,win32con.WA_ACTIVE,0)
-        win32gui.SendMessage(handle, win32con.WM_RBUTTONDOWN,win32con.MK_RBUTTON)
-        win32gui.SendMessage(handle, win32con.WM_RBUTTONUP,win32con.MK_RBUTTON)
-    
+        win32gui.SendMessage(
+            handle, win32con.WM_RBUTTONDOWN, win32con.MK_RBUTTON)
+        win32gui.SendMessage(
+            handle, win32con.WM_RBUTTONUP, win32con.MK_RBUTTON)
+
 
 def getPointColor(x, y):
     return op.getColor(x, y)
