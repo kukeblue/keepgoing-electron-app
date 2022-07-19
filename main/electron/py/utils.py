@@ -30,6 +30,7 @@ def click():
             handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
         win32gui.SendMessage(
             handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
+        time.sleep(0.2)
 
 
 def doubleClick():
@@ -48,6 +49,7 @@ def doubleClick():
             handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
         win32gui.SendMessage(
             handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
+        time.sleep(0.2)
 
 
 def rightClick():
@@ -59,6 +61,7 @@ def rightClick():
             handle, win32con.WM_RBUTTONDOWN, win32con.MK_RBUTTON)
         win32gui.SendMessage(
             handle, win32con.WM_RBUTTONUP, win32con.MK_RBUTTON)
+        time.sleep(0.2)
 
 
 def getPointColor(x, y):
