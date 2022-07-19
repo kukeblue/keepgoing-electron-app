@@ -235,7 +235,6 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
             point = window.findImgInWindow(mapDict.get(map))
         window.pointMove(point[0] + x, point[1] + y)
         utils.click()
-        utils.click()
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
         window.F_是否结束寻路()
