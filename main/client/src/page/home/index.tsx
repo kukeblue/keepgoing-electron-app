@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, message, Modal, Popover, Row, Select, Switch } from 'antd'
+import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch } from 'antd'
 import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua } from "../../call";
 import { createContainer } from 'unstated-next'
 
 import {
@@ -47,6 +47,7 @@ function usePageStore() {
     const [modalMultipleAccountSelectShow, setModalMultipleAccountSelectShow] = useState(false)
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const [isTasking, setIsTasking] = useState<boolean>(false)
+    const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(false)
     const [cangkuPath, setCangkuPath] = useState<string>('长安城');
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
@@ -212,7 +213,15 @@ function usePageStore() {
         doZhandou(watuDeviceId)
     }
 
+    const hanghua = () => {
+        message.success('操作成功')
+        // @ts-ignore
+        doHanghua(window.hanghuaCount)
+    }
+
     return {
+        setsShowHanhu,
+        isShowHanhu,
         setCangkuPath,
         cangkuPath,
         zhandou,
@@ -253,7 +262,8 @@ function usePageStore() {
         handleTest2,
         getTaskLoading,
         handleGetWatuInfo,
-        handleChangeIsBeen
+        handleChangeIsBeen,
+        hanghua
     }
 }
 
@@ -422,13 +432,27 @@ function HomeFeature() {
                 <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
             </Col>
             <Col className="m-l-10">
-                <Button onClick={() => { pageStore.zhandou() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>2凌波战斗模式</Button>
+                <Button onClick={() => { pageStore.zhandou() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>2凌波战斗</Button>
             </Col>
-
+            <Col className="m-l-10">
+                <Button onClick={() => { pageStore.setsShowHanhu(true) }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动喊话</Button>
+            </Col>
         </Row>
         <div className="home-feature-panel">
             {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
         </div>
+        <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {
+            pageStore.hanghua()
+            pageStore.setsShowHanhu(false)
+
+        }} >
+            <div>
+                请输入喊话个数 <Input onChange={
+                    // @ts-ignore
+                    v => window.hanghuaCount = v.target.value
+                } />
+            </div>
+        </Modal>
     </div>
 
 }

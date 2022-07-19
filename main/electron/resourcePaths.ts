@@ -5,7 +5,6 @@ const resourcePaths = {
     MESSAGE_INIT_REPLY: 'message_init_replay',
 
 
-
     /* *******   主服务方法    ******* */
     METHOD_START_GAME: 'method_start_game',
     METHOD_START_GAME_REPLY: 'method_start_game_reply',
@@ -24,6 +23,7 @@ const resourcePaths = {
     METHOD_SELL_EQUIPMENT: 'sell_equipment',
     METHOD_CONNECTOR: 'method_connector',
     METHOD_ZHANDOU: 'method_zhandou',
+    METHOD_HANHUA: 'method_hanhua',
 
 
 
