@@ -91,9 +91,10 @@ def F_获取宝图信息(deviceId, 仓库位置='长安城'):
         res.append(mapAndpoint)
     jsonArr = json.dumps(res, ensure_ascii=False)
     pyautogui.hotkey('alt', 'e')
+    window.focusWindow()
     map = res[0][0]
     print(map)
-    time.sleep(2)
+    time.sleep(1)
     if(map == '江南野外'):
         window.F_导航到江南野外(仓库位置='长安城')
     elif(map == '狮驼岭'):
