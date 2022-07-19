@@ -2,10 +2,51 @@
 from pickle import TRUE
 import time
 import baiduApi
+import win32gui
+import win32api
+import win32con
+import pyautogui
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
-# ocr = PaddleOCR(use_angle_cls=True, use_gpu=True, show_log=False)
 
+handle = 0
+
+def bindOp():
+    real = pyautogui.position()
+    global handle
+    handle= win32gui.WindowFromPoint((real[0], real[1]))
+    op.BindWindow(handle, "normal", "windows", "windows", 1)
+
+def click():
+    global handle
+    if(handle == 0):
+        pyautogui.click()
+    else:
+        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,win32con.WA_ACTIVE,0)
+        win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN,win32con.MK_LBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_LBUTTONUP,win32con.MK_LBUTTON)
+
+def doubleClick():
+    global handle
+    if(handle == 0):
+        pyautogui.click()
+        pyautogui.click()
+    else:
+        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,win32con.WA_ACTIVE,0)
+        win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN,win32con.MK_LBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_LBUTTONUP,win32con.MK_LBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN,win32con.MK_LBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_LBUTTONUP,win32con.MK_LBUTTON)
+
+def rightClick():
+    global handle
+    if(handle == 0):
+        pyautogui.click()
+    else:
+        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,win32con.WA_ACTIVE,0)
+        win32gui.SendMessage(handle, win32con.WM_RBUTTONDOWN,win32con.MK_RBUTTON)
+        win32gui.SendMessage(handle, win32con.WM_RBUTTONUP,win32con.MK_RBUTTON)
+    
 
 def getPointColor(x, y):
     return op.getColor(x, y)
@@ -79,4 +120,5 @@ def getGameVerificationCode():
 
 if __name__ == "__main__":
     time.sleep(3)
-    writeText('ch.1993.com')
+    bindOp()
+    rightClick()

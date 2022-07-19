@@ -11,7 +11,7 @@ import io
 import time
 import fire
 import pyautogui
-import pydirectinput
+import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -23,16 +23,16 @@ def 铃铛(deviceId):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    pydirectinput.click()
+    utils.click()
     F_铃铛任务(window)
 
 
 def F_铃铛任务(window):
     window.F_移动到游戏区域坐标(173, 335)
     time.sleep(0.5)
-    pydirectinput.click()
+    utils.click()
     time.sleep(0.5)
-    pydirectinput.click()
+    utils.click()
     pyautogui.hotkey('alt', 'q')
     time.sleep(1)
     任务 = window.F_识别自定义任务()
@@ -68,10 +68,10 @@ def 找梦魔(window, 任务):
         window.F_点击战斗()
         time.sleep(0.5)
         window.F_移动到游戏区域坐标(275, 340)
-        pydirectinput.click()
+        utils.click()
         time.sleep(0.5)
         window.F_自动战斗2()
-        pydirectinput.click()
+        utils.click()
 
 
 def 使用招魂(window, 任务):
@@ -85,16 +85,16 @@ def 使用招魂(window, 任务):
             'all_ld_zht.png', area=(23, 270, 274, 230))
         if point != None:
             window.pointMove(point[0], point[1])
-            pydirectinput.click(button="right")
+            utils.rightClick()
             pyautogui.hotkey('alt', 'e')
             window.focusWindow()
-            pydirectinput.click()
+            utils.click()
             break
     time.sleep(5)
     window.F_点击战斗()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(275, 338)
-    pydirectinput.click()
+    utils.click()
     time.sleep(0.5)
     window.F_自动战斗2()
 
@@ -114,10 +114,10 @@ def 找巧智(window, 任务):
         window.F_点击战斗()
         time.sleep(0.5)
         window.F_移动到游戏区域坐标(275, 338)
-        pydirectinput.click()
+        utils.click()
         time.sleep(0.5)
         window.F_自动战斗2()
-        pydirectinput.click()
+        utils.click()
 
 
 def 找迷幻妖(window, 任务):
@@ -135,10 +135,10 @@ def 找迷幻妖(window, 任务):
         window.F_点击战斗(True)
         time.sleep(0.5)
         window.F_移动到游戏区域坐标(275, 340)
-        pydirectinput.click()
+        utils.click()
         time.sleep(0.5)
         window.F_自动战斗2()
-        pydirectinput.click()
+        utils.click()
 
 
 def 杀虫(window, 任务):
@@ -150,10 +150,10 @@ def 杀虫(window, 任务):
     window.F_点击战斗()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(275, 340)
-    pydirectinput.click()
+    utils.click()
     time.sleep(0.5)
     window.F_自动战斗2()
-    pydirectinput.click()
+    utils.click()
 
 
 def 放虫(window, 任务):
@@ -167,10 +167,10 @@ def 放虫(window, 任务):
             'all-chong.png', area=(23, 270, 274, 230))
         if point != None:
             window.pointMove(point[0], point[1])
-            pydirectinput.click(button="right")
+            utils.rightClick()
             pyautogui.hotkey('alt', 'e')
             window.focusWindow()
-            pydirectinput.click()
+            utils.click()
             return
 
 
