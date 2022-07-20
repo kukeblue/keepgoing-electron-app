@@ -16,7 +16,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 def 连点器(deviceId):
     while True:
-          pydirectinput.click()
+        pydirectinput.click()
         time.sleep(1)
 
 
