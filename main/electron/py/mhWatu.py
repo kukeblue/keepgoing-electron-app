@@ -9,7 +9,7 @@ import io
 import time
 import fire
 import pyautogui
-import pydirectinput
+import utils
 import networkApi
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
@@ -201,8 +201,8 @@ def F_点击宝图(window, deviceId, map, x, y, num):
     time.sleep(1)
     point = window.findImgInWindow(mapDict.get(map))
     window.pointMove(point[0] + x, point[1] + y)
-    pydirectinput.click()
-    pydirectinput.click()
+    utils.click()
+    utils.click()
     pyautogui.press('tab')
 
 
@@ -234,15 +234,14 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         if(point == None):
             point = window.findImgInWindow(mapDict.get(map))
         window.pointMove(point[0] + x, point[1] + y)
-        pydirectinput.click()
-        pydirectinput.click()
+        utils.click()
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
         window.F_是否结束寻路()
         pyautogui.press('tab')
         window.F_选中道具格子(int(num))
-        pydirectinput.click(button="right")
-        # pydirectinput.click(button="right")
+        utils.rightClick()
+        # utils.rightClick()
         window.F_自动战斗()
         pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
@@ -304,14 +303,14 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(694, 384)
-    pydirectinput.click(button="right")
+    utils.rightClick()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(355, 440)
-    pydirectinput.click()
+    utils.click()
     window.F_移动到游戏区域坐标(403, 250)
-    pydirectinput.click(button="right")
+    utils.rightClick()
     window.F_移动到游戏区域坐标(694, 384)
-    pydirectinput.click()
+    utils.click()
     pyautogui.press('1')
     pyautogui.press('enter')
     pyautogui.hotkey('alt', 'f')

@@ -14,8 +14,11 @@ export const doSellEquipment = (deviceId: number) => (window as any).ipcRenderer
 export const doConnector = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CONNECTOR, [deviceId])
 export const doZhandou = (deviceId: number) => {
     (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHANDOU, [deviceId])
-
 }
+export const doHanghua = (num: number) => {
+    (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_HANHUA, [num])
+}
+
 
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)

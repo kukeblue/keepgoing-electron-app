@@ -123,6 +123,15 @@ const init = (mainWindow: Electron.BrowserWindow) => {
         }
     })
     // 带队战斗
+    ipcMain.on(resourcePaths.METHOD_HANHUA, (event, args) => {
+        logger.info('run py script: METHOD_HANHUA')
+        const result = runPyScript('mhZhandou', ['hh', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    // 带队喊话
     ipcMain.on(resourcePaths.METHOD_ZHANDOU, (event, args) => {
         logger.info('run py script: METHOD_ZHANDOU')
         const result = runPyScript('mhZhandou', ['lbc', args[0]])

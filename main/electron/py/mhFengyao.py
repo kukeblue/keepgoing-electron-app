@@ -9,8 +9,9 @@ import sys
 import io
 import time
 import fire
+import utils
 import pyautogui
-import pydirectinput
+import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -28,10 +29,10 @@ def F_碗子山守护者(deviceId):
                 pyautogui.press('f5')
                 pyautogui.press('f5')
                 window.F_移动到游戏区域坐标(331, 549)
-                pydirectinput.click()
+                utils.click()
                 pyautogui.press('f2')
                 window.F_移动到游戏区域坐标(269, 418)
-                pydirectinput.click()
+                utils.click()
                 pyautogui.keyDown('ctrl')
                 pyautogui.press('tab')
                 pyautogui.keyUp('ctrl')
@@ -42,9 +43,9 @@ def F_碗子山守护者(deviceId):
                     # print(ret)
                     # if(ret != None):
                     window.F_移动到游戏区域坐标(189, 399)
-                    pydirectinput.click()
+                    utils.click()
                     window.F_移动到游戏区域坐标(331, 549)
-                    pydirectinput.click()
+                    utils.click()
                     pyautogui.keyDown('ctrl')
                     pyautogui.press('tab')
                     pyautogui.keyUp('ctrl')

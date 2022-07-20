@@ -11,7 +11,7 @@ import io
 import time
 import fire
 import pyautogui
-import pydirectinput
+import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -23,7 +23,7 @@ def 抓鬼(deviceId):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     window.focusWindow()
-    pydirectinput.click()
+    utils.click()
     while True:
         F_领取抓鬼任务(window)
 
@@ -42,7 +42,7 @@ def F_领取抓鬼任务(window):
     pyautogui.press('f9')
     window.F_点击战斗()
     window.F_自动战斗2()
-    pydirectinput.click()
+    utils.click()
 
 
 def F_领取钟馗任务(window):
@@ -50,14 +50,14 @@ def F_领取钟馗任务(window):
     pyautogui.press('f9')
     # 点击钟馗
     window.F_移动到游戏区域坐标(522, 332)
-    pydirectinput.doubleClick()
+    utils.doubleClick()
     time.sleep(1)
     # 好的我帮你
     if window.F_红色文字位置点击('我帮你'):
         # window.F_移动到游戏区域坐标(211, 340)
-        #   pydirectinput.click()
+        #   utils.click()
         time.sleep(1)
-        pydirectinput.click()
+        utils.click()
         F_使用天眼(window)
         time.sleep(1)
     else:
@@ -67,7 +67,7 @@ def F_领取钟馗任务(window):
 def F_使用天眼(window):
     window.F_选中道具格子(15)
     time.sleep(0.2)
-    pydirectinput.click(button="right")
+    utils.rightClick()
     time.sleep(0.5)
     pyautogui.hotkey('alt', 'e')
 
