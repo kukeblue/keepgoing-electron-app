@@ -277,7 +277,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长
                       x, y, num, other)
     window.F_点击小地图出入口按钮()
     window.F_回仓库放东西(map, 仓库位置)
-    window.F_选中道具格子(15)
+    window.F_选中道具格子(14)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
         networkApi.doReadyWatuTask(deviceId)

@@ -128,7 +128,7 @@ class MHWindow:
         return location
 
     def findImgInWindowReturnWindowPoint(self, img, confidence=0.75, area=(0, 0, 0, 0)):
-        point = self.findImgInWindow(img, confidence=0.75, area=(0, 0, 0, 0))
+        point = self.findImgInWindow(img, confidence=confidence, area=area)
         if(point != None):
             point[0] = point[0] - self.windowArea[0]
             point[1] = point[1] - self.windowArea[1]
@@ -190,7 +190,7 @@ class MHWindow:
                 if mx - dx > 2 or mx - dx < -2 or my - dy > 2 or my - dy < -2:
                     cx = mx - dx
                     cy = my - dy
-                    if(isFirstMove < 1):
+                    if(isFirstMove < 1 and isSafeArea == False):
                         pyautogui.move(cx / 2, cy / 2)
                         isFirstMove = isFirstMove + 1
                     else:
@@ -328,7 +328,7 @@ class MHWindow:
                 count = 0
                 坐标 = 坐标2
 
-    def F_点击战斗(self, 多次点击=False):
+    def F_点击战斗(self, 多次点击=False, 右键点击=False):
         self.F_移动到游戏区域坐标(574, 442)
         pyautogui.hotkey('alt', 'a')
         utils.rightClick()
@@ -340,8 +340,9 @@ class MHWindow:
                 pyautogui.hotkey('alt', '7')
                 time.sleep(0.5)
                 self.pointMove(point[0]+5, point[1] + 78)
-                pyautogui.hotkey('alt', 'a')
-                time.sleep(0.1)
+                if(右键点击 == False):
+                    pyautogui.hotkey('alt', 'a')
+                    time.sleep(0.1)
                 if(多次点击):
                     time.sleep(2)
                     utils.doubleClick()
@@ -506,6 +507,8 @@ class MHWindow:
             desLocation = pointUtil.红色长安城导标旗坐标_江南野外Str
         elif(path == '化生寺出口'):
             desLocation = pointUtil.红色长安城导标旗坐标_化生寺Str
+        elif(path == '红色长安城导标旗坐标_酒店'):
+            desLocation = pointUtil.红色长安城导标旗坐标_酒店Str
         while(True):
             curLocation = self.获取当前坐标()
             if(desLocation == curLocation):
@@ -528,6 +531,10 @@ class MHWindow:
                         self.pointMove(
                             self.windowArea[0] + 627, self.windowArea[1] + 169)
                         utils.click()
+                    elif(path == '红色长安城导标旗坐标_酒店'):
+                        self.pointMove(
+                            self.windowArea[0] + 583, self.windowArea[1] + 277)
+                        utils.click()
                     time.sleep(1)
                     pyautogui.hotkey('alt', 'e')
                     break
@@ -541,6 +548,8 @@ class MHWindow:
                         self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_江南野外, None)
                     elif(path == '化生寺出口'):
                         self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_化生寺, None)
+                    elif(path == '红色长安城导标旗坐标_酒店'):
+                        self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_酒店, None)
                     break
                 else:
                     pyautogui.hotkey('alt', 'e')
@@ -813,6 +822,13 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
         utils.click()
         time.sleep(3)
+    
+    def F_导航到酒店门口(self):
+        self.F_使用长安城飞行棋('大唐国境出口')
+        time.sleep(1)
+        self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
+        utils.click()
+        time.sleep(3)
 
     def F_导航到大唐国境驿站出口(self):
         while True:
@@ -916,7 +932,7 @@ class MHWindow:
     def F_导航到狮驼岭(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_大唐境外')
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
         utils.click()
         time.sleep(1)
         time.sleep(2)
@@ -927,7 +943,7 @@ class MHWindow:
     def F_导航到大唐境外(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_大唐境外')
         time.sleep(1)
-        self.pointMove(self.windowArea[0] + 76, self.windowArea[1] + 560)
+        self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
         utils.click()
         time.sleep(1)
 
@@ -1207,6 +1223,14 @@ class MHWindow:
             self.F_导航到朱紫国智能(int(point[0]), int(point[1]))
         elif('五庄观' in 任务):
             self.F_导航到五庄观()
+        elif('狮驼岭' in 任务):
+            self.F_导航到狮驼岭()
+        elif('花果山' in 任务):
+            self.F_导航到花果山()
+        elif('长寿郊外' in 任务):
+            self.F_导航到长寿郊外()
+        elif('东海湾' in 任务):
+            self.F_导航到东海湾()
 
     def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False):
         self.pointMove(self.windowArea[0] + x,
