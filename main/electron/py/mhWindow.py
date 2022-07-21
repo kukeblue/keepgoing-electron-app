@@ -1407,14 +1407,34 @@ class MHWindow:
             time.sleep(1)
             pyautogui.hotkey('alt', 'e')
             time.sleep(1)
+            while True:
+                point = self.findImgInWindowReturnWindowPoint(
+                    'all_tiantai_text.png')
+                if(point):
+                    self.F_移动到游戏区域坐标(227, 373)
+                    utils.click()
+                    time.sleep(1)
+                    break
+                else:
+                    self.F_小地图寻路器([354, 247], True)
+                    pyautogui.press('f9')
+                    self.F_移动到游戏区域坐标(286, 333)
+                    utils.click()
+                    utils.click()
+                    time.sleep(1)
         else:
             self.F_使用飞行符('建邺城')
             time.sleep(1)
             self.F_小地图寻路器([58, 32], True)
+            pyautogui.press('f9')
+            self.F_移动到游戏区域坐标(315, 275)
+            utils.click()
+            utils.click()
+            time.sleep(1)
+            self.F_移动到游戏区域坐标(218, 370)
+            utils.click()
+            time.sleep(1)
         pyautogui.hotkey('alt', 'f')
-        # self.F_移动到游戏区域坐标(678, 294)
-        # utils.click()
-        # pyautogui.write(接货id)
         self.F_移动到游戏区域坐标(642, 325)
         utils.rightClick()
         for x in range(1, 6):
@@ -1434,6 +1454,20 @@ class MHWindow:
         time.sleep(0.5)
         pyautogui.hotkey('alt', 'f')
         time.sleep(0.5)
+        self.F_选择仓库号(1)
+        time.sleep(1)
+        self.F_移动到游戏区域坐标(198, 110)
+        utils.rightClick()
+        time.sleep(1)
+        self.F_选中道具格子(1)
+        utils.rightClick()
+        time.sleep(1)
+        pyautogui.hotkey('alt', 'e')
+        time.sleep(1)
+        self.F_选中仓库道具格子(1)
+        utils.rightClick()
+        self.F_移动到游戏区域坐标(720, 35)
+        utils.rightClick()
 
     def F_回仓库放东西(self, map, 仓库地点='长安城'):
         self.F_选中道具格子(20)
