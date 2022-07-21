@@ -144,7 +144,8 @@ function Layout(props: LayoutProps) {
                 text: '退出登录',
                 icon: <TransactionOutlined style={{ fontSize: 24 }} />,
                 click: () => {
-                    history.push('/login')
+                    userStore.setIsLogin(false)
+                //    window.location.href = '/login'
                 }
             }
         ]

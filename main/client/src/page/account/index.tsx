@@ -9,6 +9,7 @@ function Account() {
             disablePagination
             urlAdd='/api/game_account/add_game_account'
             urlDelete='/api/game_account/delete_game_account'
+            urlUpdate='/api/game_account/add_game_account'
             columns={[
                 {
                     title: '名称',
@@ -24,6 +25,11 @@ function Account() {
                     title: '账号',
                     dataIndex: 'username',
                     key: 'username',
+                },
+                {
+                    title: '游戏服务器',
+                    dataIndex: 'gameServer',
+                    key: 'gameServer',
                 },
                 {
                     title: '运行手机',
@@ -69,7 +75,7 @@ function Account() {
                 },
                 {
                     type: FormItemType.input,
-                    label: 'gameServer（全部写0）',
+                    label: 'gameServer',
                     name: 'gameServer',
                     key: 'gameServer',
                 },
