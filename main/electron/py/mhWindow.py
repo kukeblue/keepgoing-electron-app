@@ -150,7 +150,7 @@ class MHWindow:
             if(ret[1] > 0):
                 return (ret[1], ret[2])
         if(
-            手指操作模式):
+                手指操作模式):
             for x in range(2):
                 ret = baiduApi.op.FindMultiColor(
                     self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], 'd86c30', '0|1|d86c30,1|4|c85030,6|-2|200000', 0.5, 0)
@@ -165,7 +165,6 @@ class MHWindow:
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '205890', '0|0|205890', 0.6, 0)
             if(ret2[1] > 0):
                 return (ret2[1], ret2[2], False)
-        
 
     def ClickInWindow(self, x, y):
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
@@ -252,15 +251,13 @@ class MHWindow:
                 return False
         except:
             return False
-    
+
     def 导航到活动人(self):
         self.F_选中道具格子(1)
         utils.click(button="right")
         self.F_移动到游戏区域坐标(357, 327)
         utils.click()
         pyautogui.hotkey('alt', 'e')
-        
-
 
     def F_吃药(self):
         pyautogui.hotkey('alt', 'e')
@@ -306,16 +303,15 @@ class MHWindow:
         return ret
 
     def F_识别4小人(self):
-        ret = baiduApi.F_大漠红色4小人弹框识别([self.windowArea[0], self.windowArea[1],
-                                     self.windowArea[0] + 600, self.windowArea[1] + 800])
+        ret = baiduApi.F_打图4小人识别([0, 0, 600, 800])
         if(ret != None):
-            x = ret[0]-30
-            y = ret[1]-30
+            x = ret[0]
+            y = ret[1]
             位置信息 = [x, y,
-                    400, 200]
+                    380, 180]
             print("找到")
             path = self.F_窗口区域截图('temp_4_person_info.png', 位置信息)
-            time.sleep(1)
+            time.sleep(2)
             data = networkApi.getPicPoint(path)
             if(data != '' and "," in data):
                 clickPoints = data.split(',')
@@ -835,7 +831,7 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
         utils.click()
         time.sleep(3)
-    
+
     def F_导航到酒店门口(self):
         self.F_使用长安城飞行棋('大唐国境出口')
         time.sleep(1)
@@ -1090,6 +1086,15 @@ class MHWindow:
         utils.click()
         time.sleep(1)
 
+    def F_导航到化生寺(self):
+        self.F_使用长安城飞行棋('化生寺出口')
+        time.sleep(0.5)
+        pyautogui.press('f9')
+        time.sleep(0.5)
+        self.pointMove(self.windowArea[0] + 479, self.windowArea[1] + 63)
+        utils.click()
+        time.sleep(3)
+
     def F_导航到花果山(self):
         self.F_使用傲来国飞行棋('黄色傲来国导标旗坐标_花果山')
         time.sleep(0.5)
@@ -1097,7 +1102,7 @@ class MHWindow:
         time.sleep(0.5)
         self.pointMove(self.windowArea[0] + 632, self.windowArea[1] + 103)
         utils.click()
-        time.sleep(4)
+        time.sleep(3)
 
     def F_导航到女儿村(self):
         self.F_使用傲来国飞行棋('黄色傲来国导标旗坐标_女儿村')
@@ -1244,6 +1249,12 @@ class MHWindow:
             self.F_导航到长寿郊外()
         elif('东海湾' in 任务):
             self.F_导航到东海湾()
+        elif('化生寺' in 任务):
+            self.F_导航到化生寺()
+        elif('地府' in 任务):
+            self.F_导航到地府()
+        elif('大唐国境' in 任务):
+            self.F_导航到大唐国境()
 
     def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False):
         self.pointMove(self.windowArea[0] + x,
@@ -1514,6 +1525,10 @@ class MHWindow:
             map = "长寿郊外"
         elif("女国" in str):
             map = "西梁女国"
+        elif("化生寺" in str):
+            map = "化生寺"
+        elif("地府" in str):
+            map = "地府"
         else:
             print('未匹配地图', str)
 
@@ -1554,11 +1569,12 @@ class MHWindow:
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
-    window.findMhWindow()
-    time.sleep(1)
+    # window.findMhWindow()
+    # time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
-    window.F_选中道具格子(16)
-    utils.rightClick()
+    # window.F_选中道具格子(16)
+    # utils.rightClick()
+    window.F_识别4小人()
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
