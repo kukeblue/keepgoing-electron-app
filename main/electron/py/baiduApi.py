@@ -80,12 +80,13 @@ def F_小地图出入口按钮识别(area):
 
 
 def F_打图4小人识别(area):
-    op.SetDict(0, pyZhikuDir + '\\baise.txt')
-    ret = op.FindStr(area[0], area[1], area[2], area[3],
-                     'qxz', "ffffff-000000", 0.7)
-    print(ret)
-    if(ret[0] > -1):
-        return [ret[1], ret[2]]
+    for x in range(2):
+        op.SetDict(0, pyZhikuDir + '\\baise.txt')
+        ret = op.FindStr(area[0], area[1], area[2], area[3],
+                         'qxz', "ffffff-000000", 0.7)
+        print(ret)
+        if(ret[0] > -1):
+            return [ret[1], ret[2]]
 
 
 def F_大漠小地图识别(area):

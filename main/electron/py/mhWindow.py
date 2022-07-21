@@ -149,8 +149,7 @@ class MHWindow:
                 self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], '884448', '4|4|f0ecb8,1|2|401c28,-1|-2|a84048,-4|-3|f0f8f0', 0.6, 0)
             if(ret[1] > 0):
                 return (ret[1], ret[2])
-        if(
-                手指操作模式):
+        if(手指操作模式):
             for x in range(2):
                 ret = baiduApi.op.FindMultiColor(
                     self.windowArea2[0], self.windowArea2[1], self.windowArea2[2], self.windowArea2[3], 'd86c30', '0|1|d86c30,1|4|c85030,6|-2|200000', 0.5, 0)
@@ -303,7 +302,8 @@ class MHWindow:
         return ret
 
     def F_识别4小人(self):
-        ret = baiduApi.F_打图4小人识别([0, 0, 600, 800])
+        ret = baiduApi.F_打图4小人识别([self.windowArea[0], self.windowArea[1],
+                                  self.windowArea[0] + 600, self.windowArea[1] + 800])
         if(ret != None):
             x = ret[0]
             y = ret[1]
@@ -311,15 +311,19 @@ class MHWindow:
                     380, 180]
             print("找到")
             path = self.F_窗口区域截图('temp_4_person_info.png', 位置信息)
-            time.sleep(2)
+            time.sleep(1)
             data = networkApi.getPicPoint(path)
             if(data != '' and "," in data):
                 clickPoints = data.split(',')
                 if(clickPoints[1]):
                     print('success')
+                    self.F_移动到游戏区域坐标(
+                        x+int(clickPoints[0]), y+int(clickPoints[1]))
+                    utils.click()
                     return True
             else:
-                print("识别失败")
+                print('识别失败')
+                raise Exception("识别失败")
         else:
             print("未找到")
 
@@ -362,7 +366,8 @@ class MHWindow:
             time.sleep(0.5)
 
     def F_自动战斗(self):
-        pyautogui.press('f9')
+        time.sleep(0.5)
+        self.F_识别4小人()
         for i in range(4):
             print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(1)
@@ -380,6 +385,7 @@ class MHWindow:
             time.sleep(1)
             if(self.F_是否在战斗()):
                 while(True):
+                    print('进入战斗')
                     time.sleep(1)
                     if(self.F_是否在战斗() == False):
                         finish = True
@@ -904,7 +910,7 @@ class MHWindow:
             utils.doubleClick()
             time.sleep(1)
             ret = baiduApi.F_大漠红色文字位置识别([self.windowArea[0], self.windowArea[1],
-                                        self.windowArea[0] + 600, self.windowArea[1] + 800], '我要去')
+                                         self.windowArea[0] + 600, self.windowArea[1] + 800], '我要去')
 
             if(ret != None):
                 self.pointMove(ret[0], ret[1])
@@ -1569,12 +1575,12 @@ class MHWindow:
 
 if __name__ == '__main__':
     window = MHWindow(1, '9')
-    # window.findMhWindow()
+    window.findMhWindow()
     # time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    window.F_识别4小人()
+    window.F_自动战斗2()
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
