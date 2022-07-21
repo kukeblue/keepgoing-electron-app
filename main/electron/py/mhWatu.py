@@ -324,13 +324,9 @@ def F_小蜜蜂模式(deviceId, 仓库位置, 接货id=''):
     window = MHWindow(1, deviceId)
     window.findMhWindow()
     pyautogui.hotkey('alt', 'e')
-
     while(True):
         window.F_选中道具格子(14)
         time.sleep(1)
-        pyautogui.hotkey('alt', 'e')
-        time.sleep(0.1)
-        pyautogui.hotkey('alt', 'e')
         point = window.findImgInWindow('daoju_baotu_large.png')
         if(point != None and point[0] > 0):
             pyautogui.hotkey('alt', 'e')
