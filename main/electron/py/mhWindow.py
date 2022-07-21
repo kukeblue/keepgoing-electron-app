@@ -1429,10 +1429,11 @@ class MHWindow:
             # 给予
             self.F_移动到游戏区域坐标(404, 498)
             utils.click()
-        self.focusWindow()
+        self.F_移动到游戏区域坐标(406, 323)
         utils.rightClick()
         time.sleep(0.5)
         pyautogui.hotkey('alt', 'f')
+        time.sleep(0.5)
 
     def F_回仓库放东西(self, map, 仓库地点='长安城'):
         self.F_选中道具格子(20)
