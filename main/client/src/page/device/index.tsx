@@ -15,7 +15,6 @@ function Device() {
             <div className='device-list'>
                 <ChTablePanel
                     ref={pageStore.tableRef}
-                    disablePagination
                     columns={[
                         {
                             title: '名称',
@@ -161,13 +160,6 @@ function Device() {
                         }
                     ]} />
             </div>
-            {/*<div className='device-preview'>*/}
-            {/*    <div className='device-body'>*/}
-            {/*        <iframe frameBorder={0} id='appBody' width='100%' height='100%' src={pageStore.currentPhoneUrl}/>*/}
-            {/*    </div>*/}
-            {/*    <Button onClick={()=>pageStore.setCurrentPhoneUrl('')} className='m-t-20'>关闭连接</Button>*/}
-            {/*    <div>{pageStore.currentPhoneUrl}</div>*/}
-            {/*</div>*/}
         </div>
     </div>
 }

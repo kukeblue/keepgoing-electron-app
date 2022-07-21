@@ -96,29 +96,16 @@ function task() {
                     render:(v)=><div style={{width: '100px'}}>{pageStore.deviceMap[v] && pageStore.deviceMap[v].name}</div>
                 },
                 {
+                    title: '服务器',
+                    dataIndex: 'gameServer',
+                    key: 'gameServer',
+                },
+                {
                     title: '角色',
                     dataIndex: 'accountId',
                     key: 'accountId',
                     render:(v)=><div style={{width: '100px'}}>{pageStore.accountMap[v] && pageStore.accountMap[v].name}</div>
                 },
-                // {
-                //     title: '开始时间',
-                //     dataIndex: 'startTime',
-                //     key: 'startTime',
-                //     render: (_, o)=> <div style={{width: '100px'}}>{!o.startTime ? "" : ChUtils.chFormats.formatDate(o.startTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
-                // },
-                // {
-                //     title: '结束时间',
-                //     dataIndex: 'endTime',
-                //     key: 'endTime',
-                //     render: (_, o)=> <div style={{width: '100px'}}>{!o.endTime ? "" : ChUtils.chFormats.formatDate(o.endTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
-                // },
-                // {
-                //     title: '最后更新时间',
-                //     dataIndex: 'updateTime',
-                //     key: 'updateTime',
-                //     render: (_, o)=> <div style={{width: '100px'}}>{!o.updateTime ? "" : ChUtils.chFormats.formatDate(o.updateTime *1000, 'YY-MM-DD hh:mm:ss')}</div>
-                // },
                 {
                     title: '状态',
                     dataIndex: 'status',
@@ -127,22 +114,17 @@ function task() {
                         {v}
                         </div>
                 },
-                {
-                    title: '任务次数',
-                    dataIndex: 'taskCount',
-                    key: 'taskCount',
-                    render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
-                },
-                {
-                    title: '预计收入',
-                    dataIndex: 'income',
-                    key: 'income',
-                    render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
-                },
                 // {
-                //     title: '任务日志',
-                //     dataIndex: 'note',
-                //     key: 'note',
+                //     title: '任务次数',
+                //     dataIndex: 'taskCount',
+                //     key: 'taskCount',
+                //     render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
+                // },
+                // {
+                //     title: '预计收入',
+                //     dataIndex: 'income',
+                //     key: 'income',
+                //     render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
                 // },
                 {
                     title: '操作',
