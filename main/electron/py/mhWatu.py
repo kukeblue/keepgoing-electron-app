@@ -67,12 +67,13 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(deviceId, 仓库位置='长安城'):
-    time.sleep(3)
+def F_获取宝图信息(deviceId, 仓库位置='长安城', window=None):
     deviceId = str(deviceId)
-    MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
-    window.findMhWindow()
+    time.sleep(3)
+    if(window == None):
+        MHWindow = mhWindow.MHWindow
+        window = MHWindow(1, deviceId)
+        window.findMhWindow()
     window.focusWindow()
     if(仓库位置 == '长安城'):
         window.F_小地图寻路器(['391', '238'], True)
@@ -250,10 +251,10 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
                       point['realY'], point['index'], newOther)
 
 
-num = 1
+loop = 1
 
 
-def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长安城'):
+def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长安城', 接货id=''):
     deviceId = str(deviceId)
     print('点击小地图', deviceId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -276,16 +277,16 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长
             F_点击宝图并寻路(window, deviceId, map,
                       x, y, num, other)
     window.F_点击小地图出入口按钮()
-    window.F_回仓库放东西(map, 仓库位置)
+    if(接货id != None and 接货id != ''):
+        window.F_回仓库丢小号(接货id, 仓库位置)
+    else:
+        window.F_回仓库放东西(map, 仓库位置)
     window.F_选中道具格子(14)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
         networkApi.doReadyWatuTask(deviceId)
         while(True):
-            time.sleep(20)
-            if(num > 30):
-                break
-            num = num + 1
+            time.sleep(10)
             # 关闭打开
             pyautogui.hotkey('alt', 'e')
             time.sleep(0.1)
@@ -316,8 +317,27 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(deviceId, 仓库位置):
-    F_获取宝图信息(deviceId, 仓库位置)
+def F_小蜜蜂模式(deviceId, 仓库位置, 接货id=''):
+    deviceId = str(deviceId)
+    time.sleep(3)
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1, deviceId)
+    window.findMhWindow()
+    pyautogui.hotkey('alt', 'e')
+    window.F_选中道具格子(14)
+    time.sleep(1)
+    while(True):
+        pyautogui.hotkey('alt', 'e')
+        time.sleep(0.1)
+        pyautogui.hotkey('alt', 'e')
+        point = window.findImgInWindow('daoju_baotu_large.png')
+        if(point != None and point[0] > 0):
+            pyautogui.hotkey('alt', 'e')
+            window.F_点击自动()
+            F_获取宝图信息(deviceId, 仓库位置, window)
+            break
+        time.sleep(10)
+        print('等待宝图')
 
 
 if __name__ == '__main__':

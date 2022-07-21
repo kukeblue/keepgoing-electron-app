@@ -214,10 +214,10 @@ function ChMhMapTool({
             otherPoint.splice(index - 1, 1)
             let otherJson = JSON.stringify(otherPoint)
             // @ts-ignore
-            doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson, window.isBee, cangkuPath)
+            doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson, window.isBee, cangkuPath, window.acceptId)
         } else {
             // @ts-ignore
-            doGetWatuClickMap(deviceId, mapName, x, y, index, undefined, window.isBee, cangkuPath)
+            doGetWatuClickMap(deviceId, mapName, x, y, index, undefined, window.isBee, cangkuPath, window.acceptId)
         }
     }
 

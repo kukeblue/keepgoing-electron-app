@@ -75,11 +75,11 @@ function usePageStore() {
         doKillProcess(pid)
         message.success('操作成功')
     }
-    const handleGetWatuInfo = (deviceId: number) => {
+    const handleGetWatuInfo = (deviceId: number, acceptId: string) => {
         if (isBee) {
-            doBee(deviceId, cangkuPath)
+            doBee(deviceId, cangkuPath, acceptId)
         } else {
-            doGetWatuInfo(deviceId, cangkuPath)
+            doGetWatuInfo(deviceId, cangkuPath, acceptId)
         }
     }
 
@@ -117,7 +117,7 @@ function usePageStore() {
                 // @ts-ignore
                 if (window.isBee) {
                     // @ts-ignore
-                    doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
+                    doGetWatuClickMap(...window.beeData, true, window.cangkuPath, window.acceptId)
                 }
             }, 1000)
         }
@@ -136,8 +136,12 @@ function usePageStore() {
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
+                if (res.acceptId) {
+                    // @ts-ignore
+                    window.acceptId = res.acceptId
+                }
                 watuDeviceId = res.deviceId
-                handleGetWatuInfo(res.deviceId)
+                handleGetWatuInfo(res.deviceId, res.acceptId)
                 setShowSelectDeviceModal(false)
             }
         })
@@ -369,6 +373,8 @@ function HomeGameArea() {
                 <ChForm form={pageStore.formRef} formData={[
                     {
                         type: FormItemType.select, label: '选择设备', name: 'deviceId', options: pageStore.deviceOptions
+                    }, {
+                        type: FormItemType.input, label: '接货角色Id', name: 'acceptId'
                     },
                 ]} />
             </div>

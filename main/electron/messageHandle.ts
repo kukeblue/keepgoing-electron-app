@@ -85,7 +85,6 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
-
     // 关闭所有进程
     ipcMain.on(resourcePaths.METHOD_CLOSE_ALL_TASK, (event, args) => {
         logger.info('run py script: METHOD_CLOSE_ALL_TASK')
@@ -143,7 +142,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')
-        const result = runPyScript('mhWatu', ['bee', args[0], args[1]])
+        const result = runPyScript('mhWatu', ['bee', args[0], args[1], args[2]])
         event.returnValue = {
             code: result,
             status: 0

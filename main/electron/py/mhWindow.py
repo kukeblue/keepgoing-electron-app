@@ -1,5 +1,6 @@
 # coding=utf-8
 from distutils.log import error
+from pickle import TRUE
 from tkinter.messagebox import NO
 from cv2 import log
 import logUtil
@@ -425,6 +426,13 @@ class MHWindow:
     def F_选中收购商格子(self, num):
         firstBlockX = self.windowArea[0] + 306
         firstBlockY = self.windowArea[1] + 178
+        left = ((num-1) % 5) * 50
+        height = math.floor((num-1) / 5) * 50
+        self.pointMove(firstBlockX + left, firstBlockY + height)
+
+    def F_选中给予格子(self, num):
+        firstBlockX = self.windowArea[0] + 299
+        firstBlockY = self.windowArea[1] + 139
         left = ((num-1) % 5) * 50
         height = math.floor((num-1) / 5) * 50
         self.pointMove(firstBlockX + left, firstBlockY + height)
@@ -1002,7 +1010,7 @@ class MHWindow:
 
     def F_导航到五庄观(self):
         self.F_导航到大唐国境驿站出口()
-        self.F_小地图寻路器([8, 76])
+        self.F_小地图寻路器([8, 76], True)
         pyautogui.press('f9')
         self.F_移动到游戏区域坐标(40, 222)
         utils.doubleClick()
@@ -1390,6 +1398,42 @@ class MHWindow:
         self.F_移动到游戏区域坐标(720, 35)
         utils.rightClick()
 
+    def F_回仓库丢小号(self, 接货id, 仓库地点='长安城'):
+        self.F_选中道具格子(20)
+        utils.rightClick()
+        if(仓库地点 == '长安城'):
+            self.pointMove(self.windowArea[0] + 507, self.windowArea[1] + 282)
+            utils.click()
+            time.sleep(1)
+            pyautogui.hotkey('alt', 'e')
+            time.sleep(1)
+        else:
+            self.F_使用飞行符('建邺城')
+            time.sleep(1)
+            self.F_小地图寻路器([58, 32], True)
+        pyautogui.hotkey('alt', 'f')
+        # self.F_移动到游戏区域坐标(678, 294)
+        # utils.click()
+        # pyautogui.write(接货id)
+        self.F_移动到游戏区域坐标(642, 325)
+        utils.rightClick()
+        for x in range(1, 6):
+            self.F_移动到游戏区域坐标(538, 438)
+            utils.click()
+            self.F_选中给予格子(3*(x-1) + 1)
+            utils.click()
+            self.F_选中给予格子((3 * (x-1)) + 2)
+            utils.click()
+            self.F_选中给予格子((3 * (x-1)) + 3)
+            utils.click()
+            # 给予
+            self.F_移动到游戏区域坐标(404, 498)
+            utils.click()
+        self.focusWindow()
+        utils.rightClick()
+        time.sleep(0.5)
+        pyautogui.hotkey('alt', 'f')
+
     def F_回仓库放东西(self, map, 仓库地点='长安城'):
         self.F_选中道具格子(20)
         utils.rightClick()
@@ -1580,7 +1624,7 @@ if __name__ == '__main__':
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    window.F_自动战斗2()
+    window.F_回仓库丢小号('24832665')
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
