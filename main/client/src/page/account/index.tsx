@@ -6,7 +6,6 @@ import {ChTablePanel, FormItemType} from "ch-ui";
 function Account() {
     return <div className='home'>
         <ChTablePanel
-            disablePagination
             urlAdd='/api/game_account/add_game_account'
             urlDelete='/api/game_account/delete_game_account'
             urlUpdate='/api/game_account/add_game_account'

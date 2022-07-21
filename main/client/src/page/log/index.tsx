@@ -154,7 +154,8 @@ function Log() {
                     dataIndex: 'note',
                     key: 'note',
                 },
-            ]}  url='/api/task_log/get_task_log_page'
+            ]}  
+            url='/api/task_log/get_task_log_page'
             formData={[]}/>
     </div>
 }
