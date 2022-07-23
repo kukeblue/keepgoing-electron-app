@@ -139,6 +139,9 @@ function usePageStore() {
                 if (res.acceptId) {
                     // @ts-ignore
                     window.acceptId = res.acceptId
+                }else {
+                    // @ts-ignore
+                    window.acceptId = "0"
                 }
                 watuDeviceId = res.deviceId
                 handleGetWatuInfo(res.deviceId, res.acceptId)

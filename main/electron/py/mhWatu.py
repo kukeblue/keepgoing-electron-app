@@ -277,7 +277,7 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长
             F_点击宝图并寻路(window, deviceId, map,
                       x, y, num, other)
     window.F_点击小地图出入口按钮()
-    if(接货id != None and 接货id != ''):
+    if(接货id != None and 接货id != '' and 接货id != '0'):
         window.F_回仓库丢小号(接货id, 仓库位置)
     else:
         window.F_回仓库放东西(map, 仓库位置)
