@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { UserStore } from "../store/userStore"
+import { HomePageStore } from "../page/home"
 import './index.less'
 import { ChLayout } from 'ch-ui'
 import { Breadcrumb, Popover, Menu } from 'antd';
@@ -160,8 +161,9 @@ function Layout(props: LayoutProps) {
 
 export default (props: LayoutProps) => {
     // @ts-ignore
-    return <UserStore.Provider>
+    return <UserStore.Provider> <HomePageStore.Provider>
         <Layout {...props} />
+        </HomePageStore.Provider>
     </UserStore.Provider>
 }
 

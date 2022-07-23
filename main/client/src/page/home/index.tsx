@@ -31,7 +31,7 @@ type TWatuInfo = {
 let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice' | 'handleSelectZhuaGuiDevice'
 let watuDeviceId = 0
 let zhuaGuiDeviceId = 0
-function usePageStore() {
+export function usePageStore() {
     useEffect(() => {
         MainThread.messageListener.pushLogHandles = [handlePushLog]
         MainThread.messageListener.pushStateHandles = [handlePushState]
@@ -273,6 +273,8 @@ function usePageStore() {
 
 export const PageStore = createContainer(usePageStore)
 
+export const HomePageStore = PageStore
+
 function ModalMultipleAccountSelect() {
     const pageStore = PageStore.useContainer()
     const [formRef] = useForm()
@@ -464,11 +466,11 @@ function HomeFeature() {
 }
 function Home() {
     // @ts-ignore
-    return <PageStore.Provider><div className='flex home-page page'>
+    return <div className='flex home-page page'>
         <ModalMultipleAccountSelect />
         <HomeGameArea />
         <HomeFeature />
-    </div></PageStore.Provider>
+    </div>
 }
 
 export default Home
