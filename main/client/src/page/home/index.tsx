@@ -136,7 +136,7 @@ export function usePageStore() {
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
-                if (res.acceptId) {
+                if (res.acceptId && res.acceptId != '' ) {
                     // @ts-ignore
                     window.acceptId = res.acceptId
                 }else {
@@ -144,7 +144,8 @@ export function usePageStore() {
                     window.acceptId = "0"
                 }
                 watuDeviceId = res.deviceId
-                handleGetWatuInfo(res.deviceId, res.acceptId)
+                // @ts-ignore
+                handleGetWatuInfo(res.deviceId, window.acceptId)
                 setShowSelectDeviceModal(false)
             }
         })

@@ -75,10 +75,13 @@ def F_获取宝图信息(deviceId, 仓库位置='长安城', window=None):
         window = MHWindow(1, deviceId)
         window.findMhWindow()
     window.focusWindow()
-    if(仓库位置 == '长安城'):
-        window.F_小地图寻路器(['391', '238'], True)
-    else:
-        window.F_小地图寻路器(['18', '25'], True)
+    # if(仓库位置 == '长安城'):
+    #     window.F_小地图寻路器(['391', '238'], True)
+    # else:
+    #     window.F_小地图寻路器(['18', '25'], True)
+    window.医宝宝()
+    time.sleep(0.5)
+    utils.click()
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
     time.sleep(1)
@@ -234,6 +237,10 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         point = window.findImgInWindow(mapDict.get(map))
         if(point == None):
             point = window.findImgInWindow(mapDict.get(map))
+        if(point == None):
+            pyautogui.press('tab')
+            time.sleep(1)
+            point = window.findImgInWindow(mapDict.get(map))
         window.pointMove(point[0] + x, point[1] + y)
         utils.click()
         pyautogui.moveTo(
@@ -277,27 +284,30 @@ def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长
             F_点击宝图并寻路(window, deviceId, map,
                       x, y, num, other)
     window.F_点击小地图出入口按钮()
-    if(接货id != None and 接货id != '' and 接货id != '0'):
+    if(接货id != None and 接货id != '' and 接货id != 0 and 接货id != '0' ):
         window.F_回仓库丢小号(接货id, 仓库位置)
     else:
         window.F_回仓库放东西(map, 仓库位置)
-    window.F_选中道具格子(14)
+    window.F_选中道具格子(1)
     if(isBeen):
         # 小蜜蜂模式必须图满了才能发车
         networkApi.doReadyWatuTask(deviceId)
         while(True):
-            time.sleep(10)
+            time.sleep(5)
             # 关闭打开
             pyautogui.hotkey('alt', 'e')
             time.sleep(0.1)
             pyautogui.hotkey('alt', 'e')
             point = window.findImgInWindow('daoju_baotu_large.png')
             if(point != None and point[0] > 0):
+                time.sleep(10)
                 pyautogui.hotkey('alt', 'e')
                 window.F_点击自动()
                 F_小蜜蜂模式(deviceId, 仓库位置)
                 break
             print('等待宝图')
+
+
 
 
 def F_邀请发图(window):
@@ -325,10 +335,11 @@ def F_小蜜蜂模式(deviceId, 仓库位置, 接货id=''):
     window.findMhWindow()
     pyautogui.hotkey('alt', 'e')
     while(True):
-        window.F_选中道具格子(14)
+        window.F_选中道具格子(1)
         time.sleep(1)
         point = window.findImgInWindow('daoju_baotu_large.png')
         if(point != None and point[0] > 0):
+            time.sleep(15)
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
             F_获取宝图信息(deviceId, 仓库位置, window)
