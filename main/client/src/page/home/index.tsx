@@ -456,10 +456,8 @@ function HomeFeature() {
         <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {
             pageStore.hanghua()
             pageStore.setsShowHanhu(false)
-
         }} >
-            <div>
-                请输入喊话个数 <Input onChange={
+            <div>请输入喊话个数 <Input onChange={
                     // @ts-ignore
                     v => window.hanghuaCount = v.target.value
                 } />
