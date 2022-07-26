@@ -10,11 +10,7 @@ function Login() {
     const userStore = UserStore.useContainer()
     const [formRef] = useForm()
     const handleClickLoginButton = () => {
-        // userStore.setUser({
-        //     id: 1,
-        //     username: 'kuke',
-        //     password: '123456'
-        // })
+        
         // userStore.setIsLogin(true)
         formRef.validateFields().then(
         (user)=>  ChUtils.Ajax.request({
@@ -22,15 +18,17 @@ function Login() {
             data: user,
             method: 'post'
         }).then((res:{
-            data: string,
+            data: {
+                token: string,
+                user: any,
+            },
             status: number,
         })=> {
             if(res.data) {
-                userStore.setUser(user)
+                userStore.setUser(res.data.user)
                 userStore.setIsLogin(true)
-                userStore.setToken(res.data)
+                userStore.setToken(res.data.token)
                 // @ts-ignore
-
             }
         }))
         // () => {
