@@ -1255,7 +1255,9 @@ class MHWindow:
             pyautogui.press('delete')
         pyautogui.write(id)
         self.F_移动到游戏区域坐标(657, 133)
+        time.sleep(0.5)
         utils.rightClick()
+        time.sleep(0.5)
 
     def 医宝宝(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_麒麟山')
@@ -1468,6 +1470,7 @@ class MHWindow:
             utils.click()
             time.sleep(1)
             self.F_移动到游戏区域坐标(218, 370)
+            time.sleep(0.5)
             utils.click()
             time.sleep(1)
         logUtil.chLog('接货id:' + str(接货id))
