@@ -60,11 +60,11 @@ export function usePageStore() {
     const handlePushLog = (log: string) => { setLogs((logs) => [...logs, log]) }
     const handlePushState = (processState: any) => { setProcessState(processState) }
     const handleClickPreviewDevice = (device: TDevice) => {
-        const owurl = `http://127.0.0.1:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
+        const owurl = `http://192.168.0.100:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
     }
     const handleClickLinkDevice = (device: TDevice) => {
-        const owurl = `http://127.0.0.1:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
+        const owurl = `http://192.168.0.100:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
         setTimeout(() => {
             // @ts-ignore
