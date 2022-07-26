@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch } from 'antd'
+import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs } from 'antd'
 import { TDevice } from "../../typing";
 import "./index.less";
 import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
 import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua } from "../../call";
 import { createContainer } from 'unstated-next'
-
+const { TabPane } = Tabs;
 import {
     DownCircleOutlined,
     ClearOutlined,
@@ -48,7 +48,7 @@ export function usePageStore() {
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
-    const [isBee, setIsBee] = useState<boolean>(false)
+    const [isBee, setIsBee] = useState<boolean>(true)
     const [cangkuPath, setCangkuPath] = useState<string>('长安城');
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
@@ -60,11 +60,11 @@ export function usePageStore() {
     const handlePushLog = (log: string) => { setLogs((logs) => [...logs, log]) }
     const handlePushState = (processState: any) => { setProcessState(processState) }
     const handleClickPreviewDevice = (device: TDevice) => {
-        const owurl = `http://103.100.210.203:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
+        const owurl = `http://192.168.0.100:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
     }
     const handleClickLinkDevice = (device: TDevice) => {
-        const owurl = `http://103.100.210.203:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
+        const owurl = `http://192.168.0.100:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
         setTimeout(() => {
             // @ts-ignore
@@ -136,16 +136,12 @@ export function usePageStore() {
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
-                if (res.acceptId && res.acceptId != '' ) {
+                if (res.acceptId) {
                     // @ts-ignore
                     window.acceptId = res.acceptId
-                }else {
-                    // @ts-ignore
-                    window.acceptId = "0"
                 }
                 watuDeviceId = res.deviceId
-                // @ts-ignore
-                handleGetWatuInfo(res.deviceId, window.acceptId)
+                handleGetWatuInfo(res.deviceId, res.acceptId)
                 setShowSelectDeviceModal(false)
             }
         })
@@ -390,7 +386,75 @@ function HomeGameArea() {
 function HomeFeature() {
     const pageStore = PageStore.useContainer()
     return <div className='home-feature'>
-        <Row>
+        <div></div>
+        <Tabs type="card" defaultActiveKey="1"  style={{ marginBottom: 32 }}>
+            <TabPane tab="通用功能" key="1">
+                <Row>
+                    <Col>
+                        <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
+                    </Col>
+                    <Col className="m-l-10">
+                        <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
+                    </Col>
+                    <Col className="m-l-10">
+                        <Button onClick={() => { pageStore.setsShowHanhu(true) }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动喊话</Button>
+                    </Col>
+                </Row>
+            </TabPane>
+            <TabPane tab="挖图" key="2">
+                <Row>
+                    <Col><div style={{'marginLeft':'10px'}}>挖图配置:</div></Col>
+                    <Col>
+                        <Select size="small" style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v) => {
+                            // @ts-ignore
+                            window.cangkuPath = v; pageStore.setCangkuPath(v)
+                        }}>
+                            <Select.Option value="长安城">长安城</Select.Option>
+                            <Select.Option value="建邺城">建邺城</Select.Option>
+                        </Select>
+                    </Col>
+                    <Col>
+                        <div style={{ marginLeft: 20 }}>
+                            <span style={{ color: '#000' }}>小蜜蜂模式</span>： <Switch size="small" checked={pageStore.isBee} onChange={(e) => {
+                                pageStore.handleChangeIsBeen(e);
+                            }} />
+                        </div>
+                    </Col>
+                   
+                </Row>
+                <br/>
+                <Row>
+                    <Col>
+                        <Button onClick={() => {
+                            selectDeviceFunc = 'handleSelectWatuDevice'
+                            pageStore.setShowSelectDeviceModal(true)
+                        }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>开始挖图</Button>
+                    </Col>
+                    <Col className="m-l-10">
+                        <Button onClick={() => { pageStore.sellEquipment() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
+                    </Col>
+                    <Col className="m-l-10">
+                        <Button onClick={() => { pageStore.throwLitter() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
+                    </Col>
+                </Row>
+            </TabPane>
+            <TabPane tab="抓鬼" key="3">
+                <Row>
+                    <Col>
+                        <Button onClick={() => {
+                            selectDeviceFunc = 'handleSelectZhuaGuiDevice'
+                            pageStore.setShowSelectDeviceModal(true)
+                        }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
+                    </Col>
+                </Row>
+            </TabPane>
+            <TabPane tab="其他" key="4">
+                <Row>
+
+                </Row>
+            </TabPane>
+        </Tabs>
+        {/* <Row>
             <Col>
                 <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本1</Button>
             </Col>
@@ -407,13 +471,7 @@ function HomeFeature() {
                 }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>挖图位置解析</Button>
             </Col>
 
-            <Col>
-                <div style={{ marginLeft: 20 }}>
-                    <span style={{ color: '#000' }}>小蜜蜂模式</span>： <Switch checked={pageStore.isBee} onChange={(e) => {
-                        pageStore.handleChangeIsBeen(e);
-                    }} />
-                </div>
-            </Col>
+            
             <Col>
                 <Select style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v) => {
                     // @ts-ignore
@@ -423,8 +481,8 @@ function HomeFeature() {
                     <Select.Option value="建邺城">建邺城</Select.Option>
                 </Select>
             </Col>
-        </Row>
-        <Row className='m-t-10'>
+        </Row> */}
+        {/* <Row className='m-t-10'>
             <Col>
                 <Button onClick={() => {
                     selectDeviceFunc = 'handleSelectZhuaGuiDevice'
@@ -443,23 +501,19 @@ function HomeFeature() {
             <Col className="m-l-10">
                 <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
             </Col>
-            <Col className="m-l-10">
-                <Button onClick={() => { pageStore.zhandou() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>2凌波战斗</Button>
-            </Col>
+            
             <Col className="m-l-10">
                 <Button onClick={() => { pageStore.setsShowHanhu(true) }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动喊话</Button>
             </Col>
-        </Row>
+        </Row> */}
         <div className="home-feature-panel">
             {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
         </div>
         <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {
             pageStore.hanghua()
             pageStore.setsShowHanhu(false)
-
         }} >
-            <div>
-                请输入喊话个数 <Input onChange={
+            <div>请输入喊话个数 <Input onChange={
                     // @ts-ignore
                     v => window.hanghuaCount = v.target.value
                 } />

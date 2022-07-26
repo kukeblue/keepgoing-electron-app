@@ -50,8 +50,9 @@ function Header() {
         return item && item != ""
     })
     const pathCount = paths.length
-    console.log(paths)
-    return <div className='flex'>
+    const userStore = UserStore.useContainer()
+    const username = userStore.user?.username
+    return <div className='flex p-header'>
         <div>
             <Breadcrumb>
                 {
@@ -69,6 +70,10 @@ function Header() {
                 {/*</Breadcrumb.Item>*/}
                 {/*<Breadcrumb.Item>An Application</Breadcrumb.Item>*/}
             </Breadcrumb>
+        </div>
+        <div className='user-avatar'>
+            <div>当前账号: {username}</div>
+            <div>vip到期时间: 永久</div>
         </div>
     </div>
 }
@@ -115,16 +120,9 @@ function Layout(props: LayoutProps) {
             },
             {
                 text: '任务管理',
-                icon: <Popover visible={visiblePopoverId == 'taskPopover'} className='layout-task-menu' placement="right" content={
-                    <Menu style={{ width: 150, textAlign: 'center' }} mode="inline">
-                        <Menu.Item key="9" onClick={(e) => { handleClickMenu(e, '/task/task_list') }}>任务列表</Menu.Item>
-                        <Menu.Item key="10" onClick={(e) => { handleClickMenu(e, '/task/task_config') }}>任务配置</Menu.Item>
-                    </Menu>
-                } trigger="click">
-                    <CalendarOutlined style={{ fontSize: 24 }} />
-                </Popover>,
+                icon: <CalendarOutlined style={{ fontSize: 24 }} />,
                 click: () => {
-                    setVisiblePopoverId('taskPopover')
+                    history.push('/task/task_list')
                 }
             },
             {

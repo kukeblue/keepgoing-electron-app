@@ -3,7 +3,7 @@ import { createContainer } from "unstated-next"
 import { TUser } from "../typing";
 import {ChUtils} from "ch-ui";
 function useUserStore() {
-    const [user, setUser] = useState<TUser>()
+    const [user, setUser] = useState<TUser>(!!localStorage.getItem('token') ? JSON.parse(localStorage.getItem('user')!): null )
     const [isLogin, setIsLogin] = useState<boolean>(!!localStorage.getItem('token'))
     const [token, setToken] = useState<string>(localStorage.getItem('token') || '')
     useEffect(()=>{
