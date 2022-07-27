@@ -51,12 +51,10 @@ class MHWindow:
     windowAreaGui = (0, 0, 0, 0)
     pyHome = __file__.strip('mhWindow.py')
     pyImageDir = pyHome + 'config\images'
-    deviceId = ''
 
-    def __init__(self, screenUnit, deviceId):
+    def __init__(self, screenUnit):
         print('init')
         self.screenUnit = screenUnit
-        self.deviceId = deviceId
 
     def F_获取设备图片(self, img):
         if('all' in img):
@@ -66,6 +64,9 @@ class MHWindow:
 
     def getTruthPx(self, num):
         return num * self.screenUnit
+
+    def 吃红蓝():
+        print('吃红蓝')
 
     def findMhWindow(self):
         x, y, w, h = self.findPicture('window_top_left_point.png')
@@ -269,12 +270,12 @@ class MHWindow:
         pyautogui.hotkey('alt', 'e')
         try:
             point = self.findImgInWindow(
-                'all_lanwan.png', area=(97, 438, 149, 495))
+                'all_lanwan.png', area=(0, 479, 286, 60))
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.rightClick()
             point = self.findImgInWindow(
-                'all_hongwan.png', area=(149, 438, 200, 495))
+                'all_hongwan.png', area=(0, 479, 286, 60))
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.rightClick()
@@ -1691,13 +1692,13 @@ class MHWindow:
 
 
 if __name__ == '__main__':
-    window = MHWindow(1, '9')
+    window = MHWindow(1)
     window.findMhWindow()
     # time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    window.F_打开好友信息页面('30133419')
+    window.F_吃药()
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())

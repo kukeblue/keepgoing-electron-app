@@ -67,18 +67,14 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(deviceId, 仓库位置='长安城', window=None):
-    deviceId = str(deviceId)
+def F_获取宝图信息(userId, 仓库位置='长安城', window=None):
+    userId = str(userId)
     time.sleep(3)
     if(window == None):
         MHWindow = mhWindow.MHWindow
-        window = MHWindow(1, deviceId)
+        window = MHWindow(1, userId)
         window.findMhWindow()
     window.focusWindow()
-    # if(仓库位置 == '长安城'):
-    #     window.F_小地图寻路器(['391', '238'], True)
-    # else:
-    #     window.F_小地图寻路器(['18', '25'], True)
     window.医宝宝()
     time.sleep(0.5)
     utils.click()
@@ -191,11 +187,11 @@ mapDictEntrance = {
 }
 
 
-def F_点击宝图(window, deviceId, map, x, y, num):
-    deviceId = str(deviceId)
-    print('点击小地图', deviceId, x, y)
+def F_点击宝图(window, userId, map, x, y, num):
+    userId = str(userId)
+    print('点击小地图', userId, x, y)
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
+    window = MHWindow(1, userId)
     window.findMhWindow()
     window.focusWindow()
     # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
@@ -251,6 +247,7 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         utils.rightClick()
         # utils.rightClick()
         window.F_自动战斗()
+        window.F_吃药()
         pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)
@@ -261,11 +258,11 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
 loop = 1
 
 
-def F_点击小地图(deviceId, map, x, y, num, other, isBeen, 仓库位置='长安城', 接货id=''):
-    deviceId = str(deviceId)
-    print('点击小地图', deviceId, x, y)
+def F_点击小地图(userId, map, x, y, num, other, isBeen, 仓库位置='长安城', 接货id=''):
+    userId = str(userId)
+    print('点击小地图', userId, x, y)
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
+    window = MHWindow(1, userId)
     window.findMhWindow()
     window.focusWindow()
     if(other == None):
