@@ -1441,6 +1441,7 @@ class MHWindow:
         self.F_选中道具格子(20)
         utils.rightClick()
         if(仓库地点 == '长安城'):
+            print('invoke1')
             self.pointMove(self.windowArea[0] + 507, self.windowArea[1] + 282)
             utils.click()
             time.sleep(1)
@@ -1462,6 +1463,7 @@ class MHWindow:
                     utils.click()
                     time.sleep(1)
         else:
+            print('invoke')
             self.F_使用飞行符('建邺城')
             time.sleep(1)
             self.F_小地图寻路器([58, 32], True)
@@ -1477,6 +1479,15 @@ class MHWindow:
         logUtil.chLog('接货id:' + str(接货id))
         self.F_打开好友信息页面(str(接货id))
         for x in range(1, 6):
+            self.F_移动到游戏区域坐标(538, 438)
+            utils.click()
+            self.F_选中给予格子(3*(x-1) + 1)
+            utils.click()
+            self.F_选中给予格子((3 * (x-1)) + 2)
+            utils.click()
+            self.F_选中给予格子((3 * (x-1)) + 3)
+            utils.click()
+            time.sleep(0.5)
             self.F_移动到游戏区域坐标(538, 438)
             utils.click()
             self.F_选中给予格子(3*(x-1) + 1)
@@ -1698,7 +1709,7 @@ if __name__ == '__main__':
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    window.F_吃药()
+    window.F_回仓库丢小号(30133419,'建邺城')
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
