@@ -422,10 +422,10 @@ class MHWindow:
             left = ((num-1) % 5) * 50
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
-
+   
     def F_选中仓库道具格子(self, num):
-        firstBlockX = self.windowArea[0] + 500
-        firstBlockY = self.windowArea[1] + 113
+        firstBlockX = self.windowArea[0] + 453
+        firstBlockY = self.windowArea[1] + 248
         left = ((num-1) % 5) * 50
         height = math.floor((num-1) / 5) * 50
         self.pointMove(firstBlockX + left, firstBlockY + height)
@@ -1320,55 +1320,55 @@ class MHWindow:
             return
         self.当前仓库 = num
         if(num == 1):
-            self.F_移动到游戏区域坐标(180, 307)
+            self.F_移动到游戏区域坐标(131, 441)
         elif(num == 8):
-            self.F_移动到游戏区域坐标(180, 350)
+            self.F_移动到游戏区域坐标(131, 483)
         elif(num == 9):
-            self.F_移动到游戏区域坐标(200, 348)
+            self.F_移动到游戏区域坐标(152, 484)
         elif(num == 10):
-            self.F_移动到游戏区域坐标(220, 348)
+            self.F_移动到游戏区域坐标(174, 483)
         elif(num == 11):
-            self.F_移动到游戏区域坐标(243, 348)
+            self.F_移动到游戏区域坐标(195, 482)
         elif(num == 12):
-            self.F_移动到游戏区域坐标(263, 348)
+            self.F_移动到游戏区域坐标(216, 482)
         elif(num == 13):
-            self.F_移动到游戏区域坐标(285, 348)
+            self.F_移动到游戏区域坐标(236, 482)
         elif(num == 14):
-            self.F_移动到游戏区域坐标(305, 348)
+            self.F_移动到游戏区域坐标(256, 482)
         elif(num == 15):
-            self.F_移动到游戏区域坐标(325, 348)
+            self.F_移动到游戏区域坐标(276, 482)
         elif(num == 16):
-            self.F_移动到游戏区域坐标(347, 348)
+            self.F_移动到游戏区域坐标(296, 482)
         elif(num == 17):
-            self.F_移动到游戏区域坐标(180, 374)
+            self.F_移动到游戏区域坐标(130, 506)
         elif(num == 18):
-            self.F_移动到游戏区域坐标(200, 374)
+            self.F_移动到游戏区域坐标(154, 510)
         elif(num == 19):
-            self.F_移动到游戏区域坐标(228, 374)
+            self.F_移动到游戏区域坐标(175, 510)
         elif(num == 20):
-            self.F_移动到游戏区域坐标(248, 374)
+            self.F_移动到游戏区域坐标(194, 507)
         elif(num == 21):
-            self.F_移动到游戏区域坐标(263, 371)
+            self.F_移动到游戏区域坐标(215, 507)
         elif(num == 22):
-            self.F_移动到游戏区域坐标(288, 374)
+            self.F_移动到游戏区域坐标(235, 507)
         elif(num == 23):
-            self.F_移动到游戏区域坐标(308, 374)
+            self.F_移动到游戏区域坐标(255, 507)
         elif(num == 24):
-            self.F_移动到游戏区域坐标(329, 374)
+            self.F_移动到游戏区域坐标(275, 507)
         elif(num == 25):
-            self.F_移动到游戏区域坐标(348, 374)
+            self.F_移动到游戏区域坐标(299, 507)
         elif(num == 2):
-            self.F_移动到游戏区域坐标(202, 312)
+            self.F_移动到游戏区域坐标(152, 436)
         elif(num == 3):
-            self.F_移动到游戏区域坐标(225, 312)
+            self.F_移动到游戏区域坐标(172, 436)
         elif(num == 4):
-            self.F_移动到游戏区域坐标(245, 312)
+            self.F_移动到游戏区域坐标(192, 436)
         elif(num == 5):
-            self.F_移动到游戏区域坐标(269, 312)
+            self.F_移动到游戏区域坐标(212, 436)
         elif(num == 6):
-            self.F_移动到游戏区域坐标(289, 312)
+            self.F_移动到游戏区域坐标(232, 436)
         elif(num == 7):
-            self.F_移动到游戏区域坐标(309, 312)
+            self.F_移动到游戏区域坐标(252, 436)
         utils.click()
 
     def F_回到天台(self):
@@ -1416,7 +1416,7 @@ class MHWindow:
         time.sleep(1)
         # 判断当前仓库是否为空
         for x in range(15):
-            if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area=(372, 235, 81, 65)) == None):
+            if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area=(323, 370, 49, 49)) == None):
                 print("仓库已满，寻找空仓库")
                 self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
@@ -1424,16 +1424,18 @@ class MHWindow:
 
         self.F_选择仓库号(1)
         time.sleep(1)
-        self.F_移动到游戏区域坐标(198, 110)
+        self.F_移动到游戏区域坐标(144, 240)
         utils.rightClick()
         time.sleep(1)
         self.F_选中道具格子(1)
         utils.rightClick()
         time.sleep(1)
-        pyautogui.hotkey('alt', 'e')
-        time.sleep(1)
         self.F_选中仓库道具格子(1)
         utils.rightClick()
+        self.F_移动到游戏区域坐标(689, 142)
+        utils.click()
+        time.sleep(0.5)
+        pyautogui.hotkey('alt', 'e')
         self.F_移动到游戏区域坐标(720, 35)
         utils.rightClick()
 
@@ -1441,7 +1443,6 @@ class MHWindow:
         self.F_选中道具格子(20)
         utils.rightClick()
         if(仓库地点 == '长安城'):
-            print('invoke1')
             self.pointMove(self.windowArea[0] + 507, self.windowArea[1] + 282)
             utils.click()
             time.sleep(1)
@@ -1463,7 +1464,6 @@ class MHWindow:
                     utils.click()
                     time.sleep(1)
         else:
-            print('invoke')
             self.F_使用飞行符('建邺城')
             time.sleep(1)
             self.F_小地图寻路器([58, 32], True)
@@ -1488,8 +1488,6 @@ class MHWindow:
             self.F_选中给予格子((3 * (x-1)) + 3)
             utils.click()
             time.sleep(0.5)
-            self.F_移动到游戏区域坐标(538, 438)
-            utils.click()
             self.F_选中给予格子(3*(x-1) + 1)
             utils.click()
             self.F_选中给予格子((3 * (x-1)) + 2)
@@ -1506,16 +1504,20 @@ class MHWindow:
         time.sleep(0.5)
         self.F_选择仓库号(1)
         time.sleep(1)
-        self.F_移动到游戏区域坐标(198, 110)
+        self.F_移动到游戏区域坐标(144, 240)
         utils.rightClick()
         time.sleep(1)
         self.F_选中道具格子(1)
         utils.rightClick()
-        time.sleep(1)
+        time.sleep(0.5)
         pyautogui.hotkey('alt', 'e')
-        time.sleep(1)
+        time.sleep(0.5)
         self.F_选中仓库道具格子(1)
         utils.rightClick()
+        time.sleep(0.5)
+        self.F_移动到游戏区域坐标(689, 142)
+        utils.click()
+        time.sleep(0.5)
         self.F_移动到游戏区域坐标(720, 35)
         utils.rightClick()
 
@@ -1566,19 +1568,23 @@ class MHWindow:
             self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             utils.rightClick()
-
+        
         self.F_选择仓库号(1)
         time.sleep(1)
-        self.F_移动到游戏区域坐标(198, 110)
+        self.F_移动到游戏区域坐标(144, 240)
         utils.rightClick()
         time.sleep(1)
         self.F_选中道具格子(1)
         utils.rightClick()
-        time.sleep(1)
+        time.sleep(0.5)
         pyautogui.hotkey('alt', 'e')
-        time.sleep(1)
+        time.sleep(0.5)
         self.F_选中仓库道具格子(1)
         utils.rightClick()
+        time.sleep(0.5)
+        self.F_移动到游戏区域坐标(689, 142)
+        utils.click()
+        time.sleep(0.5)
         self.F_移动到游戏区域坐标(720, 35)
         utils.rightClick()
 
@@ -1587,7 +1593,7 @@ class MHWindow:
             print(记录值['满仓库遍历值'])
             self.F_选择仓库号(记录值['满仓库遍历值'])
             time.sleep(0.2)
-            if(self.findImgInWindow("all-cangku-gezi.png", confidence=0.99, area=(372, 235, 81, 65)) == None):
+            if(self.findImgInWindow("all-cangku-gezi.png", 0.99, area=(323, 370, 49, 49)) == None):
                 print("不是空仓库")
                 记录值['满仓库遍历值'] = 记录值['满仓库遍历值'] + 1
             else:
@@ -1701,6 +1707,11 @@ class MHWindow:
             utils.click()
         pyautogui.press('tab')
 
+    def 准备工作(self):
+        pyautogui.hotkey('alt', '~')
+        self.F_移动到游戏区域坐标(339, 552)
+        utils.click()
+
 
 if __name__ == '__main__':
     window = MHWindow(1)
@@ -1709,7 +1720,7 @@ if __name__ == '__main__':
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    window.F_回仓库丢小号(30133419,'建邺城')
+    
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
