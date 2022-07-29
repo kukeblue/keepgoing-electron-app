@@ -1,11 +1,37 @@
 import { Button } from 'antd';
 import React from "react";
 import './index.less'
-import {ChTablePanel, FormItemType} from "ch-ui";
+import { ChTablePanel, FormItemType } from "ch-ui";
 
 function Account() {
     return <div className='home'>
         <ChTablePanel
+            searchFormData={[
+                {
+                    label: '服务器',
+                    name: 'gameServer',
+                    type: FormItemType.input,
+                    layout: {
+                        span: 4
+                    }
+                }, {
+                    label: '名字',
+                    name: 'name',
+                    type: FormItemType.input,
+                    layout: {
+                        offset: 1,
+                        span: 4
+                    }
+                }, {
+                    label: '游戏id',
+                    name: 'nickName',
+                    type: FormItemType.input,
+                    layout: {
+                        offset: 1,
+                        span: 4
+                    }
+                }
+            ]}
             urlAdd='/api/game_account/add_game_account'
             urlDelete='/api/game_account/delete_game_account'
             urlUpdate='/api/game_account/add_game_account'
@@ -91,7 +117,7 @@ function Account() {
                         value: '离线',
                     }]
                 }
-            ]}/>
+            ]} />
     </div>
 }
 

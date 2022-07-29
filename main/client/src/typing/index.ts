@@ -63,6 +63,19 @@ export type TGameAccount = {
     gameServer: string,
 }
 
+
+export type TGameRole = {
+    id?: number
+    accoutId: number
+    userId: number
+    gameServer: string
+    name: string
+    gameId: string
+    groupId: number,
+    work: string
+    status: string
+}
+
 // *********************** 日志相关 ******************************
 
 export type TaskLogType = "launch" | "info" | "warn" | "error"
@@ -86,4 +99,12 @@ export type TUser = {
     id?: number
     username: string
     password: string
+}
+
+// ********************** 挖图相关 ********************************
+export type TWatuGroup = {
+    id?: number
+    name: string
+    userId: number
+    gameServer: string
 }

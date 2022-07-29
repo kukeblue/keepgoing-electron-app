@@ -114,18 +114,6 @@ function task() {
                         {v}
                         </div>
                 },
-                // {
-                //     title: '任务次数',
-                //     dataIndex: 'taskCount',
-                //     key: 'taskCount',
-                //     render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
-                // },
-                // {
-                //     title: '预计收入',
-                //     dataIndex: 'income',
-                //     key: 'income',
-                //     render: (v: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined)=><div style={{width: '80px'}}>{v}</div>
-                // },
                 {
                     title: '操作',
                     dataIndex: 'option',
