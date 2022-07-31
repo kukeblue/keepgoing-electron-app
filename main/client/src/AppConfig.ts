@@ -1,7 +1,7 @@
 // import {ChUtils} from "ch-ui";
 //
 // ChUtils.Ajax.RequestConfig.config = {
-//     baseURL: 'http://127.0.0.1:3000',
+//     baseURL: 'http://192.168.1.4:3000',
 //     headers: {
 //         'Content-Type': 'application/json',
 //     }

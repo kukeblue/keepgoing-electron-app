@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag} from 'antd'
+import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
 import { TDevice, TGameAccount, TGameRole, TWatuGroup } from "../../typing";
 import "./index.less";
 const request = ChUtils.Ajax.request
@@ -31,6 +32,8 @@ type TWatuInfo = {
     points: [number, number][]
     deviceId?: number
 }
+// @ts-ignore
+window.isBee = true
 
 let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice' | 'handleSelectZhuaGuiDevice'
 let watuDeviceId = 0
@@ -54,6 +57,7 @@ export function usePageStore() {
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
+    const [isAccept, setIsAccept] = useState<boolean>(true)
     const [cangkuPath, setCangkuPath] = useState<string>('长安城');
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
@@ -80,11 +84,13 @@ export function usePageStore() {
         doKillProcess(pid)
         message.success('操作成功')
     }
-    const handleGetWatuInfo = (deviceId: number, acceptId: string) => {
+    const handleGetWatuInfo = () => {
         if (isBee) {
-            doBee(deviceId, cangkuPath, acceptId)
+            message.success('操作成功')
+            doBee(cangkuPath)
         } else {
-            doGetWatuInfo(deviceId, cangkuPath, acceptId)
+            message.success('操作成功')
+            doGetWatuInfo()
         }
     }
     const closeAllTask = () => {
@@ -120,7 +126,7 @@ export function usePageStore() {
                 // @ts-ignore
                 if (window.isBee) {
                     // @ts-ignore
-                    doGetWatuClickMap(...window.beeData, true, window.cangkuPath, window.acceptId)
+                    doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
                 }
             }, 1000)
         }
@@ -135,19 +141,19 @@ export function usePageStore() {
             }
         })
     }
-    const handleSelectWatuDevice = () => {
-        formRef.validateFields().then((res: any) => {
-            if (res.deviceId) {
-                if (res.acceptId) {
-                    // @ts-ignore
-                    window.acceptId = res.acceptId
-                }
-                watuDeviceId = res.deviceId
-                handleGetWatuInfo(res.deviceId, res.acceptId)
-                setShowSelectDeviceModal(false)
-            }
-        })
-    }
+    // const handleSelectWatuDevice = () => {
+    //     formRef.validateFields().then((res: any) => {
+    //         if (res.deviceId) {
+    //             if (res.acceptId) {
+    //                 // @ts-ignore
+    //                 window.acceptId = res.acceptId
+    //             }
+    //             watuDeviceId = res.deviceId
+    //             handleGetWatuInfo()
+    //             setShowSelectDeviceModal(false)
+    //         }
+    //     })
+    // }
     const handleSelectZhuaGuiDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
@@ -204,10 +210,7 @@ export function usePageStore() {
     }
     const connector = () => {
         message.success('操作成功')
-        if (watuDeviceId > 0) {
-            doConnector(watuDeviceId)
-        }
-
+        doConnector()
     }
     const zhandou = () => {
         message.success('操作成功')
@@ -255,7 +258,6 @@ export function usePageStore() {
         deviceOptions,
         handleClickLinkDevice,
         handleSelectJiangjunDevice,
-        handleSelectWatuDevice,
         handleSelectZhuaGuiDevice,
         handleClearLog,
         showSelectDeviceModal,
@@ -272,11 +274,8 @@ export function usePageStore() {
         hanghua
     }
 }
-
 export const PageStore = createContainer(usePageStore)
-
 export const HomePageStore = PageStore
-
 function ModalMultipleAccountSelect() {
     const pageStore = PageStore.useContainer()
     const [formRef] = useForm()
@@ -310,7 +309,6 @@ function HomeGameArea() {
         if (selectDeviceFunc === 'handleSelectJiangjunDevice') {
             pageStore.handleSelectJiangjunDevice()
         } else if (selectDeviceFunc === 'handleSelectWatuDevice') {
-            pageStore.handleSelectWatuDevice()
         } else if (selectDeviceFunc === 'handleSelectZhuaGuiDevice') {
             pageStore.handleSelectZhuaGuiDevice()
         }
@@ -321,11 +319,12 @@ function HomeGameArea() {
         <div className='flex-row-center'>
             <div>
                 <div className='flex-row-center m-b-20'>
-                    <Button icon={<ScanOutlined />} className='fs-12' size="small" onClick={() => {
+                    {/* <Button icon={<ScanOutlined />} className='fs-12' size="small" onClick={() => {
                         selectDeviceFunc = 'handleSelectJiangjunDevice'
                         pageStore.setShowSelectDeviceModal(true)
-                    }}>导入将军令</Button>
-                    <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.setCurrentPhoneUrl(''); message.success('关闭成功') }}>关闭连接</Button>
+                    }}>导入将军令</Button> */}
+                    {/* <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.setCurrentPhoneUrl(''); message.success('关闭成功') }}>关闭连接</Button> */}
+                    <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.closeAllTask() }}>关闭脚本</Button>
                     <Button icon={<ClearOutlined />} className='fs-12 m-l-5' size="small" onClick={() => {
                         pageStore.handleClearLog()
                     }}>清空日志</Button>
@@ -385,7 +384,6 @@ function HomeGameArea() {
         </Modal>
     </div>
 }
-
 let showAccountPopoverIndex = 0
 function HomeWatu() {
     const tableRef = useRef<{
@@ -405,7 +403,7 @@ function HomeWatu() {
         query: {
         }
     })
-    const watuRoles = gameRoleList.filter((item: TGameRole)=>item.groupId == watuGroup?.id)
+    const watuRoles = gameRoleList.filter((item: TGameRole) => item.groupId == watuGroup?.id)
 
     const updateStatus = (t: TGameRole) => {
         request({
@@ -415,7 +413,7 @@ function HomeWatu() {
         }).then(res => {
             if (res.status == 0) {
                 message.success('修改成功')
-                setTimeout(()=>{
+                setTimeout(() => {
                     reload()
                 }, 500)
             }
@@ -423,67 +421,67 @@ function HomeWatu() {
     }
 
     const addContent = (work: string) => {
-        const accounts = watuGroup?.gameServer ? pageStore.accountList.filter((item: TGameAccount)=>{return item.gameServer == watuGroup?.gameServer}): pageStore.accountList
-        const options = accounts.map((item: TGameAccount)=>{
-            return {label: item.name, value: item.id}
+        const accounts = watuGroup?.gameServer ? pageStore.accountList.filter((item: TGameAccount) => { return item.gameServer == watuGroup?.gameServer }) : pageStore.accountList
+        const options = accounts.map((item: TGameAccount) => {
+            return { label: item.name, value: item.id }
         })
-       return <div>
-        <ChForm form={formRef} formData={[{
-            label: '选择账号',
-            name: 'accountIds',
-            type: FormItemType.multipleSelect,
-            // @ts-ignore
-            options: options,
-        }]} />
-        <Button onClick={() => {
-            formRef.validateFields().then((res: any) => {
-                if (res.accountIds) {
-                    let accounts = res.accountIds.map((id: any) => {
-                        return pageStore.accountMap[id]
-                    })
-                    let gameServer = watuGroup?.gameServer
-                    console.log('添加的账号为', accounts)
-                    console.log('服务器为', gameServer)
-                    console.log('工作内容', work)
-                    request({
-                        url: '/api/game_role/add_game_roles',
-                        data: {
-                            gameServer: gameServer,
-                            work: work,
-                            groupId: watuGroup?.id,
-                            gameAccounts: accounts
-                        },
-                        method: "post"
-                    }).then(res => {
-                        if (res.status == 0) {
-                            message.success('创建成功')
-                            setShowAccountPopover(false)
-                            setTimeout(()=>{
-                                reload()
-                            }, 1000)
-                        }
-                    })
-                }
+        return <div>
+            <ChForm form={formRef} formData={[{
+                label: '选择账号',
+                name: 'accountIds',
+                type: FormItemType.multipleSelect,
+                // @ts-ignore
+                options: options,
+            }]} />
+            <Button onClick={() => {
+                formRef.validateFields().then((res: any) => {
+                    if (res.accountIds) {
+                        let accounts = res.accountIds.map((id: any) => {
+                            return pageStore.accountMap[id]
+                        })
+                        let gameServer = watuGroup?.gameServer
+                        console.log('添加的账号为', accounts)
+                        console.log('服务器为', gameServer)
+                        console.log('工作内容', work)
+                        request({
+                            url: '/api/game_role/add_game_roles',
+                            data: {
+                                gameServer: gameServer,
+                                work: work,
+                                groupId: watuGroup?.id,
+                                gameAccounts: accounts
+                            },
+                            method: "post"
+                        }).then(res => {
+                            if (res.status == 0) {
+                                message.success('创建成功')
+                                setShowAccountPopover(false)
+                                setTimeout(() => {
+                                    reload()
+                                }, 1000)
+                            }
+                        })
+                    }
 
-            })
+                })
 
-        }} className="m-t-15" size="small" type="primary">确定</Button>
-    </div>
+            }} className="m-t-15" size="small" type="primary">确定</Button>
+        </div>
     }
 
     const roleTag = (item: TGameRole) => {
         return <Popover trigger="click" placement="topLeft" title='操作' content={
             <div>
-                <div><Button onClick={()=>{ updateStatus(Object.assign({},item, {status: '空闲'})) }} type="link">设置空闲</Button></div>
-                <div><Button onClick={()=>{ updateStatus(Object.assign({},item, {status: '忙碌'})) }} type="link">设置忙碌</Button></div>
-                <div><Button onClick={()=>{ updateStatus(Object.assign({},item, {status: '离线'})) }} type="link">设置离线</Button></div>
-                <div><Button danger onClick={()=>{ updateStatus(Object.assign({},item, {status: '删除'})) }} type="link">删除</Button></div>
+                <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '空闲' })) }} type="link">设置空闲</Button></div>
+                <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '忙碌' })) }} type="link">设置忙碌</Button></div>
+                <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '离线' })) }} type="link">设置离线</Button></div>
+                <div><Button danger onClick={() => { updateStatus(Object.assign({}, item, { status: '删除' })) }} type="link">删除</Button></div>
             </div>
         }>
             <div style={{ width: 120, margin: 5 }} className="flex-row-between">
-            <Tag color="green">{item.name}</Tag>
-            {item.status == '离线' ?<div><Badge status="default" />离线</div> : item.status == '空闲' ?<div><Badge status="processing" />空闲</div>: <div><Badge status="warning" />忙碌</div>}
-        </div>
+                <Tag color="green">{item.name}</Tag>
+                {item.status == '离线' ? <div><Badge status="default" />离线</div> : item.status == '空闲' ? <div><Badge status="processing" />空闲</div> : <div><Badge status="warning" />忙碌</div>}
+            </div>
         </Popover>
     }
     return <div>
@@ -491,7 +489,7 @@ function HomeWatu() {
             onOk={() => { setShowWatuGroupSettingModal(false) }}
             onCancel={() => setShowWatuGroupSettingModal(false)} visible={showWatuGroupSettingModal}>
             <div>
-                <Button className="m-b-20" size="small" onClick={()=>{
+                <Button className="m-b-20" size="small" onClick={() => {
                     // tableRef.current!.reload()
                     reload()
                 }}>刷新</Button>
@@ -499,7 +497,7 @@ function HomeWatu() {
                     <h4>买图角色</h4>
                 </div>
                 <Row>
-                    {watuRoles.filter((item: TGameRole)=>item.work == '买图').map((item:TGameRole) => {
+                    {watuRoles.filter((item: TGameRole) => item.work == '买图').map((item: TGameRole) => {
                         return <Col key={item.id} span={12}>
                             {roleTag(item)}
                         </Col>
@@ -522,7 +520,7 @@ function HomeWatu() {
                     <h4>发图角色</h4>
                 </div>
                 <Row>
-                    {watuRoles.filter((item: TGameRole)=>item.work == '发图').map((item:TGameRole) => {
+                    {watuRoles.filter((item: TGameRole) => item.work == '发图').map((item: TGameRole) => {
                         return <Col key={item.id} span={12}>
                             {roleTag(item)}
                         </Col>
@@ -545,7 +543,7 @@ function HomeWatu() {
                     <h4>挖图角色</h4>
                 </div>
                 <Row>
-                    {watuRoles.filter((item: TGameRole)=>item.work == '挖图').map((item:TGameRole) => {
+                    {watuRoles.filter((item: TGameRole) => item.work == '挖图').map((item: TGameRole) => {
                         return <Col key={item.id} span={12}>
                             {roleTag(item)}
                         </Col>
@@ -568,7 +566,7 @@ function HomeWatu() {
                     <h4>接货角色</h4>
                 </div>
                 <Row>
-                    {watuRoles.filter((item: TGameRole)=>item.work == '接货').map((item:TGameRole) => {
+                    {watuRoles.filter((item: TGameRole) => item.work == '接货').map((item: TGameRole) => {
                         return <Col key={item.id} span={12}>
                             {roleTag(item)}
                         </Col>
@@ -637,13 +635,19 @@ function HomeWatu() {
                             }} />
                         </div>
                     </Col>
+                    {/* <Col>
+                        <div style={{ marginLeft: 20 }}>
+                            <span style={{ color: '#000' }}>联动模式</span>： <Switch size="small" onChange={(e) => {
+                                pageStore.handleChangeIsBeen(e);
+                            }} />
+                        </div>
+                    </Col> */}
                 </Row>
                 <br />
                 <Row>
                     <Col>
                         <Button onClick={() => {
-                            selectDeviceFunc = 'handleSelectWatuDevice'
-                            pageStore.setShowSelectDeviceModal(true)
+                            pageStore.handleGetWatuInfo()
                         }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>开始挖图</Button>
                     </Col>
                     <Col className="m-l-10">
@@ -654,7 +658,9 @@ function HomeWatu() {
                     </Col>
                 </Row>
                 <br />
-                <br />
+                <div className="home-feature-panel">
+                    {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
+                </div>
                 <br />
             </Panel>
             <Panel header={"挖图组配置"} key="2">
@@ -707,7 +713,6 @@ function HomeWatu() {
 function HomeFeature() {
     const pageStore = PageStore.useContainer()
     return <div className='home-feature'>
-        <div></div>
         <Tabs onChange={(v) => pageStore.setFeatureTabIndex(v)} type="card" defaultActiveKey={pageStore.featureTabIndex} style={{ marginBottom: 32 }}>
             <TabPane tab="通用功能" key="1">
                 <Row>
@@ -742,9 +747,7 @@ function HomeFeature() {
             </TabPane>
 
         </Tabs>
-        <div className="home-feature-panel">
-            {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
-        </div>
+
         <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {
             pageStore.hanghua()
             pageStore.setsShowHanhu(false)
@@ -766,5 +769,4 @@ function Home() {
         <HomeFeature />
     </div>
 }
-
 export default Home

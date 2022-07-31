@@ -136,7 +136,7 @@ function ChMhMapTool({
         width: 557,
         height: 275
     }
-    const [mulMode, setMulMode] = useState(false)
+    const [mulMode, setMulMode] = useState(true)
     const getRealPoint = () => {
         // let _points = points.filter(item => !(item[0] == 0 && item[1] == 0))
         let _points = points
@@ -214,10 +214,10 @@ function ChMhMapTool({
             otherPoint.splice(index - 1, 1)
             let otherJson = JSON.stringify(otherPoint)
             // @ts-ignore
-            doGetWatuClickMap(deviceId, mapName, x, y, index, otherJson, window.isBee, cangkuPath, window.acceptId)
+            doGetWatuClickMap(mapName, x, y, index, otherJson, window.isBee, cangkuPath)
         } else {
             // @ts-ignore
-            doGetWatuClickMap(deviceId, mapName, x, y, index, undefined, window.isBee, cangkuPath, window.acceptId)
+            doGetWatuClickMap(mapName, x, y, index, undefined, window.isBee, cangkuPath)
         }
     }
 
@@ -233,16 +233,16 @@ function ChMhMapTool({
         })
         otherPoint.splice(index - 1, 1)
         let otherJson = JSON.stringify(otherPoint)
-        return [deviceId, mapName, x, y, index, otherJson]
+        return [mapName, x, y, index, otherJson]
     }
 
     return <div>
-        <br />
+        {/* <br />
         <div>
             <span style={{ color: '#000' }}>是否群挖</span>： <Switch checked={mulMode} onChange={(e) => setMulMode(e)} />
         </div>
 
-        <br />
+        <br /> */}
         <div key={mapName + '_watu'} className='chMhMapTool flex-center'>
             <div className='chMhMapTool-map'>
                 <img width={mapConfig.width} height={mapConfig.height} src={getMapImage()} className="mh_map_jianye" />

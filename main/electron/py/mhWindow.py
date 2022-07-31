@@ -51,10 +51,14 @@ class MHWindow:
     windowAreaGui = (0, 0, 0, 0)
     pyHome = __file__.strip('mhWindow.py')
     pyImageDir = pyHome + 'config\images'
+    gameId = ''
 
     def __init__(self, screenUnit):
         print('init')
         self.screenUnit = screenUnit
+
+    def F_获取当前游戏id():
+        pyautogui.hotkey('alt', 'e')
 
     def F_获取设备图片(self, img):
         if('all' in img):
@@ -83,7 +87,7 @@ class MHWindow:
             # pyautogui.screenshot(
             #     self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
             self.focusWindow()
-            utils.bindOp()
+            self.gameId = utils.bindOp()
 
         else:
             print('未找到前台梦幻窗口')
@@ -190,8 +194,8 @@ class MHWindow:
                 point = self.checkpoint(战斗操作模式=战斗操作模式, 手指操作模式=手指操作模式)
                 if(point == None):
                     finished = True
-                    break 
-            if(point[2]):
+                    break
+            if(point != None and point[2]):
                 finished = True
                 return
             if(point != None):
@@ -364,10 +368,11 @@ class MHWindow:
                 if(右键点击 == False):
                     pyautogui.hotkey('alt', 'a')
                     time.sleep(0.1)
-                if(多次点击):
-                    time.sleep(2)
-                    utils.doubleClick()
-                    utils.click()
+                if(多次点击 == True):
+                    pyautogui.hotkey('alt', 'a')
+                    time.sleep(1)
+                    pyautogui.doubleClick()
+                    pyautogui.doubleClick()
                 else:
                     utils.click()
                 break
@@ -422,7 +427,7 @@ class MHWindow:
             left = ((num-1) % 5) * 50
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
-   
+
     def F_选中仓库道具格子(self, num):
         firstBlockX = self.windowArea[0] + 453
         firstBlockY = self.windowArea[1] + 248
@@ -463,7 +468,8 @@ class MHWindow:
         for x in range(num):
             self.F_选中道具格子2(x + 1)
             utils.click()
-            pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
+            pyautogui.moveTo(
+                self.windowArea[0] + 450, self.windowArea[1] + 300)
             utils.click()
             time.sleep(0.5)
             self.F_移动到游戏区域坐标(356, 344)
@@ -1255,10 +1261,35 @@ class MHWindow:
             time.sleep(0.1)
             pyautogui.press('delete')
         pyautogui.write(id)
+        time.sleep(1)
+        self.focusWindow()
         self.F_移动到游戏区域坐标(657, 133)
         time.sleep(0.5)
-        utils.rightClick()
-        time.sleep(0.5)
+        ret = baiduApi.op.CmpColor(
+            self.windowArea2[0] + 750, self.windowArea2[1] + 140, 'dcda71-000000', 0.8)
+        print(ret)
+        if(ret == 1):
+            utils.rightClick()
+            time.sleep(0.5)
+        else:
+            self.F_移动到游戏区域坐标(650, 565)
+            utils.click()
+            self.F_移动到游戏区域坐标(469, 231, 移动到输入框=True)
+            utils.click()
+            for x in range(15):
+                pyautogui.press('left')
+                time.sleep(0.1)
+                pyautogui.press('delete')
+            pyautogui.write(id)
+            window.focusWindow()
+            self.F_移动到游戏区域坐标(544, 233)
+            utils.click()
+            self.F_移动到游戏区域坐标(363, 409)
+            utils.click()
+            window.focusWindow()
+            utils.rightClick()
+            pyautogui.hotkey('alt', 'f')
+            self.F_打开好友信息页面()
 
     def 医宝宝(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_麒麟山')
@@ -1309,7 +1340,7 @@ class MHWindow:
         elif('大唐国境' in 任务):
             self.F_导航到大唐国境()
 
-    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False, 移动到输入框 = False):
+    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False, 移动到输入框=False):
         self.pointMove(self.windowArea[0] + x,
                        self.windowArea[1] + y, 是否战斗操作模式, 是否手指操作模式, 移动到输入框)
 
@@ -1518,8 +1549,8 @@ class MHWindow:
         self.F_移动到游戏区域坐标(689, 142)
         utils.click()
         time.sleep(0.5)
-        self.F_移动到游戏区域坐标(720, 35)
-        utils.rightClick()
+        # self.F_移动到游戏区域坐标(720, 35)
+        # utils.rightClick()
 
     def F_回仓库放东西(self, map, 仓库地点='长安城'):
         self.F_选中道具格子(20)
@@ -1568,7 +1599,7 @@ class MHWindow:
             self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             utils.rightClick()
-        
+
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(144, 240)
@@ -1716,11 +1747,12 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
+    window.F_打开好友信息页面('30139591')
     # time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    
+
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())

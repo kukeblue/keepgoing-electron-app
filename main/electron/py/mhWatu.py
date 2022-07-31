@@ -1,5 +1,7 @@
 # coding=utf-8
 
+import atexit
+from tkinter.messagebox import NO
 import logUtil
 import mhWindow
 import re
@@ -67,12 +69,11 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(userId, 仓库位置='长安城', window=None):
-    userId = str(userId)
+def F_获取宝图信息(window=None):
     time.sleep(3)
     if(window == None):
         MHWindow = mhWindow.MHWindow
-        window = MHWindow(1, userId)
+        window = MHWindow(1)
         window.findMhWindow()
     window.focusWindow()
     window.医宝宝()
@@ -96,7 +97,7 @@ def F_获取宝图信息(userId, 仓库位置='长安城', window=None):
     print(map)
     time.sleep(1)
     if(map == '江南野外'):
-        window.F_导航到江南野外(仓库位置='长安城')
+        window.F_导航到江南野外()
     elif(map == '狮驼岭'):
         window.F_导航到狮驼岭()
     elif(map == '大唐国境'):
@@ -219,10 +220,10 @@ def F_获取最近的坐标点(x, y, other):
     return point, newOther
 
 
-def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
+def F_点击宝图并寻路(window, map, x, y, num, other):
     if(x == 0 or y == 0):
         point, newOther = F_获取最近的坐标点(x, y, other)
-        F_点击宝图并寻路(window, deviceId, map, point['realX'],
+        F_点击宝图并寻路(window, map, point['realX'],
                   point['realY'], point['index'], newOther)
     else:
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
@@ -247,26 +248,25 @@ def F_点击宝图并寻路(window, deviceId, map, x, y, num, other):
         utils.rightClick()
         # utils.rightClick()
         window.F_自动战斗()
-        window.F_吃药()
+        # window.F_吃药()
         pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)
-            F_点击宝图并寻路(window, deviceId, map, point['realX'],
+            F_点击宝图并寻路(window, map, point['realX'],
                       point['realY'], point['index'], newOther)
 
 
 loop = 1
 
 
-def F_点击小地图(userId, map, x, y, num, other, isBeen, 仓库位置='长安城', 接货id=''):
-    userId = str(userId)
-    print('点击小地图', userId, x, y)
+def F_点击小地图(map, x, y, num, other, isBeen, 仓库位置='长安城'):
+    print('点击小地图', x, y)
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, userId)
+    window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
     if(other == None):
-        F_点击宝图(window, deviceId, map, x, y, num)
+        F_点击宝图(window, map, x, y, num)
     else:
         if num == 1:
             firstPoint = {"realX": x, "realY": y, "index": num}
@@ -275,20 +275,22 @@ def F_点击小地图(userId, map, x, y, num, other, isBeen, 仓库位置='长�
                 entrancePoint = mapDictEntrance.get(map)
                 point, newOther = F_获取最近的坐标点(
                     entrancePoint[0], entrancePoint[1], other)
-                F_点击宝图并寻路(window, deviceId, map,
+                F_点击宝图并寻路(window, map,
                           point['realX'], point['realY'], point['index'], newOther)
         else:
-            F_点击宝图并寻路(window, deviceId, map,
+            F_点击宝图并寻路(window, map,
                       x, y, num, other)
     window.F_点击小地图出入口按钮()
-    if(接货id != None and 接货id != '' and 接货id != 0 and 接货id != '0' ):
+    接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
+    if(接货id != None):
         window.F_回仓库丢小号(接货id, 仓库位置)
     else:
         window.F_回仓库放东西(map, 仓库位置)
     window.F_选中道具格子(1)
     if(isBeen):
-        # 小蜜蜂模式必须图满了才能发车
-        networkApi.doReadyWatuTask(deviceId)
+        # 小蜜蜂模式必须图满了才能发车 todo
+        if(window.gameId != ''):
+            networkApi.doUpdateRoleStatus(window.gameId, '空闲')
         while(True):
             time.sleep(5)
             # 关闭打开
@@ -300,11 +302,9 @@ def F_点击小地图(userId, map, x, y, num, other, isBeen, 仓库位置='长�
                 time.sleep(10)
                 pyautogui.hotkey('alt', 'e')
                 window.F_点击自动()
-                F_小蜜蜂模式(deviceId, 仓库位置)
+                F_小蜜蜂模式(仓库位置)
                 break
             print('等待宝图')
-
-
 
 
 def F_邀请发图(window):
@@ -324,12 +324,13 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(deviceId, 仓库位置, 接货id=''):
-    deviceId = str(deviceId)
+def F_小蜜蜂模式(仓库位置):
     time.sleep(3)
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
+    window = MHWindow(1)
     window.findMhWindow()
+    if(window.gameId != ''):
+        networkApi.doUpdateRoleStatus(window.gameId, '忙碌')
     pyautogui.hotkey('alt', 'e')
     while(True):
         window.F_选中道具格子(1)
@@ -339,13 +340,16 @@ def F_小蜜蜂模式(deviceId, 仓库位置, 接货id=''):
             time.sleep(15)
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
-            F_获取宝图信息(deviceId, 仓库位置, window)
+            F_获取宝图信息(window)
             break
+        else:
+            if(window.gameId != ''):
+                networkApi.doUpdateRoleStatus(window.gameId, '空闲')
         time.sleep(10)
-        print('等待宝图')
 
 
 if __name__ == '__main__':
+
     fire.Fire({
         'info': F_获取宝图信息,
         'clickMap': F_点击小地图,

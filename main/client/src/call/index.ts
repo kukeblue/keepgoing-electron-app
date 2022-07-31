@@ -6,12 +6,12 @@ export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendS
 export const doTest = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
-export const doGetWatuInfo = (deviceId: number, cangkuPath: string, acceptId: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [deviceId, cangkuPath, acceptId])
+export const doGetWatuInfo = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [])
 export const doZhuaGuiTask = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHUAGUI_TASK, [deviceId])
 export const doCloseAllTask = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLOSE_ALL_TASK, [])
 export const doThrowLitter = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_THROW_LITTER, [deviceId])
 export const doSellEquipment = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SELL_EQUIPMENT, [deviceId])
-export const doConnector = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CONNECTOR, [deviceId])
+export const doConnector = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CONNECTOR, [])
 export const doZhandou = (deviceId: number) => {
     (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHANDOU, [deviceId])
 }
@@ -22,8 +22,8 @@ export const doHanghua = (num: number) => {
 
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
-export const doGetWatuClickMap = (deviceId: number, mapName: string, x: number, y: number, index: number, otherPoint?: string, isBeen?: boolean, cangkuPath?: string, acceptId?: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [deviceId, mapName, x, y, index, otherPoint, isBeen, cangkuPath, acceptId])
-export const doBee = (deviceId: number, cangkuPath: string, acceptId: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [deviceId, cangkuPath, acceptId])
+export const doGetWatuClickMap = (mapName: string, x: number, y: number, index: number, otherPoint?: string, isBeen?: boolean, cangkuPath?: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [mapName, x, y, index, otherPoint, isBeen, cangkuPath])
+export const doBee = (cangkuPath: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [cangkuPath])
 
 
 const init = () => {

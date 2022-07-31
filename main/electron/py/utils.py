@@ -1,4 +1,5 @@
 # from paddleocr import PaddleOCR
+import win32gui as w
 from pickle import TRUE
 import time
 import baiduApi
@@ -6,9 +7,9 @@ import win32gui
 import win32api
 import win32con
 import pyautogui
+import re
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
-
 handle = 0
 
 
@@ -16,7 +17,13 @@ def bindOp():
     real = pyautogui.position()
     global handle
     handle = win32gui.WindowFromPoint((real[0], real[1]))
+    title = w.GetWindowText(handle)
+    print(title)
+    res = re.findall(r'[[](.*?)[]]', title)[1]
     op.BindWindow(handle, "normal", "windows", "windows", 1)
+    win32gui.SetForegroundWindow(handle)
+    print('当前角色ID为: ' + res)
+    return res
 
 
 def click():

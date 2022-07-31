@@ -70,7 +70,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 读取宝图
     ipcMain.on(resourcePaths.METHOD_GET_WATU_INFO, (event, args) => {
         logger.info('run py script: METHOD_GET_WATU_INFO')
-        const result = runPyScript('mhWatu', ['info', args[0]])
+        const result = runPyScript('mhWatu', ['info'])
         event.returnValue = {
             code: result,
             status: 0
@@ -115,7 +115,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 连点器
     ipcMain.on(resourcePaths.METHOD_CONNECTOR, (event, args) => {
         logger.info('run py script: METHOD_CONNECTOR')
-        const result = runPyScript('mhLianDian', ['start', args[0]])
+        const result = runPyScript('mhLianDian', ['start', []])
         event.returnValue = {
             code: result,
             status: 0
@@ -142,7 +142,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')
-        const result = runPyScript('mhWatu', ['bee', args[0], args[1], args[2]])
+        const result = runPyScript('mhWatu', ['bee', args[0]])
         event.returnValue = {
             code: result,
             status: 0
