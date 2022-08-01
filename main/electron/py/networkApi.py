@@ -6,7 +6,7 @@ import io
 import random
 import re
 import json
-from time import sleep
+import time
 import requests
 from urllib import parse
 host = 'http://192.168.1.4:3000/api/client/'
@@ -47,22 +47,24 @@ def doReadyWatuTask(deviceId):
 
 
 def 获取空闲接货人ID(gameId, work):
-    print('获取空闲接货人')
-    print(gameId)
-    print(work)
-    url = host + "get_one_free_game_role"
-    payload = "{\n\t\"gameId\": \""+gameId + \
-        "\",\n\t\"work\": \""+work+"\"\n}"
-    headers = {
-        'content-type': "application/json",
-    }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
-    print(response.text)
-    res = json.loads(response.text)
-    if(res.get('status') == 0):
-        print('success')
-        return res.get('gameId')
+    while True:
+        print('获取空闲接货人')
+        print(gameId)
+        print(work)
+        url = host + "get_one_free_game_role"
+        payload = "{\n\t\"gameId\": \""+gameId + \
+            "\",\n\t\"work\": \""+work+"\"\n}"
+        headers = {
+            'content-type': "application/json",
+        }
+        response = requests.request(
+            "POST", url, data=payload.encode(), headers=headers)
+        print(response.text)
+        res = json.loads(response.text)
+        if(res.get('status') == 0):
+            print('success')
+            return res.get('gameId')
+        time.sleep(3)
 
 
 def doUpdateRoleStatus(gameId, status):
@@ -117,7 +119,7 @@ def getPicPoint(image_path):
     if(response.text and '6001_' in response.text):
         tid = response.text
         for x in range(60):
-            sleep(1)
+            time.sleep(1)
             num = str(random.randint(1, 10000))
             url = suanHost + "/GetAnswer.aspx"
             payload = "id=" + tid + "&r=" + num

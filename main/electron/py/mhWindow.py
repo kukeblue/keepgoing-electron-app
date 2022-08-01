@@ -406,11 +406,13 @@ class MHWindow:
 
     def F_选中道具格子(self, num):
         self.focusWindow()
-        point = self.findImgInWindow('daoju_top.png')
-        if(point == None):
-            pyautogui.hotkey('alt', 'e')
-            time.sleep(0.5)
-        point = self.findImgInWindow('daoju_top.png')
+        while True:
+            point = self.findImgInWindow('daoju_top.png')
+            if(point == None):
+                pyautogui.hotkey('alt', 'e')
+                time.sleep(0.5)
+            else:
+                break
         firstBlockX = point[0] + 26
         firstBlockY = point[1] + 83
         left = ((num-1) % 5) * 50

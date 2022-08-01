@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import atexit
+from telnetlib import theNULL
 from tkinter.messagebox import NO
 import logUtil
 import mhWindow
@@ -302,7 +303,7 @@ def F_点击小地图(map, x, y, num, other, isBeen, 仓库位置='长安城'):
                 time.sleep(10)
                 pyautogui.hotkey('alt', 'e')
                 window.F_点击自动()
-                F_小蜜蜂模式(仓库位置)
+                F_小蜜蜂模式(仓库位置, window)
                 break
             print('等待宝图')
 
@@ -324,28 +325,29 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(仓库位置):
+def F_小蜜蜂模式(仓库位置, window=None):
     time.sleep(3)
-    MHWindow = mhWindow.MHWindow
-    window = MHWindow(1)
-    window.findMhWindow()
-    if(window.gameId != ''):
-        networkApi.doUpdateRoleStatus(window.gameId, '忙碌')
-    pyautogui.hotkey('alt', 'e')
-    while(True):
-        window.F_选中道具格子(1)
-        time.sleep(1)
-        point = window.findImgInWindow('daoju_baotu_large.png')
-        if(point != None and point[0] > 0):
-            time.sleep(15)
-            pyautogui.hotkey('alt', 'e')
-            window.F_点击自动()
-            F_获取宝图信息(window)
-            break
-        else:
-            if(window.gameId != ''):
-                networkApi.doUpdateRoleStatus(window.gameId, '空闲')
-        time.sleep(10)
+    if(window):
+        F_获取宝图信息(window)
+    else:
+        MHWindow = mhWindow.MHWindow
+        window = MHWindow(1)
+        window.findMhWindow()
+        if(window.gameId != ''):
+            networkApi.doUpdateRoleStatus(window.gameId, '空闲')
+        pyautogui.hotkey('alt', 'e')
+        while(True):
+            window.F_选中道具格子(1)
+            time.sleep(1)
+            point = window.findImgInWindow('daoju_baotu_large.png')
+            if(point != None and point[0] > 0):
+                time.sleep(10)
+                pyautogui.hotkey('alt', 'e')
+                window.F_点击自动()
+                F_获取宝图信息(window)
+                break
+
+            time.sleep(10)
 
 
 if __name__ == '__main__':
