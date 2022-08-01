@@ -1252,8 +1252,11 @@ class MHWindow:
         self.F_是否结束寻路()
 
     def F_打开好友信息页面(self, id):
+        pyautogui.hotkey('alt', 'f')
+        while(self.消息弹窗处理() == True):
+            pyautogui.hotkey('alt', 'f')
+            time.sleep(0.5)
         self.F_移动到游戏区域坐标(682, 76)
-        time.sleep(0.5)
         pyautogui.hotkey('alt', 'f')
         time.sleep(0.5)
         utils.click()
@@ -1745,15 +1748,26 @@ class MHWindow:
         self.F_移动到游戏区域坐标(339, 552)
         utils.click()
 
+    def 消息弹窗处理(self):
+        if(window.findImgInWindow("all-message.png", 0.99) != None):
+            self.F_移动到游戏区域坐标(568, 140)
+            utils.click()
+            return True
+        return False
+
 
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_打开好友信息页面('30139591')
-    # time.sleep(1)
-    # print(pointUtil.傲来点集[1][0])
-    # window.F_选中道具格子(16)
-    # utils.rightClick()
+<< << << < HEAD
+window.F_打开好友信息页面('30139591')
+== == == =
+window.F_打开好友信息页面(1)
+>>>>>> > 02f8eddefa545671bdb94bd6264d26a7e8c34f42
+# time.sleep(1)
+# print(pointUtil.傲来点集[1][0])
+# window.F_选中道具格子(16)
+# utils.rightClick()
 
 
 # window.F_卖装备(15)
