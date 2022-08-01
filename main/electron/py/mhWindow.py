@@ -190,7 +190,7 @@ class MHWindow:
                 point = self.checkpoint(战斗操作模式=战斗操作模式, 手指操作模式=手指操作模式)
                 if(point == None):
                     finished = True
-                    break 
+                    break
             if(point[2]):
                 finished = True
                 return
@@ -422,7 +422,7 @@ class MHWindow:
             left = ((num-1) % 5) * 50
             height = math.floor((num-1) / 5) * 50
             self.pointMove(firstBlockX + left, firstBlockY + height)
-   
+
     def F_选中仓库道具格子(self, num):
         firstBlockX = self.windowArea[0] + 453
         firstBlockY = self.windowArea[1] + 248
@@ -463,7 +463,8 @@ class MHWindow:
         for x in range(num):
             self.F_选中道具格子2(x + 1)
             utils.click()
-            pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
+            pyautogui.moveTo(
+                self.windowArea[0] + 450, self.windowArea[1] + 300)
             utils.click()
             time.sleep(0.5)
             self.F_移动到游戏区域坐标(356, 344)
@@ -1244,8 +1245,11 @@ class MHWindow:
         self.F_是否结束寻路()
 
     def F_打开好友信息页面(self, id):
+        pyautogui.hotkey('alt', 'f')
+        while(self.消息弹窗处理()==True):
+            pyautogui.hotkey('alt', 'f')
+            time.sleep(0.5)
         self.F_移动到游戏区域坐标(682, 76)
-        time.sleep(0.5)
         pyautogui.hotkey('alt', 'f')
         time.sleep(0.5)
         utils.click()
@@ -1309,7 +1313,7 @@ class MHWindow:
         elif('大唐国境' in 任务):
             self.F_导航到大唐国境()
 
-    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False, 移动到输入框 = False):
+    def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False, 移动到输入框=False):
         self.pointMove(self.windowArea[0] + x,
                        self.windowArea[1] + y, 是否战斗操作模式, 是否手指操作模式, 移动到输入框)
 
@@ -1568,7 +1572,7 @@ class MHWindow:
             self.切换有空仓库()
             self.F_选中仓库道具格子(x + 1)
             utils.rightClick()
-        
+
         self.F_选择仓库号(1)
         time.sleep(1)
         self.F_移动到游戏区域坐标(144, 240)
@@ -1712,15 +1716,23 @@ class MHWindow:
         self.F_移动到游戏区域坐标(339, 552)
         utils.click()
 
+    def 消息弹窗处理(self):
+        if(window.findImgInWindow("all-message.png", 0.99) != None):
+            self.F_移动到游戏区域坐标(568, 140)
+            utils.click()
+            return True
+        return False  
+
 
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
+    window.F_打开好友信息页面(1)
     # time.sleep(1)
     # print(pointUtil.傲来点集[1][0])
     # window.F_选中道具格子(16)
     # utils.rightClick()
-    
+
 
 # window.F_卖装备(15)
 # print(window.F_是否结束寻路())
