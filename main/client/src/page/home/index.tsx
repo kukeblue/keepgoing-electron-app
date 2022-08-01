@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs } from 'antd'
-import { TDevice } from "../../typing";
+import React, { useEffect, useState, useRef } from "react";
+import { Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag} from 'antd'
+import { TDevice, TGameAccount, TGameRole, TWatuGroup } from "../../typing";
 import "./index.less";
-import { ChForm, ChUtils, FormItemType } from "ch-ui";
+const request = ChUtils.Ajax.request
+import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
 import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua } from "../../call";
 import { createContainer } from 'unstated-next'
 const { TabPane } = Tabs;
+const { Panel } = Collapse;
 import {
     DownCircleOutlined,
     ClearOutlined,
     CloseCircleOutlined,
-    InsertRowBelowOutlined,
+    PlusSquareOutlined,
     ScanOutlined,
     SettingOutlined,
     ToolOutlined
     // @ts-ignore
 } from '@ant-design/icons';
 import ChMhMapTool from "../../components/ChMhMapTool";
+import { UserStore } from "../../store/userStore";
+import Account from "../account";
 
 type TPanelTask = 'test' | 'test2' | 'login' | ''
-const { useOptionFormListHook } = ChUtils.chHooks
+const { useOptionFormListHook, usePage } = ChUtils.chHooks
 
 type TWatuInfo = {
     mapName: string,
@@ -46,6 +50,7 @@ export function usePageStore() {
     const [formRef] = useForm()
     const [modalMultipleAccountSelectShow, setModalMultipleAccountSelectShow] = useState(false)
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
+    const [featureTabIndex, setFeatureTabIndex] = useState("2");
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
@@ -56,15 +61,15 @@ export function usePageStore() {
     const [linkDeviceId, setLinkDeviceId] = useState<number | undefined>()
     const [showSelectDeviceModal, setShowSelectDeviceModal] = useState<boolean>(false)
     const { optionsMap: deviceMap, options: deviceOptions } = useOptionFormListHook({ url: '/api/device/get_device_list', query: {} })
-    const { optionsMap: accountMap, options: accountOptions } = useOptionFormListHook({ url: '/api/game_account/get_game_account_options', query: {} })
+    const { optionsMap: accountMap, options: accountOptions, list: accountList } = useOptionFormListHook({ url: '/api/game_account/get_game_account_options', query: {} })
     const handlePushLog = (log: string) => { setLogs((logs) => [...logs, log]) }
     const handlePushState = (processState: any) => { setProcessState(processState) }
     const handleClickPreviewDevice = (device: TDevice) => {
-        const owurl = `http://192.168.0.100:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
+        const owurl = `http://192.168.0.11:8888/vnc.html?host=192.168.8.120&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
     }
     const handleClickLinkDevice = (device: TDevice) => {
-        const owurl = `http://192.168.0.100:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
+        const owurl = `http://192.168.0.11:8888/vnc.html?host=${device.ip}&port=5900&resize=scale&autoconnect=true&quality=1&compression=1`;
         setCurrentPhoneUrl(owurl)
         setTimeout(() => {
             // @ts-ignore
@@ -82,7 +87,6 @@ export function usePageStore() {
             doGetWatuInfo(deviceId, cangkuPath, acceptId)
         }
     }
-
     const closeAllTask = () => {
         message.success('操作成功');
         doCloseAllTask()
@@ -95,7 +99,6 @@ export function usePageStore() {
         message.success('操作成功');
         doSellEquipment(watuDeviceId)
     }
-
     const handleGetWatuInfoReply = (data: any) => {
         console.log('handleGetWatuInfoReply', data);
         const result = data.result
@@ -132,7 +135,6 @@ export function usePageStore() {
             }
         })
     }
-
     const handleSelectWatuDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
@@ -146,7 +148,6 @@ export function usePageStore() {
             }
         })
     }
-
     const handleSelectZhuaGuiDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {
@@ -156,7 +157,6 @@ export function usePageStore() {
             }
         })
     }
-
     const handleTest = () => checkIsTasking(() => {
         setCurrentTask('test')
         setIsTasking(true)
@@ -197,13 +197,11 @@ export function usePageStore() {
             message.success('启动成功')
         }
     }
-
     const handleChangeIsBeen = (check: boolean) => {
         setIsBee(check);
         // @ts-ignore
         window.isBee = check;
     }
-
     const connector = () => {
         message.success('操作成功')
         if (watuDeviceId > 0) {
@@ -211,19 +209,22 @@ export function usePageStore() {
         }
 
     }
-
     const zhandou = () => {
         message.success('操作成功')
         doZhandou(watuDeviceId)
     }
-
     const hanghua = () => {
         message.success('操作成功')
         // @ts-ignore
         doHanghua(window.hanghuaCount)
     }
-
+    const 弹出添加分组框 = () => {
+        alert('添加分组')
+    }
     return {
+        弹出添加分组框,
+        featureTabIndex, // 激活的功能tab栏
+        setFeatureTabIndex,
         setsShowHanhu,
         isShowHanhu,
         setCangkuPath,
@@ -239,6 +240,7 @@ export function usePageStore() {
         modalMultipleAccountSelectShow,
         accountMap,
         accountOptions,
+        accountList,
         handleKillProcess,
         processState,
         logs,
@@ -383,27 +385,242 @@ function HomeGameArea() {
         </Modal>
     </div>
 }
-function HomeFeature() {
+
+let showAccountPopoverIndex = 0
+function HomeWatu() {
+    const tableRef = useRef<{
+        reload: Function
+    }>()
     const pageStore = PageStore.useContainer()
-    return <div className='home-feature'>
-        <div></div>
-        <Tabs type="card" defaultActiveKey="1"  style={{ marginBottom: 32 }}>
-            <TabPane tab="通用功能" key="1">
+    const userStore = UserStore.useContainer()
+    const [showGroupModal, setShowGroupModal] = useState<boolean>(false)
+    const [showWatuGroupSettingModal, setShowWatuGroupSettingModal] = useState<boolean>(false)
+    const [watuGroup, setWatuGroup] = useState<TWatuGroup>()
+    const [showAccountPopover, setShowAccountPopover] = useState<boolean>(false)
+    const [formRef] = useForm()
+    const { list: gameRoleList, reload } = usePage({
+        isScroll: false,
+        url: '/api/game_role/get_game_role_page',
+        pageSize: 100,
+        query: {
+        }
+    })
+    const watuRoles = gameRoleList.filter((item: TGameRole)=>item.groupId == watuGroup?.id)
+
+    const updateStatus = (t: TGameRole) => {
+        request({
+            url: '/api/game_role/update_game_role',
+            data: t,
+            method: "post"
+        }).then(res => {
+            if (res.status == 0) {
+                message.success('修改成功')
+                setTimeout(()=>{
+                    reload()
+                }, 500)
+            }
+        })
+    }
+
+    const addContent = (work: string) => {
+        const accounts = watuGroup?.gameServer ? pageStore.accountList.filter((item: TGameAccount)=>{return item.gameServer == watuGroup?.gameServer}): pageStore.accountList
+        const options = accounts.map((item: TGameAccount)=>{
+            return {label: item.name, value: item.id}
+        })
+       return <div>
+        <ChForm form={formRef} formData={[{
+            label: '选择账号',
+            name: 'accountIds',
+            type: FormItemType.multipleSelect,
+            // @ts-ignore
+            options: options,
+        }]} />
+        <Button onClick={() => {
+            formRef.validateFields().then((res: any) => {
+                if (res.accountIds) {
+                    let accounts = res.accountIds.map((id: any) => {
+                        return pageStore.accountMap[id]
+                    })
+                    let gameServer = watuGroup?.gameServer
+                    console.log('添加的账号为', accounts)
+                    console.log('服务器为', gameServer)
+                    console.log('工作内容', work)
+                    request({
+                        url: '/api/game_role/add_game_roles',
+                        data: {
+                            gameServer: gameServer,
+                            work: work,
+                            groupId: watuGroup?.id,
+                            gameAccounts: accounts
+                        },
+                        method: "post"
+                    }).then(res => {
+                        if (res.status == 0) {
+                            message.success('创建成功')
+                            setShowAccountPopover(false)
+                            setTimeout(()=>{
+                                reload()
+                            }, 1000)
+                        }
+                    })
+                }
+
+            })
+
+        }} className="m-t-15" size="small" type="primary">确定</Button>
+    </div>
+    }
+
+    const roleTag = (item: TGameRole) => {
+        return <Popover trigger="click" placement="topLeft" title='操作' content={
+            <div>
+                <div><Button onClick={()=>{ updateStatus(Object.assign({},item, {status: '空闲'})) }} type="link">设置空闲</Button></div>
+                <div><Button onClick={()=>{ updateStatus(Object.assign({},item, {status: '忙碌'})) }} type="link">设置忙碌</Button></div>
+                <div><Button onClick={()=>{ updateStatus(Object.assign({},item, {status: '离线'})) }} type="link">设置离线</Button></div>
+                <div><Button danger onClick={()=>{ updateStatus(Object.assign({},item, {status: '删除'})) }} type="link">删除</Button></div>
+            </div>
+        }>
+            <div style={{ width: 120, margin: 5 }} className="flex-row-between">
+            <Tag color="green">{item.name}</Tag>
+            {item.status == '离线' ?<div><Badge status="default" />离线</div> : item.status == '空闲' ?<div><Badge status="processing" />空闲</div>: <div><Badge status="warning" />忙碌</div>}
+        </div>
+        </Popover>
+    }
+    return <div>
+        <Modal title={"编辑分组角色 - " + watuGroup?.name}
+            onOk={() => { setShowWatuGroupSettingModal(false) }}
+            onCancel={() => setShowWatuGroupSettingModal(false)} visible={showWatuGroupSettingModal}>
+            <div>
+                <Button className="m-b-20" size="small" onClick={()=>{
+                    // tableRef.current!.reload()
+                    reload()
+                }}>刷新</Button>
+                <div className="m-b-10 flex-row-center">
+                    <h4>买图角色</h4>
+                </div>
                 <Row>
-                    <Col>
-                        <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
-                    </Col>
-                    <Col className="m-l-10">
-                        <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
-                    </Col>
-                    <Col className="m-l-10">
-                        <Button onClick={() => { pageStore.setsShowHanhu(true) }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动喊话</Button>
-                    </Col>
+                    {watuRoles.filter((item: TGameRole)=>item.work == '买图').map((item:TGameRole) => {
+                        return <Col key={item.id} span={12}>
+                            {roleTag(item)}
+                        </Col>
+                    })}
                 </Row>
-            </TabPane>
-            <TabPane tab="挖图" key="2">
+                <Popover onVisibleChange={(v) => {
+                    if (v) {
+                        formRef.resetFields()
+                    }
+                    setShowAccountPopover(v)
+                    showAccountPopoverIndex = 1
+                }
+                } visible={showAccountPopover && showAccountPopoverIndex == 1} trigger="click" placement="topLeft" title='添加角色' content={addContent('买图')}>
+                    <Button className="m-t-15" size="small">+添加角色</Button>
+                </Popover>
+            </div>
+            <Divider />
+            <div>
+                <div className="m-b-10 flex-row-center">
+                    <h4>发图角色</h4>
+                </div>
                 <Row>
-                    <Col><div style={{'marginLeft':'10px'}}>挖图配置:</div></Col>
+                    {watuRoles.filter((item: TGameRole)=>item.work == '发图').map((item:TGameRole) => {
+                        return <Col key={item.id} span={12}>
+                            {roleTag(item)}
+                        </Col>
+                    })}
+                </Row>
+                <Popover onVisibleChange={(v) => {
+                    if (v) {
+                        formRef.resetFields()
+                    }
+                    setShowAccountPopover(v)
+                    showAccountPopoverIndex = 2
+                }
+                } visible={showAccountPopover && showAccountPopoverIndex == 2} trigger="click" placement="topLeft" title='添加角色' content={addContent('发图')}>
+                    <Button className="m-t-15" size="small">+添加角色</Button>
+                </Popover>
+            </div>
+            <Divider />
+            <div>
+                <div className="m-b-10 flex-row-center">
+                    <h4>挖图角色</h4>
+                </div>
+                <Row>
+                    {watuRoles.filter((item: TGameRole)=>item.work == '挖图').map((item:TGameRole) => {
+                        return <Col key={item.id} span={12}>
+                            {roleTag(item)}
+                        </Col>
+                    })}
+                </Row>
+                <Popover onVisibleChange={(v) => {
+                    if (v) {
+                        formRef.resetFields()
+                    }
+                    showAccountPopoverIndex = 3
+                    setShowAccountPopover(v)
+                }
+                } visible={showAccountPopover && showAccountPopoverIndex == 3} trigger="click" placement="topLeft" title='添加角色' content={addContent('挖图')}>
+                    <Button className="m-t-15" size="small">+添加角色</Button>
+                </Popover>
+            </div>
+            <Divider />
+            <div>
+                <div className="m-b-10 flex-row-center">
+                    <h4>接货角色</h4>
+                </div>
+                <Row>
+                    {watuRoles.filter((item: TGameRole)=>item.work == '接货').map((item:TGameRole) => {
+                        return <Col key={item.id} span={12}>
+                            {roleTag(item)}
+                        </Col>
+                    })}
+                </Row>
+                <Popover onVisibleChange={(v) => {
+                    if (v) {
+                        formRef.resetFields()
+                    }
+                    showAccountPopoverIndex = 4
+                    setShowAccountPopover(v)
+                }
+                } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('接货')}>
+                    <Button className="m-t-15" size="small">+添加角色</Button>
+                </Popover>
+            </div>
+        </Modal>
+        <Modal visible={showGroupModal} onCancel={() => { setShowGroupModal(false) }} onOk={() => {
+            const id = userStore.user?.id
+            formRef.validateFields().then((res) => {
+                request({
+                    url: '/api/gameGroup/add_game_group',
+                    data: {
+                        name: res.name,
+                        type: '挖图组',
+                        gameServer: res.gameServer,
+                        userId: id,
+                    },
+                    method: "post"
+                }).then(res => {
+                    message.success('创建成功')
+                    tableRef.current!.reload()
+                    setShowGroupModal(false)
+                })
+
+            })
+        }} >
+            <ChForm form={formRef} formData={[{
+                label: '分组名称',
+                name: 'name',
+                type: FormItemType.input,
+            }, {
+                label: '分组服务器',
+                name: 'gameServer',
+                type: FormItemType.input,
+            }
+            ]} />
+        </Modal>
+        <Collapse defaultActiveKey={['1', '2']}>
+            <Panel header="挖图功能" key="1">
+                <Row>
+                    <Col><div style={{ 'marginLeft': '10px' }}>挖图配置:</div></Col>
                     <Col>
                         <Select size="small" style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v) => {
                             // @ts-ignore
@@ -420,9 +637,8 @@ function HomeFeature() {
                             }} />
                         </div>
                     </Col>
-                   
                 </Row>
-                <br/>
+                <br />
                 <Row>
                     <Col>
                         <Button onClick={() => {
@@ -437,8 +653,79 @@ function HomeFeature() {
                         <Button onClick={() => { pageStore.throwLitter() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
                     </Col>
                 </Row>
+                <br />
+                <br />
+                <br />
+            </Panel>
+            <Panel header={"挖图组配置"} key="2">
+                <Button className="m-b-10" size="small" type="primary" onClick={() => { setShowGroupModal(true) }}> 添加分组 </Button>
+
+                <ChTablePanel
+                    ref={tableRef}
+                    disablePagination={true}
+                    formData={[]}
+                    url="/api/gameGroup/get_game_group_page?type='挖图组'"
+                    columns={[
+                        {
+                            title: '分组编码',
+                            dataIndex: 'id',
+                            key: 'id',
+                        },
+                        {
+                            title: '分组类型',
+                            dataIndex: 'type',
+                            key: 'type',
+                        },
+                        {
+                            title: '名称',
+                            dataIndex: 'name',
+                            key: 'name',
+                        },
+                        {
+                            title: '服务器',
+                            dataIndex: 'gameServer',
+                            key: 'gameServer',
+                        }, {
+                            title: '操作',
+                            dataIndex: 'option',
+                            key: 'option',
+                            render: (_: any, item: TWatuGroup) => {
+                                return <div style={{ width: '120px' }}>
+                                    <Button onClick={() => {
+                                        setWatuGroup(item)
+                                        setShowWatuGroupSettingModal(true)
+                                    }} type="link">配置角色</Button>
+                                </div>
+                            }
+                        }
+                    ]}
+                />
+            </Panel>
+        </Collapse>
+    </div>
+}
+function HomeFeature() {
+    const pageStore = PageStore.useContainer()
+    return <div className='home-feature'>
+        <div></div>
+        <Tabs onChange={(v) => pageStore.setFeatureTabIndex(v)} type="card" defaultActiveKey={pageStore.featureTabIndex} style={{ marginBottom: 32 }}>
+            <TabPane tab="通用功能" key="1">
+                <Row>
+                    <Col>
+                        <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
+                    </Col>
+                    <Col className="m-l-10">
+                        <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
+                    </Col>
+                    <Col className="m-l-10">
+                        <Button onClick={() => { pageStore.setsShowHanhu(true) }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动喊话</Button>
+                    </Col>
+                </Row>
             </TabPane>
-            <TabPane tab="抓鬼" key="3">
+            <TabPane tab="挖图" key="2">
+                <HomeWatu />
+            </TabPane>
+            <TabPane tab="抓鬼" key="4">
                 <Row>
                     <Col>
                         <Button onClick={() => {
@@ -448,64 +735,13 @@ function HomeFeature() {
                     </Col>
                 </Row>
             </TabPane>
-            <TabPane tab="其他" key="4">
+            <TabPane tab="其他" key="5">
                 <Row>
 
                 </Row>
             </TabPane>
+
         </Tabs>
-        {/* <Row>
-            <Col>
-                <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本1</Button>
-            </Col>
-
-            <Col>
-                <Button onClick={() => {
-                    pageStore.setModalMultipleAccountSelectShow(true)
-                }} icon={<InsertRowBelowOutlined />} type='primary' size='small' className='fs-12 m-l-10'>一键起号</Button>
-            </Col>
-            <Col>
-                <Button onClick={() => {
-                    selectDeviceFunc = 'handleSelectWatuDevice'
-                    pageStore.setShowSelectDeviceModal(true)
-                }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>挖图位置解析</Button>
-            </Col>
-
-            
-            <Col>
-                <Select style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v) => {
-                    // @ts-ignore
-                    window.cangkuPath = v; pageStore.setCangkuPath(v)
-                }}>
-                    <Select.Option value="长安城">长安城</Select.Option>
-                    <Select.Option value="建邺城">建邺城</Select.Option>
-                </Select>
-            </Col>
-        </Row> */}
-        {/* <Row className='m-t-10'>
-            <Col>
-                <Button onClick={() => {
-                    selectDeviceFunc = 'handleSelectZhuaGuiDevice'
-                    pageStore.setShowSelectDeviceModal(true)
-                }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
-            </Col>
-            <Col className="m-l-10">
-                <Button onClick={() => { pageStore.closeAllTask() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>关闭全部脚本</Button>
-            </Col>
-            <Col className="m-l-10">
-                <Button onClick={() => { pageStore.sellEquipment() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
-            </Col>
-            <Col className="m-l-10">
-                <Button onClick={() => { pageStore.throwLitter() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
-            </Col>
-            <Col className="m-l-10">
-                <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
-            </Col>
-            
-            <Col className="m-l-10">
-                <Button onClick={() => { pageStore.setsShowHanhu(true) }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动喊话</Button>
-            </Col>
-        </Row> */}
         <div className="home-feature-panel">
             {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
         </div>
@@ -514,9 +750,9 @@ function HomeFeature() {
             pageStore.setsShowHanhu(false)
         }} >
             <div>请输入喊话个数 <Input onChange={
-                    // @ts-ignore
-                    v => window.hanghuaCount = v.target.value
-                } />
+                // @ts-ignore
+                v => window.hanghuaCount = v.target.value
+            } />
             </div>
         </Modal>
     </div>
