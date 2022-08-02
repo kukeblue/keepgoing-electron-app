@@ -1759,11 +1759,7 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-<< << << < HEAD
-window.F_打开好友信息页面('30139591')
-== == == =
-window.F_打开好友信息页面(1)
->>>>>> > 02f8eddefa545671bdb94bd6264d26a7e8c34f42
+    window.F_打开好友信息页面(1)
 # time.sleep(1)
 # print(pointUtil.傲来点集[1][0])
 # window.F_选中道具格子(16)

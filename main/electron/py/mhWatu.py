@@ -292,20 +292,13 @@ def F_点击小地图(map, x, y, num, other, isBeen, 仓库位置='长安城'):
         # 小蜜蜂模式必须图满了才能发车 todo
         if(window.gameId != ''):
             networkApi.doUpdateRoleStatus(window.gameId, '空闲')
-        while(True):
-            time.sleep(5)
-            # 关闭打开
+        point = window.findImgInWindow('daoju_baotu_large.png')
+        if(point != None and point[0] > 0):
+            time.sleep(10)
             pyautogui.hotkey('alt', 'e')
-            time.sleep(0.1)
-            pyautogui.hotkey('alt', 'e')
-            point = window.findImgInWindow('daoju_baotu_large.png')
-            if(point != None and point[0] > 0):
-                time.sleep(10)
-                pyautogui.hotkey('alt', 'e')
-                window.F_点击自动()
-                F_小蜜蜂模式(仓库位置, window)
-                break
-            print('等待宝图')
+            window.F_点击自动()
+            F_小蜜蜂模式(仓库位置, window)
+        print('等待宝图')
 
 
 def F_邀请发图(window):
@@ -346,8 +339,9 @@ def F_小蜜蜂模式(仓库位置, window=None):
                 window.F_点击自动()
                 F_获取宝图信息(window)
                 break
-
-            time.sleep(10)
+            else:
+                window.findMhWindow()
+                time.sleep(10)
 
 
 if __name__ == '__main__':

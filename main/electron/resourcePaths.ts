@@ -24,6 +24,7 @@ const resourcePaths = {
     METHOD_CONNECTOR: 'method_connector',
     METHOD_ZHANDOU: 'method_zhandou',
     METHOD_HANHUA: 'method_hanhua',
+    METHOD_UPDATEPY: 'method_update_py',
 
 
 

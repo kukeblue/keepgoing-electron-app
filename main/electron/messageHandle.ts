@@ -79,7 +79,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 抓鬼
     ipcMain.on(resourcePaths.METHOD_ZHUAGUI_TASK, (event, args) => {
         logger.info('run py script: METHOD_ZHUAGUI_TASK')
-        const result = runPyScript('mhZhuaGui', ['zg', args[0]])
+        const result = runPyScript('mhZhuaGui', ['zg', []])
         event.returnValue = {
             code: result,
             status: 0
@@ -125,6 +125,15 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     ipcMain.on(resourcePaths.METHOD_HANHUA, (event, args) => {
         logger.info('run py script: METHOD_HANHUA')
         const result = runPyScript('mhZhandou', ['hh', args[0]])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+    // 更新PY
+    ipcMain.on(resourcePaths.METHOD_UPDATEPY, (event, args) => {
+        logger.info('run py script: METHOD_UPDATEPY')
+        const result = runPyScript('mhUpdate', [])
         event.returnValue = {
             code: result,
             status: 0

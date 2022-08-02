@@ -6,10 +6,11 @@ import "./index.less";
 const request = ChUtils.Ajax.request
 import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy } from "../../call";
 import { createContainer } from 'unstated-next'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
+const { confirm } = Modal;
 import {
     DownCircleOutlined,
     ClearOutlined,
@@ -44,9 +45,22 @@ export function usePageStore() {
         MainThread.messageListener.pushStateHandles = [handlePushState]
         MainThread.messageListener.methodGetWatuInfoReplyHandles = [handleGetWatuInfoReply]
         // @ts-ignore
-        window.cangkuPath = '长安城'
+        window.cangkuPath = '建邺城'
+        request({
+            url: '/api/task/task_lock',
+            data: {},
+            method: "post"
+        }).then(res => {
+            if (res.status != 0) {
+                setLock(false)
+            }
+        }).catch(() => {
+            setLock(false)
+        })
+
     }, [])
     const [logs, setLogs] = useState<string[]>([])
+    const [lock, setLock] = useState<boolean>(true)
     const [processState, setProcessState] = useState({
         runningPyProcess: {}
     })
@@ -58,7 +72,7 @@ export function usePageStore() {
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
     const [isAccept, setIsAccept] = useState<boolean>(true)
-    const [cangkuPath, setCangkuPath] = useState<string>('长安城');
+    const [cangkuPath, setCangkuPath] = useState<string>('建邺城');
     const [currentTask, setCurrentTask] = useState<TPanelTask>('')
     const [code, setCode] = useState<number>()
     const [watuInfo, setWatuInfo] = useState<TWatuInfo>()
@@ -106,7 +120,7 @@ export function usePageStore() {
         doSellEquipment(watuDeviceId)
     }
     const handleGetWatuInfoReply = (data: any) => {
-        console.log('handleGetWatuInfoReply', data);
+        const userStore = UserStore.useContainer()
         const result = data.result
         const mapName = result[0][0] || result[1][0] || result[2][0]
         const points = result.map((item: any) => {
@@ -121,14 +135,23 @@ export function usePageStore() {
         // @ts-ignore
         // @ts-ignore
         if (window.isBee) {
-            setTimeout(() => {
-                console.log('直接开始挖图');
-                // @ts-ignore
-                if (window.isBee) {
-                    // @ts-ignore
-                    doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
+            request({
+                url: '/api/task/add_task_watu_log',
+                data: { accountId: userStore.user.id },
+                method: "post"
+            }).then(res => {
+                if (res.status == 0) {
+                    setTimeout(() => {
+                        console.log('直接开始挖图');
+                        // @ts-ignore
+                        if (window.isBee) {
+                            // @ts-ignore
+                            doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
+                        }
+                    }, 500)
                 }
-            }, 1000)
+            })
+
         }
     }
     const handleSelectJiangjunDevice = () => {
@@ -154,15 +177,6 @@ export function usePageStore() {
     //         }
     //     })
     // }
-    const handleSelectZhuaGuiDevice = () => {
-        formRef.validateFields().then((res: any) => {
-            if (res.deviceId) {
-                zhuaGuiDeviceId = res.deviceId
-                doZhuaGuiTask(res.deviceId)
-                setShowSelectDeviceModal(false)
-            }
-        })
-    }
     const handleTest = () => checkIsTasking(() => {
         setCurrentTask('test')
         setIsTasking(true)
@@ -224,8 +238,12 @@ export function usePageStore() {
     const 弹出添加分组框 = () => {
         alert('添加分组')
     }
+    const 更新脚本 = () => {
+
+    }
     return {
         弹出添加分组框,
+        lock,
         featureTabIndex, // 激活的功能tab栏
         setFeatureTabIndex,
         setsShowHanhu,
@@ -258,7 +276,6 @@ export function usePageStore() {
         deviceOptions,
         handleClickLinkDevice,
         handleSelectJiangjunDevice,
-        handleSelectZhuaGuiDevice,
         handleClearLog,
         showSelectDeviceModal,
         setShowSelectDeviceModal,
@@ -309,8 +326,6 @@ function HomeGameArea() {
         if (selectDeviceFunc === 'handleSelectJiangjunDevice') {
             pageStore.handleSelectJiangjunDevice()
         } else if (selectDeviceFunc === 'handleSelectWatuDevice') {
-        } else if (selectDeviceFunc === 'handleSelectZhuaGuiDevice') {
-            pageStore.handleSelectZhuaGuiDevice()
         }
 
     }
@@ -429,12 +444,19 @@ function HomeWatu() {
             <ChForm form={formRef} formData={[{
                 label: '选择账号',
                 name: 'accountIds',
-                type: FormItemType.multipleSelect,
+                type: FormItemType.other,
                 // @ts-ignore
                 options: options,
+                dom: <Select
+                    mode="multiple"
+                    options={options}
+                    showSearch
+                    optionFilterProp="label"
+                />
             }]} />
             <Button onClick={() => {
                 formRef.validateFields().then((res: any) => {
+                    console.log(res.accountIds)
                     if (res.accountIds) {
                         let accounts = res.accountIds.map((id: any) => {
                             return pageStore.accountMap[id]
@@ -711,8 +733,39 @@ function HomeWatu() {
     </div>
 }
 function HomeFeature() {
+    const userStore = UserStore.useContainer()
     const pageStore = PageStore.useContainer()
-    return <div className='home-feature'>
+    return !pageStore.lock ? <div></div> : <div className='home-feature'>
+        <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-r-5' size="small" onClick={() => {
+            const id = userStore.user?.id
+            if (id && id != 1) {
+                confirm({
+                    title: '更新后无法复原',
+                    content: 'Some descriptions',
+                    onOk() {
+                        doUpdatePy();
+                        message.success('更新成功，请不要重复更新')
+
+                    },
+                    onCancel() {
+                        console.log('Cancel');
+                    },
+                });
+            } else {
+                confirm({
+                    title: '开发者是否确认更新',
+                    content: 'Some descriptions',
+                    onOk() {
+                        doUpdatePy();
+                        console.log('OK');
+                    },
+                    onCancel() {
+                        console.log('Cancel');
+                    },
+                });
+            }
+        }}>更新脚本</Button>
+        <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.closeAllTask() }}>关闭全部脚本</Button>
         <Tabs onChange={(v) => pageStore.setFeatureTabIndex(v)} type="card" defaultActiveKey={pageStore.featureTabIndex} style={{ marginBottom: 32 }}>
             <TabPane tab="通用功能" key="1">
                 <Row>
@@ -734,8 +787,7 @@ function HomeFeature() {
                 <Row>
                     <Col>
                         <Button onClick={() => {
-                            selectDeviceFunc = 'handleSelectZhuaGuiDevice'
-                            pageStore.setShowSelectDeviceModal(true)
+                            doZhuaGuiTask()
                         }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
                     </Col>
                 </Row>
@@ -745,7 +797,6 @@ function HomeFeature() {
 
                 </Row>
             </TabPane>
-
         </Tabs>
 
         <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {
