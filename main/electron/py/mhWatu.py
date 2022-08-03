@@ -287,18 +287,8 @@ def F_点击小地图(map, x, y, num, other, isBeen, 仓库位置='长安城'):
         window.F_回仓库丢小号(接货id, 仓库位置)
     else:
         window.F_回仓库放东西(map, 仓库位置)
-    window.F_选中道具格子(1)
     if(isBeen):
-        # 小蜜蜂模式必须图满了才能发车 todo
-        if(window.gameId != ''):
-            networkApi.doUpdateRoleStatus(window.gameId, '空闲')
-        point = window.findImgInWindow('daoju_baotu_large.png')
-        if(point != None and point[0] > 0):
-            time.sleep(10)
-            pyautogui.hotkey('alt', 'e')
-            window.F_点击自动()
-            F_小蜜蜂模式(仓库位置, window)
-        print('等待宝图')
+        F_小蜜蜂模式(仓库位置, 0, window)
 
 
 def F_邀请发图(window):
@@ -318,30 +308,29 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(仓库位置, window=None):
+def F_小蜜蜂模式(仓库位置, restart=0, window=None):
     time.sleep(3)
-    if(window):
-        F_获取宝图信息(window)
-    else:
+    if(window == None):
+        logUtil.chLog('重新发车')
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
-        window.findMhWindow()
+    window.findMhWindow()
+    if(restart != 1):
         if(window.gameId != ''):
             networkApi.doUpdateRoleStatus(window.gameId, '空闲')
-        pyautogui.hotkey('alt', 'e')
-        while(True):
-            window.F_选中道具格子(1)
-            time.sleep(1)
-            point = window.findImgInWindow('daoju_baotu_large.png')
-            if(point != None and point[0] > 0):
-                time.sleep(10)
-                pyautogui.hotkey('alt', 'e')
-                window.F_点击自动()
-                F_获取宝图信息(window)
-                break
-            else:
-                window.findMhWindow()
-                time.sleep(10)
+    while(True):
+        window.F_选中道具格子(1)
+        time.sleep(1)
+        point = window.findImgInWindow('daoju_baotu_large.png')
+        if(point != None and point[0] > 0):
+            time.sleep(10)
+            pyautogui.hotkey('alt', 'e')
+            window.F_点击自动()
+            F_获取宝图信息(window)
+            break
+        else:
+            window.findMhWindow()
+            time.sleep(10)
 
 
 if __name__ == '__main__':

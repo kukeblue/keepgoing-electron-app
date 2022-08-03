@@ -271,7 +271,6 @@ class MHWindow:
         pyautogui.hotkey('alt', 'e')
 
     def F_吃药(self):
-        pyautogui.hotkey('alt', 'e')
         try:
             point = self.findImgInWindow(
                 'all_lanwan.png', area=(0, 479, 286, 60))
@@ -285,7 +284,6 @@ class MHWindow:
                 utils.rightClick()
         except:
             print('F_吃药 error')
-        pyautogui.hotkey('alt', 'e')
 
     def F_识别当前坐标(self):
         位置信息 = [self.windowArea[0], self.windowArea[1] + 19, 124, 52]
@@ -379,6 +377,7 @@ class MHWindow:
             time.sleep(0.5)
 
     def F_自动战斗(self):
+        是否战斗 = False
         time.sleep(0.5)
         self.F_识别4小人()
         for i in range(4):
@@ -389,8 +388,11 @@ class MHWindow:
                 while(True):
                     time.sleep(1)
                     if(self.F_是否结束战斗()):
+                        是否战斗 = True
                         print('F_自动战斗：结束战斗')
                         break
+        if(是否战斗):
+            self.F_吃药()
 
     def F_自动战斗2(self):
         finish = False
@@ -1252,10 +1254,19 @@ class MHWindow:
         self.F_是否结束寻路()
 
     def F_打开好友信息页面(self, id):
-        pyautogui.hotkey('alt', 'f')
-        while(self.消息弹窗处理() == True):
+        self.F_移动到游戏区域坐标(682, 76)
+        while True:
             pyautogui.hotkey('alt', 'f')
             time.sleep(0.5)
+            ret = baiduApi.op.FindMultiColor(
+                self.windowArea2[0] + 530, self.windowArea2[1] + 111, self.windowArea2[1] + 530 + 85, self.windowArea2[1] + 111 + 65, '380808', '1|3|b05c48,3|0|b86850', 0.95, 0)
+            if(ret[1] > 0):
+                self.F_移动到游戏区域坐标(567, 139)
+                utils.click()
+                self.F_移动到游戏区域坐标(682, 76)
+            else:
+                pyautogui.hotkey('alt', 'f')
+                break
         self.F_移动到游戏区域坐标(682, 76)
         pyautogui.hotkey('alt', 'f')
         time.sleep(0.5)
@@ -1279,7 +1290,10 @@ class MHWindow:
         else:
             self.F_移动到游戏区域坐标(650, 565)
             utils.click()
-            self.F_移动到游戏区域坐标(469, 231, 移动到输入框=True)
+            pyautogui.press('tab')
+            self.F_移动到游戏区域坐标(469, 231)
+            pyautogui.press('tab')
+            time.sleep(1)
             utils.click()
             for x in range(15):
                 pyautogui.press('left')
@@ -1747,13 +1761,6 @@ class MHWindow:
         pyautogui.hotkey('alt', '~')
         self.F_移动到游戏区域坐标(339, 552)
         utils.click()
-
-    def 消息弹窗处理(self):
-        if(window.findImgInWindow("all-message.png", 0.99) != None):
-            self.F_移动到游戏区域坐标(568, 140)
-            utils.click()
-            return True
-        return False
 
 
 if __name__ == '__main__':

@@ -59,6 +59,7 @@ export function usePageStore() {
         })
 
     }, [])
+    const userStore = UserStore.useContainer()
     const [logs, setLogs] = useState<string[]>([])
     const [lock, setLock] = useState<boolean>(true)
     const [processState, setProcessState] = useState({
@@ -98,10 +99,10 @@ export function usePageStore() {
         doKillProcess(pid)
         message.success('操作成功')
     }
-    const handleGetWatuInfo = () => {
+    const handleGetWatuInfo = (restart = 0) => {
         if (isBee) {
             message.success('操作成功')
-            doBee(cangkuPath)
+            doBee(cangkuPath, restart)
         } else {
             message.success('操作成功')
             doGetWatuInfo()
@@ -120,7 +121,7 @@ export function usePageStore() {
         doSellEquipment(watuDeviceId)
     }
     const handleGetWatuInfoReply = (data: any) => {
-        const userStore = UserStore.useContainer()
+
         const result = data.result
         const mapName = result[0][0] || result[1][0] || result[2][0]
         const points = result.map((item: any) => {
@@ -671,6 +672,11 @@ function HomeWatu() {
                         <Button onClick={() => {
                             pageStore.handleGetWatuInfo()
                         }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>开始挖图</Button>
+                    </Col>
+                    <Col>
+                        <Button onClick={() => {
+                            pageStore.handleGetWatuInfo(1)
+                        }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>重新扫描</Button>
                     </Col>
                     <Col className="m-l-10">
                         <Button onClick={() => { pageStore.sellEquipment() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>

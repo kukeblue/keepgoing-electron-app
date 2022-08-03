@@ -26,7 +26,7 @@ export const doUpdatePy = () => {
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
 export const doGetWatuClickMap = (mapName: string, x: number, y: number, index: number, otherPoint?: string, isBeen?: boolean, cangkuPath?: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [mapName, x, y, index, otherPoint, isBeen, cangkuPath])
-export const doBee = (cangkuPath: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [cangkuPath])
+export const doBee = (cangkuPath: string, restart = 0) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [cangkuPath, restart])
 
 
 const init = () => {

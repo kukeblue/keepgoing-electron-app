@@ -9,7 +9,7 @@ import json
 import time
 import requests
 from urllib import parse
-host = 'http://192.168.1.4:3000/api/client/'
+host = 'http://103.100.210.203:3000/api/client/'
 
 suanHost = ''
 

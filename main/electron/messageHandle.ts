@@ -151,7 +151,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')
-        const result = runPyScript('mhWatu', ['bee', args[0]])
+        const result = runPyScript('mhWatu', ['bee', args[0], args[1]])
         event.returnValue = {
             code: result,
             status: 0
