@@ -1057,7 +1057,8 @@ class MHWindow:
         for i in range(2):
             curLocation = self.获取当前坐标()
             if((curLocation in '762') == False):
-                self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
+                self.pointMove(
+                    self.windowArea[0] + 40, self.windowArea[1] + 525)
                 utils.click()
                 time.sleep(2)
             else:
@@ -1214,7 +1215,8 @@ class MHWindow:
         for i in range(2):
             curLocation = self.获取当前坐标()
             if((curLocation in '1010') == False):
-                self.pointMove(self.windowArea[0] + 632, self.windowArea[1] + 103)
+                self.pointMove(
+                    self.windowArea[0] + 632, self.windowArea[1] + 103)
                 utils.click()
                 time.sleep(2)
             else:
@@ -1380,12 +1382,12 @@ class MHWindow:
                 time.sleep(0.1)
                 pyautogui.press('delete')
             pyautogui.write(id)
-            window.focusWindow()
+            self.focusWindow()
             self.F_移动到游戏区域坐标(544, 233)
             utils.click()
             self.F_移动到游戏区域坐标(363, 409)
             utils.click()
-            window.focusWindow()
+            self.focusWindow()
             utils.rightClick()
             pyautogui.hotkey('alt', 'f')
             self.F_打开好友信息页面()
