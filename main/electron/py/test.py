@@ -1,20 +1,20 @@
-#encoding=UTF-8
+# # encoding=UTF-8
 
-import sys
-import os
-import string
-import win32com.client				#要下载对应的扩展程序,不明白的话，百度一下
-import pythoncom
-import time
-import win32api
-import win32con
-from ctypes import *
-from win32com.client import Dispatch
-import baiduApi
+# import sys
+# import os
+# import string
+# import win32com.client  # 要下载对应的扩展程序,不明白的话，百度一下
+# import pythoncom
+# import time
+# import win32api
+# import win32con
+# from ctypes import *
+# from win32com.client import Dispatch
+# import baiduApi
 
 
-hwnds = baiduApi.op.EnumWindow(0,"记事本","",1+4+8+16)
-print(hwnds)
+# hwnds = baiduApi.op.EnumWindow(0,"记事本","",1+4+8+16)
+# print(hwnds)
 # ret = baiduApi.op.BindWindow(hwnds, "normal", "windows", "windows", 1);
 # print(ret)
 # baiduApi.op.MoveTo(100, 200)
@@ -36,10 +36,10 @@ print(hwnds)
 # print(baiduApi.op.GetWindowProcessPath(txt_hwnd))
 # print(baiduApi.op.SetWindowState(txt_hwnd,4))
 #osapi_dll = windll.LoadLibrary('OLE32')
-#osapi_dll.CoUninitialize()
-#osapi_dll.CoInitializeEx(0,0)
+# osapi_dll.CoUninitialize()
+# osapi_dll.CoInitializeEx(0,0)
 
-#注册好爱插件
+# 注册好爱插件
 # a=os.system('regsvr32 haoi.dll')
 # if a:
 # 	print("注册 haoi.dll 成功!")
@@ -47,7 +47,6 @@ print(hwnds)
 # 	print("注册 haoi.dll 失败!")
 
 
-	
 # haoi = Dispatch('haoi.dt')
 
 
@@ -65,7 +64,7 @@ print(hwnds)
 # TID=haoi.TID #获取题目流水号，用于申诉错题
 
 # if haoi.IsRight(reply): #判断是否为正常的答案格式
-	
+
 # 	print("返回的答案是:%s " % str(ret_id))
 #     #输入内容提交 并判断验证码是否正确
 #     #如果错误应调用SendError
@@ -74,6 +73,7 @@ print(hwnds)
 # else:
 # 	print("错误")
 # 	# 应该延迟1秒后 重新截图 再重新发送
-	
-
+import mouse
 # raw_input('按任意键退出')
+
+mouse.move("100", "100", duration=0.4, absolute=True)
