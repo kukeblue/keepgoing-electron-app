@@ -479,6 +479,33 @@ class MHWindow:
             self.F_移动到游戏区域坐标(356, 344)
             utils.click()
 
+    def F_判断飞行符(self):
+        while(True):
+            self.F_移动到游戏区域坐标(37, 496)
+            utils.click()
+            if (self.findImgInWindow("all-feixing.png") == None):
+                print("没有飞行符")
+                self.F_移动到游戏区域坐标(82, 496)
+                utils.click()
+                point = self.findImgInWindow(
+                    'all-feixing.png')
+                if point != None:
+                    self.pointMove(point[0], point[1])
+                    utils.click()
+                    self.F_移动到游戏区域坐标(37, 496)
+                    utils.click()
+                    utils.click()
+                point = self.findImgInWindow(
+                    'all-feixing.png')
+                if point != None:
+                    self.pointMove(point[0], point[1])
+                    utils.click()
+                    self.F_移动到游戏区域坐标(260, 451)
+                    utils.click()
+                    break
+            else:
+                return
+
     def F_使用飞行符(self, path):
         desLocation = ""
         if(path == '傲来国'):
@@ -531,10 +558,43 @@ class MHWindow:
                         utils.click()
                     time.sleep(1)
                 else:
+                    pyautogui.hotkey('alt', 'e')
+                    self.F_判断飞行符()
                     self.F_选中道具格子(20)
                     utils.rightClick()
                     time.sleep(1)
         pyautogui.hotkey('alt', 'e')
+
+    def F_判断香(self):
+        while(True):
+            self.F_移动到游戏区域坐标(37, 496)
+            utils.click()
+            if (self.findImgInWindow("all-xiang.png") == None):
+                self.F_移动到游戏区域坐标(82, 496)
+                utils.click()
+                point = self.findImgInWindow(
+                    'all-xiang.png')
+                if point != None:
+                    self.pointMove(point[0], point[1])
+                    utils.click()
+                    self.F_移动到游戏区域坐标(37, 496)
+                    utils.click()
+                    utils.click()
+                point = self.findImgInWindow(
+                    'all-xiang.png')
+                if point != None:
+                    self.pointMove(point[0], point[1])
+                    utils.click()
+                    self.F_移动到游戏区域坐标(58, 301)
+                    utils.click()
+                    break
+            else:
+                return
+
+    def F_吃香(self):
+        self.F_判断香()
+        self.F_选中道具格子(1)
+        utils.rightClick()
 
     def F_使用长安城飞行棋(self, path):
         navWay = ""
@@ -1766,7 +1826,7 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_打开好友信息页面(1)
+    window.F_吃香()
 # time.sleep(1)
 # print(pointUtil.傲来点集[1][0])
 # window.F_选中道具格子(16)
