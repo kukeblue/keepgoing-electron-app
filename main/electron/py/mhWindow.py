@@ -144,7 +144,7 @@ class MHWindow:
 
     def findImgsInWindow(self, img):
         locations = pyautogui.locateAllOnScreen(
-            self.pyImageDir + self.F_获取设备图片(img), region=self.windowAreaGui, grayscale=False, confidence=0.75)
+            self.pyImageDir + self.F_获取设备图片(img), region=self.windowAreaGui, grayscale=False, confidence=0.95)
         ponits = []
         for location in locations:
             ponits.append([int(location.left / self.screenUnit), int(location.top / self.screenUnit),
@@ -477,6 +477,43 @@ class MHWindow:
         height = math.floor((num-1) / 5) * 50
         self.pointMove(firstBlockX + left, firstBlockY + height)
 
+    def 丢垃圾铁(self):
+        self.F_打开道具()
+        self.focusWindow()
+        points = window.findImgsInWindow('all-daoju-tie.png')
+        print(points)
+        for point in points:
+            window.pointMove(point[0], point[1])
+            time.sleep(0.2)
+            if(point != None):
+                宝图位置信息 = [window.windowArea[0], window.windowArea[1],
+                          window.windowArea[0] + 600, window.windowArea[1] + 600]
+                ret = baiduApi.F_查找等级(宝图位置信息)
+                if(ret != '' and ret != None and int(ret) < 40):
+                    utils.click()
+                    self.F_移动到游戏区域坐标(562, 417)
+                    utils.click()
+                    self.F_移动到游戏区域坐标(351, 342)
+                    utils.click()
+
+    def 丢垃圾书(self):
+        self.F_打开道具()
+        self.focusWindow()
+        points = window.findImgsInWindow('all-daoju-shu.png')
+        for point in points:
+            window.pointMove(point[0], point[1])
+            time.sleep(0.2)
+            if(point != None):
+                宝图位置信息 = [window.windowArea[0], window.windowArea[1],
+                          window.windowArea[0] + 600, window.windowArea[1] + 600]
+                ret = baiduApi.F_查找等级(宝图位置信息)
+                if(ret != '' and ret != None and int(ret) < 50):
+                    utils.click()
+                    self.F_移动到游戏区域坐标(562, 417)
+                    utils.click()
+                    self.F_移动到游戏区域坐标(351, 342)
+                    utils.click()
+
     def F_卖装备(self):
         self.F_使用飞行符('长安城')
         self.F_小地图寻路器([462, 206])
@@ -489,7 +526,6 @@ class MHWindow:
         utils.click()
         time.sleep(1)
         有货格子 = []
-        self.F_移动到游戏区域坐标(200, 200)
         point = self.findImgInWindow('all-maizhuanbei-top.png')
         if(point != None):
             print(point)
@@ -525,6 +561,8 @@ class MHWindow:
                 utils.click()
                 time.sleep(1)
                 utils.click()
+        self.F_移动到游戏区域坐标(521, 140)
+        utils.click()
 
     def F_丢垃圾(self, num):
         self.focusWindow()
@@ -1630,6 +1668,9 @@ class MHWindow:
         utils.rightClick()
 
     def F_回仓库丢小号(self, 接货id, 仓库地点='长安城'):
+        self.F_卖装备()
+        self.丢垃圾书()
+        self.丢垃圾铁()
         if(仓库地点 == '长安城'):
             self.F_使用飞行符('长安城')
             time.sleep(1)
@@ -1885,12 +1926,3 @@ if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
     window.F_卖装备()
-    # path = window.F_窗口区域截图('temp_daoju_info.png', window.daojuArea)
-# time.sleep(1)
-# print(pointUtil.傲来点集[1][0])
-# window.F_选中道具格子(16)
-# utils.rightClick()
-
-
-# window.F_卖装备(15)
-# print(window.F_是否结束寻路())
