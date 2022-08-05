@@ -7,6 +7,7 @@ import win32gui
 import win32api
 import win32con
 import pyautogui
+import mouse
 import re
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
@@ -38,6 +39,13 @@ def click():
         win32gui.SendMessage(
             handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
         time.sleep(0.2)
+
+
+def move(x, y):
+    if((abs(x) + abs(y)) < 100):
+        mouse.move(x, y, absolute=False, duration=0.04)
+    else:
+        mouse.move(x, y, absolute=False, duration=0.04)
 
 
 def doubleClick():
