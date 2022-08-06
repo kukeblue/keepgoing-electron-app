@@ -480,14 +480,14 @@ class MHWindow:
     def 丢垃圾铁(self):
         self.F_打开道具()
         self.focusWindow()
-        points = window.findImgsInWindow('all-daoju-tie.png')
+        points = self.findImgsInWindow('all-daoju-tie.png')
         print(points)
         for point in points:
-            window.pointMove(point[0], point[1])
+            self.pointMove(point[0], point[1])
             time.sleep(0.2)
             if(point != None):
-                宝图位置信息 = [window.windowArea[0], window.windowArea[1],
-                          window.windowArea[0] + 600, window.windowArea[1] + 600]
+                宝图位置信息 = [self.windowArea[0], self.windowArea[1],
+                          self.windowArea[0] + 600, self.windowArea[1] + 600]
                 ret = baiduApi.F_查找等级(宝图位置信息)
                 if(ret != '' and ret != None and int(ret) < 40):
                     utils.click()
@@ -498,14 +498,13 @@ class MHWindow:
 
     def 丢垃圾书(self):
         self.F_打开道具()
-        self.focusWindow()
-        points = window.findImgsInWindow('all-daoju-shu.png')
+        points = self.findImgsInWindow('all-daoju-shu.png')
         for point in points:
-            window.pointMove(point[0], point[1])
+            self.pointMove(point[0], point[1])
             time.sleep(0.2)
             if(point != None):
-                宝图位置信息 = [window.windowArea[0], window.windowArea[1],
-                          window.windowArea[0] + 600, window.windowArea[1] + 600]
+                宝图位置信息 = [self.windowArea[0], self.windowArea[1],
+                          self.windowArea[0] + 600, self.windowArea[1] + 600]
                 ret = baiduApi.F_查找等级(宝图位置信息)
                 if(ret != '' and ret != None and int(ret) < 50):
                     utils.click()
@@ -522,7 +521,7 @@ class MHWindow:
         self.F_移动到游戏区域坐标(305, 365)
         utils.click()
         time.sleep(1)
-        self.F_移动到游戏区域坐标(174, 341)
+        self.F_移动到游戏区域坐标(174, 337)
         utils.click()
         time.sleep(1)
         有货格子 = []
@@ -581,14 +580,14 @@ class MHWindow:
     def F_判断是否有飞行符(self):
         self.focusWindow()
         self.F_打开道具()
-        result = self.findImgInWindow(
-            "all-feixing.png", area=self.daojuArea)
+        result = pyautogui.locateOnScreen(
+            self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
         if (result == None):
             self.pointMove(self.daojuArea[0] + 50, self.daojuArea[1] + 226)
             utils.click()
             time.sleep(1)
-            point = self.findImgInWindow(
-                'all-feixing.png', area=self.daojuArea)
+            point = pyautogui.locateOnScreen(
+                self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.click()
@@ -597,8 +596,8 @@ class MHWindow:
                 utils.click()
                 utils.click()
             time.sleep(1)
-            point = self.findImgInWindow(
-                'all-feixing.png', area=self.daojuArea)
+            point = pyautogui.locateOnScreen(
+                self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.click()
@@ -669,12 +668,14 @@ class MHWindow:
 
     def F_行囊吃香(self):
         self.F_打开道具()
-        if (self.findImgInWindow("all-xiang.png", area=self.daojuArea) == None):
+        point = pyautogui.locateOnScreen(
+            self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+        if (point == None):
             self.pointMove(self.daojuArea[0] + 53, self.daojuArea[1] + 223)
             utils.click()
-            time.sleep(1)
-            point = self.findImgInWindow(
-                'all-xiang.png', area=self.daojuArea)
+            time.sleep(1.5)
+            point = pyautogui.locateOnScreen(
+                self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.click()
@@ -1184,6 +1185,7 @@ class MHWindow:
         time.sleep(1)
         pyautogui.press('f9')
         self.pointMove(self.windowArea[0] + 35, self.windowArea[1] + 125)
+        utils.click()
         utils.click()
         time.sleep(3)
 
@@ -1925,4 +1927,4 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_卖装备()
+    window.F_判断是否有飞行符()
