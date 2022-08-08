@@ -1051,10 +1051,14 @@ class MHWindow:
     def F_导航到大唐境外(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_大唐境外')
         time.sleep(1)
+        pyautogui.press('f9')
+        time.sleep(0.5)
         self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
         utils.click()
-        time.sleep(0.5)
+        time.sleep(2)
         for i in range(2):
+            pyautogui.press('f9')
+            time.sleep(0.5)
             curLocation = self.获取当前坐标()
             if((curLocation in '762') == False):
                 self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
@@ -1089,6 +1093,16 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + 35, self.windowArea[1] + 125)
         utils.click()
         time.sleep(3)
+        for i in range(2):
+            pyautogui.press('f9')
+            time.sleep(0.5)
+            curLocation = self.获取当前坐标()
+            if((curLocation in '1793') == False):
+                self.pointMove(self.windowArea[0] + 35, self.windowArea[1] + 125)
+                utils.click()
+                time.sleep(2)
+            else:
+                break
 
     def F_导航到长寿郊外(self):
         self.F_使用长寿村飞行棋('绿色长寿村导标旗坐标_长寿郊外')
@@ -1845,7 +1859,7 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_导航到花果山()
+    window.F_导航到麒麟山()
 # time.sleep(1)
 # print(pointUtil.傲来点集[1][0])
 # window.F_选中道具格子(16)
