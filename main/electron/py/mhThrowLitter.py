@@ -14,12 +14,11 @@ import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
-def 丢垃圾(deviceId):
+def 丢垃圾():
     print('F_领取丢垃圾')
     time.sleep(3)
-    deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
+    window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
     utils.click()

@@ -47,6 +47,7 @@ def 无人值守模式():
             pyautogui.hotkey('ctrl', 'tab')
             time.sleep(2)
 
+
 def 飞机队四人模式挂机():
     print('启动队四人模式挂机')
     time.sleep(3)
@@ -153,11 +154,11 @@ def 飞机队操作(window):
     time.sleep(0.3)
 
 
-无人值守模式()
-# if __name__ == '__main__':
-#     fire.Fire({
-#         'lbc': 飞机队四人模式挂机,
-#         'hh': 自动喊话模式,
-#     })
+# 无人值守模式()
+if __name__ == '__main__':
+    fire.Fire({
+        'lbc': 飞机队四人模式挂机,
+        'hh': 自动喊话模式,
+    })
 # 自动喊话模式('4')
 # 飞机队四人模式挂机('9')dfv

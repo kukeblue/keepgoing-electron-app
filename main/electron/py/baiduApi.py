@@ -101,8 +101,20 @@ def F_大漠小地图寻路坐标识别(area):
     op.SetDict(0, pyZhikuDir + '\\zuobiao_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
                  "ffff00-000000", 1.0)
-    print(ret)
+
     return ret
+
+
+def F_查找等级(area):
+    op.SetDict(0, pyZhikuDir + '\\yellow.txt')
+    ret = op.FindStr(area[0], area[1], area[2], area[3],
+                     'dengji', "fefe00-000000|ffff00-000000", 0.9)
+    if(ret[0] > -1):
+        ret = op.Ocr(ret[1] + 25, ret[2], ret[1] + 50, ret[2] + 15,
+                     "fefe00-000000|ffff00-000000", 0.8)
+        return ret
+    else:
+        return ''
 
 
 def F_大漠坐标文字识别(area):
