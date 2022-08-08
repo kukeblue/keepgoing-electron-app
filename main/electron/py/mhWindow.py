@@ -343,7 +343,6 @@ class MHWindow:
         坐标 = self.获取当前坐标()
         count = 0
         while(True):
-            time.sleep(0.5)
             坐标2 = self.获取当前坐标()
             if(坐标2 != None and 坐标 != None and 坐标 == 坐标2):
                 if(count > 1):
@@ -352,6 +351,7 @@ class MHWindow:
             else:
                 count = 0
                 坐标 = 坐标2
+            time.sleep(0.5)
 
     def F_点击战斗(self, 多次点击=False, 右键点击=False):
         self.F_移动到游戏区域坐标(574, 442)
@@ -1026,14 +1026,14 @@ class MHWindow:
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
         utils.click()
-        time.sleep(2)
+        time.sleep(1.5)
 
     def F_导航到酒店门口(self):
         self.F_使用长安城飞行棋('红色长安城导标旗坐标_酒店')
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
         utils.click()
-        time.sleep(3)
+        time.sleep(2)
 
     def F_导航到大唐国境驿站出口(self):
         while True:
@@ -1044,7 +1044,7 @@ class MHWindow:
                 self.F_使用长安城飞行棋('长安驿站')
                 time.sleep(1)
                 self.F_点击驿站老板()
-                time.sleep(1)
+                time.sleep(0.5)
 
     def F_导航到地府(self):
         while True:
@@ -1105,7 +1105,7 @@ class MHWindow:
             if(ret != None):
                 self.pointMove(ret[0], ret[1])
                 utils.click()
-        time.sleep(1)
+        time.sleep(0.5)
 
     def F_红色文字位置点击(self, str):
         ret = baiduApi.F_大漠红色文字位置识别([self.windowArea[0], self.windowArea[1],
@@ -1150,16 +1150,16 @@ class MHWindow:
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
         utils.click()
-        time.sleep(0.5)
-        for i in range(2):
-            curLocation = self.获取当前坐标()
-            if((curLocation in '762') == False):
-                self.pointMove(
-                    self.windowArea[0] + 40, self.windowArea[1] + 525)
-                utils.click()
-                time.sleep(2)
-            else:
-                break
+        time.sleep(2)
+        # for i in range(2):
+        #     curLocation = self.获取当前坐标()
+        #     if((curLocation in '762') == False):
+        #         self.pointMove(
+        #             self.windowArea[0] + 40, self.windowArea[1] + 525)
+        #         utils.click()
+        #         time.sleep(2)
+        #     else:
+        #         break
         time.sleep(1)
 
     def F_导航到墨家村(self):

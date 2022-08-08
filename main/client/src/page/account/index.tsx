@@ -4,7 +4,7 @@ import './index.less'
 import { ChTablePanel, FormItemType } from "ch-ui";
 
 function Account() {
-    return <div className='home'>
+    return <div className='home page'>
         <ChTablePanel
             searchFormData={[
                 {

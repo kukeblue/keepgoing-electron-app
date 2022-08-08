@@ -495,6 +495,7 @@ function HomeWatu() {
     const roleTag = (item: TGameRole) => {
         return <Popover trigger="click" placement="topLeft" title='操作' content={
             <div>
+                <div style={{ marginLeft: 15 }}>id: {item.gameId}</div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '空闲' })) }} type="link">设置空闲</Button></div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '忙碌' })) }} type="link">设置忙碌</Button></div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '离线' })) }} type="link">设置离线</Button></div>
@@ -705,11 +706,11 @@ function HomeWatu() {
                             dataIndex: 'id',
                             key: 'id',
                         },
-                        {
-                            title: '分组类型',
-                            dataIndex: 'type',
-                            key: 'type',
-                        },
+                        // {
+                        //     title: '分组类型',
+                        //     dataIndex: 'type',
+                        //     key: 'type',
+                        // },
                         {
                             title: '名称',
                             dataIndex: 'name',

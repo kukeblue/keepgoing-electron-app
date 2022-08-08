@@ -1,12 +1,13 @@
 import requests
 import zipfile
 import tempfile
+import time
 
 updateHome = __file__.strip('mhUpdate.py')
 
 
 def get_data():
-    url = "http://kuke-static.kukechen.top/py.zip"
+    url = "http://kuke-static.kukechen.top/py.zip?r=" + str(time.time())
     response = requests.get(url)
     return url, response.content
 
