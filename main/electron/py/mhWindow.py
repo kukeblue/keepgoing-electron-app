@@ -345,13 +345,13 @@ class MHWindow:
         while(True):
             坐标2 = self.获取当前坐标()
             if(坐标2 != None and 坐标 != None and 坐标 == 坐标2):
-                if(count > 1):
+                if(count > 2):
                     break
                 count = count + 1
             else:
                 count = 0
                 坐标 = 坐标2
-            time.sleep(0.5)
+            time.sleep(0.3)
 
     def F_点击战斗(self, 多次点击=False, 右键点击=False):
         self.F_移动到游戏区域坐标(574, 442)
@@ -689,6 +689,9 @@ class MHWindow:
                 utils.click()
                 self.pointMove(
                     self.daojuArea[0] + 53, self.daojuArea[1] + 223)
+                utils.click()
+                self.pointMove(
+                    self.daojuArea[0] + 5, self.daojuArea[1] + 223)
                 utils.click()
         else:
             return
