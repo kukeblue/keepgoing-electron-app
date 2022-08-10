@@ -515,12 +515,16 @@ class MHWindow:
 
     def F_卖装备(self):
         self.F_使用飞行符('长安城')
-        self.F_小地图寻路器([462, 206])
-        pyautogui.press('f9')
-        time.sleep(1)
-        self.F_移动到游戏区域坐标(305, 365)
-        utils.click()
-        time.sleep(1)
+        while True:
+            self.F_小地图寻路器([462, 206], True)
+            pyautogui.press('f9')
+            time.sleep(1)
+            self.F_移动到游戏区域坐标(305, 365)
+            utils.click()
+            time.sleep(1)
+            point = self.findImgInWindow('all-zbsg.png')
+            if(point != None):
+                break
         self.F_移动到游戏区域坐标(174, 337)
         utils.click()
         time.sleep(1)
@@ -1942,4 +1946,4 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_判断是否有飞行符()
+    window.F_卖装备()

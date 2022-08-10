@@ -625,10 +625,10 @@ function HomeWatu() {
                             if (v) {
                                 formRef.resetFields()
                             }
-                            showAccountPopoverIndex = 4
+                            showAccountPopoverIndex = 5
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('分铁')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 5} trigger="click" placement="topLeft" title='添加角色' content={addContent('分铁')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>
@@ -639,7 +639,7 @@ function HomeWatu() {
                             <h4>分书角色</h4>
                         </div>
                         <Row>
-                            {watuRoles.filter((item: TGameRole) => item.work == '分铁').map((item: TGameRole) => {
+                            {watuRoles.filter((item: TGameRole) => item.work == '分书').map((item: TGameRole) => {
                                 return <Col key={item.id} span={12}>
                                     {roleTag(item)}
                                 </Col>
@@ -649,10 +649,10 @@ function HomeWatu() {
                             if (v) {
                                 formRef.resetFields()
                             }
-                            showAccountPopoverIndex = 4
+                            showAccountPopoverIndex = 6
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('分书')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 6} trigger="click" placement="topLeft" title='添加角色' content={addContent('分书')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>
@@ -675,10 +675,10 @@ function HomeWatu() {
                             if (v) {
                                 formRef.resetFields()
                             }
-                            showAccountPopoverIndex = 4
+                            showAccountPopoverIndex = 7
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('分兽内')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 7} trigger="click" placement="topLeft" title='添加角色' content={addContent('分兽内')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>
@@ -699,10 +699,10 @@ function HomeWatu() {
                             if (v) {
                                 formRef.resetFields()
                             }
-                            showAccountPopoverIndex = 4
+                            showAccountPopoverIndex = 8
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('分环')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 8} trigger="click" placement="topLeft" title='添加角色' content={addContent('分环')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>
@@ -725,10 +725,10 @@ function HomeWatu() {
                             if (v) {
                                 formRef.resetFields()
                             }
-                            showAccountPopoverIndex = 4
+                            showAccountPopoverIndex = 9
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('分五宝')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 9} trigger="click" placement="topLeft" title='添加角色' content={addContent('分五宝')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>
@@ -749,10 +749,10 @@ function HomeWatu() {
                             if (v) {
                                 formRef.resetFields()
                             }
-                            showAccountPopoverIndex = 4
+                            showAccountPopoverIndex = 10
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 4} trigger="click" placement="topLeft" title='添加角色' content={addContent('分杂货')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 10} trigger="click" placement="topLeft" title='添加角色' content={addContent('分杂货')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>
