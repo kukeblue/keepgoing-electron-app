@@ -73,9 +73,7 @@
 # else:
 # 	print("错误")
 # 	# 应该延迟1秒后 重新截图 再重新发送
-from tkinter import messagebox
 import mouse
-import tkinter
 # raw_input('按任意键退出')
-if __name__ == '__main__':
-    messagebox.showerror('错误提示', '网络错误')
+
+mouse.move("100", "100", duration=0.4, absolute=True)

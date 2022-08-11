@@ -77,7 +77,8 @@ class MHWindow:
     def findMhWindow(self):
         x, y, w, h = self.findPicture('window_top_left_point.png')
         if(x > 0):
-            print(x, y)
+            y = y - 12
+            x = x - 2
             leftx = x - self.getTruthPx(5)
             topy = y - self.getTruthPx(7)
             self.windowArea = [int(leftx / self.screenUnit),
@@ -213,14 +214,14 @@ class MHWindow:
                         if(isSafeArea):
                             utils.move(cx, cy)
                         else:
-                            if(cx > 50):
-                                cx = 50
-                            elif(cx < -50):
-                                cx = -50
-                            if(dy > 40):
-                                dy = 40
-                            elif(dy < -40):
-                                dy = -40
+                            if(cx > 40):
+                                cx = 40
+                            elif(cx < -40):
+                                cx = -40
+                            if(dy > 30):
+                                dy = 30
+                            elif(dy < -30):
+                                dy = -30
                             pyautogui.move(cx, cy)
                 else:
                     finished = True
@@ -395,6 +396,7 @@ class MHWindow:
                         break
         if(是否战斗):
             self.F_吃药()
+            pyautogui.press('f7')
 
     def F_自动战斗2(self):
         finish = False
@@ -1155,8 +1157,6 @@ class MHWindow:
     def F_导航到大唐境外(self):
         self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_大唐境外')
         time.sleep(1)
-        pyautogui.press('f9')
-        time.sleep(0.5)
         self.pointMove(self.windowArea[0] + 40, self.windowArea[1] + 525)
         utils.click()
         time.sleep(2)
@@ -1197,16 +1197,6 @@ class MHWindow:
         utils.click()
         utils.click()
         time.sleep(3)
-        for i in range(2):
-            pyautogui.press('f9')
-            time.sleep(0.5)
-            curLocation = self.获取当前坐标()
-            if((curLocation in '1793') == False):
-                self.pointMove(self.windowArea[0] + 35, self.windowArea[1] + 125)
-                utils.click()
-                time.sleep(2)
-            else:
-                break
 
     def F_导航到长寿郊外(self):
         self.F_使用长寿村飞行棋('绿色长寿村导标旗坐标_长寿郊外')
