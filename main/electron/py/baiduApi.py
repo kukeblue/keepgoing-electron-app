@@ -93,7 +93,6 @@ def F_大漠小地图识别(area):
     op.SetDict(0, pyZhikuDir + '\\small_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
                  "ffffff-000000", 1.0)
-    print(ret)
     return ret
 
 

@@ -43,9 +43,9 @@ def click():
 
 def move(x, y):
     if((abs(x) + abs(y)) < 100):
-        mouse.move(x, y, absolute=False, duration=0.04)
+        mouse.move(x, y, absolute=False, duration=0.05)
     else:
-        mouse.move(x, y, absolute=False, duration=0.04)
+        mouse.move(x, y, absolute=False, duration=0.05)
 
 
 def doubleClick():
