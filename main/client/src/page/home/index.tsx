@@ -662,10 +662,10 @@ function HomeWatu() {
                 <Col span={12}>
                     <div>
                         <div className="m-t-10 flex-row-center">
-                            <h4>分兽决内单角色</h4>
+                            <h4>分兽内角色</h4>
                         </div>
                         <Row>
-                            {watuRoles.filter((item: TGameRole) => item.work == '分兽内').map((item: TGameRole) => {
+                            {watuRoles.filter((item: TGameRole) => item.work == '分兽决内丹').map((item: TGameRole) => {
                                 return <Col key={item.id} span={12}>
                                     {roleTag(item)}
                                 </Col>
@@ -678,7 +678,7 @@ function HomeWatu() {
                             showAccountPopoverIndex = 7
                             setShowAccountPopover(v)
                         }
-                        } visible={showAccountPopover && showAccountPopoverIndex == 7} trigger="click" placement="topLeft" title='添加角色' content={addContent('分兽内')}>
+                        } visible={showAccountPopover && showAccountPopoverIndex == 7} trigger="click" placement="topLeft" title='添加角色' content={addContent('分兽决内丹')}>
                             <Button className="m-t-15" size="small">+添加角色</Button>
                         </Popover>
                     </div>

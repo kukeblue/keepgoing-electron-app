@@ -318,12 +318,14 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None):
     if(restart != 1):
         if(window.gameId != ''):
             networkApi.doUpdateRoleStatus(window.gameId, '空闲')
+    window.focusWindow()
     while(True):
-        window.F_选中道具格子(1)
+        window.打开道具()
         time.sleep(1)
-        point = window.findImgInWindow('daoju_baotu_large.png')
+        point = window.findImgInWindow('daoju_baotu.png')
         if(point != None and point[0] > 0):
             time.sleep(10)
+            window.F_吃香()
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
             F_获取宝图信息(window)
