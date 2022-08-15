@@ -48,7 +48,7 @@ export type TDevice = {
     online: Boolean,
     imei: string,
     ip?: string,
-    touchId?:string,
+    touchId?: string,
     status: '空闲' | '任务中' | ''
 }
 
@@ -88,7 +88,7 @@ export type TTaskLog = {
     deviceId: number
     accountId: number
     taskName: string
-    note:  string
+    note: string
     type: TaskLogType
     time: number
 }
@@ -99,6 +99,7 @@ export type TUser = {
     id?: number
     username: string
     password: string
+    vipCard: any
 }
 
 // ********************** 挖图相关 ********************************

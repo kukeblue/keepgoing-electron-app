@@ -124,7 +124,6 @@ def F_通用文字识别(path):
         str = ''
         for item in baiduRetStr['words_result']:
             str = str + item['words']
-        print(str)
         return str
     except IOError:
         print(0)

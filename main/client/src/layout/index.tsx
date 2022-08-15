@@ -10,6 +10,7 @@ import { ContactsOutlined, MobileOutlined, CalendarOutlined, DashboardOutlined, 
 import { useHistory, useLocation } from "react-router-dom";
 import { MainThread } from "../call";
 import Login from "../page/login";
+import moment from 'moment'
 interface LayoutProps {
     children: JSX.Element;
 }
@@ -73,7 +74,7 @@ function Header() {
         </div>
         <div className='user-avatar'>
             <div>当前账号: {username}</div>
-            <div>vip到期时间: 永久</div>
+            <div>vip到期时间: {userStore.user?.vipCard && moment(userStore.user?.vipCard?.endTime * 1000).format('YYYY-MM-DD')}</div>
         </div>
     </div>
 }
@@ -106,45 +107,49 @@ function Layout(props: LayoutProps) {
             },
             {
                 text: '账号管理',
-                icon: <ContactsOutlined style={{ fontSize: 24 }} />,
+                icon: <CalendarOutlined style={{ fontSize: 24 }} />,
                 click: () => {
                     history.push('/account')
                 },
             },
-            {
-                text: '设备管理',
-                icon: <MobileOutlined style={{ fontSize: 24 }} />,
-                click: () => {
-                    history.push('/device')
-                }
-            },
-            {
-                text: '任务管理',
-                icon: <CalendarOutlined style={{ fontSize: 24 }} />,
-                click: () => {
-                    history.push('/task/task_list')
-                }
-            },
-            {
-                text: '任务日志',
-                icon: <DashboardOutlined style={{ fontSize: 24 }} />,
-                click: () => {
-                    history.push('/log')
-                }
-            },
-            {
-                text: '收支报表',
-                icon: <TransactionOutlined style={{ fontSize: 24 }} />,
-                click: () => {
-                    history.push('/report')
-                }
-            },
+            {},
+            {},
+            {},
+            {},
+            // {
+            //     text: '设备管理',
+            //     icon: <MobileOutlined style={{ fontSize: 24 }} />,
+            //     click: () => {
+            //         history.push('/device')
+            //     }
+            // },
+            // {
+            //     text: '任务管理',
+            //     icon: <CalendarOutlined style={{ fontSize: 24 }} />,
+            //     click: () => {
+            //         history.push('/task/task_list')
+            //     }
+            // },
+            // {
+            //     text: '任务日志',
+            //     icon: <DashboardOutlined style={{ fontSize: 24 }} />,
+            //     click: () => {
+            //         history.push('/log')
+            //     }
+            // },
+            // {
+            //     text: '收支报表',
+            //     icon: <TransactionOutlined style={{ fontSize: 24 }} />,
+            //     click: () => {
+            //         history.push('/report')
+            //     }
+            // },
             {
                 text: '退出登录',
                 icon: <TransactionOutlined style={{ fontSize: 24 }} />,
                 click: () => {
                     userStore.setIsLogin(false)
-                //    window.location.href = '/login'
+                    //    window.location.href = '/login'
                 }
             }
         ]
@@ -161,7 +166,7 @@ export default (props: LayoutProps) => {
     // @ts-ignore
     return <UserStore.Provider> <HomePageStore.Provider>
         <Layout {...props} />
-        </HomePageStore.Provider>
+    </HomePageStore.Provider>
     </UserStore.Provider>
 }
 

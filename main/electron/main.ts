@@ -15,13 +15,13 @@ function createWindow(): void {
         x: 0,
         y: 0,
         icon: path.join(__dirname, 'public/icon/favicon.ico'),
-        height: 800,
+        height: 750,
         webPreferences: {
             // nodeIntegration: true,
             contextIsolation: false,
             preload: path.join(__dirname, 'preload.js'),
         },
-        width: 1200,
+        width: 900,
     });
     mainWindow.loadFile(path.join(__dirname, '../../html/index.html'));
     mainWindow.on('closed', () => {

@@ -2,6 +2,7 @@
 from cgi import print_arguments
 from distutils.log import error
 from pickle import TRUE
+from telnetlib import theNULL
 from tkinter.messagebox import NO
 from cv2 import log
 import logUtil
@@ -13,6 +14,7 @@ import networkApi
 import time
 import utils
 import math
+import mouse
 import re
 import pointUtil
 mapCangkuDict = {
@@ -51,6 +53,7 @@ class MHWindow:
     windowArea2 = [0, 0, 0, 0]
     windowAreaGui = (0, 0, 0, 0)
     daojuArea = [0, 0, 0, 0]
+    daojuArea2 = [0, 0, 0, 0]
     pyHome = __file__.strip('mhWindow.py')
     pyImageDir = pyHome + 'config\images'
     gameId = ''
@@ -309,6 +312,21 @@ class MHWindow:
         ret = utils.F_通用文字识别(path)
         return ret
 
+    def F_识别抓鬼任务(self):
+        ret = baiduApi.F_大鬼小鬼任务区间识别([self.windowArea[0] + 640, self.windowArea[1] + 110,
+                                    self.windowArea[0] + 640 + 163, self.windowArea[1] + 110 + 233])
+        if(ret['鬼王'] != None):
+            path = self.F_窗口区域截图('temp_renwu_info.png', ret['鬼王'])
+            time.sleep(1)
+            text = utils.F_通用文字识别(path)
+            ret['鬼王'] = text
+        if(ret['捉鬼'] != None):
+            path = self.F_窗口区域截图('temp_renwu_info.png', ret['捉鬼'])
+            time.sleep(1)
+            text = utils.F_通用文字识别(path)
+            ret['捉鬼'] = text
+        return ret
+
     def F_识别自定义任务(self):
         位置信息 = [self.windowArea[0] + 342, self.windowArea[1] + 76,
                 211, 105]
@@ -344,7 +362,7 @@ class MHWindow:
         else:
             print("未找到")
 
-    def F_是否结束寻路(self):
+    def F_是否结束寻路(self, date=0.5):
         坐标 = self.获取当前坐标()
         count = 0
         while(True):
@@ -356,7 +374,7 @@ class MHWindow:
             else:
                 count = 0
                 坐标 = 坐标2
-            time.sleep(0.3)
+            time.sleep(date)
 
     def F_点击战斗(self, 多次点击=False, 右键点击=False):
         self.F_移动到游戏区域坐标(574, 442)
@@ -374,10 +392,11 @@ class MHWindow:
                     pyautogui.hotkey('alt', 'a')
                     time.sleep(0.1)
                 if(多次点击 == True):
-                    pyautogui.hotkey('alt', 'a')
-                    time.sleep(1)
-                    pyautogui.doubleClick()
-                    pyautogui.doubleClick()
+                    pyautogui.keyDown('alt')
+                    pyautogui.keyDown('a')
+                    mouse.double_click()
+                    pyautogui.keyUp('a')
+                    pyautogui.keyUp('alt')
                 else:
                     utils.click()
                 break
@@ -386,7 +405,7 @@ class MHWindow:
     def F_自动战斗(self):
         是否战斗 = False
         time.sleep(0.5)
-        self.F_识别4小人()
+        # self.F_识别4小人()
         for i in range(4):
             print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(1)
@@ -410,9 +429,29 @@ class MHWindow:
                 while(True):
                     print('进入战斗')
                     time.sleep(1)
-                    if(self.F_是否在战斗() == False):
+                    if(self.F_是否结束战斗()):
                         finish = True
                         break
+
+    def F_导航到女娲神迹(self):
+        self.F_导航到北俱芦洲()
+        self.F_小地图寻路器([21, 153], None)
+        pyautogui.press('f9')
+        self.F_移动到游戏区域坐标(264, 196)
+        utils.click()
+        self.F_移动到游戏区域坐标(199, 354)
+        utils.click()
+        time.sleep(1)
+
+    def F_导航到天宫(self):
+        self.F_导航到长寿郊外()
+        self.F_小地图寻路器([28, 59], None)
+        pyautogui.press('f9')
+        self.F_移动到游戏区域坐标(261, 286)
+        utils.click()
+        self.F_移动到游戏区域坐标(207, 339)
+        utils.click()
+        time.sleep(1)
 
     def F_打开道具(self):
         self.focusWindow()
@@ -423,6 +462,8 @@ class MHWindow:
                 time.sleep(0.5)
             else:
                 self.daojuArea = [point[0] + 3, point[1] + 50, 250, 205]
+                self.daojuArea2 = [point[0] + 3, point[1] +
+                                   50, point[0] + 3 + 250, point[1] + 50 + 205]
                 break
 
     def F_关闭道具(self):
@@ -590,6 +631,7 @@ class MHWindow:
     def F_判断是否有飞行符(self):
         self.focusWindow()
         self.F_打开道具()
+        time.sleep(0.5)
         result = pyautogui.locateOnScreen(
             self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
         if (result == None):
@@ -618,6 +660,7 @@ class MHWindow:
             return
 
     def F_使用飞行符(self, path):
+        判断飞行符 = False
         desLocation = ""
         if(path == '傲来国'):
             desLocation = pointUtil.傲来国飞行符坐标_飞行棋Str
@@ -669,11 +712,14 @@ class MHWindow:
                             pointUtil.长寿村飞行符坐标_屏幕xy[0], pointUtil.长寿村飞行符坐标_屏幕xy[1])
                         utils.click()
                     time.sleep(1)
+                    break
                 else:
-                    self.F_判断是否有飞行符()
+                    if(判断飞行符 == False):
+                        self.F_判断是否有飞行符()
+                        判断飞行符 = True
                     self.F_选中道具格子(20)
                     utils.rightClick()
-                    time.sleep(1)
+                    time.sleep(1.5)
         self.F_关闭道具()
 
     def F_行囊吃香(self):
@@ -1209,6 +1255,48 @@ class MHWindow:
         utils.click()
         time.sleep(3)
 
+    def F_导航到碗子山(self):
+        self.F_使用飞行符('宝象国')
+        self.F_小地图寻路器([150, 6], True)
+        self.F_移动到游戏区域坐标(664, 461)
+        utils.click()
+        time.sleep(2)
+
+    def F_导航到海底迷宫(self):
+        self.F_导航到花果山()
+        self.F_小地图寻路器([107, 7], True)
+        pyautogui.press('f9')
+        self.F_移动到游戏区域坐标(260, 457)
+        utils.click()
+        self.F_移动到游戏区域坐标(210, 334)
+        utils.click()
+        time.sleep(2)
+
+    def F_导航到海底迷宫(self):
+        self.F_导航到花果山()
+        self.F_小地图寻路器([107, 7], True)
+        pyautogui.press('f9')
+        self.F_移动到游戏区域坐标(260, 457)
+        utils.click()
+        self.F_移动到游戏区域坐标(210, 334)
+        utils.click()
+        time.sleep(2)
+
+    def F_导航到地狱迷宫三层(self):
+        self.F_导航到地府()
+        self.F_小地图寻路器([34, 115])
+        self.F_移动到游戏区域坐标(443, 105)
+        utils.click()
+        time.sleep(1)
+        self.F_小地图寻路器([9, 10], None, 30)
+        self.F_移动到游戏区域坐标(183, 457)
+        utils.click()
+        time.sleep(1)
+        self.F_小地图寻路器([111, 37], None, 30)
+        self.F_移动到游戏区域坐标(734, 272)
+        utils.click()
+        time.sleep(1)
+
     def F_导航到长寿郊外(self):
         self.F_使用长寿村飞行棋('绿色长寿村导标旗坐标_长寿郊外')
         time.sleep(1)
@@ -1380,7 +1468,7 @@ class MHWindow:
         utils.click()
         time.sleep(0.5)
 
-    def F_小地图寻路器(self, 目标坐标, 是否模糊查询=None):
+    def F_小地图寻路器(self, 目标坐标, 是否模糊查询=None, 等到时间=0):
         time.sleep(1)
         pyautogui.press('tab')
         time.sleep(1)
@@ -1447,7 +1535,10 @@ class MHWindow:
                     break
         time.sleep(2)
         pyautogui.press('tab')
-        self.F_是否结束寻路()
+        if(等到时间 == 0):
+            self.F_是否结束寻路()
+        else:
+            time.sleep(等到时间)
 
     def F_打开好友信息页面(self, id):
         self.F_移动到游戏区域坐标(682, 76)
@@ -1522,6 +1613,7 @@ class MHWindow:
         utils.click()
 
     def F_任务导航器(self, 任务, point):
+        self.focusWindow()
         if('宝象国' in 任务):
             self.F_导航到宝象国()
         elif('傲来国' in 任务):
@@ -1536,7 +1628,7 @@ class MHWindow:
             self.F_导航到普陀山()
         elif('西梁女国' in 任务):
             self.F_导航到西梁女国()
-        elif('江南野外' in 任务):
+        elif('江南野外' in 任务 or '野外' in 任务):
             self.F_导航到江南野外()
         elif('长寿村' in 任务):
             self.F_导航到长寿村智能(int(point[0]), int(point[1]))
@@ -1544,6 +1636,8 @@ class MHWindow:
             self.F_导航到朱紫国智能(int(point[0]), int(point[1]))
         elif('五庄观' in 任务):
             self.F_导航到五庄观()
+        elif('北俱芦洲' in 任务):
+            self.F_导航到北俱芦洲()
         elif('狮驼岭' in 任务):
             self.F_导航到狮驼岭()
         elif('花果山' in 任务):
@@ -1556,8 +1650,20 @@ class MHWindow:
             self.F_导航到化生寺()
         elif('地府' in 任务):
             self.F_导航到地府()
+        elif('海底迷宫' in 任务):
+            self.F_导航到海底迷宫()
+        elif('碗子山' in 任务):
+            self.F_导航到碗子山()
+        elif('地狱迷宫' in 任务):
+            self.F_导航到地狱迷宫三层()
         elif('大唐国境' in 任务):
             self.F_导航到大唐国境()
+        elif('麒麟山' in 任务):
+            self.F_导航到麒麟山()
+        elif('女娲神迹' in 任务):
+            self.F_导航到女娲神迹()
+        elif('天宫' in 任务):
+            self.F_导航到天宫()
 
     def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False, 移动到输入框=False):
         self.pointMove(self.windowArea[0] + x,
@@ -1851,15 +1957,22 @@ class MHWindow:
             ponit = ret.split(',')
             return ponit
 
+    def 任务栏点击(self, x, y):
+        pyautogui.hotkey('alt', 'f')
+        self.F_移动到游戏区域坐标(x, y)
+        pyautogui.hotkey('alt', 'f')
+        time.sleep(0.5)
+        utils.click()
+
     def F_获取任务位置和坐标(self, str):
         map = ""
         if("花果山" in str):
             map = "花果山"
         if("宝象国" in str):
             map = "宝象国"
-        elif("五庄观" in str):
+        elif("五庄观" in str or '庄观' in str):
             map = "五庄观"
-        elif("江南野外" in str):
+        elif("江南野外" in str or "野外" in str):
             map = "江南野外"
         elif("傲来国" in str):
             map = "傲来国"
@@ -1901,6 +2014,16 @@ class MHWindow:
             map = "化生寺"
         elif("地府" in str):
             map = "地府"
+        elif("地狱迷宫" in str or ("地" in str and "迷宫" in str)):
+            map = "地狱迷宫"
+        elif("碗子山" in str):
+            map = "碗子山"
+        elif("女娲" in str):
+            map = "女娲神迹"
+        elif("天宫" in str):
+            map = "天宫"
+        elif("海底迷宫" in str):
+            map = "海底迷宫"
         else:
             print('未匹配地图', str)
 
@@ -1947,4 +2070,4 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_打开好友信息页面('30114972')
+    window.F_导航到地狱迷宫三层()

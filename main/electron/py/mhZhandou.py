@@ -126,6 +126,8 @@ def 自动喊话模式(num):
         time.sleep(randint_data)
 
 
+
+
 def 飞机队操作(window):
     # 第一个号
     window.F_移动到游戏区域坐标(320, 230, True)
