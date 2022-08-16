@@ -401,7 +401,6 @@ class MHWindow:
         if(是否战斗):
             pyautogui.press('f7')
             self.F_吃药()
-            pyautogui.press('f7')
 
     def F_自动战斗2(self):
         finish = False
@@ -680,12 +679,14 @@ class MHWindow:
     def F_行囊吃香(self):
         self.F_打开道具()
         self.F_选中道具格子(20)
+        time.sleep(0.5)
         utils.click()
+        time.sleep(0.5)
         self.pointMove(
             self.daojuArea[0] + 53, self.daojuArea[1] + 223)
         utils.click()
         utils.click()
-        time.sleep(0.5)
+        time.sleep(2)
         point = pyautogui.locateOnScreen(
             self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
         if point != None:

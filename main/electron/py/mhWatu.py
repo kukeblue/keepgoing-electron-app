@@ -320,7 +320,7 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None):
             networkApi.doUpdateRoleStatus(window.gameId, '空闲')
     window.focusWindow()
     while(True):
-        window.打开道具()
+        window.F_打开道具()
         time.sleep(1)
         point = window.findImgInWindow('daoju_baotu.png')
         if(point != None and point[0] > 0):
