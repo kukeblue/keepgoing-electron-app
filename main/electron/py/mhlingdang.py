@@ -24,7 +24,8 @@ def 铃铛(deviceId):
     window.findMhWindow()
     window.focusWindow()
     utils.click()
-    F_铃铛任务(window)
+    while True:
+        F_铃铛任务(window)
 
 
 def F_铃铛任务(window):
@@ -34,7 +35,11 @@ def F_铃铛任务(window):
     time.sleep(1)
     utils.click()
     pyautogui.hotkey('alt', 'q')
-    time.sleep(1)
+    time.sleep(0.5)
+    pyautogui.hotkey('alt', 'q')
+    time.sleep(0.5)
+    pyautogui.hotkey('alt', 'q')
+    time.sleep(0.5)
     任务 = window.F_识别自定义任务()
     print(任务)
     if('弱妖' in 任务):
@@ -126,7 +131,6 @@ def 找巧智(window, 任务):
 
 def 找怯弱妖(window, 任务):
     point = window.findImgInWindow('all-ld-qry.png')
-    print('??????')
     print(point)
     if point != None:
         window.pointMove(point[0] + 10, point[1] + 5, 手指操作模式=True)
@@ -143,7 +147,7 @@ def 找怯弱妖(window, 任务):
         window.F_移动到游戏区域坐标(275, 340)
         utils.click()
         time.sleep(0.5)
-        window.F_自动战斗2()
+        window.F_自动战斗()
         utils.click()
 
 
@@ -164,7 +168,7 @@ def 找迷幻妖(window, 任务):
         window.F_移动到游戏区域坐标(275, 340)
         utils.click()
         time.sleep(0.5)
-        window.F_自动战斗2()
+        window.F_自动战斗()
         utils.click()
 
 

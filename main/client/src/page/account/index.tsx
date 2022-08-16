@@ -56,21 +56,21 @@ function Account() {
                     dataIndex: 'gameServer',
                     key: 'gameServer',
                 },
-                {
-                    title: '运行手机',
-                    dataIndex: 'phone',
-                    key: 'phone',
-                },
-                {
-                    title: '是否在线',
-                    dataIndex: 'online',
-                    key: 'online',
-                },
-                {
-                    title: '操作',
-                    dataIndex: 'option',
-                    key: 'option',
-                }
+                // {
+                //     title: '运行手机',
+                //     dataIndex: 'phone',
+                //     key: 'phone',
+                // },
+                // {
+                //     title: '是否在线',
+                //     dataIndex: 'online',
+                //     key: 'online',
+                // },
+                // {
+                //     title: '操作',
+                //     dataIndex: 'option',
+                //     key: 'option',
+                // }
             ]}
             url='/api/game_account/get_game_account_page'
             formData={[
@@ -91,6 +91,13 @@ function Account() {
                     label: '账号',
                     name: 'username',
                     key: 'username',
+                },
+                {
+                    type: FormItemType.input,
+                    inputtype: 'number',
+                    label: '等级',
+                    name: 'level',
+                    key: 'level',
                 },
                 {
                     type: FormItemType.input,

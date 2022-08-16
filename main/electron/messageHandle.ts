@@ -79,7 +79,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 抓鬼
     ipcMain.on(resourcePaths.METHOD_ZHUAGUI_TASK, (event, args) => {
         logger.info('run py script: METHOD_ZHUAGUI_TASK')
-        const result = runPyScript('mhZhuaGui', ['zg', []])
+        const result = runPyScript('mhZhuaGui', ['zg', [...args]])
         event.returnValue = {
             code: result,
             status: 0

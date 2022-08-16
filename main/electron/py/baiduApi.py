@@ -1,4 +1,5 @@
 # coding=utf-8
+from tkinter.messagebox import NO
 from aip import AipOcr
 import time
 from win32com.client import Dispatch
@@ -89,6 +90,23 @@ def F_打图4小人识别(area):
             return [ret[1], ret[2]]
 
 
+def F_大鬼小鬼任务区间识别(area):
+    data = {
+        '鬼王': None,
+        '捉鬼': None,
+    }
+    op.SetDict(0, pyZhikuDir + '\\renwu_green.txt')
+    ret = op.FindStr(area[0], area[1], area[2], area[3],
+                     '鬼王', "00ff00-000000", 0.7)
+    if(ret[0] > -1):
+        data['鬼王'] = [ret[1]-20, ret[2]-20, 166, 99]
+    ret = op.FindStr(area[0], area[1], area[2], area[3],
+                     '捉鬼', "00ff00-000000", 0.7)
+    if(ret[0] > -1):
+        data['捉鬼'] = [ret[1]-20, ret[2]-20, 183, 110]
+    return data
+
+
 def F_大漠小地图识别(area):
     op.SetDict(0, pyZhikuDir + '\\small_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
@@ -114,6 +132,14 @@ def F_查找等级(area):
         return ret
     else:
         return ''
+
+
+def F_大漠坐标文字识别(area):
+    op.SetDict(0, pyZhikuDir + '\\zuobiao.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffffff-000000|f8f8f8-000000", 1.0)
+    print(ret)
+    return ret
 
 
 def F_大漠坐标文字识别(area):
