@@ -112,6 +112,13 @@ function Layout(props: LayoutProps) {
                     history.push('/account')
                 },
             },
+            {
+                text: '收益管理',
+                icon: <TransactionOutlined style={{ fontSize: 24 }} />,
+                click: () => {
+                    history.push('/report')
+                },
+            },
             {},
             {},
             {},

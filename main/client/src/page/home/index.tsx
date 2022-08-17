@@ -888,11 +888,6 @@ function HomeWatu() {
                             dataIndex: 'id',
                             key: 'id',
                         },
-                        // {
-                        //     title: '分组类型',
-                        //     dataIndex: 'type',
-                        //     key: 'type',
-                        // },
                         {
                             title: '名称',
                             dataIndex: 'name',
