@@ -182,7 +182,16 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
         utils.click()
 
+    
+
     def pointMove(self, x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False):
+        try :
+            self.pointMoveNoError(x, y, 战斗操作模式, 手指操作模式, 移动到输入框)
+        except Exception as e :
+            self.focusWindow()
+            self.pointMove(x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False)
+            
+    def pointMoveNoError(self, x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False):
         isFirstMove = 0
         mx = x - 20
         my = y - 16
