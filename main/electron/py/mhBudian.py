@@ -1,5 +1,6 @@
 # coding=utf-8
 import random
+from tkinter.tix import Tree
 import baiduApi
 
 import logUtil
@@ -40,7 +41,25 @@ def F_女娲神迹巡逻():
         window.F_自动战斗抓律法()
 
 
-F_女娲神迹巡逻()
+def F_检查女娲技能():
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1)
+    window.findMhWindow()
+    time.sleep(3)
+    pyautogui.hotkey('alt', 'o')
+    time.sleep(1)
+    point = window.findImgInWindow('all-8-1-8.png')
+    if(point):
+        print('满了召唤兽')
+        while True:
+            识别名字 = window.findImgInWindow('all-lyvw-1.png')
+            if(识别名字 == None):
+                break
+
+    # 检查第一页
+
+
+F_检查女娲技能()
 # if __name__ == '__main__':
 #     fire.Fire({
 #         'start': F_碗子山守护者,
