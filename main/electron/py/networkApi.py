@@ -14,11 +14,14 @@ host = 'http://103.100.210.203:3000/api/client/'
 suanHost = ''
 
 
-def sendWatuLog(taskNo, deviceId, note):
+def sendWatuProfit(nickName, note):
+    print(nickName, note)
     url = host + "add_task_log"
+    taskNo = '0'
+    deviceId = '0'
     payload = "{\"imei\": \"0\",\"nickName\": \"" + nickName + "\",  \"taskNo\": \"" + taskNo + "\",  \"deviceId\": " + deviceId + ",  \"accountId\": " + \
-        deviceId + ",  \"taskName\": \"主线挖图\",  \"note\":  \"" + \
-        note + "\",  \"type\": \"info\",  \"time\": 1655084688}"
+        deviceId + ",  \"taskName\": \"挖图收益\",  \"note\":  \"" + \
+        note + "\",  \"type\": \"profit\",  \"time\": 1655084688}"
     headers = {
         'content-type': "application/json",
         'cache-control': "no-cache",
@@ -27,23 +30,6 @@ def sendWatuLog(taskNo, deviceId, note):
     response = requests.request(
         "POST", url, data=payload.encode(), headers=headers)
     print(response.text)
-
-
-def doReadyWatuTask(deviceId):
-    url = host + "get_one_task"
-    payload = "{\"deviceId\":" + deviceId + \
-        ",\"name\": \"主线挖图\",\"status\": \"进行中\"}"
-    headers = {
-        'content-type': "application/json",
-    }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
-    res = json.loads(response.text)
-    if(res.get('status') == 0):
-        print(res.get('data').get("accountNickName"))
-        global nickName
-        nickName = res.get('data').get("accountNickName")
-        sendWatuLog(res.get('data').get("taskNo"), deviceId, "准备完毕")
 
 
 def 获取空闲接货人ID(gameId, work):
