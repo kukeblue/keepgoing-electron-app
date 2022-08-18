@@ -1,14 +1,7 @@
 # coding=utf-8
-from cgi import print_arguments
-from distutils.log import error
-from pickle import TRUE
-from telnetlib import theNULL
-from tkinter.messagebox import NO
-from cv2 import log
 import logUtil
 import pyautogui
 import utils
-import sys
 import baiduApi
 import networkApi
 import time
@@ -615,6 +608,7 @@ class MHWindow:
                     self.F_移动到游戏区域坐标(351, 342)
                     utils.click()
 
+
     def 统计扫货(self):
         point = self.findImgInWindow('all-tie-big.png',  0.70, [self.windowArea[0] + 100, self.windowArea[1],
                                                                 550, 480])
@@ -675,7 +669,8 @@ class MHWindow:
             if(int(ret) == 60):
                 return '60环'
             if(int(ret) == 70):
-                return '70环'                
+                return '70环'      
+                  
         point = self.findImgInWindow('all-neidang-big.png',  0.85, [self.windowArea[0] + 130, self.windowArea[1],
                                                                     520, 480])
         if(point != None):
@@ -768,9 +763,8 @@ class MHWindow:
                 self.F_移动到游戏区域坐标(580, 141)
                 utils.click()
                 time.sleep(0.5)
-            networkApi.sendWatuProfit(self.gameId, 收益)
             pyautogui.hotkey('alt', 'f')
-            time.sleep(0.5)
+            networkApi.sendWatuProfit(self.gameId, 收益)
 
     def F_卖装备(self):
         self.F_使用飞行符('长安城')

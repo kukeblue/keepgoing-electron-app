@@ -26,6 +26,7 @@ import {
 import ChMhMapTool from "../../components/ChMhMapTool";
 import { UserStore } from "../../store/userStore";
 import Account from "../account";
+import TextArea from "antd/lib/input/TextArea";
 
 type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook, usePage } = ChUtils.chHooks
@@ -151,23 +152,9 @@ export function usePageStore() {
         // @ts-ignore
         // @ts-ignore
         if (window.isBee) {
-            request({
-                url: '/api/task/add_task_watu_log',
-                data: { accountId: userStore.user.id },
-                method: "post"
-            }).then(res => {
-                if (res.status == 0) {
-                    setTimeout(() => {
-                        console.log('直接开始挖图');
-                        // @ts-ignore
-                        if (window.isBee) {
-                            // @ts-ignore
-                            doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
-                        }
-                    }, 500)
-                }
-            })
-
+            console.log('直接开始挖图');
+            // @ts-ignore
+            doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
         }
     }
     const handleSelectJiangjunDevice = () => {
@@ -436,6 +423,7 @@ function HomeWatu() {
     const pageStore = PageStore.useContainer()
     const userStore = UserStore.useContainer()
     const [showGroupModal, setShowGroupModal] = useState<boolean>(false)
+    const [showGroupPriceModal, setShowGroupPriceModal] = useState<boolean>(false)
     const [showWatuGroupSettingModal, setShowWatuGroupSettingModal] = useState<boolean>(false)
     const [watuGroup, setWatuGroup] = useState<TWatuGroup>()
     const [showAccountPopover, setShowAccountPopover] = useState<boolean>(false)
@@ -539,6 +527,13 @@ function HomeWatu() {
         </Popover>
     }
     return <div>
+        <Modal title={"编辑分组货价 - " + watuGroup?.name} visible={showGroupPriceModal} onOk={()=>{}} onCancel={()=>{
+            setShowGroupPriceModal(false)
+        }}>
+            <div className="flex">
+                <div style={{width: 100}}>配置物价</div><TextArea defaultValue={watuGroup?.priceConfig}/>
+            </div>
+        </Modal>
         <Modal title={"编辑分组角色 - " + watuGroup?.name}
             onOk={() => { setShowWatuGroupSettingModal(false) }}
             onCancel={() => setShowWatuGroupSettingModal(false)} visible={showWatuGroupSettingModal}>
@@ -902,11 +897,15 @@ function HomeWatu() {
                             dataIndex: 'option',
                             key: 'option',
                             render: (_: any, item: TWatuGroup) => {
-                                return <div style={{ width: '120px' }}>
+                                return <div className="flex" style={{ width: '120px' }}>
                                     <Button onClick={() => {
                                         setWatuGroup(item)
                                         setShowWatuGroupSettingModal(true)
                                     }} type="link">配置角色</Button>
+                                    <Button onClick={() => {
+                                        setWatuGroup(item)
+                                        setShowGroupPriceModal(true)
+                                    }} type="link">分组货价</Button>
                                 </div>
                             }
                         }

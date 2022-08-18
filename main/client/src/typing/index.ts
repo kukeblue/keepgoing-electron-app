@@ -108,4 +108,5 @@ export type TWatuGroup = {
     name: string
     userId: number
     gameServer: string
+    priceConfig: string
 }

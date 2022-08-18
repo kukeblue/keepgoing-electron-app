@@ -1,10 +1,7 @@
 # coding=utf-8
 
-from PIL import Image
 import base64
-import io
 import random
-import re
 import json
 import time
 import requests
@@ -13,6 +10,24 @@ host = 'http://103.100.210.203:3000/api/client/'
 
 suanHost = ''
 
+
+def sendWatuInfoLogo(nickName, taskCount):
+    note=''
+    print(nickName)
+    url = host + "add_task_log"
+    taskNo = '0'
+    deviceId = '0'
+    payload = "{\"imei\": \"0\",\"nickName\": \"" + nickName + "\",  \"taskCount\": \"" + taskCount + "\", \"taskNo\": \"" + taskNo + "\",  \"deviceId\": " + deviceId + ",  \"accountId\": " + \
+        deviceId + ",  \"taskName\": \"挖图扫描\",  \"note\":  \"" + \
+        note + "\",  \"type\": \"watuScan\",  \"time\": 1655084688}"
+    headers = {
+        'content-type': "application/json",
+        'cache-control': "no-cache",
+        'postman-token': "fe1447a3-8cbe-5a50-744d-7b016e4cd990"
+    }
+    response = requests.request(
+        "POST", url, data=payload.encode(), headers=headers)
+    print(response.text)
 
 def sendWatuProfit(nickName, note):
     print(nickName, note)

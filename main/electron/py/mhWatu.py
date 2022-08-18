@@ -1,8 +1,5 @@
 # coding=utf-8
 
-import atexit
-from telnetlib import theNULL
-from tkinter.messagebox import NO
 import logUtil
 import mhWindow
 import re
@@ -132,6 +129,7 @@ def F_获取宝图信息(window=None):
     time.sleep(1)
     window.F_点击小地图出入口按钮()
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
+    
 
 
 def 识别位置信息(window, point):
