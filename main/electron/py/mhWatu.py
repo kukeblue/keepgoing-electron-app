@@ -68,7 +68,7 @@ def F_获取任务位置和坐标(str):
 
 
 def F_获取宝图信息(window=None):
-    time.sleep(3)
+    time.sleep(2)
     if(window == None):
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
@@ -88,6 +88,7 @@ def F_获取宝图信息(window=None):
             mapAndpoint = 识别位置信息(window, point)
         print(mapAndpoint)
         res.append(mapAndpoint)
+    networkApi.sendWatuInfoLogo(window.gameId, len(points))
     jsonArr = json.dumps(res, ensure_ascii=False)
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
@@ -129,7 +130,6 @@ def F_获取宝图信息(window=None):
     time.sleep(1)
     window.F_点击小地图出入口按钮()
     logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
-    
 
 
 def 识别位置信息(window, point):
@@ -309,14 +309,19 @@ def F_邀请发图(window):
 def F_小蜜蜂模式(仓库位置, restart=0, window=None):
     time.sleep(3)
     if(window == None):
-        logUtil.chLog('重新发车')
+        logUtil.chLog('开始发车')
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
-    window.findMhWindow()
+        window.findMhWindow()
+    else:
+        logUtil.chLog('继续发车')
     if(restart != 1):
         if(window.gameId != ''):
             networkApi.doUpdateRoleStatus(window.gameId, '空闲')
     window.focusWindow()
+    time.sleep(0.5)
+    window.F_使用酒肆和打坐()
+    time.sleep(0.5)
     while(True):
         window.F_打开道具()
         time.sleep(1)

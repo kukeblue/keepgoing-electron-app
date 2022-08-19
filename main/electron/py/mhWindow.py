@@ -175,15 +175,13 @@ class MHWindow:
         self.pointMove(self.windowArea[0] + x, self.windowArea[1] + y)
         utils.click()
 
-    
-
     def pointMove(self, x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False):
-        try :
+        try:
             self.pointMoveNoError(x, y, 战斗操作模式, 手指操作模式, 移动到输入框)
-        except Exception as e :
+        except Exception as e:
             self.focusWindow()
             self.pointMove(x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False)
-            
+
     def pointMoveNoError(self, x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False):
         isFirstMove = 0
         mx = x - 20
@@ -285,6 +283,7 @@ class MHWindow:
 
     def F_吃药(self):
         try:
+            pyautogui.press('f7')
             point = self.findImgInWindow(
                 'all_lanwan.png', area=(0, 479, 286, 60))
             if point != None:
@@ -419,6 +418,7 @@ class MHWindow:
                     if(self.F_是否结束战斗()):
                         是否战斗 = True
                         print('F_自动战斗：结束战斗')
+                        self.F_吃药()
                         break
 
     def F_自动战斗抓律法(self):
@@ -608,9 +608,8 @@ class MHWindow:
                     self.F_移动到游戏区域坐标(351, 342)
                     utils.click()
 
-
     def 统计扫货(self):
-        point = self.findImgInWindow('all-tie-big.png',  0.70, [self.windowArea[0] + 100, self.windowArea[1],
+        point = self.findImgInWindow('all-tie-big.png',  0.85, [self.windowArea[0] + 100, self.windowArea[1],
                                                                 550, 480])
         if(point != None):
             ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
@@ -622,7 +621,7 @@ class MHWindow:
                 return '60铁'
             elif(level == 70):
                 return '70铁'
-        point = self.findImgInWindow('all-shu-big.png',  0.65, [self.windowArea[0], self.windowArea[1],
+        point = self.findImgInWindow('all-shu-big.png',  0.85, [self.windowArea[0]+100, self.windowArea[1],
                                                                 520, 480])
         if(point != None):
             ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
@@ -633,44 +632,44 @@ class MHWindow:
             elif(level == 60):
                 return '60书'
             elif(level == 70):
-                return '70书'  
-        point = self.findImgInWindow('all-baotu-big.png',  0.75, [self.windowArea[0] + 130, self.windowArea[1],
-                                                                520, 480])
+                return '70书'
+        point = self.findImgInWindow('all-baotu-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+                                                                  520, 480])
         if(point != None):
             return '宝图'
         ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
-                                   self.windowArea[0] + 600,  self.windowArea[1] + 800])
+                               self.windowArea[0] + 600,  self.windowArea[1] + 800])
         if(ret != '' and ret != None and int(ret) < 10):
             红玛瑙 = self.findImgInWindow('all-baoshi-malao-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
-                                                                520, 480])
+                                                                           520, 480])
             if(红玛瑙 != None):
                 return '红玛瑙' + ret
             黑宝石 = self.findImgInWindow('all-heibaoshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
-                                                                520, 480])
+                                                                        520, 480])
             if(黑宝石 != None):
                 return '黑宝石' + ret
             光芒石 = self.findImgInWindow('all-guanmanshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
-                                                                520, 480])
+                                                                         520, 480])
             if(光芒石 != None):
                 return '光芒石' + ret
             月亮石 = self.findImgInWindow('all-yueliangshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
-                                                                520, 480])
+                                                                          520, 480])
             if(月亮石 != None):
                 return '月亮石' + ret
             太阳石 = self.findImgInWindow('all-taiyangshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
-                                                                520, 480])
+                                                                         520, 480])
             if(太阳石 != None):
                 return '太阳石' + ret
             return '垃圾宝石'
-                
+
         if(ret != '' and ret != None and int(ret) > 40):
             if(int(ret) == 50):
                 return '50环'
             if(int(ret) == 60):
                 return '60环'
             if(int(ret) == 70):
-                return '70环'      
-                  
+                return '70环'
+
         point = self.findImgInWindow('all-neidang-big.png',  0.85, [self.windowArea[0] + 130, self.windowArea[1],
                                                                     520, 480])
         if(point != None):
@@ -691,16 +690,16 @@ class MHWindow:
                                                                         520, 480])
         if(point != None):
             return '金刚石'
-        point = self.findImgInWindow('all-bishui-big.png',  0.85, [self.windowArea[0] + 120, self.windowArea[1],
-                                                                        520, 480])
+        point = self.findImgInWindow('all-bishui-big.png',  0.95, [self.windowArea[0] + 120, self.windowArea[1],
+                                                                   520, 480])
         if(point != None):
             return '避水珠'
-        point = self.findImgInWindow('all-longlin-big.png',  0.85, [self.windowArea[0] + 120, self.windowArea[1],
-                                                                        520, 480])
+        point = self.findImgInWindow('all-longlin-big.png',  0.95, [self.windowArea[0] + 120, self.windowArea[1],
+                                                                    520, 480])
         if(point != None):
             return '龙鳞'
         point = self.findImgInWindow('all-yeguang-big.png',  0.85, [self.windowArea[0] + 120, self.windowArea[1],
-                                                                        520, 480])
+                                                                    520, 480])
         if(point != None):
             return '夜光珠'
         return '未知'
@@ -708,7 +707,9 @@ class MHWindow:
     def F_给与东西(self, 接货id):
         self.F_打开好友信息页面(str(接货id))
         self.F_移动到游戏区域坐标(538, 438)
+        time.sleep(0.2)
         utils.click()
+        time.sleep(0.1)
         self.F_移动到游戏区域坐标(513, 489)
         point = self.findImgInWindow('all-geiyu-top.png')
         有货格子 = []
@@ -746,6 +747,7 @@ class MHWindow:
                         item = 有货格子[p]
                         self.F_移动到游戏区域坐标(item[0] - self.windowArea[0] + 25,
                                          item[1] - self.windowArea[1] + 25)
+
                         ret = self.统计扫货()
                         if(收益 == ''):
                             收益 = ret
@@ -990,18 +992,24 @@ class MHWindow:
         self.pointMove(
             self.daojuArea[0] + 53, self.daojuArea[1] + 223)
         utils.click()
+        time.sleep(0.5)
         utils.click()
-        time.sleep(2)
+        time.sleep(1)
         point = pyautogui.locateOnScreen(
             self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+        if(point == None):
+            point = pyautogui.locateOnScreen(
+                self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
         if point != None:
             self.pointMove(point[0], point[1])
             utils.click()
+            time.sleep(0.1)
             self.pointMove(
                 self.daojuArea[0] + 5, self.daojuArea[1] + 223)
             utils.click()
+            time.sleep(0.1)
             utils.click()
-            time.sleep(0.5)
+            time.sleep(1.5)
             point = pyautogui.locateOnScreen(
                 self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
             if point != None:
@@ -1012,9 +1020,12 @@ class MHWindow:
                 self.pointMove(
                     self.daojuArea[0] + 53, self.daojuArea[1] + 223)
                 utils.click()
+                utils.click()
+                time.sleep(0.5)
                 self.pointMove(
                     self.daojuArea[0] + 5, self.daojuArea[1] + 223)
                 utils.click()
+                time.sleep(0.5)
 
     def F_吃香(self):
         self.F_行囊吃香()
@@ -1576,7 +1587,8 @@ class MHWindow:
         utils.doubleClick()
         time.sleep(2)
         pyautogui.press('tab')
-        self.F_移动到游戏区域坐标(689, 286)
+        self.F_移动到游戏区域坐标(686, 284)
+        time.sleep(0.2)
         utils.doubleClick()
         pyautogui.press('tab')
         self.F_是否结束寻路()
@@ -1712,6 +1724,15 @@ class MHWindow:
         self.F_使用飞行符('朱紫国')
         time.sleep(1)
 
+    def F_使用酒肆和打坐(self):
+        pyautogui.press('f7')
+        pyautogui.press('f6')
+        time.sleep(1)
+        if(self.findImgInWindow("all-woyaoxiuxi.png", 0.70, area=(146, 378, 100, 60)) != None):
+            print("我要休息")
+            self.F_移动到游戏区域坐标(190, 394)
+            pyautogui.click()
+
     def F_导航到普陀山(self):
         self.F_导航到大唐国境()
         pyautogui.press('tab')
@@ -1735,12 +1756,20 @@ class MHWindow:
         目标坐标x = int(目标坐标[0])
         目标坐标y = int(目标坐标[1])
         isFirstMove = 1
+        错误次数 = 0
+        循环次数 = 0
         while True:
+            循环次数 = 循环次数 + 1
+            if(循环次数 > 20):
+                break
             point = self.F_获取小地图寻路坐标()
             print(目标坐标)
             print(point)
             if(point == None or len(point) < 2):
+                错误次数 = 错误次数 + 1
                 self.focusWindow()
+                if(错误次数 == 3):
+                    break
                 continue
             当前坐标x = int(point[0])
             当前坐标y = int(point[1])
@@ -1750,7 +1779,6 @@ class MHWindow:
                     utils.click()
                     break
                 else:
-                    # pyautogui.move(目标坐标x - 当前坐标x,  当前坐标y - 目标坐标y)
                     cx = 目标坐标x - 当前坐标x
                     cy = 当前坐标y - 目标坐标y
                     if(isFirstMove < 2):
@@ -2086,7 +2114,6 @@ class MHWindow:
             time.sleep(1)
         logUtil.chLog('接货id:' + str(接货id))
         self.F_给与东西(接货id)
-        
 
     def F_回仓库放东西(self, map, 仓库地点='长安城'):
 
@@ -2293,4 +2320,4 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_给与东西('29514102')
+    window.F_小地图寻路器([560, 89])

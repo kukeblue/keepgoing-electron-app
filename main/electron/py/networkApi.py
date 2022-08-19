@@ -12,7 +12,8 @@ suanHost = ''
 
 
 def sendWatuInfoLogo(nickName, taskCount):
-    note=''
+    taskCount = str(taskCount)
+    note = ''
     print(nickName)
     url = host + "add_task_log"
     taskNo = '0'
@@ -28,6 +29,7 @@ def sendWatuInfoLogo(nickName, taskCount):
     response = requests.request(
         "POST", url, data=payload.encode(), headers=headers)
     print(response.text)
+
 
 def sendWatuProfit(nickName, note):
     print(nickName, note)

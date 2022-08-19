@@ -46,15 +46,46 @@ def F_检查女娲技能():
     window = MHWindow(1)
     window.findMhWindow()
     time.sleep(3)
-    pyautogui.hotkey('alt', 'o')
+    # pyautogui.hotkey('alt', 'o')
     time.sleep(1)
-    point = window.findImgInWindow('all-8-1-8.png')
-    if(point):
+    ret1 = baiduApi.F_识别放生验证数字([window.windowArea[0] + 289, window.
+                                windowArea[1] + 265,
+                                window.windowArea[0] + 366,  window.windowArea[1] + 298])
+    pyautogui.press('tab')
+    window.F_移动到游戏区域坐标(266, 306)
+    pyautogui.press('tab')
+    utils.click()
+    time.sleep(2)
+    pyautogui.write(ret1)
+    print(ret1)
+    return
+    point = window.findImgInWindow('all-8-1-8.png',  0.95)
+    if(point != None):
         print('满了召唤兽')
         while True:
             识别名字 = window.findImgInWindow('all-lyvw-1.png')
             if(识别名字 == None):
                 break
+            else:
+                window.pointMove(识别名字[0], 识别名字[1])
+                print(point)
+                print('检查技能该名字')
+                utils.rightClick()
+                time.sleep(1)
+                技能善恶 = window.findImgInWindow('all-jn-se.png')
+                if(技能善恶 == None):
+                    window.F_移动到游戏区域坐标(180, 472)
+                    utils.click()
+                    window.F_移动到游戏区域坐标(328, 342)
+                    utils.click()
+                    ret = baiduApi.F_大漠坐标文字识别([window.windowArea[0] + 289, window.windowArea[1] + 265,
+                                               window.windowArea[0] + 366,  window.windowArea[1] + 298])
+                    print(ret)
+
+                break
+            time.sleep(1)
+    else:
+        print('继续抓')
 
     # 检查第一页
 

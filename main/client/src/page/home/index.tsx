@@ -527,11 +527,26 @@ function HomeWatu() {
         </Popover>
     }
     return <div>
-        <Modal title={"编辑分组货价 - " + watuGroup?.name} visible={showGroupPriceModal} onOk={()=>{}} onCancel={()=>{
+        <Modal title={"编辑分组货价 - " + watuGroup?.name} visible={showGroupPriceModal} onOk={() => {
+            request({
+                url: '/api/gameGroup/add_game_group',
+                data: watuGroup,
+                method: "post"
+            }).then(res => {
+                if (res.status == 0) {
+                    message.success('修改成功')
+                    setTimeout(() => {
+                        reload()
+                    }, 500)
+                }
+            })
+        }} onCancel={() => {
             setShowGroupPriceModal(false)
         }}>
             <div className="flex">
-                <div style={{width: 100}}>配置物价</div><TextArea defaultValue={watuGroup?.priceConfig}/>
+                <div style={{ width: 100 }}>配置物价</div><TextArea defaultValue={watuGroup?.priceConfig} onChange={(v) => {
+                    watuGroup ? watuGroup.priceConfig = v.target.value : 0
+                }} />
             </div>
         </Modal>
         <Modal title={"编辑分组角色 - " + watuGroup?.name}
@@ -913,7 +928,7 @@ function HomeWatu() {
                 />
             </Panel>
         </Collapse>
-    </div>
+    </div >
 }
 function HomeFeature() {
     const userStore = UserStore.useContainer()
