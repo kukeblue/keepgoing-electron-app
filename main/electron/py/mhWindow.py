@@ -93,7 +93,7 @@ class MHWindow:
             print('未找到前台梦幻窗口')
 
     def focusWindow(self):
-        pyautogui.moveTo(self.windowArea[0] + 450, self.windowArea[1] + 300)
+        pyautogui.moveTo(self.windowArea[0] + 400, self.windowArea[1] + 300)
 
     def F_窗口区域截图(self, fileName, windowRegion):
         region = (windowRegion[0] * self.screenUnit, windowRegion[1] * self.screenUnit,
@@ -984,7 +984,7 @@ class MHWindow:
         self.F_关闭道具()
 
     def F_行囊吃香(self):
-        self.F_打开道具()
+
         self.F_选中道具格子(20)
         time.sleep(0.5)
         utils.click()
@@ -1029,6 +1029,15 @@ class MHWindow:
 
     def F_吃香(self):
         self.F_行囊吃香()
+
+    def F_吃香2(self):
+        self.F_打开道具()
+        point = pyautogui.locateOnScreen(
+            self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+        self.pointMove(point[0], point[1])
+        utils.click()
+        time.sleep(0.1)
+        self.F_关闭道具()
 
     def F_使用长安城飞行棋(self, path):
         navWay = ""
@@ -1748,11 +1757,11 @@ class MHWindow:
         utils.click()
         time.sleep(0.5)
 
-    def F_小地图寻路器(self, 目标坐标, 是否模糊查询=None, 等到时间=0):
-        time.sleep(1)
-        pyautogui.press('tab')
-        time.sleep(1)
-        self.focusWindow()
+    def F_小地图寻路器(self, 目标坐标, 是否模糊查询=None, 等到时间=0, openTab=False):
+        time.sleep(0.5)
+        if(openTab == False):
+            pyautogui.press('tab')
+        time.sleep(0.5)
         目标坐标x = int(目标坐标[0])
         目标坐标y = int(目标坐标[1])
         isFirstMove = 1
@@ -1760,7 +1769,7 @@ class MHWindow:
         循环次数 = 0
         while True:
             循环次数 = 循环次数 + 1
-            if(循环次数 > 20):
+            if(循环次数 > 30):
                 break
             point = self.F_获取小地图寻路坐标()
             print(目标坐标)
@@ -1768,7 +1777,7 @@ class MHWindow:
             if(point == None or len(point) < 2):
                 错误次数 = 错误次数 + 1
                 self.focusWindow()
-                if(错误次数 == 3):
+                if(错误次数 == 5):
                     break
                 continue
             当前坐标x = int(point[0])

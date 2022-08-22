@@ -1,4 +1,5 @@
 # coding=utf-8
+from telnetlib import theNULL
 from tkinter import N, NO
 import baiduApi
 
@@ -29,15 +30,21 @@ def 抓鬼(是否抓大鬼):
 def F_领取抓鬼任务(window, 是否抓大鬼):
     logUtil.chLog('开始抓大鬼')
     logUtil.chLog(是否抓大鬼)
+    抓鬼次数 = 0
     while True:
+        抓鬼次数 = 抓鬼次数 + 1
+        if(抓鬼次数 == 3 or 抓鬼次数 == 6 or 抓鬼次数 == 10):
+            window.F_吃香2()
         任务 = window.F_识别抓鬼任务()
         if(是否抓大鬼 == 1 and 任务['鬼王'] != None):
             pyautogui.hotkey('alt', 'q')
             time.sleep(0.5)
             鬼王任务 = window.F_识别自定义任务()
+            logUtil.chLog(鬼王任务)
             pyautogui.hotkey('alt', 'q')
             ret = window.F_获取任务位置和坐标(鬼王任务)
             print(ret[0])
+
             window.F_任务导航器(ret[0], ret[1])
             if(ret[0] == '大唐境外'):
                 window.F_小地图寻路器(ret[1], True)
@@ -49,7 +56,7 @@ def F_领取抓鬼任务(window, 是否抓大鬼):
             window.F_移动到游戏区域坐标(665, 301)
             utils.click()
         if(任务['捉鬼'] != None):
-            print(任务['捉鬼'])
+            logUtil.chLog(任务['捉鬼'])
             小鬼任务 = 任务['捉鬼']
             ret = window.F_获取任务位置和坐标(小鬼任务)
             print(ret[0])

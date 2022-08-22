@@ -67,14 +67,15 @@ def F_获取任务位置和坐标(str):
         print("An exception occurred")
 
 
-def F_获取宝图信息(window=None):
+def F_获取宝图信息(window=None, restart=0):
     time.sleep(2)
     if(window == None):
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
         window.findMhWindow()
     window.focusWindow()
-    window.医宝宝()
+    if(restart != 1):
+        window.医宝宝()
     time.sleep(0.5)
     utils.click()
     pyautogui.hotkey('alt', 'e')
@@ -187,7 +188,7 @@ mapDictEntrance = {
 }
 
 
-def F_点击宝图(window, userId, map, x, y, num):
+def F_点击宝图(window, userId, map, x, y, ox, oy, num):
     userId = str(userId)
     print('点击小地图', userId, x, y)
     MHWindow = mhWindow.MHWindow
@@ -200,10 +201,15 @@ def F_点击宝图(window, userId, map, x, y, num):
     pyautogui.press('tab')
     time.sleep(1)
     point = window.findImgInWindow(mapDict.get(map))
-    window.pointMove(point[0] + x, point[1] + y)
+    window.pointMove(point[0] + x, point[1] + y, 移动到输入框=True)
     utils.click()
-    utils.click()
-    pyautogui.press('tab')
+    window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
+    window.F_选中道具格子(int(num))
+    utils.rightClick()
+    # utils.rightClick()
+    window.F_自动战斗()
+    # window.F_吃药()
+    pyautogui.hotkey('alt', 'e')
 
 
 def F_获取最近的坐标点(x, y, other):
@@ -219,11 +225,11 @@ def F_获取最近的坐标点(x, y, other):
     return point, newOther
 
 
-def F_点击宝图并寻路(window, map, x, y, num, other):
+def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
     if(x == 0 or y == 0):
         point, newOther = F_获取最近的坐标点(x, y, other)
         F_点击宝图并寻路(window, map, point['realX'],
-                  point['realY'], point['index'], newOther)
+                  point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
     else:
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
         pyautogui.moveTo(
@@ -237,12 +243,11 @@ def F_点击宝图并寻路(window, map, x, y, num, other):
             pyautogui.press('tab')
             time.sleep(1)
             point = window.findImgInWindow(mapDict.get(map))
-        window.pointMove(point[0] + x, point[1] + y)
+        window.pointMove(point[0] + x, point[1] + y, 移动到输入框=True)
         utils.click()
+        window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
-        window.F_是否结束寻路()
-        pyautogui.press('tab')
         window.F_选中道具格子(int(num))
         utils.rightClick()
         # utils.rightClick()
@@ -252,33 +257,34 @@ def F_点击宝图并寻路(window, map, x, y, num, other):
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)
             F_点击宝图并寻路(window, map, point['realX'],
-                      point['realY'], point['index'], newOther)
+                      point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
 
 
 loop = 1
 
 
-def F_点击小地图(map, x, y, num, other, isBeen, 仓库位置='长安城'):
+def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长安城'):
     print('点击小地图', x, y)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
     if(other == None):
-        F_点击宝图(window, map, x, y, num)
+        F_点击宝图(window, map, x, y, ox, oy, num)
     else:
         if num == 1:
-            firstPoint = {"realX": x, "realY": y, "index": num}
+            firstPoint = {"realX": x, "realY": y,
+                          "orgPointX": ox, "orgPointY": oy, "index": num}
             if other != None:
                 other.append(firstPoint)
                 entrancePoint = mapDictEntrance.get(map)
                 point, newOther = F_获取最近的坐标点(
                     entrancePoint[0], entrancePoint[1], other)
                 F_点击宝图并寻路(window, map,
-                          point['realX'], point['realY'], point['index'], newOther)
+                          point['realX'], point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
         else:
             F_点击宝图并寻路(window, map,
-                      x, y, num, other)
+                      x, y, ox, oy, num, other)
     window.F_点击小地图出入口按钮()
     接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
     if(接货id != None):
@@ -327,11 +333,12 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None):
         time.sleep(1)
         point = window.findImgInWindow('daoju_baotu.png')
         if(point != None and point[0] > 0):
-            time.sleep(10)
-            window.F_吃香()
+            if(restart != 1):
+                time.sleep(10)
+                window.F_吃香()
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
-            F_获取宝图信息(window)
+            F_获取宝图信息(window, restart=restart)
             break
         else:
             window.findMhWindow()

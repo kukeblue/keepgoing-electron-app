@@ -66,7 +66,7 @@ export function usePageStore() {
     const [showLog, setShowLog] = useState<boolean>(false)
     const [logs, setLogs] = useState<string[]>([])
     useEffect(() => {
-        setLogs([])
+        // setLogs([])
     }, [showLog])
 
     const [lock, setLock] = useState<boolean>(true)
@@ -154,9 +154,12 @@ export function usePageStore() {
         if (window.isBee) {
             console.log('直接开始挖图');
             // @ts-ignore
+            console.log(window.beeData)
+            // @ts-ignore
             doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
         }
     }
+
     const handleSelectJiangjunDevice = () => {
         formRef.validateFields().then((res: any) => {
             if (res.deviceId) {

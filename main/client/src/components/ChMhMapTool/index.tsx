@@ -200,7 +200,7 @@ function ChMhMapTool({
     }
     const pointDatas = getRealPoint()
 
-    const handleClickPoint = (map: string, realX: number, realY: number, index: number) => {
+    const handleClickPoint = (map: string, realX: number, realY: number, orgPointX: number, orgPointY: number, index: number) => {
         const x = Math.round(realX)
         const y = Math.round(realY)
         if (mulMode) {
@@ -208,32 +208,36 @@ function ChMhMapTool({
                 return {
                     realX: Math.round(item.realPoint[0]),
                     realY: Math.round(mapConfig.height - item.realPoint[1]),
+                    orgPointX: item.orgPoint[0],
+                    orgPointY: item.orgPoint[1],
                     index: i + 1,
                 }
             })
             otherPoint.splice(index - 1, 1)
             let otherJson = JSON.stringify(otherPoint)
             // @ts-ignore
-            doGetWatuClickMap(mapName, x, y, index, otherJson, window.isBee, cangkuPath)
+            doGetWatuClickMap(mapName, x, y, orgPointX, orgPointY, index, otherJson, window.isBee, cangkuPath)
         } else {
             // @ts-ignore
-            doGetWatuClickMap(mapName, x, y, index, undefined, window.isBee, cangkuPath)
+            doGetWatuClickMap(mapName, x, y, orgPointX, orgPointY, index, undefined, window.isBee, cangkuPath)
         }
     }
 
-    const handleClickArgs = (map: string, realX: number, realY: number, index: number) => {
+    const handleClickArgs = (map: string, realX: number, realY: number, orgPointX: number, orgPointY: number, index: number) => {
         const x = Math.round(realX)
         const y = Math.round(realY)
         let otherPoint = pointDatas.map((item, i) => {
             return {
                 realX: Math.round(item.realPoint[0]),
                 realY: Math.round(mapConfig.height - item.realPoint[1]),
+                orgPointX: item.orgPoint[0],
+                orgPointY: item.orgPoint[1],
                 index: i + 1,
             }
         })
         otherPoint.splice(index - 1, 1)
         let otherJson = JSON.stringify(otherPoint)
-        return [mapName, x, y, index, otherJson]
+        return [mapName, x, y, orgPointX, orgPointY, index, otherJson]
     }
 
     return <div>
@@ -249,13 +253,13 @@ function ChMhMapTool({
                 {
                     pointDatas.map((pointData: any, index) => {
                         let realPoint = pointData.realPoint
+                        let orgPoint = pointData.orgPoint
                         if (index == 0) {
                             // @ts-ignore
-                            window.beeData = handleClickArgs(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1, true)
+                            window.beeData = handleClickArgs(mapName, realPoint[0], mapConfig.height - realPoint[1], orgPoint[0], orgPoint[1], index + 1, true)
                         }
-                        let orgPoint = pointData.orgPoint
                         return <div id={`${mapName}${index}`} onClick={() => {
-                            handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], index + 1)
+                            handleClickPoint(mapName, realPoint[0], mapConfig.height - realPoint[1], orgPoint[0], orgPoint[1], index + 1)
                             const dom = window.document.querySelector(`#${mapName}${index}`)
                             // @ts-ignore
                             dom!.style['background-color'] = '#fff'

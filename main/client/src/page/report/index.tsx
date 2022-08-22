@@ -1,12 +1,31 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import './index.less'
 import { ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { createContainer } from 'unstated-next'
 import moment from "moment";
+import Ajax from "ch-ui/dist/chutils/request";
+import { message } from "antd";
+const request = ChUtils.Ajax.request
 
 export function usePageStore() {
+    const [syncIncomeLoading, setSyncIncomeLoading] = useState(false)
+    const syncIncome = function () {
+        setSyncIncomeLoading(true)
+        request({
+            url: '/api/report/build_report_day_summary',
+            data: {},
+            method: "post"
+        }).then((res: { status: number; }) => {
+            if (res.status === 0) {
+                setSyncIncomeLoading(false)
+                message.success('同步收益成功！')
+            }
+        })
+    }
     return {
-
+        syncIncome,
+        syncIncomeLoading,
+        setSyncIncomeLoading
     }
 }
 
@@ -14,9 +33,27 @@ export const PageStore = createContainer(usePageStore)
 
 
 function Report() {
+    const pageStore = PageStore.useContainer()
     return <div>
         <br />
         <ChTablePanel
+            actions={[{
+                loading: pageStore.syncIncomeLoading,
+                type: 'primary',
+                text: '同步收益',
+                onClick: () => { pageStore.syncIncome() }
+            }]}
+            searchFormData={[
+                {
+                    label: '日期',
+                    name: 'date',
+                    initialValue: moment().format('YYYY-MM-DD'),
+                    type: FormItemType.date,
+                    layout: {
+                        span: 4
+                    }
+                }
+            ]}
             formData={[]}
             url="/api/report/get_report_page"
             columns={[
@@ -64,4 +101,6 @@ function Report() {
     </div>
 }
 
-export default Report
+export default () =>
+    // @ts-ignore
+    <PageStore.Provider><Report /></PageStore.Provider>
