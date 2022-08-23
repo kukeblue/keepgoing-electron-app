@@ -41,7 +41,7 @@ def F_女娲神迹巡逻():
         time.sleep(1)
         window.F_是否结束寻路()
         window.F_自动战斗抓律法()
-        F_检查女娲技能()
+        # F_检查女娲技能()
 
 
 def F_获取方式数字(window):
@@ -157,7 +157,7 @@ def F_检查女娲技能():
 MHWindow = mhWindow.MHWindow
 window = MHWindow(1)
 window.findMhWindow()
-F_改名字(window)
+F_女娲神迹巡逻(window)
 # if __name__ == '__main__':
 #     fire.Fire({
 #         'start': F_碗子山守护者,
