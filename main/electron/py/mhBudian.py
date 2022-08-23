@@ -76,7 +76,7 @@ def F_改名字(window):
     # else:
     #     技能数 = '2'
     point = window.findImgInWindow(
-        'all-empty-jn.png', 0.75, area=(479, 383, 43, 45))
+        'all-empty-jn.png', 0.75, area=(479, 383, 43, 43))
     if(point != None):
         技能数 = '3'
     名字 = ret + 技能数
@@ -157,7 +157,7 @@ def F_检查女娲技能():
 MHWindow = mhWindow.MHWindow
 window = MHWindow(1)
 window.findMhWindow()
-F_女娲神迹巡逻(window)
+F_改名字(window)
 # if __name__ == '__main__':
 #     fire.Fire({
 #         'start': F_碗子山守护者,
