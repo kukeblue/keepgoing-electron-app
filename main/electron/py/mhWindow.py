@@ -421,12 +421,22 @@ class MHWindow:
                         self.F_吃药()
                         break
 
+    def F_判断低蓝位(self):
+        # 低蓝位位置 = [self.windowArea[0] + 748, self.windowArea[1] + 22, 15, 7]
+        # path = self.F_窗口区域截图('temp_dilan_kedu.png', 低蓝位位置)
+        ret = baiduApi.op.FindMultiColor(
+            self.windowArea[0] + 748, self.windowArea[1] + 22, self.windowArea[0] + 748 + 15, self.windowArea[1] + 22 + 7, '808080', '2|-1|d0d0d0', 0.8, 0)
+        if(ret[1] > 0):
+            print('缺蓝')
+            self.F_使用酒肆和打坐()
+
     def F_自动战斗抓律法(self):
         抓次数 = 0
         是否战斗 = False
         time.sleep(0.5)
         # self.F_识别4小人()
         for i in range(4):
+
             print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(1)
             if(self.F_是否在战斗()):
@@ -466,8 +476,7 @@ class MHWindow:
                         break
 
         if(是否战斗):
-            pyautogui.press('f7')
-            self.F_吃药()
+            self.F_判断低蓝位()
 
     def F_自动战斗2(self):
         finish = False
@@ -2329,4 +2338,4 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_小地图寻路器([560, 89])
+    window.F_判断低蓝位()
