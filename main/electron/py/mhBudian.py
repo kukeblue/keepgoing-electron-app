@@ -41,7 +41,9 @@ def F_女娲神迹巡逻():
         time.sleep(1)
         window.F_是否结束寻路()
         window.F_自动战斗抓律法()
-        # F_检查女娲技能()
+        res = F_检查女娲技能(window)
+        if(res):
+            break
 
 
 def F_获取方式数字(window):
@@ -53,32 +55,32 @@ def F_获取方式数字(window):
     return num
 
 
-def F_改名字(window):
-    五行位置 = [window.windowArea[0] + 498, window.windowArea[1] + 353, 30, 30]
-    path = window.F_窗口区域截图('temp_orc_info.png', 五行位置)
+def F_获取携带数量(window):
+    携带数量 = [window.windowArea[0] + 128, window.windowArea[1] + 282, 30, 33]
+    path = window.F_窗口区域截图('temp_orc_info.png', 携带数量)
     ret = baiduApi.cnocr文字识别(path)
+    print(ret)
+    num = "".join(list(filter(str.isdigit, ret)))
+    return num
+
+
+def F_改名字(window):
+    五行位置 = [window.windowArea[0] + 505, window.windowArea[1] + 357, 20, 20]
+    path = window.F_窗口区域截图('temp_orc_info.png', 五行位置)
+    ret = baiduApi.cnocr文字识别2(path)
     print('五行:' + ret)
     技能数 = '0'
-    # point = window.findImgInWindow(
-    #     'all-empty-jn.png', 0.75, area=(523, 383, 43, 45))
-    # if(point == None):
-    #     point = window.findImgInWindow(
-    #         'all-empty-jn.png', 0.75, area=(479, 383, 43, 45))
-    # else:
-    #     技能数 = '4'
-    # if(point == None):
-    #     point = window.findImgInWindow(
-    #         'all-empty-jn.png', 0.75, area=(436, 383, 43, 45))
-    # else:
-    #     技能数 = '3'
-    # if(point == None):
-    #     技能数 = '1'
-    # else:
-    #     技能数 = '2'
     point = window.findImgInWindow(
-        'all-empty-jn.png', 0.75, area=(479, 383, 43, 43))
-    if(point != None):
+        'all-empty-jn.png', 0.75, area=(480, 385, 43, 35))
+    if(point == None):
         技能数 = '3'
+    else:
+        point = window.findImgInWindow(
+            'all-empty-jn.png', 0.75, area=(440, 381, 43, 43))
+        if(point == None):
+            技能数 = '2'
+        else:
+            技能数 = '1'
     名字 = ret + 技能数
     pyautogui.press('tab')
     window.F_移动到游戏区域坐标(282, 293)
@@ -103,23 +105,37 @@ def F_改名字(window):
     # return
 
 
-def F_检查女娲技能():
-    MHWindow = mhWindow.MHWindow
-    window = MHWindow(1)
-    window.findMhWindow()
+def F_检查女娲技能(window):
     time.sleep(1)
     pyautogui.hotkey('alt', 'o')
     time.sleep(1)
-    point = window.findImgInWindow('all-8-1-8.png',  0.95)
-    if(point != None):
+    携带数量 = F_获取携带数量(window)
+    if(携带数量 == '8/8' or 携带数量 == '818'):
         print('满了召唤兽')
         是否第一次查看技能 = True
         while True:
-            识别名字 = window.findImgInWindow('all-lyvw-1.png')
+            window.F_移动到游戏区域坐标(184, 101)
+            utils.click()
+            识别名字 = window.findImgInWindow(
+                'all-lyvw-1.png', 0.9, area=(14, 70, 193, 235))
             if(识别名字 == None):
-                识别名字 = window.findImgInWindow('all-lyvw-2.png')
+                识别名字 = window.findImgInWindow(
+                    'all-lyvw-2.png', 0.9, area=(14, 70, 193, 235))
             if(识别名字 == None):
-                break
+                window.F_移动到游戏区域坐标(184, 273)
+                utils.click()
+                识别名字 = window.findImgInWindow(
+                    'all-lyvw-1.png', 0.9, area=(14, 70, 193, 235))
+                if(识别名字 == None):
+                    识别名字 = window.findImgInWindow(
+                        'all-lyvw-2.png', 0.9, area=(14, 70, 193, 235))
+                if(识别名字 == None):
+                    携带数量 = F_获取携带数量(window)
+                    pyautogui.hotkey('alt', 'o')
+                    if(携带数量 == '6/8' or 携带数量 == '618' or 携带数量 == '7/8' or 携带数量 == '718' or 携带数量 == '8/8' or 携带数量 == '818'):
+                        return True
+                    else:
+                        return False
             window.pointMove(识别名字[0], 识别名字[1])
             if(是否第一次查看技能):
                 utils.rightClick()
@@ -154,11 +170,8 @@ def F_检查女娲技能():
         pyautogui.hotkey('alt', 'o')
 
 
-MHWindow = mhWindow.MHWindow
-window = MHWindow(1)
-window.findMhWindow()
-F_改名字(window)
-# if __name__ == '__main__':
-#     fire.Fire({
-#         'start': F_碗子山守护者,
-#     })
+F_女娲神迹巡逻()
+# MHWindow = mhWindow.MHWindow
+# window = MHWindow(1)
+# window.findMhWindow()
+# F_改名字(window)

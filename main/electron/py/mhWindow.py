@@ -181,6 +181,7 @@ class MHWindow:
         except Exception as e:
             self.focusWindow()
             self.pointMove(x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False)
+        time.sleep(0.1)
 
     def pointMoveNoError(self, x, y, 战斗操作模式=False, 手指操作模式=False, 移动到输入框=False):
         isFirstMove = 0
@@ -408,10 +409,14 @@ class MHWindow:
         是否战斗 = False
         time.sleep(0.5)
         # self.F_识别4小人()
+        是否续自动 = False
         for i in range(4):
             print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(1)
             if(self.F_是否在战斗()):
+                if(是否续自动 == False):
+                    是否续自动 = True
+                    self.F_点击自动()
                 print('F_自动战斗：进入战斗')
                 while(True):
                     time.sleep(1)
@@ -535,6 +540,7 @@ class MHWindow:
                 break
 
     def F_选中道具格子(self, num):
+        self.F_打开道具()
         self.focusWindow()
         while True:
             point = self.findImgInWindow('daoju_top.png')
@@ -993,7 +999,6 @@ class MHWindow:
         self.F_关闭道具()
 
     def F_行囊吃香(self):
-
         self.F_选中道具格子(20)
         time.sleep(0.5)
         utils.click()
@@ -1011,6 +1016,7 @@ class MHWindow:
                 self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
         if point != None:
             self.pointMove(point[0], point[1])
+            time.sleep(0.2)
             utils.click()
             time.sleep(0.1)
             self.pointMove(
@@ -1021,6 +1027,9 @@ class MHWindow:
             time.sleep(1.5)
             point = pyautogui.locateOnScreen(
                 self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+            if(point == None):
+                point = pyautogui.locateOnScreen(
+                    self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.rightClick()
@@ -1030,7 +1039,7 @@ class MHWindow:
                     self.daojuArea[0] + 53, self.daojuArea[1] + 223)
                 utils.click()
                 utils.click()
-                time.sleep(0.5)
+                time.sleep(1)
                 self.pointMove(
                     self.daojuArea[0] + 5, self.daojuArea[1] + 223)
                 utils.click()
@@ -1912,9 +1921,9 @@ class MHWindow:
         pyautogui.press('f9')
         self.F_移动到游戏区域坐标(172, 295)
         utils.click()
-        time.sleep(0.5)
+        time.sleep(1)
         self.F_移动到游戏区域坐标(295, 400)
-        time.sleep(0.1)
+        time.sleep(0.3)
         utils.click()
 
     def F_任务导航器(self, 任务, point):
@@ -2338,4 +2347,4 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_判断低蓝位()
+    window.F_行囊吃香()

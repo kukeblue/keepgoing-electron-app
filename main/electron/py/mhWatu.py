@@ -11,6 +11,7 @@ import fire
 import pyautogui
 import utils
 import networkApi
+import mouse
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -63,8 +64,8 @@ def F_获取任务位置和坐标(str):
         point = str1[0].split(",")
         return [map, point]
     except:
-        return [map, [0, 0]]
         print("An exception occurred")
+        return [map, [0, 0]]
 
 
 def F_获取宝图信息(window=None, restart=0):
@@ -81,7 +82,7 @@ def F_获取宝图信息(window=None, restart=0):
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
     time.sleep(1)
-    points = window.findImgsInWindow('daoju_baotu.png')
+    points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75)
     res = []
     for point in points:
         mapAndpoint = 识别位置信息(window, point)
@@ -136,13 +137,12 @@ def F_获取宝图信息(window=None, restart=0):
 def 识别位置信息(window, point):
     window.pointMove(point[0], point[1])
     time.sleep(0.2)
-    if(point != None):
-        宝图位置信息 = [window.windowArea[0], window.windowArea[1],
-                  window.windowArea[0] + 600, window.windowArea[1] + 600]
-        ret = window.F_宝图文字识别(宝图位置信息)
-        logUtil.chLog(ret)
-        mapAndpoint = F_获取任务位置和坐标(ret)
-        return mapAndpoint
+    宝图位置信息 = [window.windowArea[0], window.windowArea[1],
+              window.windowArea[0] + 600, window.windowArea[1] + 600]
+    ret = window.F_宝图文字识别(宝图位置信息)
+    logUtil.chLog(ret)
+    mapAndpoint = F_获取任务位置和坐标(ret)
+    return mapAndpoint
 
 
 mapDict = {
@@ -243,7 +243,8 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
             pyautogui.press('tab')
             time.sleep(1)
             point = window.findImgInWindow(mapDict.get(map))
-        window.pointMove(point[0] + x, point[1] + y, 移动到输入框=True)
+        mouse.move(point[0] + x, point[1] + y)
+        time.sleep(0.5)
         utils.click()
         window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
         pyautogui.moveTo(
@@ -335,7 +336,7 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None):
         if(point != None and point[0] > 0):
             if(restart != 1):
                 time.sleep(10)
-                window.F_吃香()
+            window.F_吃香()
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
             F_获取宝图信息(window, restart=restart)
