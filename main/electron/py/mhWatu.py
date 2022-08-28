@@ -79,6 +79,7 @@ def F_获取宝图信息(window=None, restart=0):
         window.医宝宝()
     time.sleep(0.5)
     utils.click()
+    time.sleep(0.5)
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
     time.sleep(1)
@@ -201,8 +202,8 @@ def F_点击宝图(window, userId, map, x, y, ox, oy, num):
     pyautogui.press('tab')
     time.sleep(1)
     point = window.findImgInWindow(mapDict.get(map))
-    window.pointMove(point[0] + x, point[1] + y, 移动到输入框=True)
-    utils.click()
+    if(point != None):
+        window.pointMove(point[0] + x, point[1] + y, 移动到输入框=True)
     window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
     window.F_选中道具格子(int(num))
     utils.rightClick()
@@ -213,11 +214,18 @@ def F_点击宝图(window, userId, map, x, y, ox, oy, num):
 
 
 def F_获取最近的坐标点(x, y, other):
+    if(len(other) == 1):
+        return other[0], []
+    if(x == 0 or y == 0):
+        point = other[0]
+        newOther = other[1:]
+        return point, newOther
     for item in other:
         distance = (item.get('realX') - x) * (item.get('realX') -
                                               x) + (item.get('realY') - y)*(item.get('realY') - y)
         item['distance'] = distance
     sortother = sorted(other, key=lambda item: item['distance'])
+    logUtil.chLog('get first point')
     logUtil.chLog(sortother)
     newOther = sortother[1:]
     # todo
@@ -226,7 +234,7 @@ def F_获取最近的坐标点(x, y, other):
 
 
 def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
-    if(x == 0 or y == 0):
+    if((x == 0 or y == 0) and len(other) > 0):
         point, newOther = F_获取最近的坐标点(x, y, other)
         F_点击宝图并寻路(window, map, point['realX'],
                   point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
@@ -243,9 +251,8 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
             pyautogui.press('tab')
             time.sleep(1)
             point = window.findImgInWindow(mapDict.get(map))
-        mouse.move(point[0] + x, point[1] + y)
-        time.sleep(0.5)
-        utils.click()
+        if(point != None):
+            mouse.move(point[0] + x, point[1] + y)
         window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
@@ -253,7 +260,7 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
         utils.rightClick()
         # utils.rightClick()
         window.F_自动战斗()
-        # window.F_吃药()
+        window.F_判断人物宝宝低红蓝位()
         pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)

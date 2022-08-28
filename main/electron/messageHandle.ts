@@ -85,6 +85,15 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+    // 补店
+    ipcMain.on(resourcePaths.METHOD_BUDIAN_TASK, (event, args) => {
+        logger.info('run py script: METHOD_BUDIAN_TASK')
+        const result = runPyScript('mhBudian', ['lf', []])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
     // 关闭所有进程
     ipcMain.on(resourcePaths.METHOD_CLOSE_ALL_TASK, (event, args) => {
         logger.info('run py script: METHOD_CLOSE_ALL_TASK')

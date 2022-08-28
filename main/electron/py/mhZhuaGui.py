@@ -69,7 +69,8 @@ def F_领取抓鬼任务(window, 是否抓大鬼):
             window.F_点击战斗()
             window.F_自动战斗2()
         window.F_导航到地府()
-        F_领取大鬼任务(window)
+        if(是否抓大鬼 == 1):
+            F_领取大鬼任务(window)
         F_领取钟馗任务(window)
 
 

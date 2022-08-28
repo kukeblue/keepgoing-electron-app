@@ -18,6 +18,7 @@ const resourcePaths = {
     METHOD_SYNC_IMAGES: 'method_sync_images', // 同步任务图片
     METHOD_BEE_MODE: 'method_bee_mode', // 同步任务图片
     METHOD_ZHUAGUI_TASK: 'method_zhuagui_task',
+    METHOD_BUDIAN_TASK: 'method_budian_task',
     METHOD_CLOSE_ALL_TASK: 'method_close_all_task',
     METHOD_THROW_LITTER: 'throw_litter',
     METHOD_SELL_EQUIPMENT: 'sell_equipment',

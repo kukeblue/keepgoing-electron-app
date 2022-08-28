@@ -24,6 +24,5 @@ if __name__ == '__main__':
     zf = zipfile.ZipFile(_tmp_file, mode='r')
     for names in zf.namelist():
         f = zf.extract(names, updateHome)  # 解压到zip目录文件下
-        print(f)
 
     zf.close()

@@ -6,7 +6,7 @@ import "./index.less";
 const request = ChUtils.Ajax.request
 import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy } from "../../call";
+import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
 
 
 import { createContainer } from 'unstated-next'
@@ -1003,9 +1003,13 @@ function HomeFeature() {
                     </Col>
                 </Row>
             </TabPane>
-            <TabPane tab="其他" key="5">
+            <TabPane tab="补店" key="5">
                 <Row>
-
+                    <Button onClick={() => {
+                        pageStore.setShowLog(true)
+                        message.success('操作成功')
+                        doBudianTask()
+                    }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓律法女娲</Button>
                 </Row>
             </TabPane>
         </Tabs>
