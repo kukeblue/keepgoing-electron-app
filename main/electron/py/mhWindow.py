@@ -87,6 +87,9 @@ class MHWindow:
                 leftx, topy, self.getTruthPx(800), self.getTruthPx(600))
             # pyautogui.screenshot(
             #     self.pyImageDir + '/temp/screen.png', region=self.windowAreaGui)
+            pyautogui.moveTo(
+                self.windowArea[0] + 400, self.windowArea[1] + 300)
+            pyautogui.click()
             self.gameId = utils.bindOp()
             self.focusWindow()
 
@@ -1126,7 +1129,16 @@ class MHWindow:
         point = pyautogui.locateOnScreen(
             self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
         self.pointMove(point[0], point[1])
-        utils.click()
+        utils.rightClick()
+        time.sleep(0.1)
+        self.F_关闭道具()
+
+    def F_吃动名草(self):
+        self.F_打开道具()
+        point = pyautogui.locateOnScreen(
+            self.pyImageDir + self.F_获取设备图片('all-daoju-dmc.png'), region=self.daojuArea, grayscale=True, confidence=0.85)
+        self.pointMove(point[0], point[1])
+        utils.rightClick()
         time.sleep(0.1)
         self.F_关闭道具()
 
@@ -1143,6 +1155,8 @@ class MHWindow:
             desLocation = pointUtil.红色长安城导标旗坐标_化生寺Str
         elif(path == '红色长安城导标旗坐标_酒店'):
             desLocation = pointUtil.红色长安城导标旗坐标_酒店Str
+        elif(path == '红色长安城导标旗坐标_商会'):
+            desLocation = pointUtil.红色长安城导标旗坐标_商会Str
         while(True):
             curLocation = self.获取当前坐标()
             if(desLocation == curLocation):
@@ -1169,6 +1183,10 @@ class MHWindow:
                         self.pointMove(
                             self.windowArea[0] + 583, self.windowArea[1] + 277)
                         utils.click()
+                    elif(path == '红色长安城导标旗坐标_商会'):
+                        self.pointMove(
+                            self.windowArea[0] + 455, self.windowArea[1] + 421)
+                        utils.click()
                     time.sleep(0.5)
                     pyautogui.hotkey('alt', 'e')
                     break
@@ -1187,6 +1205,8 @@ class MHWindow:
                         self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_化生寺, None)
                     elif(path == '红色长安城导标旗坐标_酒店'):
                         self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_酒店, None)
+                    elif(path == '红色长安城导标旗坐标_商会'):
+                        self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_商会, None)
                     break
                 else:
                     pyautogui.hotkey('alt', 'e')
