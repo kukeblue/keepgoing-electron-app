@@ -52,7 +52,7 @@ def F_领取抓鬼任务(window, 是否抓大鬼):
                 window.F_小地图寻路器(ret[1], None)
             pyautogui.press('f9')
             window.F_点击战斗()
-            window.F_自动战斗2()
+            window.F_抓鬼自动战斗()
             window.F_移动到游戏区域坐标(665, 301)
             utils.click()
         if(任务['捉鬼'] != None):
@@ -67,7 +67,7 @@ def F_领取抓鬼任务(window, 是否抓大鬼):
                 window.F_小地图寻路器(ret[1], None)
             pyautogui.press('f9')
             window.F_点击战斗()
-            window.F_自动战斗2()
+            window.F_抓鬼自动战斗()
         window.F_导航到地府()
         if(是否抓大鬼 == 1):
             F_领取大鬼任务(window)

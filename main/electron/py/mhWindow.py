@@ -421,6 +421,11 @@ class MHWindow:
         ret = utils.F_通用文字识别(path)
         return ret
 
+    def F_组队切换验证4小人(self):
+        area = [self.windowArea[0] - 3, self.windowArea[1] - 65, 800, 65]
+        result = pyautogui.locateOnScreen(
+            self.pyImageDir + self.F_获取设备图片(pic), region=area, grayscale=True, confidence=0.75)
+
     def F_识别4小人(self):
         ret = baiduApi.F_打图4小人识别([self.windowArea[0], self.windowArea[1],
                                   self.windowArea[0] + 600, self.windowArea[1] + 800])
@@ -437,9 +442,12 @@ class MHWindow:
                 clickPoints = data.split(',')
                 if(clickPoints[1]):
                     print('success')
-                    self.F_移动到游戏区域坐标(
+                    self.pointMove(
                         x+int(clickPoints[0]), y+int(clickPoints[1]))
+                    time.sleep(0.3)
+                    pyautogui.click()
                     utils.click()
+
                     return True
             else:
                 print('识别失败')
@@ -506,6 +514,11 @@ class MHWindow:
                         是否战斗 = True
                         print('F_自动战斗：结束战斗')
                         break
+        if(是否战斗 == True):
+            self.F_移动到游戏区域坐标(620, 100)
+            self.F_移动到游戏区域坐标(620, 50)
+            self.F_移动到游戏区域坐标(630, 12)
+            utils.rightClick()
 
     def F_判断人物宝宝低红蓝位(self):
         self.F_打开道具()
@@ -522,15 +535,10 @@ class MHWindow:
         if(ret[1] > 0):
             self.F_吃蓝()
             print('人物缺蓝')
-        ret = baiduApi.op.FindMultiColor(
-            self.windowArea[0] + 639, self.windowArea[1] + 10, self.windowArea[0] + 639 + 15, self.windowArea[1] + 10 + 7, '808080', '2|-1|d0d0d0', 0.7, 0)
-        if(ret[1] > 0):
-            # self.F_吃红()
-            print('宝宝缺红')
-            self.F_移动到游戏区域坐标(620, 100)
-            self.F_移动到游戏区域坐标(620, 50)
-            self.F_移动到游戏区域坐标(630, 12)
-            utils.rightClick()
+        # point = self.findImgInWindow(
+        #     'all-baobao-hong.png', confidence=0.90, area=(639, 10, 20, 20))
+        # if point != None:
+        #     print('宝宝缺红')
 
     def F_判断低蓝位(self):
         # 低蓝位位置 = [self.windowArea[0] + 748, self.windowArea[1] + 22, 15, 7]
@@ -547,7 +555,6 @@ class MHWindow:
         time.sleep(0.5)
         # self.F_识别4小人()
         for i in range(4):
-
             print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(1)
             if(self.F_是否在战斗()):
@@ -594,6 +601,23 @@ class MHWindow:
         while(finish == False):
             time.sleep(1)
             if(self.F_是否在战斗()):
+                while(True):
+                    print('进入战斗')
+                    time.sleep(1)
+                    if(self.F_是否结束战斗()):
+                        finish = True
+                        break
+
+    def F_抓鬼自动战斗(self):
+        finish = False
+        while(finish == False):
+            time.sleep(1)
+            if(self.F_是否在战斗()):
+                for x in range(4):
+                    self.F_识别4小人()
+                    self.F_点击自动2()
+                    pyautogui.hotkey('ctrl', 'tab')
+                pyautogui.hotkey('ctrl', 'tab')
                 while(True):
                     print('进入战斗')
                     time.sleep(1)
@@ -733,7 +757,7 @@ class MHWindow:
                         utils.click()
 
     def 统计扫货(self):
-        point = self.findImgInWindow('all-tie-big.png',  0.85, [self.windowArea[0] + 100, self.windowArea[1],
+        point = self.findImgInWindow('all-tie-big.png',  0.85, [self.windowArea[0] + 80, self.windowArea[1],
                                                                 550, 480])
         if(point != None):
             ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
@@ -745,7 +769,7 @@ class MHWindow:
                 return '60铁'
             elif(level == 70):
                 return '70铁'
-        point = self.findImgInWindow('all-shu-big.png',  0.85, [self.windowArea[0]+100, self.windowArea[1],
+        point = self.findImgInWindow('all-shu-big.png',  0.85, [self.windowArea[0] + 80, self.windowArea[1],
                                                                 520, 480])
         if(point != None):
             ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
@@ -757,30 +781,34 @@ class MHWindow:
                 return '60书'
             elif(level == 70):
                 return '70书'
-        point = self.findImgInWindow('all-baotu-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+        point = self.findImgInWindow('all-baotu-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
                                                                   520, 480])
         if(point != None):
             return '宝图'
         ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
                                self.windowArea[0] + 600,  self.windowArea[1] + 800])
         if(ret != '' and ret != None and int(ret) < 10):
-            红玛瑙 = self.findImgInWindow('all-baoshi-malao-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+            红玛瑙 = self.findImgInWindow('all-baoshi-malao-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
                                                                            520, 480])
             if(红玛瑙 != None):
                 return '红玛瑙' + ret
-            黑宝石 = self.findImgInWindow('all-heibaoshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+            舍利子 = self.findImgInWindow('all-shelizi-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
+                                                                      520, 480])
+            if(舍利子 != None):
+                return '舍利子' + ret
+            黑宝石 = self.findImgInWindow('all-heibaoshi-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
                                                                         520, 480])
             if(黑宝石 != None):
                 return '黑宝石' + ret
-            光芒石 = self.findImgInWindow('all-guanmanshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+            光芒石 = self.findImgInWindow('all-guanmanshi-big.png',  0.95, [self.windowArea[0] + 80, self.windowArea[1],
                                                                          520, 480])
             if(光芒石 != None):
                 return '光芒石' + ret
-            月亮石 = self.findImgInWindow('all-yueliangshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+            月亮石 = self.findImgInWindow('all-yueliangshi-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
                                                                           520, 480])
             if(月亮石 != None):
                 return '月亮石' + ret
-            太阳石 = self.findImgInWindow('all-taiyangshi-big.png',  0.75, [self.windowArea[0] + 100, self.windowArea[1],
+            太阳石 = self.findImgInWindow('all-taiyangshi-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
                                                                          520, 480])
             if(太阳石 != None):
                 return '太阳石' + ret
@@ -794,35 +822,35 @@ class MHWindow:
             if(int(ret) == 70):
                 return '70环'
 
-        point = self.findImgInWindow('all-neidang-big.png',  0.85, [self.windowArea[0] + 130, self.windowArea[1],
+        point = self.findImgInWindow('all-neidang-big.png',  0.85, [self.windowArea[0] + 80, self.windowArea[1],
                                                                     520, 480])
         if(point != None):
             return '内丹'
-        point = self.findImgInWindow('all-shoujue-big.png',  0.85, [self.windowArea[0] + 130, self.windowArea[1],
+        point = self.findImgInWindow('all-shoujue-big.png',  0.75, [self.windowArea[0] + 80, self.windowArea[1],
                                                                     520, 480])
         if(point != None):
             return '兽决'
-        point = self.findImgInWindow('all-66-big.png',  0.85, [self.windowArea[0] + 130, self.windowArea[1],
+        point = self.findImgInWindow('all-66-big.png',  0.85, [self.windowArea[0] + 80, self.windowArea[1],
                                                                520, 480])
         if(point != None):
             return '金柳露'
-        point = self.findImgInWindow('all-dinghunzhu-big.png',  0.85, [self.windowArea[0] + 130, self.windowArea[1],
+        point = self.findImgInWindow('all-dinghunzhu-big.png',  0.80, [self.windowArea[0] + 80, self.windowArea[1],
                                                                        520, 480])
         if(point != None):
             return '定魂珠'
-        point = self.findImgInWindow('all-jinggangshi-big.png',  0.85, [self.windowArea[0] + 120, self.windowArea[1],
+        point = self.findImgInWindow('all-jinggangshi-big.png',  0.95, [self.windowArea[0] + 80, self.windowArea[1],
                                                                         520, 480])
         if(point != None):
             return '金刚石'
-        point = self.findImgInWindow('all-bishui-big.png',  0.95, [self.windowArea[0] + 120, self.windowArea[1],
+        point = self.findImgInWindow('all-bishui-big.png',  0.95, [self.windowArea[0] + 80, self.windowArea[1],
                                                                    520, 480])
         if(point != None):
             return '避水珠'
-        point = self.findImgInWindow('all-longlin-big.png',  0.95, [self.windowArea[0] + 120, self.windowArea[1],
+        point = self.findImgInWindow('all-longlin-big.png',  0.95, [self.windowArea[0] + 80, self.windowArea[1],
                                                                     520, 480])
         if(point != None):
             return '龙鳞'
-        point = self.findImgInWindow('all-yeguang-big.png',  0.85, [self.windowArea[0] + 120, self.windowArea[1],
+        point = self.findImgInWindow('all-yeguang-big.png',  0.85, [self.windowArea[0] + 80, self.windowArea[1],
                                                                     520, 480])
         if(point != None):
             return '夜光珠'
@@ -886,11 +914,13 @@ class MHWindow:
                         else:
                             收益 = 收益 + ',' + ret
                         print('识别到：' + ret)
-                        time.sleep(0.5)
                         utils.click()
-                        pyautogui.click()
+                for p in range(i * 3, (i + 1) * 3):
+                    if(p < len(有货格子)):
+                        item = 有货格子[p]
+                        self.F_移动到游戏区域坐标(item[0] - self.windowArea[0] + 25,
+                                         item[1] - self.windowArea[1] + 25)
                         utils.click()
-                        time.sleep(0.5)
                 self.F_移动到游戏区域坐标(405, 497)
                 utils.click()
                 if(i != (给予次数 - 1)):
@@ -993,6 +1023,7 @@ class MHWindow:
                 utils.click()
                 self.pointMove(
                     self.daojuArea[0] + 5, self.daojuArea[1] + 226)
+                time.sleep(0.5)
                 utils.click()
                 time.sleep(0.5)
                 utils.click()
@@ -1073,9 +1104,9 @@ class MHWindow:
 
     def F_行囊吃香(self):
         self.F_选中道具格子(20)
-        time.sleep(0.5)
+        time.sleep(1)
         utils.click()
-        time.sleep(0.5)
+        time.sleep(1)
         self.pointMove(
             self.daojuArea[0] + 53, self.daojuArea[1] + 223)
         utils.click()
@@ -1108,7 +1139,7 @@ class MHWindow:
                 utils.rightClick()
                 time.sleep(1)
                 utils.click()
-                time.sleep(0.3)
+                time.sleep(0.5)
                 self.pointMove(
                     self.daojuArea[0] + 53, self.daojuArea[1] + 223)
                 time.sleep(0.3)
@@ -2426,7 +2457,13 @@ class MHWindow:
                 pyautogui.press('tab')
                 time.sleep(2)
 
+    def F_点击自动2(self):
+        self.F_移动到游戏区域坐标(695, 385)
+        utils.click()
+
     def F_点击自动(self):
+        self.F_移动到游戏区域坐标(695, 385)
+        utils.click()
         self.F_移动到游戏区域坐标(339, 552)
         utils.click()
 
@@ -2448,4 +2485,11 @@ class MHWindow:
 if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_吃红()
+    point = window.findImgInWindow(
+        'all-baobao-hong.png', confidence=0.85, area=(639, 10, 20, 20))
+    if point != None:
+        print('宝宝缺红')
+        window.F_移动到游戏区域坐标(620, 100)
+        window.F_移动到游戏区域坐标(620, 50)
+        window.F_移动到游戏区域坐标(630, 12)
+        utils.rightClick()

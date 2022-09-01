@@ -523,7 +523,7 @@ function HomeWatu() {
                 <div><Button danger onClick={() => { updateStatus(Object.assign({}, item, { status: '删除' })) }} type="link">删除</Button></div>
             </div>
         }>
-            <div style={{ width: 120, margin: 5 }} className="flex-row-between">
+            <div style={{ margin: 5 }} className="flex-row-between">
                 <Tag color="green">{item.name}</Tag>
                 {item.status == '离线' ? <div><Badge status="default" />离线</div> : item.status == '空闲' ? <div><Badge status="processing" />空闲</div> : <div><Badge status="warning" />忙碌</div>}
             </div>
@@ -547,7 +547,7 @@ function HomeWatu() {
             setShowGroupPriceModal(false)
         }}>
             <div className="flex">
-                <div style={{ width: 100 }}>配置物价</div><TextArea defaultValue={watuGroup?.priceConfig} onChange={(v) => {
+                <div style={{ width: 100 }}>配置物价</div><TextArea rows={5} defaultValue={watuGroup?.priceConfig} onChange={(v) => {
                     watuGroup ? watuGroup.priceConfig = v.target.value : 0
                 }} />
             </div>
@@ -655,11 +655,11 @@ function HomeWatu() {
                 <Col span={12}>
                     <div>
                         <div className="m-t-10 flex-row-center">
-                            <h4>分铁角色</h4>
+                            <h4>分铁</h4>
                         </div>
                         <Row>
                             {watuRoles.filter((item: TGameRole) => item.work == '分铁').map((item: TGameRole) => {
-                                return <Col key={item.id} span={12}>
+                                return <Col key={item.id}>
                                     {roleTag(item)}
                                 </Col>
                             })}
@@ -679,11 +679,86 @@ function HomeWatu() {
                 <Col span={12}>
                     <div>
                         <div className="m-t-10 flex-row-center">
+                            <h4>分铁50</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分铁50').map((item: TGameRole) => {
+                                return <Col key={item.id}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 50
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 50} trigger="click" placement="topLeft" title='添加角色' content={addContent('分铁50')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分铁60</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分铁60').map((item: TGameRole) => {
+                                return <Col key={item.id}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 60
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 60} trigger="click" placement="topLeft" title='添加角色' content={addContent('分铁60')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分铁70</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分铁70').map((item: TGameRole) => {
+                                return <Col key={item.id}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 70
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 70} trigger="click" placement="topLeft" title='添加角色' content={addContent('分铁70')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+            </Row>
+            <Divider />
+            <Row>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
                             <h4>分书角色</h4>
                         </div>
                         <Row>
                             {watuRoles.filter((item: TGameRole) => item.work == '分书').map((item: TGameRole) => {
-                                return <Col key={item.id} span={12}>
+                                return <Col key={item.id}>
                                     {roleTag(item)}
                                 </Col>
                             })}
@@ -700,7 +775,56 @@ function HomeWatu() {
                         </Popover>
                     </div>
                 </Col>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分书60</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分书60').map((item: TGameRole) => {
+                                return <Col key={item.id}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 61
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 61} trigger="click" placement="topLeft" title='添加角色' content={addContent('分书60')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分书70</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分书70').map((item: TGameRole) => {
+                                return <Col key={item.id}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 62
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 62} trigger="click" placement="topLeft" title='添加角色' content={addContent('分书70')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
             </Row>
+            <Divider />
             <Row>
                 <Col span={12}>
                     <div>
@@ -709,7 +833,7 @@ function HomeWatu() {
                         </div>
                         <Row>
                             {watuRoles.filter((item: TGameRole) => item.work == '分兽决内丹').map((item: TGameRole) => {
-                                return <Col key={item.id} span={12}>
+                                return <Col key={item.id}>
                                     {roleTag(item)}
                                 </Col>
                             })}
@@ -726,6 +850,9 @@ function HomeWatu() {
                         </Popover>
                     </div>
                 </Col>
+            </Row>
+            <Divider />
+            <Row>
                 <Col span={12}>
                     <div>
                         <div className="m-t-10 flex-row-center">
@@ -733,7 +860,7 @@ function HomeWatu() {
                         </div>
                         <Row>
                             {watuRoles.filter((item: TGameRole) => item.work == '分环').map((item: TGameRole) => {
-                                return <Col key={item.id} span={12}>
+                                return <Col key={item.id}>
                                     {roleTag(item)}
                                 </Col>
                             })}
@@ -750,7 +877,83 @@ function HomeWatu() {
                         </Popover>
                     </div>
                 </Col>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分环50</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分环50').map((item: TGameRole) => {
+                                return <Col key={item.id} span={12}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 80
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 80} trigger="click" placement="topLeft" title='添加角色' content={addContent('分环50')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
             </Row>
+            <br />
+            <Row>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分环60</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分环60').map((item: TGameRole) => {
+                                return <Col key={item.id} span={12}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 81
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 81} trigger="click" placement="topLeft" title='添加角色' content={addContent('分环60')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>分环70</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '分环70').map((item: TGameRole) => {
+                                return <Col key={item.id} span={12}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 82
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 82} trigger="click" placement="topLeft" title='添加角色' content={addContent('分环70')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+            </Row>
+            <Divider />
             <Row>
                 <Col span={12}>
                     <div>
@@ -759,7 +962,7 @@ function HomeWatu() {
                         </div>
                         <Row>
                             {watuRoles.filter((item: TGameRole) => item.work == '分五宝').map((item: TGameRole) => {
-                                return <Col key={item.id} span={12}>
+                                return <Col key={item.id}>
                                     {roleTag(item)}
                                 </Col>
                             })}
@@ -783,7 +986,7 @@ function HomeWatu() {
                         </div>
                         <Row>
                             {watuRoles.filter((item: TGameRole) => item.work == '分杂货').map((item: TGameRole) => {
-                                return <Col key={item.id} span={12}>
+                                return <Col key={item.id}>
                                     {roleTag(item)}
                                 </Col>
                             })}

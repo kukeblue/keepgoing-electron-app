@@ -3,15 +3,15 @@ from tkinter.messagebox import NO
 from aip import AipOcr
 import time
 from win32com.client import Dispatch
-from cnocr import CnOcr
+# from cnocr import CnOcr
 import win32api
 import utils
 import sys
 import os
 import logUtil
-import easyocr
-reader = easyocr.Reader(['ch_sim', 'en'])
-ocr = CnOcr()
+# import easyocr
+# reader = easyocr.Reader(['ch_sim', 'en'])
+# ocr = CnOcr()
 
 op = Dispatch("op.opsoft")
 
@@ -139,22 +139,23 @@ def F_查找等级(area):
 
 
 def cnocr文字识别2(path):
-    res = ocr.ocr_for_single_line(path)
-    print(res)
-    return res['text']
+    # res = ocr.ocr_for_single_line(path)
+    # print(res)
+    # return res['text']
+    return ''
 
 
 def cnocr文字识别(path):
-    res = reader.readtext(path)
-    print(res)
-    if(len(res) == 0):
-        return ""
-    return res[0][1]
+    # res = reader.readtext(path)
+    # if(len(res) == 0):
+    #     return ""
+    # return res[0][1]
+    return ''
 
-# def F_识别放生验证数字(area):
-#     op.SetDict(0, pyZhikuDir + '\\fangshen_number.txt')
-#     return op.Ocr(area[0], area[1], area[2], area[3],
-#                   "eff104-000000|ffff01-000000|ffff01-000000|dee109-000000|ffff01-000000|c5cb0f-000000", 0.8)
+    # def F_识别放生验证数字(area):
+    #     op.SetDict(0, pyZhikuDir + '\\fangshen_number.txt')
+    #     return op.Ocr(area[0], area[1], area[2], area[3],
+    #                   "eff104-000000|ffff01-000000|ffff01-000000|dee109-000000|ffff01-000000|c5cb0f-000000", 0.8)
 
 
 def F_大漠坐标文字识别(area):
