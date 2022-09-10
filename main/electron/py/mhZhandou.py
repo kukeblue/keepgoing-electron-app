@@ -27,23 +27,27 @@ def 无人值守模式():
             pyautogui.click()
             window.F_移动到游戏区域坐标(337, 551)
             pyautogui.click()
+            window.F_点击自动()
             pyautogui.hotkey('ctrl', 'tab')
             time.sleep(1)
             window.F_移动到游戏区域坐标(190, 394)
             pyautogui.click()
             window.F_移动到游戏区域坐标(337, 551)
             pyautogui.click()
+            window.F_点击自动()
             pyautogui.hotkey('ctrl', 'tab')
             time.sleep(1)
             window.F_移动到游戏区域坐标(190, 394)
             pyautogui.click()
             window.F_移动到游戏区域坐标(337, 551)
             pyautogui.click()
+            window.F_点击自动()
             pyautogui.hotkey('ctrl', 'tab')
             window.F_移动到游戏区域坐标(190, 394)
             pyautogui.click()
             window.F_移动到游戏区域坐标(337, 551)
             pyautogui.click()
+            window.F_点击自动()
             pyautogui.hotkey('ctrl', 'tab')
             time.sleep(2)
 
@@ -126,8 +130,6 @@ def 自动喊话模式(num):
         time.sleep(randint_data)
 
 
-
-
 def 飞机队操作(window):
     # 第一个号
     window.F_移动到游戏区域坐标(320, 230, True)
@@ -156,11 +158,11 @@ def 飞机队操作(window):
     time.sleep(0.3)
 
 
-# 无人值守模式()
-if __name__ == '__main__':
-    fire.Fire({
-        'lbc': 飞机队四人模式挂机,
-        'hh': 自动喊话模式,
-    })
+无人值守模式()
+# if __name__ == '__main__':
+#     fire.Fire({
+#         'lbc': 飞机队四人模式挂机,
+#         'hh': 自动喊话模式,
+#     })
 # 自动喊话模式('4')
 # 飞机队四人模式挂机('9')dfv

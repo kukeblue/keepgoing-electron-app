@@ -43,6 +43,7 @@ function Report() {
                 text: '同步收益',
                 onClick: () => { pageStore.syncIncome() }
             }]}
+
             searchFormData={[
                 {
                     label: '日期',

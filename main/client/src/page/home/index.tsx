@@ -38,6 +38,9 @@ type TWatuInfo = {
 }
 // @ts-ignore
 window.isBee = true
+// @ts-ignore
+window.isChilan = true
+
 
 let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice' | 'handleSelectZhuaGuiDevice'
 let watuDeviceId = 0
@@ -80,6 +83,8 @@ export function usePageStore() {
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
+    // 是否吃蓝
+    const [isChilan, setIsChilan] = useState<boolean>(true)
     const [isBigGhost, setIsBigGhost] = useState<boolean>(true)
     const [isAccept, setIsAccept] = useState<boolean>(true)
     const [cangkuPath, setCangkuPath] = useState<string>('建邺城');
@@ -114,7 +119,8 @@ export function usePageStore() {
         if (isBee) {
             setShowLog(true)
             message.success('操作成功')
-            doBee(cangkuPath, restart)
+            // @ts-ignore
+            doBee(cangkuPath, restart, window.isChilan)
         } else {
             setShowLog(true)
             message.success('操作成功')
@@ -156,7 +162,7 @@ export function usePageStore() {
             // @ts-ignore
             console.log(window.beeData)
             // @ts-ignore
-            doGetWatuClickMap(...window.beeData, true, window.cangkuPath)
+            doGetWatuClickMap(...window.beeData, true, window.cangkuPath, window.isChilan)
         }
     }
 
@@ -230,6 +236,15 @@ export function usePageStore() {
         // @ts-ignore
         window.isBee = check;
     }
+
+    const handleChangeIsChilan = (check: boolean) => {
+        setIsChilan(check);
+        // @ts-ignore
+        window.isChilan = check;
+        // @ts-ignore
+        print(window.isChilan)
+    }
+
     const connector = () => {
         setShowLog(true)
         message.success('操作成功')
@@ -253,6 +268,9 @@ export function usePageStore() {
 
     }
     return {
+        handleChangeIsChilan,
+        setIsChilan,
+        isChilan,
         setShowLog,
         showLog,
         setIsBigGhost,
@@ -1004,7 +1022,32 @@ function HomeWatu() {
                     </div>
                 </Col>
             </Row>
-
+            <Row>
+                <Col span={12}>
+                    <div>
+                        <div className="m-t-10 flex-row-center">
+                            <h4>后勤</h4>
+                        </div>
+                        <Row>
+                            {watuRoles.filter((item: TGameRole) => item.work == '后勤').map((item: TGameRole) => {
+                                return <Col key={item.id}>
+                                    {roleTag(item)}
+                                </Col>
+                            })}
+                        </Row>
+                        <Popover onVisibleChange={(v) => {
+                            if (v) {
+                                formRef.resetFields()
+                            }
+                            showAccountPopoverIndex = 101
+                            setShowAccountPopover(v)
+                        }
+                        } visible={showAccountPopover && showAccountPopoverIndex == 101} trigger="click" placement="topLeft" title='添加角色' content={addContent('后勤')}>
+                            <Button className="m-t-15" size="small">+添加角色</Button>
+                        </Popover>
+                    </div>
+                </Col>
+            </Row>
         </Modal>
         <Modal visible={showGroupModal} onCancel={() => { setShowGroupModal(false) }} onOk={() => {
             const id = userStore.user?.id
@@ -1052,8 +1095,9 @@ function HomeWatu() {
                     </Col>
                     <Col>
                         <div style={{ marginLeft: 20 }}>
-                            <span style={{ color: '#000' }}>小蜜蜂模式</span>： <Switch size="small" checked={pageStore.isBee} onChange={(e) => {
-                                pageStore.handleChangeIsBeen(e);
+                            <span style={{ color: '#000' }}>补蓝</span>： <Switch size="small" checked={pageStore.isChilan} onChange={(e) => {
+                                pageStore.handleChangeIsChilan(e)
+                                // pageStore.handleChangeIsBeen(e);
                             }} />
                         </div>
                     </Col>
@@ -1137,6 +1181,7 @@ function HomeWatu() {
     </div >
 }
 function HomeFeature() {
+    const [price, setPrice] = useState('25555')
     const userStore = UserStore.useContainer()
     const pageStore = PageStore.useContainer()
     return !pageStore.lock ? <div></div> : <div className='home-feature'>
@@ -1208,11 +1253,14 @@ function HomeFeature() {
             </TabPane>
             <TabPane tab="补店" key="5">
                 <Row>
-                    <Button onClick={() => {
-                        pageStore.setShowLog(true)
-                        message.success('操作成功')
-                        doBudianTask()
-                    }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓律法女娲</Button>
+                    <Col>
+                        <Button onClick={() => {
+                            pageStore.setShowLog(true)
+                            message.success('操作成功')
+                            doBudianTask(price)
+                        }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓律法女娲</Button></Col>
+                    <Col offset={1}> <span>价格：</span><Input onChange={(e) => { setPrice(e.target.value) }} value={price} style={{ width: 150 }} /></Col>
+
                 </Row>
             </TabPane>
         </Tabs>

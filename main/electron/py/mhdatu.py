@@ -16,21 +16,21 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def 到店小二领取任务(window):
-
     ret = baiduApi.op.FindMultiColor(
         window.windowArea2[0] + 641, window.windowArea2[1] + 135, window.windowArea2[0] + 680, window.windowArea2[3] + 175, '00ff00', '11|2|00ff00', 0.8, 0)
     if(ret[1] > 0):
         print('有任务')
     else:
-        window.F_使用长安城飞行棋('红色长安城导标旗坐标_酒店')
-        time.sleep(1)
-        pyautogui.press('f9')
-        window.F_移动到游戏区域坐标(533, 165)
-        utils.click()
-        time.sleep(3)
-        window.F_移动到游戏区域坐标(559, 284)
-        utils.click()
-        time.sleep(3)
+        if(window.获取当前地图2() != '酒店'):
+            window.F_使用长安城飞行棋('红色长安城导标旗坐标_酒店')
+            time.sleep(1)
+            pyautogui.press('f9')
+            window.F_移动到游戏区域坐标(533, 165)
+            utils.click()
+            time.sleep(3)
+            window.F_移动到游戏区域坐标(559, 284)
+            utils.click()
+            time.sleep(3)
         pyautogui.press('f9')
     while True:
         ret = baiduApi.op.FindMultiColor(
@@ -92,19 +92,19 @@ def 到店小二附近(window):
 def 点击店小二(window):
     for x in range(3):
         point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-1.png', confidence=0.6)
+            'all-xiaoer-1.png', confidence=0.75)
         if(point):
             window.F_移动到游戏区域坐标(point[0] + 5, point[1])
             utils.click()
             break
         point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-2.png', confidence=0.6)
+            'all-xiaoer-2.png', confidence=0.75)
         if(point):
             window.F_移动到游戏区域坐标(point[0] + 5, point[1])
             utils.click()
             break
         point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-3.png', confidence=0.6)
+            'all-xiaoer-3.png', confidence=0.75)
         if(point):
             window.F_移动到游戏区域坐标(point[0] + 5, point[1])
             utils.click()
@@ -137,7 +137,7 @@ print('到店小二领取任务')
 time.sleep(3)
 deviceId = str(deviceId)
 MHWindow = mhWindow.MHWindow
-window = MHWindow(1, deviceId)
+window = MHWindow(1)
 window.findMhWindow()
 window.focusWindow()
 while True:

@@ -8,7 +8,7 @@ export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
 export const doGetWatuInfo = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [])
 export const doZhuaGuiTask = (isBigGhost: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHUAGUI_TASK, [isBigGhost])
-export const doBudianTask = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BUDIAN_TASK, [])
+export const doBudianTask = (price: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BUDIAN_TASK, [price])
 export const doCloseAllTask = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLOSE_ALL_TASK, [])
 export const doThrowLitter = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_THROW_LITTER, [deviceId])
 export const doSellEquipment = (deviceId: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SELL_EQUIPMENT, [deviceId])
@@ -26,8 +26,8 @@ export const doUpdatePy = () => {
 
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
-export const doGetWatuClickMap = (mapName: string, x: number, y: number, ox: number, oy: number, index: number, otherPoint?: string, isBeen?: boolean, cangkuPath?: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [mapName, x, y, ox, oy, index, otherPoint, isBeen, cangkuPath])
-export const doBee = (cangkuPath: string, restart = 0) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [cangkuPath, restart])
+export const doGetWatuClickMap = (mapName: string, x: number, y: number, ox: number, oy: number, index: number, otherPoint?: string, isBeen?: boolean, cangkuPath?: string, isChilan?: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [mapName, x, y, ox, oy, index, otherPoint, isBeen, cangkuPath, isChilan])
+export const doBee = (cangkuPath: string, restart = 0, isChilan: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [cangkuPath, restart, isChilan])
 
 
 const init = () => {

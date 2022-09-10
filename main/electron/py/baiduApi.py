@@ -88,14 +88,14 @@ def F_打图4小人识别(area):
     for x in range(2):
         op.SetDict(0, pyZhikuDir + '\\baise.txt')
         ret = op.FindStr(area[0], area[1], area[2], area[3],
-                         'qxz', "ffffff-000000", 0.7)
+                         'qxz', "ffffff-000000", 0.6)
         print(ret)
         if(ret[0] > -1):
             return [ret[1], ret[2]]
     for x in range(2):
         op.SetDict(0, pyZhikuDir + '\\baise.txt')
         ret = op.FindStr(area[0], area[1], area[2], area[3],
-                         'gxn', "ffffff-000000", 0.7)
+                         'gxn', "ffffff-000000", 0.6)
         print(ret)
         if(ret[0] > -1):
             return [ret[1], ret[2]]
@@ -118,18 +118,18 @@ def F_大鬼小鬼任务区间识别(area):
     return data
 
 
-def F_大漠小地图识别(area):
-    op.SetDict(0, pyZhikuDir + '\\small_map.txt')
-    ret = op.Ocr(area[0], area[1], area[2], area[3],
-                 "ffffff-000000", 1.0)
-    return ret
-
-
 def F_大漠小地图寻路坐标识别(area):
     op.SetDict(0, pyZhikuDir + '\\zuobiao_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
                  "ffff00-000000", 1.0)
 
+    return ret
+
+
+def F_大漠小地图识别(area):
+    op.SetDict(0, pyZhikuDir + '\\small_map.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffffff-000000", 1.0)
     return ret
 
 

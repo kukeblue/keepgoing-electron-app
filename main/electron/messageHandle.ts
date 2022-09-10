@@ -88,7 +88,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 补店
     ipcMain.on(resourcePaths.METHOD_BUDIAN_TASK, (event, args) => {
         logger.info('run py script: METHOD_BUDIAN_TASK')
-        const result = runPyScript('mhBudian', ['lf', []])
+        const result = runPyScript('mhBudian', ['lf', [...args]])
         event.returnValue = {
             code: result,
             status: 0
@@ -160,7 +160,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 小蜜蜂模式
     ipcMain.on(resourcePaths.METHOD_BEE_MODE, (event, args) => {
         logger.info('run py script: METHOD_BEE_MODE')
-        const result = runPyScript('mhWatu', ['bee', args[0], args[1]])
+        const result = runPyScript('mhWatu', ['bee', args[0], args[1], 'None', args[2]])
         event.returnValue = {
             code: result,
             status: 0

@@ -56,7 +56,7 @@ def F_获取方式数字(window):
 
 
 def F_获取携带数量(window):
-    携带数量 = [window.windowArea[0] + 128, window.windowArea[1] + 282, 30, 33]
+    携带数量 = [window.windowArea[0] + 128, window.windowArea[1] + 282, 40, 33]
     path = window.F_窗口区域截图('temp_orc_info.png', 携带数量)
     ret = baiduApi.cnocr文字识别(path)
     return ret
@@ -77,16 +77,21 @@ def F_改名字(window):
     print('五行:' + ret)
     技能数 = '0'
     point = window.findImgInWindow(
-        'all-empty-jn.png', 0.70, area=(480, 385, 43, 35))
-    if(point == None):
-        技能数 = '3'
-    else:
+        'all-empty-jn.png', 0.70, area=(520, 385, 43, 35))
+    if(point != None):
         point = window.findImgInWindow(
-            'all-empty-jn.png', 0.70, area=(440, 381, 43, 43))
+            'all-empty-jn.png', 0.70, area=(480, 385, 43, 35))
         if(point == None):
-            技能数 = '2'
+            技能数 = '3'
         else:
-            技能数 = '1'
+            point = window.findImgInWindow(
+                'all-empty-jn.png', 0.70, area=(440, 381, 43, 43))
+            if(point == None):
+                技能数 = '2'
+            else:
+                技能数 = '1'
+    else:
+        技能数 = '4'
     名字 = ret + 技能数
     pyautogui.press('tab')
     window.F_移动到游戏区域坐标(282, 293)
@@ -141,7 +146,7 @@ def F_回商会(window):
     utils.click()
     window.F_移动到游戏区域坐标(260, 378)
     utils.click()
-    window.F_移动到游戏区域坐标(221, 341)
+    window.F_移动到游戏区域坐标(221, 339)
     utils.click()
 
 
@@ -177,7 +182,7 @@ def F_检查女娲技能(window):
     time.sleep(1)
     携带数量 = F_获取携带数量(window)
     print(携带数量)
-    if(携带数量 == '8/8' or 携带数量 == '818'):
+    if(携带数量 == '8/8' or 携带数量 == '818' or 携带数量 == '10/10' or 携带数量 == '10110'):
         print('满了召唤兽')
         是否第一次查看技能 = True
         while True:
@@ -211,8 +216,9 @@ def F_检查女娲技能(window):
                     if(识别名字 == None):
                         print('携带数量')
                         print(携带数量)
-                        pyautogui.hotkey('alt', 'o')
-                        if((携带数量 == '6/8') or (携带数量 == '618') or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818')):
+                        window.F_移动到游戏区域坐标(198, 365)
+                        utils.rightClick()
+                        if((携带数量 == '6/8') or (携带数量 == '618') or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818') or (携带数量 == '10110') or (携带数量 == '8/10') or (携带数量 == '10/10') or (携带数量 == '9/10') or (携带数量 == '8/10') or (携带数量 == '9110') or (携带数量 == '8110')):
                             return True
                         else:
                             return False
@@ -247,7 +253,7 @@ def F_检查女娲技能(window):
                 F_改名字(window)
         time.sleep(1)
     else:
-        pyautogui.hotkey('alt', 'o')
+        window.F_移动到游戏区域坐标(198, 365)
         utils.rightClick()
         print('继续抓')
 
@@ -256,27 +262,64 @@ def F_去女娲(window):
     window.F_吃香2()
     window.F_导航到女娲神迹()
     window.F_吃动名草()
+    point = window.findImgInWindow('all-map-nvsj.png')
+    if(point == None):
+        F_去女娲(window)
 
 
-def F_补店():
+def F_补店(prices):
+    # prices = price.split(",")
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1)
     window.findMhWindow()
-    # F_去女娲(window)
-    # F_女娲神迹巡逻(window)
-    # F_回商会(window)
-    F_放入商店(window)
-
-
-def F_放入商店(window):
+    res = F_检查女娲技能(window)
+    if(res == True):
+        F_回商会(window)
+        F_放入商店(window, prices)
     while True:
+        F_去女娲(window)
+        F_女娲神迹巡逻(window)
+        F_回商会(window)
+        F_放入商店(window, prices)
+
+
+def F_放入商店(window, prices):
+    扫描数量 = 0
+    while True:
+        扫描数量 = 扫描数量 + 1
         num = F_商店单间数量(window)
         print(num)
         if(num == '16/16'):
-            window.F_移动到游戏区域坐标(281, 491)
-            utils.click()
-            time.sleep(2)
-            continue
+            if(扫描数量 == 10):
+                point = window.findImgInWindow(
+                    'all-shandian-lf.png', 0.70, area=(420, 240, 267, 226))
+                if(point == None):
+                    time.sleep(1800)
+                    window.F_移动到游戏区域坐标(687, 90)
+                    utils.click()
+                    break
+                else:
+                    time.sleep(1800)
+                    window.F_移动到游戏区域坐标(687, 90)
+                    utils.click()
+                    pyautogui.press('f9')
+                    time.sleep(1)
+                    window.F_移动到游戏区域坐标(301, 222)
+                    utils.click()
+                    window.F_移动到游戏区域坐标(260, 378)
+                    utils.click()
+                    window.F_移动到游戏区域坐标(221, 341)
+                    utils.click()
+                    F_放入商店(window)
+                    window.F_移动到游戏区域坐标(687, 90)
+                    utils.click()
+                    break
+            else:
+                window.F_移动到游戏区域坐标(281, 491)
+                utils.click()
+                time.sleep(2)
+                continue
+
         window.F_移动到游戏区域坐标(632, 463)
         utils.click()
         window.F_移动到游戏区域坐标(484, 492)
@@ -285,49 +328,64 @@ def F_放入商店(window):
         point = window.findImgInWindow(
             'all-shandian-lf.png', 0.70, area=(420, 240, 267, 226))
         if(point == None):
-            messagebox.showinfo('提示', '没有宝宝了继续抓')
-            F_商店扫描(window)
+            # messagebox.showinfo('提示', '没有宝宝了继续抓')
+            F_商店扫描(window, prices)
             break
         else:
             window.F_移动到游戏区域坐标(478, 491)
             utils.click()
             time.sleep(1)
-            F_商店扫描(window)
+            F_商店扫描(window, prices)
+    window.F_移动到游戏区域坐标(687, 90)
+    utils.click()
 
 
-def F_商店扫描(window):
+def F_商店扫描(window, prices):
     # window.F_移动到游戏区域坐标(337, 418)
     # utils.click()
-    pyautogui.press('tab')
-    window.F_移动到游戏区域坐标(222, 418)
-    pyautogui.press('tab')
-    utils.click()
-    for x in range(10):
-        pyautogui.press('left')
-        time.sleep(0.1)
-        pyautogui.press('delete')
-    pyperclip.copy("25555")
-    pyautogui.hotkey('ctrl', 'v')
     while True:
         window.F_移动到游戏区域坐标(374, 198)
         utils.click()
-        上部改名 = F_循环上架(window)
+        上部改名 = F_循环上架(window, prices)
         window.F_移动到游戏区域坐标(374, 390)
         utils.click()
-        下部改名 = F_循环上架(window)
+        下部改名 = F_循环上架(window, prices)
         if(上部改名 and 下部改名):
             break
 
 
-def F_循环上架(window):
+def F_循环上架(window, prices):
     point = window.findImgInWindow(
         'all-gaiming-lf.png', 0.90, area=(126, 189, 151, 210))
     if(point == None):
         print('未找到需要上架的货物')
         return True
     else:
+        位置 = [point[0]+70, point[1], 15, 20]
+        path = window.F_窗口区域截图('temp_orc_info.png', 位置)
+        ret = baiduApi.cnocr文字识别2(path)
         window.pointMove(point[0] + 10, point[1] + 5)
         utils.click()
+        pyautogui.press('tab')
+        window.F_移动到游戏区域坐标(222, 418)
+        pyautogui.press('tab')
+        utils.click()
+        for x in range(10):
+            pyautogui.press('left')
+            time.sleep(0.1)
+            pyautogui.press('delete')
+        print('===========')
+        print(ret)
+        if(ret == '1'):
+            pyperclip.copy(prices[0])
+        elif(ret == '2'):
+            pyperclip.copy(prices[1])
+        elif(ret == '3'):
+            pyperclip.copy(prices[2])
+        elif(ret == '4'):
+            pyperclip.copy(prices[2])
+        pyautogui.hotkey('ctrl', 'v')
+
         print('需要上架')
 
         window.F_移动到游戏区域坐标(354, 317)
@@ -337,10 +395,15 @@ def F_循环上架(window):
         return False
 
 
-F_补店()
-
-# if __name__ == '__main__':
-#     fire.Fire({
-#         'lf': F_女娲神迹巡逻,
-#     })
-#
+# MHWindow = mhWindow.MHWindow
+# window = MHWindow(1)
+# window.findMhWindow()
+# F_改名字(window)
+# print(F_获取携带数量(window))
+# F_女娲神迹巡逻(window)
+if __name__ == '__main__':
+    fire.Fire({
+        'lf': F_补店,
+    })
+# F_商店扫描(window)
+# F_补店()

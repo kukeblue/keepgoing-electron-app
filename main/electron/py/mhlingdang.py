@@ -76,6 +76,7 @@ def 找梦魔(window, 任务):
         window.F_点击战斗()
         time.sleep(0.5)
         window.F_移动到游戏区域坐标(275, 340)
+        time.sleep(3)
         utils.click()
         time.sleep(0.5)
         window.F_自动战斗2()
@@ -145,7 +146,9 @@ def 找怯弱妖(window, 任务):
         window.F_点击战斗(True)
         time.sleep(0.5)
         window.F_移动到游戏区域坐标(275, 340)
+        time.sleep(3)
         utils.click()
+
         time.sleep(0.5)
         window.F_自动战斗()
         utils.click()
@@ -166,6 +169,7 @@ def 找迷幻妖(window, 任务):
         window.F_点击战斗(True)
         time.sleep(1)
         window.F_移动到游戏区域坐标(275, 340)
+        time.sleep(3)
         utils.click()
         time.sleep(0.5)
         window.F_自动战斗()
@@ -181,6 +185,7 @@ def 杀虫(window, 任务):
     window.F_点击战斗()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(275, 340)
+    time.sleep(3)
     utils.click()
     time.sleep(0.5)
     window.F_自动战斗2()
@@ -209,4 +214,4 @@ def 放虫(window, 任务):
 
 if __name__ == '__main__':
     print('F_领取铃铛任务')
-    铃铛('9')
+    铃铛()

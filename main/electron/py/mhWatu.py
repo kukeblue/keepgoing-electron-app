@@ -233,11 +233,11 @@ def F_获取最近的坐标点(x, y, other):
     return point, newOther
 
 
-def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
+def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True):
     if((x == 0 or y == 0) and len(other) > 0):
         point, newOther = F_获取最近的坐标点(x, y, other)
         F_点击宝图并寻路(window, map, point['realX'],
-                  point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
+                  point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther, isChilan)
     else:
         logUtil.chLog('F_点击宝图并寻路:' + str(num))
         pyautogui.moveTo(
@@ -260,18 +260,21 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other):
         utils.rightClick()
         # utils.rightClick()
         window.F_自动战斗()
-        window.F_判断人物宝宝低红蓝位()
+        window.F_判断人物宝宝低红蓝位(isChilan)
         pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)
             F_点击宝图并寻路(window, map, point['realX'],
-                      point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
+                      point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther, isChilan)
 
 
 loop = 1
 
 
-def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长安城'):
+def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长安城', isChilan=True):
+    print(isChilan)
+    if(isChilan == 'false'):
+        isChilan = False
     print('点击小地图', x, y)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1)
@@ -289,10 +292,10 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
                 point, newOther = F_获取最近的坐标点(
                     entrancePoint[0], entrancePoint[1], other)
                 F_点击宝图并寻路(window, map,
-                          point['realX'], point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther)
+                          point['realX'], point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther, isChilan)
         else:
             F_点击宝图并寻路(window, map,
-                      x, y, ox, oy, num, other)
+                      x, y, ox, oy, num, other, isChilan)
     window.F_点击小地图出入口按钮()
     接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
     if(接货id != None):
@@ -300,7 +303,7 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
     else:
         window.F_回仓库放东西(map, 仓库位置)
     if(isBeen):
-        F_小蜜蜂模式(仓库位置, 0, window)
+        F_小蜜蜂模式(仓库位置, 0, window, isChilan)
 
 
 def F_邀请发图(window):
@@ -320,7 +323,11 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(仓库位置, restart=0, window=None):
+def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
+    if(isChilan == 'true'):
+        isChilan = True
+    else:
+        isChilan = False
     time.sleep(3)
     if(window == None):
         logUtil.chLog('开始发车')
@@ -329,10 +336,12 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None):
         window.findMhWindow()
     else:
         logUtil.chLog('继续发车')
+        window.focusWindow()
     if(restart != 1):
         if(window.gameId != ''):
-            networkApi.doUpdateRoleStatus(window.gameId, '空闲')
-    window.focusWindow()
+            window.F_发车检查(isChilan)
+            # networkApi.doUpdateRoleStatus(window.gameId, '空闲')
+
     time.sleep(0.5)
     window.F_使用酒肆和打坐()
     time.sleep(0.5)

@@ -1,16 +1,15 @@
 # # encoding=UTF-8
 
-# import sys
-# import os
-# import string
-# import win32com.client  # 要下载对应的扩展程序,不明白的话，百度一下
-# import pythoncom
-# import time
-# import win32api
-# import win32con
-# from ctypes import *
-# from win32com.client import Dispatch
-# import baiduApi
+from typing_extensions import Self
+import mhWindow
+import sys
+import io
+import time
+import fire
+import pyautogui
+import utils
+import random
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 # hwnds = baiduApi.op.EnumWindow(0,"记事本","",1+4+8+16)
@@ -73,7 +72,59 @@
 # else:
 # 	print("错误")
 # 	# 应该延迟1秒后 重新截图 再重新发送
-import mouse
+# import mouse
 # raw_input('按任意键退出')
 
-mouse.move("100", "100", duration=0.4, absolute=True)
+# mouse.move("100", "100", duration=0.4, absolute=True)
+# time.sleep(3)
+window = mhWindow.MHWindow(1)
+window.findMhWindow()
+# time.sleep(3)
+# print(window.F_获取灯谜())
+
+pyautogui.hotkey('alt', 'e')
+window.F_移动到游戏区域坐标(54, 300)
+pyautogui.rightClick()
+window.F_移动到游戏区域坐标(581, 273)
+utils.click()
+pyautogui.hotkey('alt', 'e')
+time.sleep(1)
+window.F_移动到游戏区域坐标(463, 256)
+utils.click()
+time.sleep(1)
+window.F_移动到游戏区域坐标(718, 230)
+utils.click()
+time.sleep(4)
+pyautogui.press('f9')
+time.sleep(1)
+window.F_移动到游戏区域坐标(590, 215)
+time.sleep(1)
+utils.click()
+utils.click()
+window.F_移动到游戏区域坐标(204, 375)
+utils.click()
+time.sleep(1)
+utils.click()
+pyautogui.hotkey('alt', 'e')
+window.F_移动到游戏区域坐标(101, 301)
+pyautogui.rightClick()
+window.F_移动到游戏区域坐标(198, 337)
+utils.click()
+time.sleep(1)
+pyautogui.hotkey('alt', 'e')
+window.F_移动到游戏区域坐标(458, 206)
+utils.click()
+time.sleep(1)
+window.F_移动到游戏区域坐标(589, 344)
+utils.click()
+time.sleep(2.5)
+window.F_移动到游戏区域坐标(430, 257)
+time.sleep(1)
+utils.click()
+utils.click()
+window.F_移动到游戏区域坐标(272, 378)
+utils.click()
+window.F_移动到游戏区域坐标(219, 374)
+time.sleep(0.5)
+utils.click()
+utils.click()
