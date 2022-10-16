@@ -5,7 +5,6 @@ import time
 from win32com.client import Dispatch
 # from cnocr import CnOcr
 import win32api
-import utils
 import sys
 import os
 import logUtil
@@ -129,7 +128,7 @@ def F_大漠小地图寻路坐标识别(area):
 def F_大漠小地图识别(area):
     op.SetDict(0, pyZhikuDir + '\\small_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
-                 "ffffff-000000", 1.0)
+                 "ffffff-000000", 0.85)
     return ret
 
 

@@ -15,10 +15,9 @@ import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
-def 铃铛(deviceId):
+def 铃铛():
     print('F_领取铃铛任务')
     time.sleep(3)
-    deviceId = str(deviceId)
     MHWindow = mhWindow.MHWindow
     window = MHWindow(1)
     window.findMhWindow()
@@ -72,6 +71,7 @@ def 找梦魔(window, 任务):
         window.F_任务导航器(ret[0], ret[1])
         window.F_小地图寻路器(ret[1], None)
         pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
         time.sleep(0.5)
         window.F_点击战斗()
         time.sleep(0.5)
@@ -88,6 +88,7 @@ def 使用招魂(window, 任务):
     window.F_任务导航器(ret[0], ret[1])
     window.F_小地图寻路器(ret[1], True)
     pyautogui.press('f9')
+    pyautogui.hotkey('alt', 'h')
     pyautogui.hotkey('alt', 'e')
     for i in range(3):
         point = window.findImgInWindow(
@@ -120,6 +121,7 @@ def 找巧智(window, 任务):
         window.F_任务导航器(ret[0], ret[1])
         window.F_小地图寻路器(ret[1], None)
         pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
         time.sleep(0.5)
         window.F_点击战斗()
         time.sleep(1)
@@ -142,6 +144,7 @@ def 找怯弱妖(window, 任务):
         window.F_任务导航器(ret[0], ret[1])
         window.F_小地图寻路器(ret[1], None)
         pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
         time.sleep(0.5)
         window.F_点击战斗(True)
         time.sleep(0.5)
@@ -165,6 +168,7 @@ def 找迷幻妖(window, 任务):
         window.F_任务导航器(ret[0], ret[1])
         window.F_小地图寻路器(ret[1], None)
         pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
         time.sleep(1)
         window.F_点击战斗(True)
         time.sleep(1)
@@ -181,6 +185,7 @@ def 杀虫(window, 任务):
     window.F_任务导航器(ret[0], ret[1])
     window.F_小地图寻路器(ret[1], None)
     pyautogui.press('f9')
+    pyautogui.hotkey('alt', 'h')
     time.sleep(0.5)
     window.F_点击战斗()
     time.sleep(0.5)
@@ -197,6 +202,7 @@ def 放虫(window, 任务):
     window.F_任务导航器(ret[0], ret[1])
     window.F_小地图寻路器(ret[1], True)
     pyautogui.press('f9')
+    pyautogui.hotkey('alt', 'h')
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
     for i in range(3):

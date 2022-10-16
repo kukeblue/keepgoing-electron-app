@@ -6,7 +6,7 @@ export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendS
 export const doTest = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
-export const doGetWatuInfo = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [])
+export const doGetWatuInfo = (isChilan: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [isChilan])
 export const doZhuaGuiTask = (isBigGhost: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_ZHUAGUI_TASK, [isBigGhost])
 export const doBudianTask = (price: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BUDIAN_TASK, [price])
 export const doCloseAllTask = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLOSE_ALL_TASK, [])

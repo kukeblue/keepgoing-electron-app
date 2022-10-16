@@ -12,6 +12,9 @@ import random
 import re
 import pointUtil
 import win32gui
+import json
+
+
 mapCangkuDict = {
     '花果山': 25,
     '傲来国': 24,
@@ -114,7 +117,7 @@ class MHWindow:
         return baiduApi.F_大漠宝图文字识别(area)
 
     def findPicture(self, img):
-        return pyautogui.locateOnScreen(self.pyImageDir + self.F_获取设备图片(img))
+        return pyautogui.locateOnScreen(self.pyImageDir + self.F_获取设备图片(img), confidence=0.7)
 
     def findImgInWindow(self, img, confidence=0.75, area=(0, 0, 0, 0)):
         location = None
@@ -408,20 +411,26 @@ class MHWindow:
                     time.sleep(0.2)
                     utils.rightClick()
                     break
-        networkApi.doUpdateRoleStatus(self.gameId, '空闲')
 
     def F_吃红(self):
         try:
             point = self.findImgInWindow(
-                'all_hongwan.png', area=(0, 479, 286, 60))
-            if(point == None):
-                self.F_行囊拿红蓝('all_hongwan.png')
+                'all-shuidi.png', confidence=0.9, area=(0, 479, 286, 60))
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.rightClick()
                 return True
             else:
-                return False
+                point = self.findImgInWindow(
+                    'all_hongwan.png', area=(0, 479, 286, 60))
+                if(point == None):
+                    self.F_行囊拿红蓝('all_hongwan.png')
+                if point != None:
+                    self.pointMove(point[0], point[1])
+                    utils.rightClick()
+                    return True
+                else:
+                    return False
         except:
             print('F_吃药 error')
 
@@ -536,13 +545,89 @@ class MHWindow:
             else:
                 print("未找到")
 
-    def F_关闭对话(self):
+    def F_买飞行符(self):
+        self.F_使用长安城飞行棋('长安驿站')
+        time.sleep(1)
+        self.F_小地图寻路器([253, 35])
+        pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
+        self.F_移动到游戏区域坐标(483, 158)
+        utils.click()
+        time.sleep(1)
+        self.F_移动到游戏区域坐标(174, 340)
+        utils.click()
+        time.sleep(1)
+        self.F_移动到游戏区域坐标(403, 204)
+        utils.click()
+        time.sleep(1)
+        for i in range(29):
+            utils.click()
+        self.F_移动到游戏区域坐标(406, 477)
+        utils.click()
+        time.sleep(1)
+        self.F_移动到游戏区域坐标(322, 404)
+        utils.click()
+        time.sleep(1)
+        utils.rightClick()
+
+    def F_买香(self):
+        self.F_使用长安城飞行棋('红色长安城导标旗坐标_杂货店')
+        time.sleep(1)
+        pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
+        self.F_移动到游戏区域坐标(472, 194)
+        utils.click()
+        time.sleep(1)
+        pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
+        self.F_移动到游戏区域坐标(370, 223)
+        utils.click()
+        time.sleep(2)
+        self.F_移动到游戏区域坐标(172, 339)
+        utils.click()
+        time.sleep(1)
+        self.F_移动到游戏区域坐标(401, 154)
+        utils.click()
+        for i in range(29):
+            utils.click()
+        self.F_移动到游戏区域坐标(406, 477)
+        utils.click()
+        time.sleep(1)
+        self.F_移动到游戏区域坐标(322, 404)
+        utils.click()
+        time.sleep(1)
+        utils.rightClick()
+
+    def F_关闭对话(self, 是否多窗口=False):
         time.sleep(0.3)
         point = self.findImgInWindow('all-close.png', confidence=0.9)
         if(point != None):
             self.pointMove(point[0] + 10, point[1] + 5)
-            utils.click()
-            pyautogui.click()
+            time.sleep(0.1)
+            if(是否多窗口):
+                pyautogui.click()
+            else:
+                utils.click()
+            return True
+        point = self.findImgInWindow('all-close-feixing.png', confidence=0.9)
+        if(point != None):
+            self.pointMove(point[0] + 10, point[1] + 5)
+            time.sleep(0.1)
+            if(是否多窗口):
+                pyautogui.click()
+            else:
+                utils.click()
+            return True
+        point = self.findImgInWindow('all-close3.png', confidence=0.9)
+        if(point != None):
+            self.pointMove(point[0] + 10, point[1] + 5)
+            time.sleep(0.1)
+            if(是否多窗口):
+                pyautogui.click()
+            else:
+                utils.click()
+            return True
+
         # point = self.findImgInWindow('all-kuang.png', confidence=0.95)
         # if(point != None):
         #     self.pointMove(point[0] + 10, point[1] + 10)
@@ -553,6 +638,8 @@ class MHWindow:
         self.F_关闭对话()
         count = 0
         while(True):
+            if(self.F_是否在战斗()):
+                break
             坐标2 = self.获取当前坐标()
             if(坐标2 != None and 坐标 != None and 坐标 == 坐标2):
                 if(count > 2):
@@ -564,17 +651,23 @@ class MHWindow:
             time.sleep(date)
 
     def F_点击战斗(self, 多次点击=False, 右键点击=False):
-        self.F_移动到游戏区域坐标(574, 442)
-        pyautogui.hotkey('alt', 'a')
-        utils.rightClick()
-        while True:
+
+        pathMaybe = [[5, 78], [38, 74], [-20, 74], [-10, 74]]
+        for i in range(4):
+            self.F_移动到游戏区域坐标(574, 442)
+            pyautogui.hotkey('alt', 'a')
+            utils.rightClick()
+            pathMaybeItem = pathMaybe[i]
             point = self.findImgInWindow('all-duibiao.png')
             if(point == None):
                 point = self.findImgInWindow('all-duibiao-plus.png')
             if(point != None):
                 pyautogui.hotkey('alt', '7')
+                utils.rightClick()
                 time.sleep(0.5)
-                self.pointMove(point[0]+5, point[1] + 78)
+                self.pointMove(point[0]+pathMaybeItem[0],
+                               point[1] + pathMaybeItem[1])
+                time.sleep(0.5)
                 if(右键点击 == False):
                     pyautogui.hotkey('alt', 'a')
                     time.sleep(0.1)
@@ -586,7 +679,11 @@ class MHWindow:
                     pyautogui.keyUp('alt')
                 else:
                     utils.click()
-                break
+                time.sleep(1)
+                if(self.F_是否在战斗()):
+                    break
+                else:
+                    utils.rightClick()
             time.sleep(0.5)
 
     def F_自动战斗(self):
@@ -596,7 +693,7 @@ class MHWindow:
         是否续自动 = False
         for i in range(4):
             print('F_自动战斗：等待进入战斗:' + str(i))
-            time.sleep(1)
+            time.sleep(0.5)
             if(self.F_是否在战斗()):
                 if(是否续自动 == False):
                     是否续自动 = True
@@ -608,18 +705,13 @@ class MHWindow:
                         是否战斗 = True
                         print('F_自动战斗：结束战斗')
                         break
-        # if(是否战斗 == True):
-            # self.F_移动到游戏区域坐标(620, 100)
-            # self.F_移动到游戏区域坐标(620, 50)
-            # self.F_移动到游戏区域坐标(630, 12)
-            # utils.rightClick()
 
     def F_判断人物宝宝低红蓝位(self, 是否吃蓝=True):
         self.F_打开道具()
         pyautogui.press('f7')
         # 检查红
         ret = baiduApi.op.FindMultiColor(
-            self.windowArea[0] + 775, self.windowArea[1] + 10, self.windowArea[0] + 775 + 15, self.windowArea[1] + 10 + 7, 'b89090', '3|2|804c48', 0.7, 0)
+            self.windowArea[0] + 775, self.windowArea[1] + 10, self.windowArea[0] + 775 + 15, self.windowArea[1] + 10 + 7, 'b89090', '3|2|804c48', 0.65, 0)
         if(ret[1] > 0):
             self.F_吃红()
             print('人物缺红')
@@ -655,7 +747,7 @@ class MHWindow:
         self.F_识别4小人()
         for i in range(4):
             print('F_自动战斗：等待进入战斗:' + str(i))
-            time.sleep(1)
+            time.sleep(0.5)
             if(self.F_是否在战斗()):
                 self.focusWindow()
                 print('F_自动战斗：进入战斗')
@@ -666,7 +758,10 @@ class MHWindow:
                     if(self.F_是否战斗操作()):
                         time.sleep(1)
                         points = self.findImgsInWindow('all-lvfa.png', 0.65)
-                        if(len(points) == 1 and 抓次数 < 5):
+                        points2 = self.findImgsInWindow('all-linfu.png', 0.98)
+                        if(len(points) > 1):
+                            points.extend(points2)
+                        if(len(points) == 1 and 抓次数 < 6):
                             point = points[0]
                             if(point != None):
                                 抓次数 = 抓次数 + 1
@@ -674,7 +769,7 @@ class MHWindow:
                                 self.pointMove(point[0]+15, point[1]+10, True)
                                 pyautogui.hotkey('alt', 'g')
                                 utils.click()
-                        elif(len(points) > 0 and 抓次数 < 5):
+                        elif(len(points) > 0 and 抓次数 < 6):
                             i = random.randrange(0, len(points), 1)
                             print(i)
                             point = points[i]
@@ -693,10 +788,13 @@ class MHWindow:
                         break
 
         if(是否战斗):
+            pyautogui.press('f7')
             self.F_判断低蓝位()
 
     def F_自动战斗2(self):
         finish = False
+        time.sleep(0.5)
+        self.F_识别4小人()
         while(finish == False):
             time.sleep(1)
             if(self.F_是否在战斗()):
@@ -716,7 +814,7 @@ class MHWindow:
                 time.sleep(2)
                 for x in range(5):
                     self.F_识别4小人()
-                    self.F_关闭对话()
+                    self.F_关闭对话(是否多窗口=True)
                     self.F_点击自动2()
                     pyautogui.hotkey('ctrl', 'tab')
                 # pyautogui.hotkey('ctrl', 'tab')
@@ -739,7 +837,6 @@ class MHWindow:
         self.F_移动到游戏区域坐标(199, 354)
         utils.click()
         time.sleep(3)
- 
 
     def F_导航到天宫(self):
         self.F_导航到长寿郊外()
@@ -964,8 +1061,9 @@ class MHWindow:
 
     def F_给与东西(self, 接货id):
         self.F_打开好友信息页面(str(接货id))
-        self.F_移动到游戏区域坐标(538, 438)
+        self.F_移动到游戏区域坐标(530, 438)
         time.sleep(0.2)
+        utils.click()
         utils.click()
         time.sleep(0.1)
         self.F_移动到游戏区域坐标(513, 489)
@@ -1005,7 +1103,13 @@ class MHWindow:
             print(math.ceil(len(有货格子)/3))
             给予次数 = math.ceil(len(有货格子)/3)
             收益 = ''
-            for i in range(0, math.ceil(len(有货格子)/3)):
+
+            给与次数 = math.ceil(len(有货格子)/3)
+            if(给与次数 < 4):
+                networkApi.doUpdateRoleStatus(self.gameId, '空闲')
+            for i in range(0, 给与次数):
+                if(给与次数 == i + 1 and 给与次数 > 3):
+                    networkApi.doUpdateRoleStatus(self.gameId, '空闲')
                 print(i)
                 for p in range(i * 3, (i + 1) * 3):
                     print(p)
@@ -1030,14 +1134,19 @@ class MHWindow:
                 self.F_移动到游戏区域坐标(405, 497)
                 utils.click()
                 if(i != (给予次数 - 1)):
-                    self.F_移动到游戏区域坐标(538, 438)
+                    time.sleep(0.5)
+                    self.F_移动到游戏区域坐标(535, 435)
                     time.sleep(0.5)
                     utils.click()
-                self.F_移动到游戏区域坐标(580, 141)
-                utils.click()
-                time.sleep(0.5)
+                else:
+                    time.sleep(0.5)
+                    self.F_移动到游戏区域坐标(394, 284)
+                    utils.rightClick()
+                    time.sleep(0.5)
             pyautogui.hotkey('alt', 'f')
             networkApi.sendWatuProfit(self.gameId, 收益)
+        else:
+            networkApi.doUpdateRoleStatus(self.gameId, '空闲')
 
     def F_卖装备(self):
         self.F_使用飞行符('长安城')
@@ -1118,22 +1227,25 @@ class MHWindow:
         time.sleep(0.5)
         result = pyautogui.locateOnScreen(
             self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+        self.F_关闭道具()
         if (result == None):
-            self.pointMove(self.daojuArea[0] + 50, self.daojuArea[1] + 224)
-            utils.click()
-            time.sleep(1)
-            point = pyautogui.locateOnScreen(
-                self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
-            if point != None:
-                self.pointMove(point[0], point[1])
-                utils.click()
-                self.pointMove(
-                    self.daojuArea[0] + 5, self.daojuArea[1] + 224)
-                time.sleep(0.3)
-                utils.click()
-                utils.click()
-                time.sleep(0.1)
-                utils.click()
+            self.F_买飞行符()
+            self.F_打开道具()
+            # self.pointMove(self.daojuArea[0] + 50, self.daojuArea[1] + 224)
+            # utils.click()
+            # time.sleep(1)
+            # point = pyautogui.locateOnScreen(
+            #     self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+            # if point != None:
+            #     self.pointMove(point[0], point[1])
+            #     utils.click()
+            #     self.pointMove(
+            #         self.daojuArea[0] + 5, self.daojuArea[1] + 224)
+            #     time.sleep(0.3)
+            #     utils.click()
+            #     utils.click()
+            #     time.sleep(0.1)
+            #     utils.click()
             time.sleep(0.5)
             point = pyautogui.locateOnScreen(
                 self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
@@ -1165,7 +1277,7 @@ class MHWindow:
             desLocation = pointUtil.朱紫国飞行符坐标_飞行棋Str
         while(True):
             curLocation = self.获取当前坐标()
-            if(curLocation in desLocation):
+            if(curLocation != '' and curLocation in desLocation):
                 break
             else:
                 result = self.findImgInWindow("all-wind.png")
@@ -1204,7 +1316,6 @@ class MHWindow:
                     if(判断飞行符 == False):
                         self.F_判断是否有飞行符()
                         判断飞行符 = True
-
                     self.F_选中道具格子(20)
                     utils.rightClick()
                     time.sleep(1.5)
@@ -1220,20 +1331,22 @@ class MHWindow:
             utils.rightClick()
             time.sleep(0.1)
         else:
-            self.pointMove(self.daojuArea[0] + 50, self.daojuArea[1] + 224)
-            utils.click()
-            time.sleep(1)
-            point = pyautogui.locateOnScreen(
-                self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
-            if point != None:
-                self.pointMove(point[0], point[1])
-                utils.click()
-                self.pointMove(
-                    self.daojuArea[0] + 5, self.daojuArea[1] + 224)
-                time.sleep(0.3)
-                utils.click()
-                time.sleep(0.3)
-                utils.click()
+            # self.pointMove(self.daojuArea[0] + 50, self.daojuArea[1] + 224)
+            # utils.click()
+            # time.sleep(1)
+            # point = pyautogui.locateOnScreen(
+            #     self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+            # if point != None:
+            #     self.pointMove(point[0], point[1])
+            #     utils.click()
+            #     self.pointMove(
+            #         self.daojuArea[0] + 5, self.daojuArea[1] + 224)
+            #     time.sleep(0.3)
+            #     utils.click()
+            #     time.sleep(0.3)
+            #     utils.click()
+            self.F_买香()
+            self.F_打开道具()
             time.sleep(0.5)
             point = pyautogui.locateOnScreen(
                 self.pyImageDir + self.F_获取设备图片('all-xiang.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
@@ -1341,6 +1454,8 @@ class MHWindow:
             desLocation = pointUtil.红色长安城导标旗坐标_酒店Str
         elif(path == '红色长安城导标旗坐标_商会'):
             desLocation = pointUtil.红色长安城导标旗坐标_商会Str
+        elif(path == '红色长安城导标旗坐标_杂货店'):
+            desLocation = pointUtil.红色长安城导标旗坐标_杂货店Str
         while(True):
             curLocation = self.获取当前坐标()
             if(desLocation == curLocation):
@@ -1371,6 +1486,10 @@ class MHWindow:
                         self.pointMove(
                             self.windowArea[0] + 455, self.windowArea[1] + 421)
                         utils.click()
+                    elif(path == '红色长安城导标旗坐标_杂货店'):
+                        self.pointMove(
+                            self.windowArea[0] + 654, self.windowArea[1] + 309)
+                        utils.click()
                     time.sleep(0.5)
                     pyautogui.hotkey('alt', 'e')
                     break
@@ -1391,6 +1510,8 @@ class MHWindow:
                         self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_酒店, None)
                     elif(path == '红色长安城导标旗坐标_商会'):
                         self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_商会, None)
+                    elif(path == '红色长安城导标旗坐标_杂货店'):
+                        self.F_小地图寻路器(pointUtil.红色长安城导标旗坐标_杂货店, None)
                     break
                 else:
                     pyautogui.hotkey('alt', 'e')
@@ -1426,7 +1547,7 @@ class MHWindow:
             return
         while(True):
             curLocation = self.获取当前坐标()
-            if(desLocation == curLocation):
+            if(curLocation != '' and desLocation == curLocation):
                 break
             else:
                 if (navWay and self.findImgInWindow("all-feixing-zz.png") != None):
@@ -1485,6 +1606,7 @@ class MHWindow:
                     time.sleep(1)
                     if (self.findImgInWindow("all-zzqi.png") != None):
                         self.F_选中道具格子(19)
+                        time.sleep(0.2)
                         navWay = True
                         utils.rightClick()
                         time.sleep(0.5)
@@ -1517,7 +1639,7 @@ class MHWindow:
             return
         while(True):
             curLocation = self.获取当前坐标()
-            if(desLocation in curLocation):
+            if(curLocation != '' and desLocation in curLocation):
                 break
             else:
                 if (navWay and self.findImgInWindow("all-feixing-cs.png") != None):
@@ -1600,7 +1722,7 @@ class MHWindow:
             desLocation = pointUtil.黄色傲来国导标旗坐标_兵器店Str
         while(True):
             curLocation = self.获取当前坐标()
-            if(desLocation in curLocation):
+            if(curLocation != '' and desLocation in curLocation):
                 break
             else:
                 time.sleep(0.5)
@@ -1612,7 +1734,6 @@ class MHWindow:
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_女儿村屏幕xy[1])
                     elif(path == '黄色傲来国导标旗坐标_东海湾'):
-
                         self.F_移动到游戏区域坐标(
                             pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[0], pointUtil.黄色傲来国导标旗坐标_东海湾屏幕xy[1])
                     elif(path == '黄色傲来国导标旗坐标_布店'):
@@ -1710,6 +1831,7 @@ class MHWindow:
 
     def F_点击驿站老板(self):
         pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
         print('开始查找驿站老板')
         yz = None
         while yz is None:
@@ -1870,7 +1992,7 @@ class MHWindow:
         self.F_移动到游戏区域坐标(183, 457)
         utils.click()
         time.sleep(1)
-        self.F_小地图寻路器([111, 37], None, 50)
+        self.F_小地图寻路器([111, 37], None, 30)
         self.F_移动到游戏区域坐标(734, 272)
         utils.click()
         time.sleep(1)
@@ -1902,6 +2024,7 @@ class MHWindow:
         self.F_是否结束寻路()
         self.F_移动到游戏区域坐标(680, 222)
         utils.doubleClick()
+        time.sleep(3)
 
     def F_位置分析器(self, 坐标集合, 坐标):
         距离集合 = []
@@ -1996,6 +2119,7 @@ class MHWindow:
             self.F_使用傲来国飞行棋('黄色傲来国导标旗坐标_花果山')
             time.sleep(1)
             pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
             time.sleep(1)
             self.pointMove(self.windowArea[0] + 632, self.windowArea[1] + 103)
             utils.click()
@@ -2031,6 +2155,30 @@ class MHWindow:
     def F_导航到朱紫国(self):
         self.F_使用飞行符('朱紫国')
         time.sleep(1)
+
+    def F_集体酒肆(self):
+        pyautogui.press('f6')
+        time.sleep(1)
+        if(self.findImgInWindow("all-woyaoxiuxi.png", 0.9, area=(151, 381, 81, 35)) != None):
+            print("我要休息")
+            self.F_移动到游戏区域坐标(190, 394)
+            pyautogui.click()
+            pyautogui.hotkey('ctrl', 'tab')
+            time.sleep(1)
+            self.F_移动到游戏区域坐标(190, 394)
+            pyautogui.click()
+            pyautogui.hotkey('ctrl', 'tab')
+            time.sleep(1)
+            self.F_移动到游戏区域坐标(190, 394)
+            pyautogui.click()
+            pyautogui.hotkey('ctrl', 'tab')
+            self.F_移动到游戏区域坐标(190, 394)
+            pyautogui.click()
+            pyautogui.hotkey('ctrl', 'tab')
+            self.F_移动到游戏区域坐标(190, 394)
+            pyautogui.click()
+            pyautogui.hotkey('ctrl', 'tab')
+            time.sleep(2)
 
     def F_使用酒肆和打坐(self):
         pyautogui.press('f7')
@@ -2204,15 +2352,18 @@ class MHWindow:
             self.F_打开好友信息页面(id)
 
     def 医宝宝(self):
-        self.F_使用朱紫国飞行棋('白色朱紫国导标旗坐标_麒麟山')
-        self.F_小地图寻路器([15, 89])
+        # self.F_使用飞行符('朱紫国')
+        self.F_小地图寻路器([100, 57])
         pyautogui.press('f9')
-        self.F_移动到游戏区域坐标(172, 295)
+        pyautogui.hotkey('alt', 'h')
+        self.F_移动到游戏区域坐标(488, 309)
         utils.click()
         time.sleep(1)
         self.F_移动到游戏区域坐标(295, 400)
-        time.sleep(0.3)
+        time.sleep(0.5)
         utils.click()
+        time.sleep(0.5)
+        self.F_关闭对话()
 
     def F_任务导航器(self, 任务, point):
         self.focusWindow()
@@ -2228,7 +2379,7 @@ class MHWindow:
             self.F_导航到大唐境外()
         elif('普陀山' in 任务):
             self.F_导航到普陀山()
-        elif('西梁女国' in 任务):
+        elif('西梁女国' in 任务 or '女国' in 任务):
             self.F_导航到西梁女国()
         elif('江南野外' in 任务 or '野外' in 任务):
             self.F_导航到江南野外()
@@ -2266,6 +2417,8 @@ class MHWindow:
             self.F_导航到女娲神迹()
         elif('天宫' in 任务):
             self.F_导航到天宫()
+        else:
+            logUtil.chLog('未匹配到地图：' + 任务)
 
     def F_移动到游戏区域坐标(self, x, y, 是否战斗操作模式=False, 是否手指操作模式=False, 移动到输入框=False):
         self.pointMove(self.windowArea[0] + x,
@@ -2365,6 +2518,7 @@ class MHWindow:
             else:
                 self.F_小地图寻路器([354, 247], True)
                 pyautogui.press('f9')
+                pyautogui.hotkey('alt', 'h')
                 self.F_移动到游戏区域坐标(286, 333)
                 utils.click()
                 utils.click()
@@ -2417,6 +2571,7 @@ class MHWindow:
                 else:
                     self.F_小地图寻路器([354, 247], True)
                     pyautogui.press('f9')
+                    pyautogui.hotkey('alt', 'h')
                     self.F_移动到游戏区域坐标(286, 333)
                     utils.click()
                     utils.click()
@@ -2426,6 +2581,7 @@ class MHWindow:
             time.sleep(1)
             self.F_小地图寻路器([58, 32], True)
             pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
             time.sleep(1)
         logUtil.chLog('接货id:' + str(接货id))
         self.F_给与东西(接货id)
@@ -2446,6 +2602,7 @@ class MHWindow:
                 else:
                     self.F_小地图寻路器([354, 247], True)
                     pyautogui.press('f9')
+                    pyautogui.hotkey('alt', 'h')
                     self.F_移动到游戏区域坐标(286, 333)
                     utils.click()
                     utils.click()
@@ -2455,6 +2612,7 @@ class MHWindow:
             time.sleep(1)
             self.F_小地图寻路器([58, 32], True)
             pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
             self.F_移动到游戏区域坐标(315, 275)
             utils.click()
             utils.click()
@@ -2574,8 +2732,6 @@ class MHWindow:
             map = "朱紫国"
         elif("普陀山" in str):
             map = "普陀山"
-        elif("西梁女国" in str):
-            map = "西梁女国"
         elif("宝象国" in str):
             map = "宝象国"
         elif("长寿村" in str):
@@ -2624,10 +2780,10 @@ class MHWindow:
 
     def F_点击自动2(self):
         self.F_移动到游戏区域坐标(695, 385)
-        utils.click()
+        # utils.click()
         pyautogui.click()
         self.F_移动到游戏区域坐标(339, 552)
-        utils.click()
+        # utils.click()
         pyautogui.click()
 
     def F_点击自动(self):
@@ -2693,5 +2849,21 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    time.sleep(3)
-    window.F_发车检查()
+    a = [[1, 2]]
+    jsonArr = json.dumps(a, ensure_ascii=False)
+    with open(window.pyImageDir + '/temp/911.txt', "w", encoding='utf-8') as f:
+        f.write(jsonArr)
+        f.close()
+        with open(window.pyImageDir + '/temp/911.txt', "r", encoding='utf-8') as f:
+            data2 = json.loads(f.read())
+            print(a[0][1])
+    # point = window.findImgInWindow('all-duibiao.png')
+    # if(point == None):
+    #     point = window.findImgInWindow('all-duibiao-plus.png')
+    # if(point != None):
+    #     pyautogui.hotkey('alt', '7')
+    #     time.sleep(0.5)
+    #     window.pointMove(point[0]-20, point[1] + 74)
+    #     time.sleep(0.5)
+    #     # utils.click()
+    # time.sleep(0.5)

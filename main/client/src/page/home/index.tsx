@@ -124,8 +124,22 @@ export function usePageStore() {
         } else {
             setShowLog(true)
             message.success('操作成功')
-            doGetWatuInfo()
+            // @ts-ignore
+            doGetWatuInfo(window.isChilan)
         }
+    }
+    const doTaskAuth = (callback: Function) => {
+        request({
+            url: '/api/task/do_task_auth',
+            data: {},
+            method: "post"
+        }).then(res => {
+            if (res.status != 0) {
+                message.info('暂无使用权限')
+            } else {
+                callback()
+            }
+        })
     }
     const closeAllTask = () => {
         setShowLog(false)
@@ -268,6 +282,7 @@ export function usePageStore() {
 
     }
     return {
+        doTaskAuth,
         handleChangeIsChilan,
         setIsChilan,
         isChilan,
@@ -534,7 +549,8 @@ function HomeWatu() {
     const roleTag = (item: TGameRole) => {
         return <Popover trigger="click" placement="topLeft" title='操作' content={
             <div>
-                <div style={{ marginLeft: 15 }}>id: {item.gameId}</div>
+                <div style={{ marginLeft: 15 }}>id: {item.gameId}; </div>
+                <div style={{ marginLeft: 15 }}>账号:{pageStore.accountMap[item.accoutId] && pageStore.accountMap[item.accoutId].username}</div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '空闲' })) }} type="link">设置空闲</Button></div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '忙碌' })) }} type="link">设置忙碌</Button></div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '离线' })) }} type="link">设置离线</Button></div>
@@ -1240,7 +1256,9 @@ function HomeFeature() {
                         <Button onClick={() => {
                             pageStore.setShowLog(true)
                             message.success('操作成功')
-                            doZhuaGuiTask(pageStore.isBigGhost ? 1 : 0)
+                            pageStore.doTaskAuth(() => {
+                                doZhuaGuiTask(pageStore.isBigGhost ? 1 : 0)
+                            })
                         }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓鬼</Button>
                     </Col>
                     <Col offset={1}>
@@ -1251,7 +1269,7 @@ function HomeFeature() {
                     </Col>
                 </Row>
             </TabPane>
-            <TabPane tab="补店" key="5">
+            {userStore.user.vipCard.level == 100 && <TabPane tab="补店" key="5">
                 <Row>
                     <Col>
                         <Button onClick={() => {
@@ -1262,7 +1280,7 @@ function HomeFeature() {
                     <Col offset={1}> <span>价格：</span><Input onChange={(e) => { setPrice(e.target.value) }} value={price} style={{ width: 150 }} /></Col>
 
                 </Row>
-            </TabPane>
+            </TabPane>}
         </Tabs>
 
         <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {

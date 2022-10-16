@@ -25,6 +25,7 @@ def 到店小二领取任务(window):
             window.F_使用长安城飞行棋('红色长安城导标旗坐标_酒店')
             time.sleep(1)
             pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
             window.F_移动到游戏区域坐标(533, 165)
             utils.click()
             time.sleep(3)
@@ -32,6 +33,7 @@ def 到店小二领取任务(window):
             utils.click()
             time.sleep(3)
         pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
     while True:
         ret = baiduApi.op.FindMultiColor(
             window.windowArea2[0] + 641, window.windowArea2[1] + 135, window.windowArea2[0] + 680, window.windowArea2[3] + 175, '00ff00', '11|2|00ff00', 0.8, 0)
@@ -41,6 +43,7 @@ def 到店小二领取任务(window):
             window.F_任务导航器(ret[0], ret[1])
             window.F_小地图寻路器(ret[1], None)
             pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
             window.F_点击战斗(右键点击=True)
             window.F_移动到游戏区域坐标(209, 339)
             utils.click()
@@ -50,8 +53,8 @@ def 到店小二领取任务(window):
         else:
             到店小二附近(window)
             pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
             window.findMhWindow()
-            点击店小二(window)
             time.sleep(1)
 
 
@@ -63,6 +66,7 @@ def 到店小二附近(window):
             window.F_移动到游戏区域坐标(point[0] + 60, point[1])
             utils.click()
             time.sleep(3)
+            点击店小二(window, '1')
             break
         point = window.findImgInWindowReturnWindowPoint(
             'all-xiaoer-2.png', confidence=0.6)
@@ -70,14 +74,15 @@ def 到店小二附近(window):
             window.F_移动到游戏区域坐标(point[0] + 60, point[1])
             utils.click()
             time.sleep(3)
+            点击店小二(window, '2')
             break
         point = window.findImgInWindowReturnWindowPoint(
             'all-xiaoer-3.png', confidence=0.6)
         if(point):
-            window.F_移动到游戏区域坐标(point[0] + 60, point[1])
+            window.F_移动到游戏区域坐标(point[0] - 60, point[1])
             utils.click()
             time.sleep(3)
-            window.focusWindow()
+            点击店小二(window, '3')
             break
         point = window.findImgInWindowReturnWindowPoint(
             'all-xiaoer-4.png', confidence=0.8)
@@ -85,34 +90,16 @@ def 到店小二附近(window):
             window.F_移动到游戏区域坐标(point[0] + 60, point[1])
             utils.click()
             time.sleep(3)
-            window.focusWindow()
+            点击店小二(window, '4')
             break
 
 
-def 点击店小二(window):
-    for x in range(3):
+def 点击店小二(window, 图片):
+    for x in range(10):
         point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-1.png', confidence=0.75)
+            'all-xiaoer-' + 图片 + '.png', confidence=0.75)
         if(point):
             window.F_移动到游戏区域坐标(point[0] + 5, point[1])
-            utils.click()
-            break
-        point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-2.png', confidence=0.75)
-        if(point):
-            window.F_移动到游戏区域坐标(point[0] + 5, point[1])
-            utils.click()
-            break
-        point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-3.png', confidence=0.75)
-        if(point):
-            window.F_移动到游戏区域坐标(point[0] + 5, point[1])
-            utils.click()
-            break
-        point = window.findImgInWindowReturnWindowPoint(
-            'all-xiaoer-4.png', confidence=0.8)
-        if(point):
-            window.F_移动到游戏区域坐标(point[0] + 60, point[1])
             utils.click()
             break
     time.sleep(0.6)

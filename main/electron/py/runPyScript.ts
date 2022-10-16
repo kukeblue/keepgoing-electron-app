@@ -16,7 +16,7 @@ export function runPyScript(name, args = []) {
     let argsStr = ''
     args.forEach((item, index) => argsStr = argsStr + (index > 0 ? ' ' : '') + item)
     try {
-        const command = `python ${resolve('./')}/main/electron/py/${name}.py${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
+        const command = `python ${resolve('./')}/main/electron/py/__pycache__/${name}.pyc${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
         logger.info('run py script ' + command)
         const process = exec(command, (error, stdout, stderr) => {
             const runningPyProcess = state.runningPyProcess

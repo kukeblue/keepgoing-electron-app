@@ -15,7 +15,7 @@ import mouse
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
-def F_获取任务位置和坐标(str):
+def F_获取任务位置和坐标(str, roPoint):
     map = ""
     if("花果山" in str):
         map = "花果山"
@@ -62,26 +62,29 @@ def F_获取任务位置和坐标(str):
     str1 = re.findall("(\d+,\d+)", str)
     try:
         point = str1[0].split(",")
-        return [map, point]
+        return [map, point, roPoint]
     except:
         print("An exception occurred")
-        return [map, [0, 0]]
+        return [map, [0, 0], roPoint]
 
 
-def F_获取宝图信息(window=None, restart=0):
+def F_获取宝图信息(window=None, restart=0, isChilan=True):
+    print(isChilan)
+    if(isChilan == 'false'):
+        isChilan = False
     time.sleep(2)
     if(window == None):
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
         window.findMhWindow()
     window.focusWindow()
-    if(restart != 1):
+    if(restart == 0):
         window.医宝宝()
     time.sleep(0.5)
-    utils.click()
-    time.sleep(0.5)
+    # utils.click()
+    # time.sleep(0.5)
     pyautogui.hotkey('alt', 'e')
-    window.focusWindow()
+    # window.focusWindow()
     time.sleep(1)
     points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75)
     res = []
@@ -91,13 +94,34 @@ def F_获取宝图信息(window=None, restart=0):
             mapAndpoint = 识别位置信息(window, point)
         print(mapAndpoint)
         res.append(mapAndpoint)
-    networkApi.sendWatuInfoLogo(window.gameId, len(points))
     jsonArr = json.dumps(res, ensure_ascii=False)
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
     map = res[0][0]
     print(map)
-    time.sleep(1)
+    if(map == ''):
+        接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
+        if(接货id != None):
+            window.F_回仓库丢小号(接货id, '建邺城')
+        else:
+            window.F_回仓库放东西(map, '建邺城')
+        F_小蜜蜂模式('建邺城', 0, window, isChilan)
+    else:
+        networkApi.sendWatuInfoLogo(window.gameId, len(points))
+        time.sleep(1)
+        if(window.获取当前地图() != map):
+            挖图导航(window, map)
+            time.sleep(2)
+            if(window.获取当前地图() != map):
+                挖图导航(window, map)
+        window.F_点击小地图出入口按钮()
+        with open(window.pyImageDir + '/temp/911.txt', "w", encoding='utf-8') as f:
+            f.write(jsonArr)
+            f.close()
+        logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
+
+
+def 挖图导航(window, map):
     if(map == '江南野外'):
         window.F_导航到江南野外()
     elif(map == '狮驼岭'):
@@ -130,9 +154,6 @@ def F_获取宝图信息(window=None, restart=0):
         window.F_导航到大唐境外()
     elif(map == '五庄观'):
         window.F_导航到五庄观()
-    time.sleep(1)
-    window.F_点击小地图出入口按钮()
-    logUtil.chLog('mhWatu result:start' + jsonArr + 'end')
 
 
 def 识别位置信息(window, point):
@@ -142,7 +163,7 @@ def 识别位置信息(window, point):
               window.windowArea[0] + 600, window.windowArea[1] + 600]
     ret = window.F_宝图文字识别(宝图位置信息)
     logUtil.chLog(ret)
-    mapAndpoint = F_获取任务位置和坐标(ret)
+    mapAndpoint = F_获取任务位置和坐标(ret, point)
     return mapAndpoint
 
 
@@ -200,14 +221,16 @@ def F_点击宝图(window, userId, map, x, y, ox, oy, num):
     # window.F_打开地图()
     time.sleep(0.3)
     pyautogui.press('tab')
-    time.sleep(1)
+    time.sleep(0.5)
     point = window.findImgInWindow(mapDict.get(map))
     if(point != None):
         window.pointMove(point[0] + x, point[1] + y, 移动到输入框=True)
     window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
-    window.F_选中道具格子(int(num))
+    global 上次扫描数据
+    orPoint = 上次扫描数据[num - 1][2]
+    window.F_打开道具()
+    window.pointMove(orPoint[0], orPoint[1])
     utils.rightClick()
-    # utils.rightClick()
     window.F_自动战斗()
     # window.F_吃药()
     pyautogui.hotkey('alt', 'e')
@@ -256,7 +279,10 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True
         window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
-        window.F_选中道具格子(int(num))
+        global 上次扫描数据
+        orPoint = 上次扫描数据[num - 1][2]
+        window.F_打开道具()
+        window.pointMove(orPoint[0], orPoint[1])
         utils.rightClick()
         # utils.rightClick()
         window.F_自动战斗()
@@ -269,6 +295,8 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True
 
 
 loop = 1
+global 上次扫描数据
+上次扫描数据 = []
 
 
 def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长安城', isChilan=True):
@@ -280,30 +308,33 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
     window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
-    if(other == None):
-        F_点击宝图(window, map, x, y, ox, oy, num)
-    else:
-        if num == 1:
-            firstPoint = {"realX": x, "realY": y,
-                          "orgPointX": ox, "orgPointY": oy, "index": num}
-            if other != None:
-                other.append(firstPoint)
-                entrancePoint = mapDictEntrance.get(map)
-                point, newOther = F_获取最近的坐标点(
-                    entrancePoint[0], entrancePoint[1], other)
-                F_点击宝图并寻路(window, map,
-                          point['realX'], point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther, isChilan)
+    with open(window.pyImageDir + '/temp/911.txt', "r", encoding='utf-8') as f:
+        global 上次扫描数据
+        上次扫描数据 = json.loads(f.read())
+        if(other == None):
+            F_点击宝图(window, map, x, y, ox, oy, num)
         else:
-            F_点击宝图并寻路(window, map,
-                      x, y, ox, oy, num, other, isChilan)
-    window.F_点击小地图出入口按钮()
-    接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
-    if(接货id != None):
-        window.F_回仓库丢小号(接货id, 仓库位置)
-    else:
-        window.F_回仓库放东西(map, 仓库位置)
-    if(isBeen):
-        F_小蜜蜂模式(仓库位置, 0, window, isChilan)
+            if num == 1:
+                firstPoint = {"realX": x, "realY": y,
+                              "orgPointX": ox, "orgPointY": oy, "index": num}
+                if other != None:
+                    other.append(firstPoint)
+                    entrancePoint = mapDictEntrance.get(map)
+                    point, newOther = F_获取最近的坐标点(
+                        entrancePoint[0], entrancePoint[1], other)
+                    F_点击宝图并寻路(window, map,
+                              point['realX'], point['realY'], point['orgPointX'], point['orgPointY'], point['index'], newOther, isChilan)
+            else:
+                F_点击宝图并寻路(window, map,
+                          x, y, ox, oy, num, other, isChilan)
+        window.F_点击小地图出入口按钮()
+        接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
+        if(接货id != None):
+            window.F_回仓库丢小号(接货id, 仓库位置)
+        else:
+            window.F_回仓库放东西(map, 仓库位置)
+        if(isBeen):
+            F_小蜜蜂模式(仓库位置, 0, window, isChilan)
 
 
 def F_邀请发图(window):
@@ -324,6 +355,9 @@ def F_邀请发图(window):
 
 
 def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
+    首次启动 = False
+    if(window == None):
+        首次启动 = True
     if(isChilan == 'true'):
         isChilan = True
     else:
@@ -339,11 +373,8 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
         window.focusWindow()
     if(restart != 1):
         if(window.gameId != ''):
-            window.F_发车检查(isChilan)
-            # networkApi.doUpdateRoleStatus(window.gameId, '空闲')
-
-    time.sleep(0.5)
-    window.F_使用酒肆和打坐()
+            if(首次启动):
+                networkApi.doUpdateRoleStatus(window.gameId, '空闲')
     time.sleep(0.5)
     while(True):
         window.F_打开道具()
@@ -352,6 +383,9 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
         if(point != None and point[0] > 0):
             if(restart != 1):
                 time.sleep(10)
+            window.F_发车检查(isChilan)
+            networkApi.doUpdateRoleStatus(window.gameId, '忙碌')
+            window.F_使用酒肆和打坐()
             window.F_吃香()
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()

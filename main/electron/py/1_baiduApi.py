@@ -5,7 +5,6 @@ import time
 from win32com.client import Dispatch
 from cnocr import CnOcr
 import win32api
-import utils
 import sys
 import os
 import logUtil

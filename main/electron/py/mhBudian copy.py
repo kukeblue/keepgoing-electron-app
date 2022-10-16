@@ -190,32 +190,8 @@ def F_丢灵符(window):
             time.sleep(0.5)
             window.focusWindow()
             time.sleep(0.5)
-        # else:
-        #     F_改名字(window, 攻击)
-
-
-def F_检查善恶(window):
-    技能善恶 = window.findImgInWindow('all-jn-se.png')
-    if(技能善恶 == None):
-        window.F_移动到游戏区域坐标(180, 472)
-        utils.click()
-        window.F_移动到游戏区域坐标(328, 342)
-        utils.click()
-        time.sleep(1)
-        num = F_获取方式数字(window)
-        pyautogui.press('tab')
-        window.F_移动到游戏区域坐标(267, 306)
-        pyautogui.press('tab')
-        utils.click()
-        pyautogui.write(num)
-        time.sleep(0.5)
-        window.F_移动到游戏区域坐标(517, 338)
-        utils.click()
-        time.sleep(0.5)
-        window.focusWindow()
-        time.sleep(0.5)
-    window.F_移动到游戏区域坐标(442, 318)
-    utils.rightClick()
+        else:
+            F_改名字(window, 攻击)
 
 
 def F_检查女娲技能(window):
@@ -225,81 +201,83 @@ def F_检查女娲技能(window):
     携带数量 = F_获取携带数量(window)
     print(携带数量)
     if(携带数量 == '8/8' or 携带数量 == '818' or 携带数量 == '10/10' or 携带数量 == '10110' or 携带数量 == '9/9' or 携带数量 == '919'):
-        for x in range(2):
-            print('满了召唤兽')
+        print('满了召唤兽')
+        是否第一次查看技能 = True
+        while True:
             window.F_移动到游戏区域坐标(184, 101)
             utils.click()
-            window.F_移动到游戏区域坐标(69, 120)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 167)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 208)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 247)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(184, 168)
-            utils.click()
-            window.F_移动到游戏区域坐标(69, 120)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 167)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 208)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 247)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(184, 270)
-            utils.click()
-            window.F_移动到游戏区域坐标(69, 167)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            window.F_移动到游戏区域坐标(69, 208)
-            utils.click()
-            utils.rightClick()
-            time.sleep(1)
-            F_检查善恶(window)
-            携带数量 = F_获取携带数量(window)
-            if(('7' in 携带数量) or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818') or (携带数量 == '10110') or (携带数量 == '8/10') or (携带数量 == '8/9') or (携带数量 == '9/9') or (携带数量 == '919') or (携带数量 == '819') or (携带数量 == '10/10') or (携带数量 == '9/10') or (携带数量 == '8/10') or (携带数量 == '9110') or (携带数量 == '8110')):
-                print('未满')
-            else:
-                window.F_移动到游戏区域坐标(178, 361)
+            F_丢灵符(window)
+            识别名字 = window.findImgInWindow(
+                'all-lyvw-1.png', 0.9, area=(14, 70, 193, 235))
+            if(识别名字 == None):
+                识别名字 = window.findImgInWindow(
+                    'all-lyvw-2.png', 0.9, area=(14, 70, 193, 235))
+            if(识别名字 == None):
+                window.F_移动到游戏区域坐标(184, 196)
+                utils.click()
+                F_丢灵符(window)
+                识别名字 = window.findImgInWindow(
+                    'all-lyvw-1.png', 0.9, area=(14, 70, 193, 235))
+                if(识别名字 == None):
+                    识别名字 = window.findImgInWindow(
+                        'all-lyvw-2.png', 0.9, area=(14, 70, 193, 235))
+                if(识别名字 == None):
+                    window.F_移动到游戏区域坐标(184, 272)
+                    utils.click()
+                    F_丢灵符(window)
+                    携带数量 = F_获取携带数量(window)
+                    识别名字 = window.findImgInWindow(
+                        'all-lyvw-1.png', 0.9, area=(14, 70, 193, 235))
+                    if(识别名字 == None):
+                        识别名字 = window.findImgInWindow(
+                            'all-lyvw-2.png', 0.9, area=(14, 70, 193, 235))
+                    if(识别名字 == None):
+                        print('携带数量')
+                        print(携带数量)
+                        window.F_移动到游戏区域坐标(198, 365)
+                        utils.rightClick()
+                        if(('6' in 携带数量) or ('7' in 携带数量) or (携带数量 == '6/8') or (携带数量 == '618') or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818') or (携带数量 == '10110') or (携带数量 == '8/10') or (携带数量 == '8/9') or (携带数量 == '9/9') or (携带数量 == '919') or (携带数量 == '819') or (携带数量 == '10/10') or (携带数量 == '9/10') or (携带数量 == '8/10') or (携带数量 == '9110') or (携带数量 == '8110')):
+                            return True
+                        else:
+                            return False
+
+            window.pointMove(识别名字[0], 识别名字[1])
+            if(是否第一次查看技能):
                 utils.rightClick()
-                return False
-        if(('7' in 携带数量) or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818') or (携带数量 == '10110') or (携带数量 == '8/10') or (携带数量 == '8/9') or (携带数量 == '9/9') or (携带数量 == '919') or (携带数量 == '819') or (携带数量 == '10/10') or (携带数量 == '9/10') or (携带数量 == '8/10') or (携带数量 == '9110') or (携带数量 == '8110')):
-            window.F_移动到游戏区域坐标(178, 361)
-            utils.rightClick()
-            return True
-        else:
-            window.F_移动到游戏区域坐标(178, 361)
-            utils.rightClick()
-            return False
-    window.F_移动到游戏区域坐标(178, 361)
-    utils.rightClick()
+                是否第一次查看技能 = False
+            else:
+                utils.click()
+            time.sleep(1.5)
+            技能善恶 = window.findImgInWindow('all-jn-se.png')
+            攻击 = F_获取攻击数字(window)
+            if(攻击 < 100):
+                F_改名字(window, 攻击)
+            else:
+                if(技能善恶 == None):
+                    window.F_移动到游戏区域坐标(180, 472)
+                    utils.click()
+                    window.F_移动到游戏区域坐标(328, 342)
+                    utils.click()
+                    time.sleep(1)
+                    num = F_获取方式数字(window)
+                    pyautogui.press('tab')
+                    window.F_移动到游戏区域坐标(267, 306)
+                    pyautogui.press('tab')
+                    utils.click()
+                    pyautogui.write(num)
+                    time.sleep(0.5)
+                    window.F_移动到游戏区域坐标(517, 338)
+                    utils.click()
+                    time.sleep(0.5)
+                    window.focusWindow()
+                    time.sleep(0.5)
+                else:
+                    F_改名字(window)
+        time.sleep(1)
+    else:
+        window.F_移动到游戏区域坐标(198, 365)
+        utils.rightClick()
+        print('继续抓')
 
 
 def F_去女娲(window):
@@ -429,8 +407,6 @@ def F_循环上架(window, prices):
             pyperclip.copy(prices[2])
         elif(ret == '4'):
             pyperclip.copy(prices[3])
-        else:
-            pyperclip.copy(prices[0])
         pyautogui.hotkey('ctrl', 'v')
 
         print('需要上架')
@@ -442,10 +418,9 @@ def F_循环上架(window, prices):
         return False
 
 
-MHWindow = mhWindow.MHWindow
-window = MHWindow(1)
-window.findMhWindow()
-# F_检查女娲技能(window)
+# MHWindow = mhWindow.MHWindow
+# window = MHWindow(1)
+# window.findMhWindow()
 # 攻击 = F_获取攻击数字(window)
 # print(攻击)
 # print(F_获取携带数量(window))
@@ -454,5 +429,5 @@ if __name__ == '__main__':
     fire.Fire({
         'lf': F_补店,
     })
-F_商店扫描(window)
-F_补店()
+# F_商店扫描(window)
+# F_补店()

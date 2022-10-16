@@ -70,7 +70,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 读取宝图
     ipcMain.on(resourcePaths.METHOD_GET_WATU_INFO, (event, args) => {
         logger.info('run py script: METHOD_GET_WATU_INFO')
-        const result = runPyScript('mhWatu', ['info'])
+        const result = runPyScript('mhWatu', ['info', [...args]])
         event.returnValue = {
             code: result,
             status: 0
