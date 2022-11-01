@@ -3,7 +3,7 @@ import zipfile
 import tempfile
 import time
 
-updateHome = __file__.strip('mhUpdate.py')
+updateHome = __file__.strip('mhUpdate.pyc')
 
 
 def get_data():

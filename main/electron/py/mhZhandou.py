@@ -8,14 +8,12 @@ import fire
 import pyautogui
 import utils
 import random
-# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def 无人值守模式():
     time.sleep(2)
-    deviceId = '9'
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
+    window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
     pyautogui.click()
@@ -57,7 +55,7 @@ def 飞机队四人模式挂机():
     time.sleep(3)
     deviceId = '9'
     MHWindow = mhWindow.MHWindow
-    window = MHWindow(1, deviceId)
+    window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
     utils.click()
@@ -158,11 +156,11 @@ def 飞机队操作(window):
     time.sleep(0.3)
 
 
-无人值守模式()
-# if __name__ == '__main__':
-#     fire.Fire({
-#         'lbc': 飞机队四人模式挂机,
-#         'hh': 自动喊话模式,
-#     })
+# 无人值守模式()
+if __name__ == '__main__':
+    fire.Fire({
+        'lbc': 飞机队四人模式挂机,
+        'hh': 自动喊话模式,
+    })
 # 自动喊话模式('4')
 # 飞机队四人模式挂机('9')dfv

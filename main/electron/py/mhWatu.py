@@ -78,6 +78,7 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
         window = MHWindow(1)
         window.findMhWindow()
     window.focusWindow()
+    window.F_关闭对话()
     if(restart == 0):
         window.医宝宝()
     time.sleep(0.5)
@@ -97,8 +98,24 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
     jsonArr = json.dumps(res, ensure_ascii=False)
     pyautogui.hotkey('alt', 'e')
     window.focusWindow()
-    map = res[0][0]
-    print(map)
+    map = ''
+    if(len(res) > 0):
+        mapName = ''
+        mostName = 0
+        mapNameCounts = {}
+        for item in res:
+            mapName = item[0]
+            if ((mapName in mapNameCounts.keys()) == False):
+                mapNameCounts[mapName] = 1
+            else:
+                mapNameCounts[mapName] = mapNameCounts[mapName] + 1
+        for key in mapNameCounts.keys():
+            mapNameCount = mapNameCounts[key]
+            if (mostName < mapNameCount):
+                mostName = mapNameCount
+                mapName = key
+        map = mapName
+        res[0][0] = mapName
     if(map == ''):
         接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
         if(接货id != None):
@@ -108,12 +125,15 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
         F_小蜜蜂模式('建邺城', 0, window, isChilan)
     else:
         networkApi.sendWatuInfoLogo(window.gameId, len(points))
-        time.sleep(1)
+        time.sleep(0.5)
         if(window.获取当前地图() != map):
             挖图导航(window, map)
             time.sleep(2)
             if(window.获取当前地图() != map):
                 挖图导航(window, map)
+                time.sleep(2)
+                if(window.获取当前地图() != map):
+                    挖图导航(window, map)
         window.F_点击小地图出入口按钮()
         with open(window.pyImageDir + '/temp/911.txt', "w", encoding='utf-8') as f:
             f.write(jsonArr)
@@ -308,6 +328,7 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
     window = MHWindow(1)
     window.findMhWindow()
     window.focusWindow()
+    window.F_关闭对话()
     with open(window.pyImageDir + '/temp/911.txt', "r", encoding='utf-8') as f:
         global 上次扫描数据
         上次扫描数据 = json.loads(f.read())
@@ -354,7 +375,7 @@ def F_邀请发图(window):
     pyautogui.hotkey('alt', 'f')
 
 
-def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
+def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', handle=None, gameId=None):
     首次启动 = False
     if(window == None):
         首次启动 = True
@@ -362,19 +383,37 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
         isChilan = True
     else:
         isChilan = False
-    time.sleep(3)
+    time.sleep(1)
     if(window == None):
         logUtil.chLog('开始发车')
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
         window.findMhWindow()
+        window.F_关闭对话()
+        window.F_关闭对话()
+
     else:
         logUtil.chLog('继续发车')
+        window.F_关闭对话()
         window.focusWindow()
-    if(restart != 1):
-        if(window.gameId != ''):
-            if(首次启动):
-                networkApi.doUpdateRoleStatus(window.gameId, '空闲')
+
+    if(restart != 1 and 首次启动 == True):
+        接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
+        if(接货id != None):
+            point = window.获取当前坐标()
+            当前坐标 = str(point)
+            map = window.获取当前地图()
+            if(map == '建邺城'):
+                if(当前坐标 != '6530'):
+                    window.F_小地图寻路器([65, 30])
+            else:
+                window.F_使用飞行符('建邺城')
+            pyautogui.press('f9')
+            pyautogui.hotkey('alt', 'h')
+            time.sleep(1)
+            logUtil.chLog('接货id:' + str(接货id))
+            window.F_给与东西(接货id, False)
+
     time.sleep(0.5)
     while(True):
         window.F_打开道具()
@@ -383,16 +422,16 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true'):
         if(point != None and point[0] > 0):
             if(restart != 1):
                 time.sleep(10)
+            window.F_使用酒肆和打坐()
             window.F_发车检查(isChilan)
             networkApi.doUpdateRoleStatus(window.gameId, '忙碌')
-            window.F_使用酒肆和打坐()
             window.F_吃香()
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
             F_获取宝图信息(window, restart=restart)
             break
         else:
-            window.findMhWindow()
+            # window.findMhWindow()
             time.sleep(10)
 
 

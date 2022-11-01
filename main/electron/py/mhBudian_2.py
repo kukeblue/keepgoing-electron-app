@@ -153,6 +153,7 @@ def F_改名字(window, 攻击=0):
 #     pyautogui.hotkey('alt', 'o')
 
 def F_回商会(window):
+    time.sleep(2)
     window.F_使用长安城飞行棋('红色长安城导标旗坐标_商会')
     pyautogui.press('f9')
     pyautogui.hotkey('alt', 'h')
@@ -225,7 +226,7 @@ def F_检查女娲技能(window):
     携带数量 = F_获取携带数量(window)
     print(携带数量)
     if(携带数量 == '8/8' or 携带数量 == '818' or 携带数量 == '10/10' or 携带数量 == '10110' or 携带数量 == '9/9' or 携带数量 == '919'):
-        for x in range(10):
+        for x in range(2):
             print('满了召唤兽')
             window.F_移动到游戏区域坐标(184, 101)
             utils.click()
@@ -287,20 +288,39 @@ def F_检查女娲技能(window):
             if(('7' in 携带数量) or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818') or (携带数量 == '10110') or (携带数量 == '8/10') or (携带数量 == '8/9') or (携带数量 == '9/9') or (携带数量 == '919') or (携带数量 == '819') or (携带数量 == '10/10') or (携带数量 == '9/10') or (携带数量 == '8/10') or (携带数量 == '9110') or (携带数量 == '8110')):
                 print('未满')
             else:
+                window.F_移动到游戏区域坐标(178, 361)
+                utils.rightClick()
                 return False
         if(('7' in 携带数量) or (携带数量 == '7/8') or (携带数量 == '718') or (携带数量 == '7I8') or (携带数量 == '8/8') or (携带数量 == '818') or (携带数量 == '10110') or (携带数量 == '8/10') or (携带数量 == '8/9') or (携带数量 == '9/9') or (携带数量 == '919') or (携带数量 == '819') or (携带数量 == '10/10') or (携带数量 == '9/10') or (携带数量 == '8/10') or (携带数量 == '9110') or (携带数量 == '8110')):
+            window.F_移动到游戏区域坐标(178, 361)
+            utils.rightClick()
             return True
         else:
+            window.F_移动到游戏区域坐标(178, 361)
+            utils.rightClick()
             return False
+    window.F_移动到游戏区域坐标(178, 361)
+    utils.rightClick()
 
 
 def F_去女娲(window):
-    window.F_吃香2()
-    window.F_导航到女娲神迹()
-    window.F_吃动名草()
+    pyautogui.press('f5')
+    time.sleep(1)
+    point = window.findImgInWindow('all_yueguan_nw.png')
+    if(point != None):
+        window.pointMove(point[0] + 10, point[1] + 5)
+    utils.click()
+    time.sleep(1)
     point = window.findImgInWindow('all-map-nvsj.png')
-    if(point == None):
-        F_去女娲(window)
+    if(point != None):
+        return
+    window.F_吃香2()
+    while True:
+        window.F_导航到女娲神迹()
+        point = window.findImgInWindow('all-map-nvsj.png')
+        if(point != None):
+            window.F_吃动名草()
+            return
 
 
 def F_补店(prices):
@@ -437,7 +457,8 @@ def F_循环上架(window, prices):
 MHWindow = mhWindow.MHWindow
 window = MHWindow(1)
 window.findMhWindow()
-# F_检查女娲技能(window)
+
+# F_去女娲(window)
 # 攻击 = F_获取攻击数字(window)
 # print(攻击)
 # print(F_获取携带数量(window))
@@ -446,5 +467,5 @@ if __name__ == '__main__':
     fire.Fire({
         'lf': F_补店,
     })
-F_商店扫描(window)
-F_补店()
+# F_商店扫描(window)
+# F_补店()

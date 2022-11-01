@@ -17,7 +17,7 @@ export function runPyScript(name, args = []) {
     args.forEach((item, index) => argsStr = argsStr + (index > 0 ? ' ' : '') + item)
     try {
         const command = `python ${resolve('./')}/main/electron/py/__pycache__/${name}.pyc${(argsStr.length > 0 ? ` ${argsStr}` : '')}`
-        logger.info('run py script ' + command)
+        // logger.info('run py script ' + command)
         const process = exec(command, (error, stdout, stderr) => {
             const runningPyProcess = state.runningPyProcess
             if (error) {
@@ -30,6 +30,24 @@ export function runPyScript(name, args = []) {
         })
         state.runningPyProcess[name] = process.pid
         logger.info('pid: ' + process.pid)
+
+        if (name == 'mhWatu') {
+            setTimeout(() => {
+                const command = `python ${resolve('./')}/main/electron/py/__pycache__/mhShouhu.pyc`
+                // logger.info('run py script ' + command)
+                const process = exec(command, (error, stdout, stderr) => {
+                    const runningPyProcess = state.runningPyProcess
+                    if (error) {
+                        logger.info(`exec error: ${error}`);
+                        return;
+                    } else {
+                        logger.info(`${name} run finish pid ${runningPyProcess[name]}`)
+                    }
+                    delete runningPyProcess[name]
+                })
+            }, 1000)
+        }
+
         return 0
     } catch (error) {
         console.log(error.message)

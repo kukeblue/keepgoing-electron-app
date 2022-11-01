@@ -35,7 +35,7 @@ def F_领取抓鬼任务(window, 是否抓大鬼):
         抓鬼次数 = 抓鬼次数 + 1
         if(抓鬼次数 == 3 or 抓鬼次数 == 6 or 抓鬼次数 == 10):
             window.F_吃香2()
-            window.F_集体酒肆()
+            # window.F_集体酒肆()
         任务 = window.F_识别抓鬼任务()
         if(是否抓大鬼 == 1 and 任务['鬼王'] != None):
             pyautogui.hotkey('alt', 'q')

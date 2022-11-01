@@ -148,7 +148,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
-    // 带队喊话
+    // 带队打架
     ipcMain.on(resourcePaths.METHOD_ZHANDOU, (event, args) => {
         logger.info('run py script: METHOD_ZHANDOU')
         const result = runPyScript('mhZhandou', ['lbc', args[0]])

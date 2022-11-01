@@ -1,14 +1,31 @@
 # coding=utf-8
 
+import sys
 import base64
 import random
 import json
 import time
 import requests
 from urllib import parse
-host = 'http://103.100.210.203:3000/api/client/'
-
+host = 'http://42.51.41.129:3000/api/client/'
 suanHost = ''
+
+
+def chRequest(method, url, data, headers):
+    while True:  # 一直循环，知道访问站点成功
+        try:
+            res = requests.request(
+                method, url, data=data, headers=headers, timeout=20)
+            return res
+        except requests.exceptions.ConnectionError:
+            print('ConnectionError -- please wait 3 seconds')
+            time.sleep(3)
+        except requests.exceptions.ChunkedEncodingError:
+            print('ChunkedEncodingError -- please wait 3 seconds')
+            time.sleep(3)
+        except:
+            print('Unfortunitely -- An Unknow Error Happened, Please wait 3 seconds')
+            time.sleep(3)
 
 
 def sendWatuInfoLogo(nickName, taskCount):
@@ -26,9 +43,12 @@ def sendWatuInfoLogo(nickName, taskCount):
         'cache-control': "no-cache",
         'postman-token': "fe1447a3-8cbe-5a50-744d-7b016e4cd990"
     }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
+    response = chRequest(
+        "POST", url, payload.encode(), headers)
     print(response.text)
+    res = json.loads(response.text)
+    if(res.get('status') != 0):
+        sys.exit(0)
 
 
 def sendWatuProfit(nickName, note):
@@ -44,8 +64,8 @@ def sendWatuProfit(nickName, note):
         'cache-control': "no-cache",
         'postman-token': "fe1447a3-8cbe-5a50-744d-7b016e4cd990"
     }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
+    response = chRequest(
+        "POST", url, payload.encode(), headers)
     print(response.text)
 
 
@@ -60,8 +80,8 @@ def 获取空闲接货人ID(gameId, work):
         headers = {
             'content-type': "application/json",
         }
-        response = requests.request(
-            "POST", url, data=payload.encode(), headers=headers)
+        response = chRequest(
+            "POST", url, payload.encode(), headers)
         print(response.text)
         res = json.loads(response.text)
         if(res.get('status') == 0):
@@ -80,8 +100,8 @@ def doUpdateRoleStatus(gameId, status):
     headers = {
         'content-type': "application/json",
     }
-    response = requests.request(
-        "POST", url, data=payload.encode(), headers=headers)
+    response = chRequest(
+        "POST", url, payload.encode(), headers)
     print(response.text)
     res = json.loads(response.text)
     if(res.get('status') == 0):
@@ -116,7 +136,7 @@ def getPicPoint(image_path):
         'content-type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
     }
-    response = requests.request("POST", url, data=payload, headers=headers)
+    response = chRequest("POST", url, data=payload, headers=headers)
     print(response.text)
 
     if(response.text and '6001_' in response.text):
@@ -131,7 +151,7 @@ def getPicPoint(image_path):
                 'content-type': "application/x-www-form-urlencoded",
                 'cache-control': "no-cache",
             }
-            response = requests.request(
+            response = chRequest(
                 "POST", url, data=payload.encode(), headers=headers)
             ret = response.text
             print(response.text)

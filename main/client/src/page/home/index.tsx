@@ -159,7 +159,25 @@ export function usePageStore() {
     const handleGetWatuInfoReply = (data: any) => {
 
         const result = data.result
-        const mapName = result[0][0] || result[1][0] || result[2][0]
+        let mapName = ''
+        let mostName = 0
+        let mapNameCounts: any = {
+        }
+        result.map((item: any) => {
+            let mapName = item[0]
+            if (!mapNameCounts[mapName]) {
+                mapNameCounts[mapName] = 1
+            } else {
+                mapNameCounts[mapName] = mapNameCounts[mapName] + 1
+            }
+        })
+        Object.keys(mapNameCounts).map(key => {
+            let mapNameCount = mapNameCounts[key]
+            if (mostName < mapNameCount) {
+                mostName = mapNameCount
+                mapName = key
+            }
+        })
         const points = result.map((item: any) => {
             return item[1]
         })
@@ -276,7 +294,6 @@ export function usePageStore() {
         doHanghua(window.hanghuaCount)
     }
     const 弹出添加分组框 = () => {
-        alert('添加分组')
     }
     const 更新脚本 = () => {
 

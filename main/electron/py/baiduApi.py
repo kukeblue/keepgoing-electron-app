@@ -1,5 +1,4 @@
 # coding=utf-8
-from tkinter.messagebox import NO
 from aip import AipOcr
 import time
 from win32com.client import Dispatch
@@ -14,15 +13,20 @@ import logUtil
 
 op = Dispatch("op.opsoft")
 
-pyHome = __file__.strip('baiduApi.py')
-pyZhikuDir = pyHome + 'config\zhiku'
-
+pyHome = __file__.strip('baiduApi.pyc')
+pyZhikuDir = pyHome + '\config\zhiku'
+pyZhikuDir2 = pyHome + '\config\images'
 
 APP_ID = '25713120'
 API_KEY = 'GOkNrLxVH3cV8I7DVpXx67mh'
 SECRET_KEY = '9MTEeMd2nNcm457CsGTGNV5ddkISAuI1'
-
-client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
+client = None
+with open(pyZhikuDir2 + '/temp/913.txt', "r", encoding='utf-8') as f:
+    data = f.read()
+    textAppData = data.split(',')
+    f.close()
+    client = AipOcr('28169102', 'TlqWuTLLPyVnoMAILQQnhQU1',
+                    '3T2wyhRHS7pH7euXSefHRR6gjcE1h1I2')
 
 """ 读取图片 """
 
@@ -117,11 +121,25 @@ def F_大鬼小鬼任务区间识别(area):
     return data
 
 
+def F_人物位置识别(area):
+    ret = op.FindMultiColor(area[0], area[1], area[2], area[3], 'f8fcf8',
+                            '1|-1|f870f8,2|1|f850f8,38|-171|ff01ff,10|-1|80a818', 0.56, 0)
+    if(ret[0] == 1):
+        return [ret[0] + 33, ret[1] - 120]
+
+
 def F_大漠小地图寻路坐标识别(area):
     op.SetDict(0, pyZhikuDir + '\\zuobiao_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
                  "ffff00-000000", 1.0)
 
+    return ret
+
+
+def F_大漠摄妖香分钟识别(area):
+    op.SetDict(0, pyZhikuDir + '\\syx_number.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffffff-000000", 1.0)
     return ret
 
 

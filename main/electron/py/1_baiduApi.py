@@ -1,5 +1,4 @@
 # coding=utf-8
-from tkinter.messagebox import NO
 from aip import AipOcr
 import time
 from win32com.client import Dispatch
@@ -14,8 +13,8 @@ ocr = CnOcr()
 
 op = Dispatch("op.opsoft")
 
-pyHome = __file__.strip('baiduApi.py')
-pyZhikuDir = pyHome + 'config\zhiku'
+pyHome = __file__.strip('baiduApi.pyc')
+pyZhikuDir = pyHome + '\config\zhiku'
 
 
 APP_ID = '25713120'
@@ -83,6 +82,14 @@ def F_小地图出入口按钮识别(area):
         return [ret[1], ret[2]]
 
 
+def F_人物位置识别(area):
+    ret = op.FindStr(area[0], area[1], area[2], area[3], "",
+                     "f8fcf8-000000|f870f8-000000|f850f8-000000|ff01ff-000000|80a818-000000", 1.0)
+    print(ret)
+    if(ret[0] > -1):
+        return [ret[1], ret[2]]
+
+
 def F_打图4小人识别(area):
     for x in range(2):
         op.SetDict(0, pyZhikuDir + '\\baise.txt')
@@ -125,10 +132,17 @@ def F_大漠小地图寻路坐标识别(area):
     return ret
 
 
+def F_大漠摄妖香分钟识别(area):
+    op.SetDict(0, pyZhikuDir + '\\syx_number.txt')
+    ret = op.Ocr(area[0], area[1], area[2], area[3],
+                 "ffffff-000000", 1.0)
+    return ret
+
+
 def F_大漠小地图识别(area):
     op.SetDict(0, pyZhikuDir + '\\small_map.txt')
     ret = op.Ocr(area[0], area[1], area[2], area[3],
-                 "ffffff-000000", 1.0)
+                 "ffffff-000000", 0.85)
     return ret
 
 
