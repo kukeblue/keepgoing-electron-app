@@ -481,6 +481,7 @@ function HomeWatu() {
     const [watuGroup, setWatuGroup] = useState<TWatuGroup>()
     const [showAccountPopover, setShowAccountPopover] = useState<boolean>(false)
     const [formRef] = useForm()
+    const [roleMonitor, setRoleMonitor] = useState<any>({})
     const { list: gameRoleList, reload } = usePage({
         isScroll: false,
         url: '/api/game_role/get_game_role_page',
@@ -504,6 +505,26 @@ function HomeWatu() {
             }
         })
     }
+
+    const getRoleMonitor = () => {
+        request({
+            url: '/api/report/get_role_baotu_monitor',
+            data: {},
+            method: "post"
+        }).then(res => {
+            if (res.status == 0) {
+                const data: any = {}
+                res.list.forEach((item: any) => {
+                    data[item.gameId] = item
+                })
+                setRoleMonitor(data)
+            }
+        })
+    }
+
+    useEffect(() => {
+        getRoleMonitor()
+    }, [showGroupModal])
 
     const addContent = (work: string) => {
         const accounts = watuGroup?.gameServer ? pageStore.accountList.filter((item: TGameAccount) => { return item.gameServer == watuGroup?.gameServer }) : pageStore.accountList
@@ -566,7 +587,7 @@ function HomeWatu() {
     const roleTag = (item: TGameRole) => {
         return <Popover trigger="click" placement="topLeft" title='操作' content={
             <div>
-                <div style={{ marginLeft: 15 }}>id: {item.gameId}; </div>
+                <div style={{ marginLeft: 15 }}>id: {item.gameId};  </div>
                 <div style={{ marginLeft: 15 }}>账号:{pageStore.accountMap[item.accoutId] && pageStore.accountMap[item.accoutId].username}</div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '空闲' })) }} type="link">设置空闲</Button></div>
                 <div><Button onClick={() => { updateStatus(Object.assign({}, item, { status: '忙碌' })) }} type="link">设置忙碌</Button></div>
@@ -575,7 +596,7 @@ function HomeWatu() {
             </div>
         }>
             <div style={{ margin: 5 }} className="flex-row-between">
-                <Tag color="green">{item.name}</Tag>
+                <Tag color="green">{item.name}{roleMonitor[item.gameId] && <span style={{ color: 'red' }}>-{roleMonitor[item.gameId] && roleMonitor[item.gameId].baotuCount}</span>}</Tag>
                 {item.status == '离线' ? <div><Badge status="default" />离线</div> : item.status == '空闲' ? <div><Badge status="processing" />空闲</div> : <div><Badge status="warning" />忙碌</div>}
             </div>
         </Popover>
@@ -610,6 +631,7 @@ function HomeWatu() {
                 <Button className="m-b-20" size="small" onClick={() => {
                     // tableRef.current!.reload()
                     reload()
+                    getRoleMonitor()
                 }}>刷新</Button>
                 <div className="m-b-10 flex-row-center">
                     <h4>买图角色</h4>
@@ -1267,7 +1289,7 @@ function HomeFeature() {
             <TabPane tab="挖图" key="2">
                 <HomeWatu />
             </TabPane>
-            <TabPane tab="抓鬼" key="4">
+            {userStore.user.vipCard.level > 0 && <TabPane tab="抓鬼" key="4">
                 <Row>
                     <Col>
                         <Button onClick={() => {
@@ -1286,18 +1308,20 @@ function HomeFeature() {
                     </Col>
                 </Row>
             </TabPane>
-            {userStore.user.vipCard.level == 100 && <TabPane tab="补店" key="5">
-                <Row>
-                    <Col>
-                        <Button onClick={() => {
-                            pageStore.setShowLog(true)
-                            message.success('操作成功')
-                            doBudianTask(price)
-                        }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓律法女娲</Button></Col>
-                    <Col offset={1}> <span>价格：</span><Input onChange={(e) => { setPrice(e.target.value) }} value={price} style={{ width: 150 }} /></Col>
+            }
+            {
+                userStore.user.vipCard.level == 100 && <TabPane tab="补店" key="5">
+                    <Row>
+                        <Col>
+                            <Button onClick={() => {
+                                pageStore.setShowLog(true)
+                                message.success('操作成功')
+                                doBudianTask(price)
+                            }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓律法女娲</Button></Col>
+                        <Col offset={1}> <span>价格：</span><Input onChange={(e) => { setPrice(e.target.value) }} value={price} style={{ width: 150 }} /></Col>
 
-                </Row>
-            </TabPane>}
+                    </Row>
+                </TabPane>}
         </Tabs>
 
         <Modal visible={pageStore.isShowHanhu} onCancel={() => { pageStore.setsShowHanhu(false) }} onOk={() => {

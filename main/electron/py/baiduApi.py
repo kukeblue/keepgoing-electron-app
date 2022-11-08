@@ -14,8 +14,8 @@ import logUtil
 op = Dispatch("op.opsoft")
 
 pyHome = __file__.strip('baiduApi.pyc')
-pyZhikuDir = pyHome + '\config\zhiku'
-pyZhikuDir2 = pyHome + '\config\images'
+pyZhikuDir = pyHome + 'config\zhiku'
+pyZhikuDir2 = pyHome + 'config\images'
 
 APP_ID = '25713120'
 API_KEY = 'GOkNrLxVH3cV8I7DVpXx67mh'

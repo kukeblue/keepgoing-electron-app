@@ -10,3 +10,5 @@
 ## 挖图逻辑
 -  挖图不用顺序排列
 -  异常重启
+
+python .\blurb.py D:\project\keepgoing-electron-app\main\electron\py\ D:\project\keepgoing-electron-app\main\electron\temp\

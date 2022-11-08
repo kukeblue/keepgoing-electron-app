@@ -95,6 +95,9 @@ class MHWindow:
                 self.windowArea[0] + 400, self.windowArea[1] + 300)
             # pyautogui.click()
             if(self.gameId == ''):
+                pyautogui.moveTo(
+                    self.windowArea[0] + 400, self.windowArea[1] + 300)
+                # utils.click()
                 data = utils.bindOp()
                 self.gameId = data[0]
                 self.handle = data[1]
@@ -106,7 +109,7 @@ class MHWindow:
 
     def focusWindow(self):
         pyautogui.moveTo(self.windowArea[0] + 400, self.windowArea[1] + 300)
-        win32gui.SetForegroundWindow(self.handle)
+        # win32gui.SetForegroundWindow(self.handle)
 
     def focusWindow2(self):
         pyautogui.moveTo(self.windowArea[0] + 400, self.windowArea[1] + 300)
@@ -230,7 +233,7 @@ class MHWindow:
                 finished = True
                 return
             if(lastPoint != None and point != None and point[0] == lastPoint[0] and point[1] == lastPoint[1]):
-                win32gui.SetForegroundWindow(utils.handle)
+                # win32gui.SetForegroundWindow(utils.handle)
                 pyautogui.moveTo(
                     self.windowArea[0] + 400, self.windowArea[1] + 300)
                 # utils.click()
@@ -269,7 +272,7 @@ class MHWindow:
             realX = real[0]
             realY = real[1]
             if(realX > (self.windowArea[0] + 800) or realX < self.windowArea[0] or realY > (self.windowArea[1] + 600) or realY < (self.windowArea[1])):
-                win32gui.SetForegroundWindow(utils.handle)
+                # win32gui.SetForegroundWindow(utils.handle)
                 pyautogui.moveTo(
                     self.windowArea[0] + 400, self.windowArea[1] + 300)
                 time.sleep(1)

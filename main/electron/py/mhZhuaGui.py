@@ -12,6 +12,7 @@ import io
 import time
 import fire
 import pyautogui
+import networkApi
 import utils
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
@@ -24,7 +25,8 @@ def 抓鬼(是否抓大鬼):
     window.findMhWindow()
     window.focusWindow()
     utils.click()
-    F_领取抓鬼任务(window, 是否抓大鬼)
+    if(networkApi.doUpdateRoleStatus(window.gameId, '抓鬼')):
+        F_领取抓鬼任务(window, 是否抓大鬼)
 
 
 def F_领取抓鬼任务(window, 是否抓大鬼):
@@ -32,10 +34,14 @@ def F_领取抓鬼任务(window, 是否抓大鬼):
     logUtil.chLog(是否抓大鬼)
     抓鬼次数 = 0
     while True:
-        抓鬼次数 = 抓鬼次数 + 1
-        if(抓鬼次数 == 3 or 抓鬼次数 == 6 or 抓鬼次数 == 10):
+        if(是否抓大鬼 == 1):
+            抓鬼次数 = 抓鬼次数 + 1
+        else:
+            抓鬼次数 = 抓鬼次数 + 0.5
+        if(抓鬼次数 == 5):
             window.F_吃香2()
-            # window.F_集体酒肆()
+            window.F_集体酒肆()
+            抓鬼次数 = 0
         任务 = window.F_识别抓鬼任务()
         if(是否抓大鬼 == 1 and 任务['鬼王'] != None):
             pyautogui.hotkey('alt', 'q')

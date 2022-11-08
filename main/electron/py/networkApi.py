@@ -106,6 +106,7 @@ def doUpdateRoleStatus(gameId, status):
     res = json.loads(response.text)
     if(res.get('status') == 0):
         print('success')
+        return True
 
 
 def suanGetHost():

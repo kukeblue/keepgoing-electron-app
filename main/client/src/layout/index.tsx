@@ -162,6 +162,7 @@ function Layout(props: LayoutProps) {
         ]
     }
     console.log('Layout 刷新')
+    // @ts-ignore
     return userStore.isLogin ? <ChLayout header={<Header />} adminIcon={<img style={{ borderRadius: '50%', width: '60px', height: 'auto' }} src={image_robot} />} sider={sider}>
         <div className='app-content'>
             {props.children}
