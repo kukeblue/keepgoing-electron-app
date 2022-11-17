@@ -239,7 +239,6 @@ def F_点击宝图(window, userId, map, x, y, ox, oy, num):
     window.focusWindow()
     # window.ClickInWindow(mapTopLeft[0], mapTopLeft[1])
     # window.F_打开地图()
-    time.sleep(0.3)
     pyautogui.press('tab')
     time.sleep(0.5)
     point = window.findImgInWindow(mapDict.get(map))
@@ -286,7 +285,7 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True
         pyautogui.moveTo(
             window.windowArea[0] + 400, window.windowArea[1] + 300)
         pyautogui.press('tab')
-        time.sleep(1)
+        time.sleep(0.5)
         point = window.findImgInWindow(mapDict.get(map))
         if(point == None):
             point = window.findImgInWindow(mapDict.get(map))
@@ -297,8 +296,8 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True
         if(point != None):
             mouse.move(point[0] + x, point[1] + y)
         window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
-        pyautogui.moveTo(
-            window.windowArea[0] + 400, window.windowArea[1] + 300)
+        # pyautogui.moveTo(
+        #     window.windowArea[0] + 400, window.windowArea[1] + 300)
         global 上次扫描数据
         orPoint = 上次扫描数据[num - 1][2]
         window.F_打开道具()

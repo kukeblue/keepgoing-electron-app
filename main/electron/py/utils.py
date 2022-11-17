@@ -1,4 +1,5 @@
 # from paddleocr import PaddleOCR
+import socket
 import win32gui as w
 from pickle import TRUE
 import time
@@ -14,6 +15,18 @@ op = Dispatch("op.opsoft")
 handle = 0
 
 
+tcp_client_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 2 通过客户端套接字的connect方法与服务器套接字建立连接
+# 参数介绍：前面的ip地址代表服务器的ip地址，后面的61234代表服务端的端口号 。
+tcp_client_1.connect(("127.0.0.1", 61234))
+# while True:
+#     time.sleep(1)
+#     send_data = "rigthClick".encode(encoding='utf-8')
+#     tcp_client_1.send(send_data)
+#     recv_data = tcp_client_1.recv(1024)
+#     print(recv_data.decode(encoding='utf-8'))
+
+
 def bindOp():
     real = pyautogui.position()
     global handle
@@ -21,24 +34,17 @@ def bindOp():
     title = w.GetWindowText(handle)
     print(title)
     res = re.findall(r'[\[](.*?)[]]', title)[1]
-    op.BindWindow(handle, "normal", "windows", "windows", 1)
+    # op.BindWindow(handle, "normal", "windows", "windows", 1)
     win32gui.SetForegroundWindow(handle)
     print('当前角色ID为: ' + res)
     return [res, handle]
 
 
 def click():
-    global handle
-    if(handle == 0):
-        pyautogui.click()
-    else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
-                             win32con.WA_ACTIVE, 0)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
-        time.sleep(0.2)
+    send_data = "click".encode(encoding='utf-8')
+    tcp_client_1.send(send_data)
+    recv_data = tcp_client_1.recv(1024)
+    print(recv_data.decode(encoding='utf-8'))
 
 
 def move(x, y):
@@ -49,34 +55,18 @@ def move(x, y):
 
 
 def doubleClick():
-    global handle
-    if(handle == 0):
-        pyautogui.click()
-        pyautogui.click()
-    else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
-                             win32con.WA_ACTIVE, 0)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
-        time.sleep(0.2)
+    send_data = "doubleClick".encode(encoding='utf-8')
+    tcp_client_1.send(send_data)
+    recv_data = tcp_client_1.recv(1024)
+    print(recv_data.decode(encoding='utf-8'))
 
 
 def rightClick():
-    global handle
-    if(handle == 0):
-        pyautogui.rightClick()
-    else:
-        win32gui.SendMessage(
-            handle, win32con.WM_RBUTTONDOWN, win32con.MK_RBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_RBUTTONUP, win32con.MK_RBUTTON)
-        time.sleep(0.2)
+    send_data = "rightClick".encode(encoding='utf-8')
+    tcp_client_1.send(send_data)
+    recv_data = tcp_client_1.recv(1024)
+    print(recv_data.decode(encoding='utf-8'))
+    time.sleep(0.2)
 
 
 def getPointColor(x, y):

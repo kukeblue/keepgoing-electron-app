@@ -22,8 +22,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 def F_女娲神迹巡逻(window):
     logUtil.chLog('女娲神迹巡逻')
-    points = [[250, 210], [527, 294], [221, 308], [
-        451, 412], [396, 332], [471, 269], [303, 445]]
+    points = [[253, 215], [547, 298], [211, 318], [
+        481, 412], [306, 332], [401, 269], [318, 445]]
     lastPoint = None
     time.sleep(1)
 
@@ -33,7 +33,8 @@ def F_女娲神迹巡逻(window):
         if(lastPoint == point):
             continue
         pyautogui.press('tab')
-        window.F_移动到游戏区域坐标(point[0], point[1], True)
+        window.F_移动到游戏区域坐标(point[0] + random.choice((-1, 1)) * random.randint(
+            1, 20), point[1] + random.choice((-1, 1)) * random.randint(1, 20), True)
         utils.click()
         time.sleep(1)
         pyautogui.press('tab')

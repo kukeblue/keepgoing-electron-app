@@ -3,6 +3,7 @@ import * as path from 'path';
 import messageHandle from './messageHandle'
 import { listenLogs } from "./utils/logChangeHandle";
 import timer from "./timer"
+import { runPyScript } from "./py/runPyScript";
 import MessageHandle from "./messageHandle";
 const fs = require("fs");
 let mainWindow: Electron.BrowserWindow;
@@ -11,6 +12,7 @@ let mainWindow: Electron.BrowserWindow;
 fs.truncate('app.log', 0, function () { console.log('clear log success') })
 
 function createWindow(): void {
+    const result = runPyScript('ddServer')
     mainWindow = new BrowserWindow({
         x: 0,
         y: 0,

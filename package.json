@@ -14,7 +14,7 @@
         "afterSign": "scripts/notarize.js"
     },
     "build": {
-        "productName": "乾坤辅助",
+        "productName": "python教程",
         "appId": "com.chepp.kukechen",
         "copyright": "kukechen",
         "directories": {

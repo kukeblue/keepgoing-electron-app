@@ -20,7 +20,8 @@ def login(accounts):
         hwnd = op.findWindow('', '梦幻西游 ONLINE')
         if hwnd is not None and hwnd != 0:
             time.sleep(3)
-            ret = op.FindMultiColor(1157, 681, 1245, 760, '5f26a0-993d27', '7|0|5e229e', 0.95, 0)
+            ret = op.FindMultiColor(
+                1157, 681, 1245, 760, '5f26a0-993d27', '7|0|5e229e', 0.95, 0)
             logUtil.chLog(ret)
             if ret[0] > 0:
                 op.MoveTo(1208, 724)
@@ -28,15 +29,16 @@ def login(accounts):
                 op.LeftClick()
             break
         else:
-             logUtil.chLog('not find window')
-             return
+            logUtil.chLog('not find window')
+            return
     for index in range(len(accounts)):
         account = accounts[index]
         while True:
             time.sleep(1)
             # 点击下一步
             logUtil.chLog('info:click next')
-            ret2 = op.FindMultiColor(1282, 844, 1416, 899, 'c0d8f0-993d27', '0|-1|c0d8f0', 0.95, 0)
+            ret2 = op.FindMultiColor(
+                1282, 844, 1416, 899, 'c0d8f0-993d27', '0|-1|c0d8f0', 0.95, 0)
             if ret2[0] > 0:
                 op.MoveTo(1352, 871)
                 time.sleep(3)
@@ -81,7 +83,8 @@ def login(accounts):
         while True:
             logUtil.chLog('info:click enter game')
             time.sleep(1)
-            ret2 = op.FindMultiColor(671, 836, 735, 864, 'a0b0d0-993d27', '2|6|90a4d0,4|0|8898b8', 0.95, 0)
+            ret2 = op.FindMultiColor(
+                671, 836, 735, 864, 'a0b0d0-993d27', '2|6|90a4d0,4|0|8898b8', 0.95, 0)
             if ret2[0] > 0:
                 op.MoveTo(1335, 879)
                 op.LeftClick()
@@ -103,14 +106,16 @@ def login(accounts):
         while True:
             logUtil.chLog('is login success?')
             time.sleep(1)
-            ret2 = op.FindColor(641, 340, 657, 355, '185878-993d27|084060-000000|78e4e0-000000', 0.90, 0)
+            ret2 = op.FindColor(
+                641, 340, 657, 355, '185878-993d27|084060-000000|78e4e0-000000', 0.90, 0)
             if ret2[0] > 0:
                 logUtil.chLog('login success！')
                 break
 
         if index + 1 != len(accounts):
             logUtil.chLog('next account')
-            ret2 = op.FindMultiColor(771, 297, 1444, 319, '3e5c72-993d27', '0|-4|3f6d8e,3|-3|9cb0c5', 0.95, 0)
+            ret2 = op.FindMultiColor(
+                771, 297, 1444, 319, '3e5c72-993d27', '0|-4|3f6d8e,3|-3|9cb0c5', 0.95, 0)
             if ret2[0] > 0:
                 op.MoveTo(ret2[1], ret2[2])
                 op.LeftClick()
@@ -139,8 +144,9 @@ if __name__ == "__main__":
     logUtil.chLog(len(args))
     Accounts = []
     for index in range(len(args)):
-       username = args[index][:-8]
-       Accounts.append({"username": username, "password": accountMap[username]})
+        username = args[index][:-8]
+        Accounts.append(
+            {"username": username, "password": accountMap[username]})
 
     logUtil.chLog(Accounts)
     login(Accounts)
