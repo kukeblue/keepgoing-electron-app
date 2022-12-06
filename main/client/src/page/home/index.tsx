@@ -27,6 +27,7 @@ import ChMhMapTool from "../../components/ChMhMapTool";
 import { UserStore } from "../../store/userStore";
 import Account from "../account";
 import TextArea from "antd/lib/input/TextArea";
+import Item from "antd/lib/list/Item";
 
 type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook, usePage } = ChUtils.chHooks
@@ -480,6 +481,8 @@ function HomeWatu() {
     const [showWatuGroupSettingModal, setShowWatuGroupSettingModal] = useState<boolean>(false)
     const [watuGroup, setWatuGroup] = useState<TWatuGroup>()
     const [showAccountPopover, setShowAccountPopover] = useState<boolean>(false)
+    const [showRoleMonitorPage, setShowRoleMonitorPage] = useState<boolean>(false)
+    const [roleMonitorData, setRoleMonitorData] = useState<any>({})
     const [formRef] = useForm()
     const [roleMonitor, setRoleMonitor] = useState<any>({})
     const { list: gameRoleList, reload } = usePage({
@@ -583,7 +586,6 @@ function HomeWatu() {
             }} className="m-t-15" size="small" type="primary">确定</Button>
         </div>
     }
-
     const roleTag = (item: TGameRole) => {
         return <Popover trigger="click" placement="topLeft" title='操作' content={
             <div>
@@ -600,6 +602,26 @@ function HomeWatu() {
                 {item.status == '离线' ? <div><Badge status="default" />离线</div> : item.status == '空闲' ? <div><Badge status="processing" />空闲</div> : <div><Badge status="warning" />忙碌</div>}
             </div>
         </Popover>
+    }
+    const getMonitorPageData = () => {
+        request({
+            url: '/api/report/get_role_baotu_monitor',
+            data: {},
+            method: "post"
+        }).then(res => {
+            if (res.status == 0) {
+                let gameServerMap:any = {}
+                res.list.forEach((item: any) => {
+                    if(!gameServerMap[item.gameServer]) {
+                        gameServerMap[item.gameServer] = [item]
+                    }else {
+                        gameServerMap[item.gameServer].push(item)
+                    }
+                })
+                setRoleMonitorData(gameServerMap)
+                setShowRoleMonitorPage(true)
+            }
+        })
     }
     return <div>
         <Modal title={"编辑分组货价 - " + watuGroup?.name} visible={showGroupPriceModal} onOk={() => {
@@ -1135,6 +1157,36 @@ function HomeWatu() {
             }
             ]} />
         </Modal>
+        <Modal onCancel={()=>setShowRoleMonitorPage(false)} footer={false} visible={showRoleMonitorPage}>
+            <h4>挖图监控</h4>
+            <Button size="small" onClick={()=>getMonitorPageData()}>刷新</Button>
+            {
+                Object.keys(roleMonitorData).map(gameServer=>{
+                    return <div key={gameServer}>
+                        <div>{gameServer}</div>
+                        {
+                            roleMonitorData[gameServer].map((item:any)=>{
+                                let isRed = false
+                                if(item.work === '发图' && item.amount < 80) {
+                                    isRed = true
+                                }
+                                if(item.work === '挖图' && item.amount > 250) {
+                                    isRed = true
+                                }
+                                if(item.work === '接货' && item.amount > 20) {
+                                    isRed = true
+                                }
+                                return <div style={{color: `${isRed?'red':'#333'}`}} key={item.gameId}>
+                                    <span>【{item.work}】</span>
+                                    <span>{item.name}</span>
+                                    <span>{item.amount}</span>
+                                </div>
+                            })
+                        }
+                    </div>
+                })
+            }
+        </Modal>
         <Collapse defaultActiveKey={['1']}>
             <Panel header="挖图功能" key="1">
                 <Row>
@@ -1191,7 +1243,7 @@ function HomeWatu() {
             </Panel>
             <Panel header={"挖图组配置"} key="2">
                 <Button className="m-b-10" size="small" type="primary" onClick={() => { setShowGroupModal(true) }}> 添加分组 </Button>
-
+                <Button onClick={()=>getMonitorPageData()} className="m-b-10 m-l-10" size="small" type="primary"> 角色监控 </Button>
                 <ChTablePanel
                     ref={tableRef}
                     disablePagination={true}

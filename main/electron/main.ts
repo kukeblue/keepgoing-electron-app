@@ -12,7 +12,7 @@ let mainWindow: Electron.BrowserWindow;
 fs.truncate('app.log', 0, function () { console.log('clear log success') })
 
 function createWindow(): void {
-    const result = runPyScript('ddServer')
+  
     mainWindow = new BrowserWindow({
         x: 0,
         y: 0,

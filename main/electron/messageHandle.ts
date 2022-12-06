@@ -52,7 +52,7 @@ const init = (mainWindow: Electron.BrowserWindow) => {
     // 测试
     ipcMain.on(resourcePaths.METHOD_TEST, (event, args) => {
         logger.info('run py script: test')
-        const result = runPyScriptSync('test', args)
+        const result = runPyScript('ddServer', args)
         event.returnValue = {
             code: result,
             status: 0

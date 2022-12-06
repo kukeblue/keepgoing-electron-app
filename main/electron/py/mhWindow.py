@@ -778,7 +778,7 @@ class MHWindow:
         # 检查蓝
         if(是否吃蓝):
             ret = baiduApi.op.FindMultiColor(
-                self.windowArea[0] + 748, self.windowArea[1] + 22, self.windowArea[0] + 748 + 25, self.windowArea[1] + 22 + 7, '808080', '2|-1|d0d0d0', 0.8, 0)
+                self.windowArea[0] + 748, self.windowArea[1] + 22, self.windowArea[0] + 800, self.windowArea[1] + 22 + 7, 'd0d0d0', '-2|1|b8b8b8', 0.8, 0)
             if(ret[1] > 0):
                 self.F_吃蓝()
                 print('人物缺蓝')
@@ -997,7 +997,7 @@ class MHWindow:
                     time.sleep(0.2)
                     utils.click()
                     self.F_移动到游戏区域坐标(351, 342)
-                    time.sleep(0.2)
+                    time.sleep(1)
                     utils.click()
 
     def 丢垃圾书(self):
@@ -1015,6 +1015,7 @@ class MHWindow:
                     self.F_移动到游戏区域坐标(562, 417)
                     utils.click()
                     self.F_移动到游戏区域坐标(351, 342)
+                    time.sleep(1)
                     utils.click()
                     if(int(ret) == 50):
                         time.sleep(1)
@@ -2938,7 +2939,7 @@ if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
     pyautogui.press('f9')
-    time.sleep(0.5)
-    pyautogui.hotkey('alt', 'h')
-    time.sleep(0.5)
-    window.医宝宝()
+    ret = baiduApi.op.FindMultiColor(
+    window.windowArea[0] + 748, window.windowArea[1] + 22, window.windowArea[0] + 800, window.windowArea[1] + 22 + 7, 'd0d0d0', '-2|1|b8b8b8', 0.8, 0)
+    if(ret[1] > 0):
+        print('人物缺蓝')
