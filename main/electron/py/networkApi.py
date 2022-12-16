@@ -170,4 +170,4 @@ def encode_base64(file):
         return parse.quote(base64_data_str)
 
 
-suanGetHost()
+# suanGetHost()
