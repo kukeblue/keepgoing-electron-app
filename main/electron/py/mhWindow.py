@@ -56,6 +56,8 @@ class MHWindow:
     pyImageDir = pyHome + '\config\images'
     gameId = ''
     handle = ''
+    gameServer=''
+    roleName=''
 
     def __init__(self, screenUnit):
         print('init')
@@ -101,11 +103,26 @@ class MHWindow:
                 data = utils.bindOp()
                 self.gameId = data[0]
                 self.handle = data[1]
-
+                self.gameServer = data[2]
+                self.roleName = data[3]
+                
             self.focusWindow()
 
         else:
             print('未找到前台梦幻窗口')
+    
+    def F_注册挖图角色(self):
+        networkApi.checkGameId(self.gameId, self.F_获取角色等级(), self.gameServer, self.roleName)
+        
+
+    def F_获取角色等级(self):
+        pyautogui.hotkey('alt', 'w')
+        time.sleep(2)
+        角色等级位置 = [self.windowArea[0] + 595, self.windowArea[1] + 93, 40, 18]
+        path = window.F_窗口区域截图('temp_orc_info.png', 角色等级位置)
+        ret = baiduApi.cnocr文字识别2(path)
+        pyautogui.hotkey('alt', 'w')
+        return ret
 
     def focusWindow(self):
         pyautogui.moveTo(self.windowArea[0] + random.randint(400, 500),
@@ -2938,8 +2955,4 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    pyautogui.press('f9')
-    ret = baiduApi.op.FindMultiColor(
-    window.windowArea[0] + 748, window.windowArea[1] + 22, window.windowArea[0] + 800, window.windowArea[1] + 22 + 7, 'd0d0d0', '-2|1|b8b8b8', 0.8, 0)
-    if(ret[1] > 0):
-        print('人物缺蓝')
+    window.F_注册挖图角色()

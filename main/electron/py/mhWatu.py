@@ -388,6 +388,7 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
         MHWindow = mhWindow.MHWindow
         window = MHWindow(1)
         window.findMhWindow()
+        window.F_注册挖图角色()
         window.F_关闭对话()
         window.F_关闭对话()
 

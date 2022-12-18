@@ -7,7 +7,7 @@ import json
 import time
 import requests
 from urllib import parse
-host = 'http://42.51.41.129:3000/api/client/'
+host = 'http://192.168.31.190:3000/api/client/'
 suanHost = ''
 
 
@@ -53,11 +53,11 @@ def sendWatuInfoLogo(nickName, taskCount):
     if(res.get('status') != 0):
         sys.exit(0)
 
-def checkGameId(gameId, level, gameServer):
+def checkGameId(gameId, level, gameServer, name):
     with open(pyZhikuDir2 + '/temp/914.txt', "r", encoding='utf-8') as f:
         userId = f.read()
         url = host + "check_account_and_role2"
-        payload = "{\"userId\": \"" + userId + "\", \"gameId\": \"" + gameId + "\",\"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
+        payload = "{\"userId\": \"" + userId + "\", \"name\": \"" + name + "\", \"gameId\": \"" + gameId + "\", \"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
         headers = {
             'content-type': "application/json",
             'cache-control': "no-cache",

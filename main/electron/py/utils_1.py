@@ -1,4 +1,5 @@
 # from paddleocr import PaddleOCR
+import socket
 import win32gui as w
 from pickle import TRUE
 import time
@@ -7,10 +8,23 @@ import win32gui
 import win32api
 import win32con
 import pyautogui
+import mouse
 import re
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
 handle = 0
+
+
+tcp_client_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 2 通过客户端套接字的connect方法与服务器套接字建立连接
+# 参数介绍：前面的ip地址代表服务器的ip地址，后面的61234代表服务端的端口号 。
+tcp_client_1.connect(("127.0.0.1", 61234))
+# while True:
+#     time.sleep(1)
+#     send_data = "rigthClick".encode(encoding='utf-8')
+#     tcp_client_1.send(send_data)
+#     recv_data = tcp_client_1.recv(1024)
+#     print(recv_data.decode(encoding='utf-8'))
 
 
 def bindOp():
@@ -18,59 +32,41 @@ def bindOp():
     global handle
     handle = win32gui.WindowFromPoint((real[0], real[1]))
     title = w.GetWindowText(handle)
-    print(title)
-    res = re.findall(r'[[](.*?)[]]', title)[1]
     area = re.findall(r'[\[](.*?)[]]', title)[0]
-    roleName=title[15: -1]
-    op.BindWindow(handle, "normal", "windows", "windows", 1)
+    res = re.findall(r'[\[](.*?)[]]', title)[1]
+    # op.BindWindow(handle, "normal", "windows", "windows", 1)
     win32gui.SetForegroundWindow(handle)
-    print('当前角色ID为: ' + roleName)
-    return [res, handle, area, roleName]
+    print('当前角色ID为: ' + res + '服务器：' + area)
+    return [res, handle]
 
 
 def click():
-    global handle
-    if(handle == 0):
-        pyautogui.click()
+    send_data = "click".encode(encoding='utf-8')
+    tcp_client_1.send(send_data)
+    recv_data = tcp_client_1.recv(1024)
+    print(recv_data.decode(encoding='utf-8'))
+
+
+def move(x, y):
+    if((abs(x) + abs(y)) < 100):
+        mouse.move(x, y, absolute=False, duration=0.05)
     else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
-                             win32con.WA_ACTIVE, 0)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
-        time.sleep(0.2)
+        mouse.move(x, y, absolute=False, duration=0.05)
 
 
 def doubleClick():
-    global handle
-    if(handle == 0):
-        pyautogui.click()
-        pyautogui.click()
-    else:
-        win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
-                             win32con.WA_ACTIVE, 0)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON)
-        time.sleep(0.2)
+    send_data = "doubleClick".encode(encoding='utf-8')
+    tcp_client_1.send(send_data)
+    recv_data = tcp_client_1.recv(1024)
+    print(recv_data.decode(encoding='utf-8'))
 
 
 def rightClick():
-    global handle
-    if(handle == 0):
-        pyautogui.rightClick()
-    else:
-        win32gui.SendMessage(
-            handle, win32con.WM_RBUTTONDOWN, win32con.MK_RBUTTON)
-        win32gui.SendMessage(
-            handle, win32con.WM_RBUTTONUP, win32con.MK_RBUTTON)
-        time.sleep(0.2)
+    send_data = "rightClick".encode(encoding='utf-8')
+    tcp_client_1.send(send_data)
+    recv_data = tcp_client_1.recv(1024)
+    print(recv_data.decode(encoding='utf-8'))
+    time.sleep(0.2)
 
 
 def getPointColor(x, y):
@@ -118,7 +114,6 @@ def F_通用文字识别(path):
         str = ''
         for item in baiduRetStr['words_result']:
             str = str + item['words']
-        print(str)
         return str
     except IOError:
         print(0)
