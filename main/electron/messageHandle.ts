@@ -67,6 +67,15 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+     // 注入配置
+     ipcMain.on(resourcePaths.METHOD_SET_OPTION, (event, args) => {
+        logger.info('run py script: mhSetOption')
+        const result = runPyScript('mhSetOption', ["start" ,...args] )
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
     // 读取宝图
     ipcMain.on(resourcePaths.METHOD_GET_WATU_INFO, (event, args) => {
         logger.info('run py script: METHOD_GET_WATU_INFO')

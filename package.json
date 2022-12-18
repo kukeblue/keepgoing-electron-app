@@ -66,6 +66,7 @@
     },
     "dependencies": {
         "@electron/get": "^1.14.1",
+        "@types/node": "^18.11.15",
         "iconv-lite": "^0.6.3",
         "log4js": "^6.4.2",
         "moment": "^2.29.1",

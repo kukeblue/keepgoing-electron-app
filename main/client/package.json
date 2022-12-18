@@ -49,6 +49,7 @@
         "@polka/url": "^0.5.0",
         "antd": "^4.16.8",
         "axios": "^0.21.1",
+        "babel-polyfill": "^6.26.0",
         "ch-ui": "git+ssh://git@github.com:kukeblue/ch-ui.git",
         "file-loader": "^6.2.0",
         "html2canvas": "^1.4.1",

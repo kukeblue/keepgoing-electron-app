@@ -6,7 +6,7 @@ import "./index.less";
 const request = ChUtils.Ajax.request
 import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
+import { setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
 
 
 import { createContainer } from 'unstated-next'
@@ -47,6 +47,7 @@ let selectDeviceFunc: 'handleSelectJiangjunDevice' | 'handleSelectWatuDevice' | 
 let watuDeviceId = 0
 let zhuaGuiDeviceId = 0
 export function usePageStore() {
+    const userStore = UserStore.useContainer()
     useEffect(() => {
         MainThread.messageListener.pushLogHandles = [handlePushLog]
         MainThread.messageListener.pushStateHandles = [handlePushState]
@@ -64,9 +65,14 @@ export function usePageStore() {
         }).catch(() => {
             setLock(false)
         })
-
+            setTimeout(()=>{
+                const id = userStore.user?.id
+                if(id) {
+                setOption(id)
+            }
+            }, 1000)
+        
     }, [])
-    const userStore = UserStore.useContainer()
     const [showLog, setShowLog] = useState<boolean>(false)
     const [logs, setLogs] = useState<string[]>([])
     useEffect(() => {

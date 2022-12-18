@@ -22,7 +22,9 @@ export const doHanghua = (num: number) => {
 export const doUpdatePy = () => {
     (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_UPDATEPY, [])
 }
-
+export const setOption = (userId: number) => {
+    (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SET_OPTION, [userId])
+}
 
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)

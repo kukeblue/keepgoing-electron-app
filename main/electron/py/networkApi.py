@@ -11,6 +11,9 @@ host = 'http://42.51.41.129:3000/api/client/'
 suanHost = ''
 
 
+pyHome = __file__.strip('networkApi.pyc')
+pyZhikuDir2 = pyHome + 'config\images'
+
 def chRequest(method, url, data, headers):
     while True:  # 一直循环，知道访问站点成功
         try:
@@ -49,6 +52,26 @@ def sendWatuInfoLogo(nickName, taskCount):
     res = json.loads(response.text)
     if(res.get('status') != 0):
         sys.exit(0)
+
+def checkGameId(gameId, level, gameServer):
+    with open(pyZhikuDir2 + '/temp/914.txt', "r", encoding='utf-8') as f:
+        userId = f.read()
+        url = host + "check_account_and_role2"
+        payload = "{\"userId\": \"" + userId + "\", \"gameId\": \"" + gameId + "\",\"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
+        headers = {
+            'content-type': "application/json",
+            'cache-control': "no-cache",
+            'postman-token': "fe1447a3-8cbe-5a50-744d-7b016e4cd990"
+        }
+        response = chRequest(
+            "POST", url, payload.encode(), headers)
+        print(response.text)
+        res = json.loads(response.text)
+        if(res.get('status') != 0):
+            sys.exit(0)
+        f.close()
+ 
+    
 
 
 def sendWatuProfit(nickName, note):

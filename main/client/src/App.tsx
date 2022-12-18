@@ -1,4 +1,5 @@
 import React from "react";
+import 'babel-polyfill';
 import { ChUtils } from 'ch-ui'
 import Layout from './layout/index'
 import './index.less'

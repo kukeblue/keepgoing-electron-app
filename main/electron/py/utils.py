@@ -32,11 +32,11 @@ def bindOp():
     global handle
     handle = win32gui.WindowFromPoint((real[0], real[1]))
     title = w.GetWindowText(handle)
-    print(title)
+    area = re.findall(r'[\[](.*?)[]]', title)[0]
     res = re.findall(r'[\[](.*?)[]]', title)[1]
     # op.BindWindow(handle, "normal", "windows", "windows", 1)
     win32gui.SetForegroundWindow(handle)
-    print('当前角色ID为: ' + res)
+    print('当前角色ID为: ' + res + '服务器：' + area)
     return [res, handle]
 
 

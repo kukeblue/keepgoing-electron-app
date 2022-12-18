@@ -26,6 +26,7 @@ const resourcePaths = {
     METHOD_ZHANDOU: 'method_zhandou',
     METHOD_HANHUA: 'method_hanhua',
     METHOD_UPDATEPY: 'method_update_py',
+    METHOD_SET_OPTION: 'method_set_option',
 
 
 
