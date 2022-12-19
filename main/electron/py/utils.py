@@ -12,7 +12,13 @@ import mouse
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
 handle = 0
+import socket
+mode = 1
 
+
+tcp_client_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 2 通过客户端套接字的connect方法与服务器套接字建立连接
+# 参数介绍：前面的ip地址代表服务器的ip地址，后面的61234代表服务端的端口号 。
 
 def bindOp():
     real = pyautogui.position()
@@ -29,10 +35,13 @@ def bindOp():
     return [res, handle, area, roleName]
 
 
+
 def click():
-    global handle
-    if(handle == 0):
-        pyautogui.click()
+    if(mode == 2):
+        send_data = "click".encode(encoding='utf-8')
+        tcp_client_1.send(send_data)
+        recv_data = tcp_client_1.recv(1024)
+        print(recv_data.decode(encoding='utf-8'))
     else:
         win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
                              win32con.WA_ACTIVE, 0)
@@ -45,9 +54,11 @@ def click():
 
 def doubleClick():
     global handle
-    if(handle == 0):
-        pyautogui.click()
-        pyautogui.click()
+    if(mode == 2):
+        send_data = "doubleClick".encode(encoding='utf-8')
+        tcp_client_1.send(send_data)
+        recv_data = tcp_client_1.recv(1024)
+        print(recv_data.decode(encoding='utf-8'))
     else:
         win32gui.SendMessage(handle, win32con.WM_ACTIVATE,
                              win32con.WA_ACTIVE, 0)
@@ -64,8 +75,12 @@ def doubleClick():
 
 def rightClick():
     global handle
-    if(handle == 0):
-        pyautogui.rightClick()
+    if(mode == 2):
+        send_data = "rightClick".encode(encoding='utf-8')
+        tcp_client_1.send(send_data)
+        recv_data = tcp_client_1.recv(1024)
+        print(recv_data.decode(encoding='utf-8'))
+        time.sleep(0.2)
     else:
         win32gui.SendMessage(
             handle, win32con.WM_RBUTTONDOWN, win32con.MK_RBUTTON)

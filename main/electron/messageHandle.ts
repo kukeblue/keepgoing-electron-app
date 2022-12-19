@@ -76,6 +76,15 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+    // 设置驱动
+    ipcMain.on(resourcePaths.METHOD_SET_CLICK_MODE, (event, args) => {
+        logger.info('run py script: METHOD_SET_CLICK_MODE')
+        const result = runPyScript('mhSetClickMode', ["start" ,...args] )
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
     // 读取宝图
     ipcMain.on(resourcePaths.METHOD_GET_WATU_INFO, (event, args) => {
         logger.info('run py script: METHOD_GET_WATU_INFO')

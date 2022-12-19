@@ -51,7 +51,7 @@
         "electronDownload": {
             "cache": "download/electron/Cache",
             "mirror": "https://cdn.npmmirror.com/binaries/electron/",
-            "customDir": "17.1.2"
+            "customDir": "17.4.7"
         }
     },
     "keywords": [],

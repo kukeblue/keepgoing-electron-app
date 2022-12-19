@@ -27,8 +27,7 @@ const resourcePaths = {
     METHOD_HANHUA: 'method_hanhua',
     METHOD_UPDATEPY: 'method_update_py',
     METHOD_SET_OPTION: 'method_set_option',
-
-
+    METHOD_SET_CLICK_MODE: 'method_set_click_mode',
 
 
     /* *******   主服务消息    ******* */

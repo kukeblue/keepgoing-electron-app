@@ -25,6 +25,9 @@ export const doUpdatePy = () => {
 export const setOption = (userId: number) => {
     (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SET_OPTION, [userId])
 }
+export const setClickMode = (v: number) => {
+    (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SET_CLICK_MODE, [v])
+}
 
 
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
