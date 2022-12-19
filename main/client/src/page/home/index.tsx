@@ -6,7 +6,7 @@ import "./index.less";
 const request = ChUtils.Ajax.request
 import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
+import { setClickMode, setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
 
 
 import { createContainer } from 'unstated-next'
@@ -92,6 +92,8 @@ export function usePageStore() {
     const [isBee, setIsBee] = useState<boolean>(true)
     // 是否吃蓝
     const [isChilan, setIsChilan] = useState<boolean>(true)
+    // 开启硬件模拟
+    const [isYinjian, setIsYinjian] = useState<boolean>(false)
     const [isBigGhost, setIsBigGhost] = useState<boolean>(true)
     const [isAccept, setIsAccept] = useState<boolean>(true)
     const [cangkuPath, setCangkuPath] = useState<string>('建邺城');
@@ -305,10 +307,21 @@ export function usePageStore() {
     const 更新脚本 = () => {
 
     }
+    const handleChangeIsYinjian = (v: boolean) => {
+        setIsYinjian(v)
+        if(v) {
+           setClickMode(2)
+        }else {
+            setClickMode(1)
+        }
+    }
     return {
         doTaskAuth,
         handleChangeIsChilan,
         setIsChilan,
+        isYinjian,
+        setIsYinjian,
+        handleChangeIsYinjian,
         isChilan,
         setShowLog,
         showLog,
@@ -1332,10 +1345,19 @@ function HomeFeature() {
         <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.closeAllTask() }}>关闭全部脚本</Button>
         <Tabs onChange={(v) => pageStore.setFeatureTabIndex(v)} type="card" defaultActiveKey={pageStore.featureTabIndex} style={{ marginBottom: 32 }}>
             <TabPane tab="通用功能" key="1">
+                <Row className="m-b-20">
+                    <Col>
+                        <span style={{ color: '#000' }}>开启硬件驱动</span>： <Switch size="small" checked={pageStore.isYinjian} onChange={(e) => {
+                            pageStore.handleChangeIsYinjian(e)
+                            // pageStore.handleChangeIsBeen(e);
+                        }} />
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
                         <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
                     </Col>
+                    
                     <Col className="m-l-10">
                         <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
                     </Col>

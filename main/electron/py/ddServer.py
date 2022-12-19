@@ -21,8 +21,7 @@ def killport(port):
         " | awk '{print $7}' | awk -F'/' '{{ print $1 }}')"
     os.system(command)
 
-
-if __name__ == '__main__':
+def start():
     with os.popen('netstat -aon|findstr "61234"') as res:
         res = res.read().split('\n')
         result = []
@@ -63,6 +62,10 @@ if __name__ == '__main__':
                 s1.send(send_data)
         except:
             print('error')
+
+if __name__ == '__main__':
+    start()
+    
     # # 创建tcp服务端套接字
     # # 参数同客户端配置一致，这里不再重复
     # tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
