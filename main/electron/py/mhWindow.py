@@ -119,7 +119,7 @@ class MHWindow:
         pyautogui.hotkey('alt', 'w')
         time.sleep(2)
         角色等级位置 = [self.windowArea[0] + 595, self.windowArea[1] + 93, 40, 18]
-        path = window.F_窗口区域截图('temp_orc_info.png', 角色等级位置)
+        path = self.F_窗口区域截图('temp_orc_info.png', 角色等级位置)
         ret = baiduApi.cnocr文字识别2(path)
         pyautogui.hotkey('alt', 'w')
         return ret

@@ -7,7 +7,7 @@ import json
 import time
 import requests
 from urllib import parse
-host = 'http://192.168.31.190:3000/api/client/'
+host = 'http://42.51.41.129:3000/api/client/'
 suanHost = ''
 
 
@@ -193,4 +193,4 @@ def encode_base64(file):
         return parse.quote(base64_data_str)
 
 
-# suanGetHost()
+suanGetHost()

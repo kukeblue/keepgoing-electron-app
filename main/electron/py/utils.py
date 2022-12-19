@@ -8,6 +8,7 @@ import win32api
 import win32con
 import pyautogui
 import re
+import mouse
 from win32com.client import Dispatch
 op = Dispatch("op.opsoft")
 handle = 0
@@ -123,6 +124,12 @@ def F_通用文字识别(path):
     except IOError:
         print(0)
         return 0
+
+def move(x, y):
+    if((abs(x) + abs(y)) < 100):
+        mouse.move(x, y, absolute=False, duration=0.05)
+    else:
+        mouse.move(x, y, absolute=False, duration=0.05)
 
 
 def getGameVerificationCode():

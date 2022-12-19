@@ -12,6 +12,7 @@ import { setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doG
 import { createContainer } from 'unstated-next'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
+// @ts-ignore
 const { confirm } = Modal;
 import {
     DownCircleOutlined,
