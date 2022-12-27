@@ -4,10 +4,7 @@ import wmi
 import os
 import time
 import logUtil
-import sys
 import mhWindow
-import pyautogui
-import utils
 
 
 def printCmd(process):

@@ -97,7 +97,6 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
         res.append(mapAndpoint)
     jsonArr = json.dumps(res, ensure_ascii=False)
     pyautogui.hotkey('alt', 'e')
-    window.focusWindow()
     map = ''
     if(len(res) > 0):
         mapName = ''
@@ -295,18 +294,23 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True
             point = window.findImgInWindow(mapDict.get(map))
         if(point != None):
             mouse.move(point[0] + x, point[1] + y)
-        window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True)
+        window.F_小地图寻路器([ox, oy], openTab=True, 是否模糊查询=True, 是否等待寻路结束=False)
         # pyautogui.moveTo(
         #     window.windowArea[0] + 400, window.windowArea[1] + 300)
         global 上次扫描数据
         orPoint = 上次扫描数据[num - 1][2]
         window.F_打开道具()
         window.pointMove(orPoint[0], orPoint[1])
+        结束坐标Str = str(orPoint[0]) + str(orPoint[1])
+        window.F_是否结束寻路(寻路结束坐标=结束坐标Str)
         utils.rightClick()
         # utils.rightClick()
-        window.F_自动战斗()
-        window.F_判断人物宝宝低红蓝位(isChilan)
-        pyautogui.hotkey('alt', 'e')
+        是否战斗 = window.F_自动战斗()
+        红蓝充足 = window.F_判断人物宝宝低红蓝位(isChilan, 是否战斗=是否战斗)
+        if(红蓝充足 == False):
+            window.F_中途加油(是否补蓝=isChilan)
+        else:
+            pyautogui.hotkey('alt', 'e')
         if(len(other) > 0):
             point, newOther = F_获取最近的坐标点(x, y, other)
             F_点击宝图并寻路(window, map, point['realX'],
@@ -314,7 +318,7 @@ def F_点击宝图并寻路(window, map, x, y, ox, oy, num, other, isChilan=True
 
 
 loop = 1
-global 上次扫描数据
+global 上次扫描数据   
 上次扫描数据 = []
 
 
@@ -348,13 +352,23 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
                 F_点击宝图并寻路(window, map,
                           x, y, ox, oy, num, other, isChilan)
         window.F_点击小地图出入口按钮()
-        接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
-        if(接货id != None):
-            window.F_回仓库丢小号(接货id, 仓库位置)
+        
+        #再次检查有没有宝图
+        pyautogui.hotkey('alt', 'e')
+        # window.focusWindow()
+        time.sleep(1)
+        points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75)
+        if(len(points) > 1):
+            logUtil.chLog('没有挖完!!!!!!')
+            F_获取宝图信息(window, restart=1, isChilan=isChilan)
         else:
-            window.F_回仓库放东西(map, 仓库位置)
-        if(isBeen):
-            F_小蜜蜂模式(仓库位置, 0, window, isChilan)
+            接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
+            if(接货id != None):
+                window.F_回仓库丢小号(接货id, 仓库位置)
+            else:
+                window.F_回仓库放东西(map, 仓库位置)
+            if(isBeen):
+                F_小蜜蜂模式(仓库位置, 0, window, isChilan)
 
 
 def F_邀请发图(window):
@@ -408,9 +422,9 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
                     window.F_小地图寻路器([65, 30])
             else:
                 window.F_使用飞行符('建邺城')
+            time.sleep(1)
             pyautogui.press('f9')
             pyautogui.hotkey('alt', 'h')
-            time.sleep(1)
             logUtil.chLog('接货id:' + str(接货id))
             window.F_给与东西(接货id, False)
 

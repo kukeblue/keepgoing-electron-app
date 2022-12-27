@@ -1271,15 +1271,15 @@ function HomeWatu() {
                     url="/api/gameGroup/get_game_group_page?type='挖图组'"
                     columns={[
                         {
-                            title: '分组编码',
+                            title: '联动码',
                             dataIndex: 'id',
                             key: 'id',
                         },
-                        {
-                            title: '名称',
-                            dataIndex: 'name',
-                            key: 'name',
-                        },
+                        // {
+                        //     title: '名称',
+                        //     dataIndex: 'name',
+                        //     key: 'name',
+                        // },
                         {
                             title: '服务器',
                             dataIndex: 'gameServer',
@@ -1356,7 +1356,7 @@ function HomeFeature() {
                 </Row>
                 <Row>
                     <Col>
-                        <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>测试脚本</Button>
+                        <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>驱动服务</Button>
                     </Col>
                     
                     <Col className="m-l-10">

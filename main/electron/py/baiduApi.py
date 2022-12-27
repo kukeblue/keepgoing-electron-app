@@ -21,7 +21,7 @@ APP_ID = '25713120'
 API_KEY = 'GOkNrLxVH3cV8I7DVpXx67mh'
 SECRET_KEY = '9MTEeMd2nNcm457CsGTGNV5ddkISAuI1'
 client = None
-with open(pyZhikuDir2 + '/temp/913.txt', "r", encoding='utf-8') as f:
+with open(pyZhikuDir2 + '\\temp\\913.txt', "r", encoding='utf-8') as f:
     data = f.read()
     textAppData = data.split(',')
     f.close()
@@ -165,7 +165,10 @@ def F_查找等级(area):
 def cnocr文字识别2(path):
     res = ocr.ocr_for_single_line(path)
     print(res)
-    return ''.join(str(i) for i in res[0]) 
+    if 'text' in res:
+        print(res['text'])
+    else:
+        return ''.join(str(i) for i in res[0]) 
     # return ''
 
 

@@ -14,6 +14,9 @@ suanHost = ''
 pyHome = __file__.strip('networkApi.pyc')
 pyZhikuDir2 = pyHome + 'config\images'
 
+
+
+
 def chRequest(method, url, data, headers):
     while True:  # 一直循环，知道访问站点成功
         try:

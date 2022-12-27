@@ -12,8 +12,11 @@ import random
 
 def setOption(userId):
     pyHome = __file__.strip('mhSetOption.pyc')
-    pyImageDir = pyHome + '\config\images'
-    with open(pyImageDir + '/temp/914.txt', "w", encoding='utf-8') as f:
+    pyImageDir = pyHome + 'config\images'
+    if(pyImageDir[0] == ":"):
+        pyImageDir = "C" + pyImageDir
+    print(pyImageDir)
+    with open(pyImageDir + '\\temp\\914.txt', "w", encoding='utf-8') as f:
             f.write(str(userId))
             f.close()
 
