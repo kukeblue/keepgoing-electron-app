@@ -129,9 +129,11 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
             挖图导航(window, map)
             time.sleep(2)
             if(window.获取当前地图() != map):
+                window.F_关闭对话()
                 挖图导航(window, map)
                 time.sleep(2)
                 if(window.获取当前地图() != map):
+                    window.F_关闭对话()
                     挖图导航(window, map)
         window.F_点击小地图出入口按钮()
         with open(window.pyImageDir + '/temp/911.txt', "w", encoding='utf-8') as f:

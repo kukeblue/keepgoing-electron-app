@@ -6,14 +6,17 @@ import random
 import json
 import time
 import requests
+import logUtil
 from urllib import parse
 host = 'http://42.51.41.129:3000/api/client/'
 suanHost = ''
 
 
 pyHome = __file__.strip('networkApi.pyc')
-pyZhikuDir2 = pyHome + 'config\images'
 
+pyZhikuDir2 = pyHome + 'config\images'
+if(pyZhikuDir2[0] == ":"):
+    pyZhikuDir2 = "C" + pyZhikuDir2
 
 
 
@@ -117,9 +120,9 @@ def 获取空闲接货人ID(gameId, work):
 
 
 def doUpdateRoleStatus(gameId, status):
-    print('修改角色状态')
-    print(gameId)
-    print(status)
+    logUtil.chLog('修改角色状态')
+    logUtil.chLog(gameId)
+    logUtil.chLog(status)
     url = host + "update_game_role_status"
     payload = "{\n\t\"gameId\": \""+gameId + \
         "\",\n\t\"status\": \""+status+"\"\n}"

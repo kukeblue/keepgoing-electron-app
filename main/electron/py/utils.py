@@ -20,7 +20,8 @@ pyZhikuDir2 = pyHome + 'config\images'
 tcp_client_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # 2 通过客户端套接字的connect方法与服务器套接字建立连接
 # 参数介绍：前面的ip地址代表服务器的ip地址，后面的61234代表服务端的端口号 。
-
+if(pyZhikuDir2[0] == ":"):
+    pyZhikuDir2 = "C" + pyZhikuDir2
 
 with open(pyZhikuDir2 + '/temp/915.txt', "r", encoding='utf-8') as f:
     mode = f.read()

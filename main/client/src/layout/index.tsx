@@ -93,7 +93,7 @@ function Layout(props: LayoutProps) {
         setVisiblePopoverId((v) => '')
         history.push(url)
     }
-
+    const level = userStore.user?.vipCard.level
     const history = useHistory()
     const sider = {
         currentItem: 1,
@@ -118,50 +118,28 @@ function Layout(props: LayoutProps) {
                 click: () => {
                     history.push('/report')
                 },
-            },
-            {},
-            {},
-            {},
-            {},
-            // {
-            //     text: '设备管理',
-            //     icon: <MobileOutlined style={{ fontSize: 24 }} />,
-            //     click: () => {
-            //         history.push('/device')
-            //     }
-            // },
-            // {
-            //     text: '任务管理',
-            //     icon: <CalendarOutlined style={{ fontSize: 24 }} />,
-            //     click: () => {
-            //         history.push('/task/task_list')
-            //     }
-            // },
-            // {
-            //     text: '任务日志',
-            //     icon: <DashboardOutlined style={{ fontSize: 24 }} />,
-            //     click: () => {
-            //         history.push('/log')
-            //     }
-            // },
-            // {
-            //     text: '收支报表',
-            //     icon: <TransactionOutlined style={{ fontSize: 24 }} />,
-            //     click: () => {
-            //         history.push('/report')
-            //     }
-            // },
-            {
-                text: '退出登录',
-                icon: <TransactionOutlined style={{ fontSize: 24 }} />,
-                click: () => {
-                    userStore.setIsLogin(false)
-                    //    window.location.href = '/login'
-                }
             }
+           
         ]
     }
-    console.log('Layout 刷新')
+    if(level && level > 999) {
+        sider.siderItems.push({
+            text: '用户管理',
+            icon: <TransactionOutlined style={{ fontSize: 24 }} />,
+            click: () => {
+                history.push('/user')
+            },
+        })
+    }
+    sider.siderItems.push({
+        text: '退出登录',
+        icon: <TransactionOutlined style={{ fontSize: 24 }} />,
+        click: () => {
+            userStore.setIsLogin(false)
+            //    window.location.href = '/login'
+        }
+    })
+    
     // @ts-ignore
     return userStore.isLogin ? <ChLayout header={<Header />} adminIcon={<img style={{ borderRadius: '50%', width: '60px', height: 'auto' }} src={image_robot} />} sider={sider}>
         <div className='app-content'>

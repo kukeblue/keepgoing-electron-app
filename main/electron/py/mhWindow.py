@@ -637,20 +637,24 @@ class MHWindow:
         time.sleep(0.3)
 
     def F_买飞行符(self):
+        self.F_使用长安城飞行棋('长安驿站')
         while True:
-            self.F_使用长安城飞行棋('长安驿站')
             time.sleep(1)
-            self.F_小地图寻路器([252, 35])
+            self.F_小地图寻路器([252, 34], 是否关闭对话=False)
             pyautogui.press('f9')
             pyautogui.hotkey('alt', 'h')
             point = self.findImgInWindow('all-ca-ldr.png', confidence=0.75)
             if(point == None):
                 print('继续寻找罗道人')
+                self.F_移动到游戏区域坐标(500,136)
+                utils.click()
             else:
                 self.pointMove(point[0], point[1])
                 utils.click()
+            time.sleep(1)
+            point = self.findImgInWindow('all-luodaoren-duihua.png')
+            if(point != None): 
                 break
-        time.sleep(1)
         self.F_移动到游戏区域坐标(174, 340)
         utils.click()
         time.sleep(1)
@@ -740,9 +744,9 @@ class MHWindow:
         #     self.pointMove(point[0] + 10, point[1] + 10)
         #     utils.rightClick()
 
-    def F_是否结束寻路(self, date=0.2, 寻路结束坐标=""):
+    def F_是否结束寻路(self, date=0.2, 寻路结束坐标="", 是否关闭对话=True):
         坐标 = self.获取当前坐标()
-        if(寻路结束坐标 == ""):
+        if(寻路结束坐标 == "" and 是否关闭对话==True):
             self.F_关闭对话()
         count = 0
         while(True):
@@ -1203,8 +1207,8 @@ class MHWindow:
                     # print(point2)
         else:
             print('没找到')
-        print('有货格子数量')
-        print(len(有货格子))
+        logUtil.chLog('有货格子数量')
+        logUtil.chLog(len(有货格子))
         if(len(有货格子) == 0):
             self.F_移动到游戏区域坐标(407, 439)
             utils.rightClick()
@@ -1214,9 +1218,9 @@ class MHWindow:
             pyautogui.hotkey('alt', 'f')
             if(是否上报收益 == True):
                 networkApi.sendWatuProfit(self.gameId, '')
-                networkApi.doUpdateRoleStatus(self.gameId, '空闲')
+            networkApi.doUpdateRoleStatus(self.gameId, '空闲')
         if(len(有货格子) > 0):
-            print('有货格子循环')
+            logUtil.chLog('有货格子循环')
             print(math.ceil(len(有货格子)/3))
             给予次数 = math.ceil(len(有货格子)/3)
             收益 = ''
@@ -1247,7 +1251,6 @@ class MHWindow:
                         item = 有货格子[p]
                         self.F_移动到游戏区域坐标(item[0] - self.windowArea[0] + 25,
                                          item[1] - self.windowArea[1] + 25)
-                        time.sleep(0.5)
                         utils.click()
                         utils.click()
                         time.sleep(0.2)
@@ -1273,12 +1276,12 @@ class MHWindow:
                 logUtil.chLog('开始上报收益')
                 networkApi.sendWatuProfit(self.gameId, 收益)
                 logUtil.chLog('上报收益完毕')
-        
 
     def F_卖装备(self):
         self.F_使用飞行符('长安城')
+        self.F_关闭对话()
         while True:
-            self.F_小地图寻路器([461, 203], None)
+            self.F_小地图寻路器([461, 203], None, 是否关闭对话=False)
             pyautogui.press('f9')
             time.sleep(1)
             self.F_移动到游戏区域坐标(321, 307)
@@ -1287,6 +1290,11 @@ class MHWindow:
             point = self.findImgInWindow('all-zbsg.png')
             if(point != None):
                 break
+            else:
+                time.sleep(3)
+                point = self.findImgInWindow('all-zbsg.png')
+                if(point != None):
+                    break
         
         self.F_移动到游戏区域坐标(174, 337)
         time.sleep(0.5)
@@ -1296,10 +1304,12 @@ class MHWindow:
         while True:
             if(point != None):
                 break
-            time.sleep(0.1)
+            time.sleep(0.5)
             point = self.findImgInWindow('all-maizhuanbei-top.png')
         有货格子 = []
+        time.sleep(0.5)
         if(point != None):
+            point = self.findImgInWindow('all-maizhuanbei-top2.png', confidence=0.9, area=(242,121, 199, 83))
             print(point)
             卖东西区域top = [point[0]+2, point[1] + 27]
         卖东西区域 = [卖东西区域top[0], 卖东西区域top[1], 250, 200]
@@ -1308,11 +1318,8 @@ class MHWindow:
             left = (i % 5) * 50
             height = int(i / 5) * 50
             blockArea = (卖东西区域top[0] + left, 卖东西区域top[1] + height, 50, 50)
-            # print('第' + str(i + 1) + '个格子')
-            # window.F_窗口区域截图('all-daoju-empty-' +
-            #                 str(i) + '.png', blockArea)
             point = pyautogui.locateOnScreen(
-                self.pyImageDir + self.F_获取设备图片('all-daoju-empty-' + str(i) + '.png'), region=blockArea, grayscale=True, confidence=0.90)
+                self.pyImageDir + self.F_获取设备图片('all-daoju-empty-' + str(i) + '.png'), region=blockArea, grayscale=True, confidence=0.9)
             if(point == None):
                 print('第' + str(i + 1) + '个格子有货')
                 有货格子.append(blockArea)
@@ -1323,7 +1330,9 @@ class MHWindow:
             time.sleep(1)
             ret = baiduApi.F_查找等级([self.windowArea[0], self.windowArea[1],
                                    self.windowArea[0] + 600,  self.windowArea[1] + 800])
+            print('找到等级-0')
             print(ret)
+            print('找到等级-1')
             if(ret != '' and ret != None and int(ret) < 50):
                 utils.click()
                 self.F_移动到游戏区域坐标(404, 440)
@@ -1360,7 +1369,25 @@ class MHWindow:
         self.F_打开道具()
         time.sleep(1)
         result = pyautogui.locateOnScreen(
-            self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+            self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=[self.daojuArea[0] + 204, self.daojuArea[1] + 156, 70, 70], grayscale=True, confidence=0.75)
+        if (result == None):
+            point = pyautogui.locateOnScreen(
+                self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=self.daojuArea, grayscale=True, confidence=0.75)
+            if point != None:
+                self.pointMove(point[0], point[1])
+                utils.click()
+                time.sleep(0.2)
+                self.pointMove(
+                    self.daojuArea[0] + 233, self.daojuArea[1] + 176)
+                utils.click()
+                time.sleep(0.2)
+                self.focusWindow()
+                point = pyautogui.locateOnScreen(
+                    self.pyImageDir + self.F_获取设备图片('all-feixing.png'), region=[self.daojuArea[0] + 201, self.daojuArea[1] + 160, self.daojuArea[2], self.daojuArea[3]], grayscale=True, confidence=0.75)
+                if(point != None):
+                    return True
+        else:
+            return True
         if (result == None):
             self.pointMove(self.daojuArea[0] + 50, self.daojuArea[1] + 224)
             utils.click()
@@ -2115,10 +2142,12 @@ class MHWindow:
         self.F_导航到大唐国境()
         self.F_小地图寻路器([5, 76], True)
         pyautogui.press('f9')
-        self.F_移动到游戏区域坐标(40, 222)
+        self.F_移动到游戏区域坐标(40, 222)      
         utils.doubleClick()
         time.sleep(2)
-        self.F_小地图寻路器([634, 83], True)
+        self.F_点击小地图出入口按钮()
+        self.F_小地图寻路器([634, 76], True)
+        self.F_点击小地图出入口按钮()
         pyautogui.press('f9')
         time.sleep(0.2)
         self.F_移动到游戏区域坐标(680, 222)
@@ -2305,7 +2334,7 @@ class MHWindow:
         utils.click()
         time.sleep(0.5)
 
-    def F_小地图寻路器(self, 目标坐标, 是否模糊查询=None, 等到时间=0, openTab=False, 是否等待寻路结束=True):
+    def F_小地图寻路器(self, 目标坐标, 是否模糊查询=None, 等到时间=0, openTab=False, 是否等待寻路结束=True, 是否关闭对话=True):
         time.sleep(0.5)
         if(openTab == False):
             pyautogui.press('tab')
@@ -2387,7 +2416,7 @@ class MHWindow:
         if(是否等待寻路结束 == True):
             if(等到时间 == 0):
                 self.focusWindow()
-                self.F_是否结束寻路()
+                self.F_是否结束寻路(是否关闭对话=是否关闭对话)
             else:
                 time.sleep(等到时间)
 
@@ -2630,7 +2659,7 @@ class MHWindow:
                 time.sleep(1)
                 break
             else:
-                self.F_小地图寻路器([354, 247], True)
+                self.F_小地图寻路器([354, 247], True, 是否关闭对话=False)
                 pyautogui.press('f9')
                 pyautogui.hotkey('alt', 'h')
                 self.F_移动到游戏区域坐标(286, 333)
@@ -2701,7 +2730,6 @@ class MHWindow:
         self.F_给与东西(接货id)
 
     def F_回仓库放东西(self, map, 仓库地点='长安城'):
-
         if(仓库地点 == '长安城'):
             self.F_使用飞行符('长安城')
             time.sleep(1)
@@ -2932,6 +2960,7 @@ class MHWindow:
         # if(ret != None):
         #     print(ret)
         #     return ret
+    
 
     def F_获取灯谜(self):
         logUtil.chLog('F_获取灯谜')
@@ -2972,6 +3001,9 @@ class MHWindow:
                     utils.click()
 
 
+    
+
+
 def 挖图导航(window, map):
     if(map == '江南野外'):
         window.F_导航到江南野外()
@@ -3007,8 +3039,48 @@ def 挖图导航(window, map):
         window.F_导航到五庄观()
 
 
+
+class EventStrand:
+    isFinish = False
+    window = None
+
+    def __init__(self, window):
+        print('init')
+        self.window = window
+    
+    def compareImg(self ,name, confidence=0.75, area=(0, 0, 0, 0), checkFinish=False):
+        if(self.isFinish == False):
+            point = window.findImgInWindow(name, confidenc=confidence, area=area)
+            if(checkFinish and point != None):
+                self.isFinish = True
+        return self
+
+    
+    def compareImgAndClick(self ,name, confidence=0.75, area=(0, 0, 0, 0), checkFinish=False):
+        if(self.isFinish == False):
+            point = window.findImgInWindow(name, confidenc=confidence, area=area)
+            if(point != None):
+                self.window.pointMove(point[0], point[1])
+                utils.click()
+            if(checkFinish and point != None):
+                self.isFinish = True
+        return self
+
+    def compareImgAndRightClick(self ,name, confidence=0.75, area=(0, 0, 0, 0), checkFinish=False):
+        if(self.isFinish == False):
+            point = window.findImgInWindow(name, confidenc=confidence, area=area)
+            if(point != None):
+                self.window.pointMove(point[0], point[1])
+                utils.rightClick()
+            if(checkFinish and point != None):
+                self.isFinish = True
+        return self
+
+
 if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_使用长安城飞行棋('红色长安城导标旗坐标_杂货店')
+    # window.F_使用长安城飞行棋('红色长安城导标旗坐标_杂货店')
+    point = window.F_卖装备()
+    

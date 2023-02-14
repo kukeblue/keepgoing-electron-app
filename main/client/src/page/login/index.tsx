@@ -4,6 +4,7 @@ import { ChForm, ChUtils, FormItemType } from "ch-ui";
 import { Button } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UserStore } from "../../store/userStore";
+import { setOption } from "../../call";
 
 
 function Login() {
@@ -28,12 +29,15 @@ function Login() {
                     userStore.setUser(res.data.user)
                     userStore.setIsLogin(true)
                     userStore.setToken(res.data.token)
+                    setTimeout(()=>{
+                        const id = res.data.user.id
+                        if(id) {
+                            setOption(id)
+                        }
+                    }, 1000)
                     // @ts-ignore
                 }
             }))
-        // () => {
-
-        // })
 
     }
     return <div className='login-page page flex-column-all-center'>

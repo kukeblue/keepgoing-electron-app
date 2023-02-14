@@ -1266,7 +1266,6 @@ function HomeWatu() {
                 <Button onClick={()=>getMonitorPageData()} className="m-b-10 m-l-10" size="small" type="primary"> 角色监控 </Button>
                 <ChTablePanel
                     ref={tableRef}
-                    disablePagination={true}
                     formData={[]}
                     url="/api/gameGroup/get_game_group_page?type='挖图组'"
                     columns={[
@@ -1312,7 +1311,7 @@ function HomeFeature() {
     const userStore = UserStore.useContainer()
     const pageStore = PageStore.useContainer()
     return !pageStore.lock ? <div></div> : <div className='home-feature'>
-        <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-r-5' size="small" onClick={() => {
+        {/* <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-r-5' size="small" onClick={() => {
             const id = userStore.user?.id
             if (id && id != 1) {
 
@@ -1342,8 +1341,9 @@ function HomeFeature() {
                 });
             }
             pageStore.setShowLog(true)
-        }}>更新脚本</Button>
-        <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.closeAllTask() }}>关闭全部脚本</Button>
+        }}>更新脚本</Button> */}
+        <Button type="primary" icon={<CloseCircleOutlined />} className='fs-12 m-l-5 m-b-10' size="small" onClick={() => { pageStore.closeAllTask() }}>关闭全部脚本</Button>
+        <br/>
         <Tabs onChange={(v) => pageStore.setFeatureTabIndex(v)} type="card" defaultActiveKey={pageStore.featureTabIndex} style={{ marginBottom: 32 }}>
             <TabPane tab="通用功能" key="1">
                 <Row className="m-b-20">

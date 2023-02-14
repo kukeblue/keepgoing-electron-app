@@ -14,6 +14,8 @@ import Log from "./page/log";
 import Device from "./page/device";
 import Report from "./page/report";
 import Home from "./page/home";
+import User from "./page/user";
+
 import TaskConfig from "./page/taskConfig";
 import { ConfigProvider } from "antd";
 
@@ -54,6 +56,9 @@ export function App() {
                         </Route>
                         <Route path="/report">
                             <Report />
+                        </Route>
+                        <Route path="/user">
+                            <User />
                         </Route>
                         <Route path="/">
                             <Home />

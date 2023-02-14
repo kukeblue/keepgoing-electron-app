@@ -56,21 +56,6 @@ function Account() {
                     dataIndex: 'gameServer',
                     key: 'gameServer',
                 },
-                // {
-                //     title: '运行手机',
-                //     dataIndex: 'phone',
-                //     key: 'phone',
-                // },
-                // {
-                //     title: '是否在线',
-                //     dataIndex: 'online',
-                //     key: 'online',
-                // },
-                // {
-                //     title: '操作',
-                //     dataIndex: 'option',
-                //     key: 'option',
-                // }
             ]}
             url='/api/game_account/get_game_account_page'
             formData={[
