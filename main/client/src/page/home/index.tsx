@@ -1476,7 +1476,12 @@ function Home() {
                         return <div>{item}</div>
                     })}
                 </div>
-                <div style={{marginLeft: '60px'}} className="m-t-15">
+                <div style={{position: 'relative', left: -10}} className="m-t-15 flex">
+                    <Button onClick={()=>{
+                        userStore.setIsLogin(false)
+                    }} size="small" icon={<EnvironmentOutlined />}>
+                        注销
+                    </Button>
                     <Button size="small" type="primary" icon={<EnvironmentOutlined />}>
                         vip到期时间: {userStore.user?.vipCard && moment(userStore.user?.vipCard?.endTime * 1000).format('YYYY-MM-DD')}
                     </Button>

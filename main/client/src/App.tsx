@@ -25,7 +25,7 @@ const env = APP_ENV
 console.log('Running App version ' + APP_ENV);
 ChUtils.Ajax.RequestConfig.config = {
     // @ts-ignore
-    baseURL: env === 'dev' ? 'http://42.51.41.129:3000' : 'http://42.51.41.129:3000',
+    baseURL: env === 'dev' ? 'http://42.51.41.129:3001' : 'http://42.51.41.129:3001',
     headers: {
         'Content-Type': 'application/json',
         token: localStorage.getItem('token')

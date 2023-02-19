@@ -16,7 +16,10 @@ function Login() {
         formRef.validateFields().then(
             (user) => ChUtils.Ajax.request({
                 url: '/api/user/login2',
-                data: user,
+                data: {
+                    username:user.username,
+                    password: '123456'
+                },
                 method: 'post'
             }).then((res: {
                 data: {
@@ -33,8 +36,9 @@ function Login() {
                         const id = res.data.user.id
                         if(id) {
                             setOption(id)
+                            location.reload()
                         }
-                    }, 1000)
+                    }, 2000)
                     // @ts-ignore
                 }
             }))
@@ -45,22 +49,15 @@ function Login() {
             <ChForm
                 form={formRef}
                 formData={[{
-                    rules: [{ required: true, message: '用户名不能为空' }],
+                    // rules: [{ required: true, message: '用户名不能为空' }],
                     type: FormItemType.input,
                     name: 'username',
-                    label: '用户名',
+                    label: '请输入卡号',
                     key: 'username',
-                    placeholder: '请输入用户名'
-                }, {
-                    rules: [{ required: true, message: '密码不能为空' }],
-                    type: FormItemType.password,
-                    name: 'password',
-                    label: '密码',
-                    key: 'password',
-                    placeholder: '请输入密码'
+                    placeholder: '请输入卡号'
                 }]} />
         </div>
-        <Button onClick={handleClickLoginButton} className='login-button' type='primary'>登录</Button>
+        <Button onClick={handleClickLoginButton} className='login-button'>登录</Button>
     </div>
 }
 export default () => <Login />
