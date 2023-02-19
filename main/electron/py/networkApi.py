@@ -8,6 +8,7 @@ import time
 import requests
 import logUtil
 from urllib import parse
+import win32api,win32con
 host = 'http://42.51.41.129:3000/api/client/'
 suanHost = ''
 
@@ -60,22 +61,24 @@ def sendWatuInfoLogo(nickName, taskCount):
         sys.exit(0)
 
 def checkGameId(gameId, level, gameServer, name):
-    with open(pyZhikuDir2 + '/temp/914.txt', "r", encoding='utf-8') as f:
-        userId = f.read()
-        url = host + "check_account_and_role2"
-        payload = "{\"userId\": \"" + userId + "\", \"name\": \"" + name + "\", \"gameId\": \"" + gameId + "\", \"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
-        headers = {
-            'content-type': "application/json",
-            'cache-control': "no-cache",
-            'postman-token': "fe1447a3-8cbe-5a50-744d-7b016e4cd990"
-        }
-        response = chRequest(
-            "POST", url, payload.encode(), headers)
-        print(response.text)
-        res = json.loads(response.text)
-        if(res.get('status') != 0):
-            sys.exit(0)
-        f.close()
+    fp = open(r"C:\config.txt", 'a+')
+    fp.seek(0, 0)
+    config = json.loads(fp.read())
+    userId = str(config["userId"])
+    url = host + "check_account_and_role2"
+    payload = "{\"userId\": \"" + userId + "\", \"name\": \"" + name + "\", \"gameId\": \"" + gameId + "\", \"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
+    headers = {
+        'content-type': "application/json",
+        'cache-control': "no-cache",
+        'postman-token': "fe1447a3-8cbe-5a50-744d-7b016e4cd990"
+    }
+    response = chRequest(
+        "POST", url, payload.encode(), headers)
+    print(response.text)
+    res = json.loads(response.text)
+    if(res.get('status') != 0):
+        sys.exit(0)
+    fp.close()
  
     
 
@@ -96,7 +99,19 @@ def sendWatuProfit(nickName, note):
     response = chRequest(
         "POST", url, payload.encode(), headers)
     print(response.text)
-
+    res = json.loads(response.text)
+    if(res.get('status') == 0):
+        print('success')
+        print(res.get('data').get('monitor').get('baotuCount'))
+        fp = open(r"C:\config.txt", 'a+')
+        fp.seek(0, 0)
+        config = json.loads(fp.read())
+        maxBaotu = str(config["maxBaotu"])
+        baotuCount = res.get('data').get('monitor').get('baotuCount')
+        fp.close()
+        if(int(baotuCount) > int(maxBaotu)):
+            win32api.MessageBox(0, "已经完成最大挖图数", "提醒",win32con.MB_OK)
+    time.sleep(3)   
 
 def 获取空闲接货人ID(gameId, work):
     while True:

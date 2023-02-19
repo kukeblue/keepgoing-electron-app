@@ -3,18 +3,7 @@ import socket
 from ctypes import *
 import time
 import os
-print("Load DD!")
 pyHome = __file__.strip('test.pyc')
-
-dd_dll = windll.LoadLibrary(pyHome + '\config\DD94687.64.dll')
-time.sleep(2)
-
-st = dd_dll.DD_btn(0)  # DD Initialize
-if st == 1:
-    print("OK")
-else:
-    print("Error")
-
 
 def killport(port):
     command = "kill -9 $(netstat -nlp | grep :"+str(port) + \
@@ -30,8 +19,12 @@ if __name__ == '__main__':
             temp = [i for i in line.split(' ') if i != '']
             if len(temp) > 4:
                 result.append(temp[4])
-    for i in result:
-        os.kill(int(i), signal.SIGINT)
+    if(len(result) > 0):
+        for i in result:
+            os.kill(int(i), signal.SIGINT)
+    else:
+        # dd_dll = windll.LoadLibrary(pyHome + '\config\DD94687.64.dll')
+        # st = dd_dll.DD_btn(0)  # DD Initialize
     while True:
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

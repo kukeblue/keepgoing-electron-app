@@ -393,8 +393,8 @@ class MHWindow:
         当前坐标 = str(point)
         map = self.获取当前地图()
         if(map == '建邺城'):
-            if(当前坐标 != '6530'):
-                self.F_小地图寻路器([65, 30])
+            if(当前坐标 != '6131'):
+                self.F_小地图寻路器([61, 31])
         else:
             self.F_使用飞行符('建邺城')   
         self.F_发车检查(是否补蓝=是否补蓝)   
@@ -429,8 +429,8 @@ class MHWindow:
         if(是否有红 == False):
             print('呼叫补红')
             if(map == '建邺城'):
-                if(当前坐标 != '6530'):
-                    self.F_小地图寻路器([65, 30])
+                if(当前坐标 != '6131'):
+                    self.F_小地图寻路器([61, 31])
             else:
                 self.F_使用飞行符('建邺城') 
             networkApi.doUpdateRoleStatus(self.gameId, '补红')
@@ -454,8 +454,8 @@ class MHWindow:
         if(是否补蓝 and 是否有蓝 == False):
             print('呼叫补蓝')
             if(map == '建邺城'):
-                if(当前坐标 != '6530'):
-                    self.F_小地图寻路器([65, 30])
+                if(当前坐标 != '6131'):
+                    self.F_小地图寻路器([61, 31])
             else:
                 self.F_使用飞行符('建邺城') 
             networkApi.doUpdateRoleStatus(self.gameId, '补蓝')
@@ -1278,13 +1278,18 @@ class MHWindow:
                 logUtil.chLog('上报收益完毕')
 
     def F_卖装备(self):
-        self.F_使用飞行符('长安城')
+        a = random.choice((-1, 1))
+        if(a == 1):
+            self.F_使用飞行符('长安城')
+        else:
+            self.F_使用长安城飞行棋('江南野外出口')
+        time.sleep(1)
         self.F_关闭对话()
         while True:
-            self.F_小地图寻路器([461, 203], None, 是否关闭对话=False)
+            self.F_小地图寻路器([464, 16], None, 是否关闭对话=False)
             pyautogui.press('f9')
             time.sleep(1)
-            self.F_移动到游戏区域坐标(321, 307)
+            self.F_移动到游戏区域坐标(301, 297)
             utils.click()
             time.sleep(1)
             point = self.findImgInWindow('all-zbsg.png')

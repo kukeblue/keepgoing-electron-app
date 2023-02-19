@@ -413,15 +413,22 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
         window.F_关闭对话()
         window.focusWindow()
 
-    if(restart != 1 and 首次启动 == True):
+    _restart = 0;
+    window.F_打开道具()
+    time.sleep(0.5)
+    point = window.findImgInWindow('daoju_baotu.png')
+    if(point != None and point[0] > 0):
+        _restart = 1
+    window.F_关闭道具()
+    if(_restart != 1 and 首次启动 == True):
         接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
         if(接货id != None):
             point = window.获取当前坐标()
             当前坐标 = str(point)
             map = window.获取当前地图()
             if(map == '建邺城'):
-                if(当前坐标 != '6530'):
-                    window.F_小地图寻路器([65, 30])
+                if(当前坐标 != '6131'):
+                    window.F_小地图寻路器([61, 31])
             else:
                 window.F_使用飞行符('建邺城')
             time.sleep(1)
@@ -436,7 +443,7 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
         time.sleep(1)
         point = window.findImgInWindow('daoju_baotu.png')
         if(point != None and point[0] > 0):
-            if(restart != 1):
+            if(_restart != 1):
                 time.sleep(10)
             window.F_使用酒肆和打坐()
             window.F_发车检查(isChilan)
@@ -444,7 +451,7 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
             window.F_吃香()
             pyautogui.hotkey('alt', 'e')
             window.F_点击自动()
-            F_获取宝图信息(window, restart=restart)
+            F_获取宝图信息(window, restart=_restart)
             break
         else:
             # window.findMhWindow()

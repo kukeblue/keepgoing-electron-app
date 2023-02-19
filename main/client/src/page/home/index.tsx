@@ -1,14 +1,15 @@
 
 import React, { useEffect, useState, useRef } from "react";
-import { Drawer, Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
+import { Radio, Space, Drawer, Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
 import { TDevice, TGameAccount, TGameRole, TWatuGroup } from "../../typing";
 import "./index.less";
 const request = ChUtils.Ajax.request
 import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
 import { setClickMode, setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
-
-
+import image_bg from '../../assets/images/bg2.png'
+import { SearchOutlined } from '@ant-design/icons';
+import moment from 'moment'
 import { createContainer } from 'unstated-next'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -21,7 +22,8 @@ import {
     PlusSquareOutlined,
     ScanOutlined,
     SettingOutlined,
-    ToolOutlined
+    ToolOutlined,
+    EnvironmentOutlined
     // @ts-ignore
 } from '@ant-design/icons';
 import ChMhMapTool from "../../components/ChMhMapTool";
@@ -29,6 +31,7 @@ import { UserStore } from "../../store/userStore";
 import Account from "../account";
 import TextArea from "antd/lib/input/TextArea";
 import Item from "antd/lib/list/Item";
+import { userInfo } from "os";
 
 type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook, usePage } = ChUtils.chHooks
@@ -75,7 +78,7 @@ export function usePageStore() {
         
     }, [])
     const [showLog, setShowLog] = useState<boolean>(false)
-    const [logs, setLogs] = useState<string[]>([])
+    const [logs, setLogs] = useState<string[]>(['等待初始化'])
     useEffect(() => {
         // setLogs([])
     }, [showLog])
@@ -91,6 +94,8 @@ export function usePageStore() {
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
+    const [maxBaotu, setMaxBaotu] = useState<number>(300)
+
     // 是否吃蓝
     const [isChilan, setIsChilan] = useState<boolean>(true)
     // 开启硬件模拟
@@ -106,7 +111,7 @@ export function usePageStore() {
     const { optionsMap: deviceMap, options: deviceOptions } = useOptionFormListHook({ url: '/api/device/get_device_list', query: {} })
     const { optionsMap: accountMap, options: accountOptions, list: accountList } = useOptionFormListHook({ url: '/api/game_account/get_game_account_options', query: {} })
     const handlePushLog = (log: string) => {
-        setLogs((logs) => [...logs, log])
+        // setLogs((logs) => [...logs, log])
     }
     const handlePushState = (processState: any) => { setProcessState(processState) }
     const handleClickPreviewDevice = (device: TDevice) => {
@@ -123,20 +128,22 @@ export function usePageStore() {
     }
     const handleKillProcess = (pid: string) => {
         doKillProcess(pid)
-        message.success('操作成功')
+        // message.success('执行成功')
     }
     const handleGetWatuInfo = (restart = 0) => {
         if (isBee) {
             setShowLog(true)
-            message.success('操作成功')
+           
+            // message.success('执行成功')
             // @ts-ignore
             doBee(cangkuPath, restart, window.isChilan)
         } else {
             setShowLog(true)
-            message.success('操作成功')
+            // message.success('执行成功')
             // @ts-ignore
             doGetWatuInfo(window.isChilan)
         }
+        setLogs(['启动脚本成功！'])
     }
     const doTaskAuth = (callback: Function) => {
         request({
@@ -153,17 +160,18 @@ export function usePageStore() {
     }
     const closeAllTask = () => {
         setShowLog(false)
-        message.success('清理后台脚本');
+        // message.success('关闭脚本');
+        setLogs(['关闭脚本']);
         doCloseAllTask()
     }
     const throwLitter = () => {
         setShowLog(true)
-        message.success('操作成功');
+        // message.success('执行成功');
         doThrowLitter(watuDeviceId)
     }
     const sellEquipment = () => {
         setShowLog(true)
-        message.success('操作成功');
+        // message.success('执行成功');
         doSellEquipment(watuDeviceId)
     }
     const handleGetWatuInfoReply = (data: any) => {
@@ -214,7 +222,7 @@ export function usePageStore() {
                 const device: TDevice = deviceMap[res.deviceId]
                 handleClickLinkDevice(device)
                 setShowSelectDeviceModal(false)
-                message.success('导入将军令中，请稍后...')
+                // message.success('导入将军令中，请稍后...')
             }
         })
     }
@@ -235,11 +243,19 @@ export function usePageStore() {
         setCurrentTask('test')
         setIsTasking(true)
         setShowLog(true)
-        const res = doTest()
+        const res = doTest(userStore.user.id + '', maxBaotu)
         if (res.status == 0) {
-            message.success('连接成功')
+            // // message.success('连接成功')
+            setLogs(["初始化成功"])
             setIsTasking(false)
         }
+    })
+    const handleSetMaxBaotu = (maxBaotu2: number) => checkIsTasking(() => {
+            setTimeout(()=>{
+                const res = doTest(userStore.user.id + '', maxBaotu2)
+                setLogs(["设置最大挖图数成功"])
+            , 1000})
+            setIsTasking(false)
     })
     const handleTest2 = () => checkIsTasking(() => {
         setCurrentTask('test2')
@@ -247,7 +263,7 @@ export function usePageStore() {
         const res = doTest2()
         setShowLog(true)
         if (res.status == 0) {
-            message.success('测试已提交')
+            // message.success('测试已提交')
             setIsTasking(false)
         }
     })
@@ -267,10 +283,10 @@ export function usePageStore() {
     const logAllAccount = (type: number) => {
         if (type === 1) {
             doStartGame(['ch1993com5', 'ch.1993.com', 'ch1993com6', 'ch1993com8', 'ch1993com1'])
-            message.success('启动成功')
+            // message.success('启动成功')
         } else {
             doStartGame(['ch1993com2', 'ch1993com3', 'ch1993com4', 'ch1993com7', 'mm1042061794'])
-            message.success('启动成功')
+            // message.success('启动成功')
         }
     }
     const handleChangeIsBeen = (check: boolean) => {
@@ -283,23 +299,22 @@ export function usePageStore() {
         setIsChilan(check);
         // @ts-ignore
         window.isChilan = check;
-        // @ts-ignore
-        print(window.isChilan)
+        setLogs(['设置蓝碗成功'])
     }
 
     const connector = () => {
         setShowLog(true)
-        message.success('操作成功')
+        setLogs(['连点器执行成功'])
         doConnector()
     }
     const zhandou = () => {
         setShowLog(true)
-        message.success('操作成功')
+        // message.success('执行成功')
         doZhandou(watuDeviceId)
     }
     const hanghua = () => {
         setShowLog(true)
-        message.success('操作成功')
+        // message.success('执行成功')
         // @ts-ignore
         doHanghua(window.hanghuaCount)
     }
@@ -330,6 +345,7 @@ export function usePageStore() {
         isBigGhost,
         弹出添加分组框,
         lock,
+        handleSetMaxBaotu,
         featureTabIndex, // 激活的功能tab栏
         setFeatureTabIndex,
         setsShowHanhu,
@@ -350,7 +366,10 @@ export function usePageStore() {
         accountList,
         handleKillProcess,
         processState,
+        setMaxBaotu,
+        maxBaotu,
         logs,
+        setLogs,
         isTasking,
         logAllAccount,
         handleClickPreviewDevice,
@@ -389,7 +408,7 @@ function ModalMultipleAccountSelect() {
                     return pageStore.accountMap[accountId].username
                 })
                 pageStore.setShowLog(true)
-                message.success('操作成功')
+                // message.success('执行成功')
                 doStartGame(ret)
 
             }
@@ -428,7 +447,7 @@ function HomeGameArea() {
                         selectDeviceFunc = 'handleSelectJiangjunDevice'
                         pageStore.setShowSelectDeviceModal(true)
                     }}>导入将军令</Button> */}
-                    {/* <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.setCurrentPhoneUrl(''); message.success('关闭成功') }}>关闭连接</Button> */}
+                    {/* <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.setCurrentPhoneUrl(''); // message.success('关闭成功') }}>关闭连接</Button> */}
                     <Button icon={<CloseCircleOutlined />} className='fs-12 m-l-5' size="small" onClick={() => { pageStore.closeAllTask() }}>关闭脚本</Button>
                     <Button icon={<ClearOutlined />} className='fs-12 m-l-5' size="small" onClick={() => {
                         pageStore.handleClearLog()
@@ -521,7 +540,7 @@ function HomeWatu() {
             method: "post"
         }).then(res => {
             if (res.status == 0) {
-                message.success('修改成功')
+                // message.success('修改成功')
                 setTimeout(() => {
                     reload()
                 }, 500)
@@ -590,7 +609,7 @@ function HomeWatu() {
                             method: "post"
                         }).then(res => {
                             if (res.status == 0) {
-                                message.success('创建成功')
+                                // message.success('创建成功')
                                 setShowAccountPopover(false)
                                 setTimeout(() => {
                                     reload()
@@ -651,7 +670,7 @@ function HomeWatu() {
                 method: "post"
             }).then(res => {
                 if (res.status == 0) {
-                    message.success('修改成功')
+                    // message.success('修改成功')
                     setTimeout(() => {
                         reload()
                     }, 500)
@@ -1159,7 +1178,7 @@ function HomeWatu() {
                     },
                     method: "post"
                 }).then(res => {
-                    message.success('创建成功')
+                    // message.success('创建成功')
                     tableRef.current!.reload()
                     setShowGroupModal(false)
                 })
@@ -1256,9 +1275,7 @@ function HomeWatu() {
                     </Col>
                 </Row>
                 <br />
-                <div className="home-feature-panel">
-                    {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={watuDeviceId} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
-                </div>
+                
                 <br />
             </Panel>
             <Panel header={"挖图组配置"} key="2">
@@ -1320,7 +1337,7 @@ function HomeFeature() {
                     content: 'Some descriptions',
                     onOk() {
                         doUpdatePy();
-                        message.success('更新成功，请不要重复更新')
+                        // message.success('更新成功，请不要重复更新')
 
                     },
                     onCancel() {
@@ -1375,7 +1392,7 @@ function HomeFeature() {
                     <Col>
                         <Button onClick={() => {
                             pageStore.setShowLog(true)
-                            message.success('操作成功')
+                            // message.success('执行成功')
                             pageStore.doTaskAuth(() => {
                                 doZhuaGuiTask(pageStore.isBigGhost ? 1 : 0)
                             })
@@ -1396,11 +1413,10 @@ function HomeFeature() {
                         <Col>
                             <Button onClick={() => {
                                 pageStore.setShowLog(true)
-                                message.success('操作成功')
+                                // message.success('执行成功')
                                 doBudianTask(price)
                             }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>自动抓律法女娲</Button></Col>
                         <Col offset={1}> <span>价格：</span><Input onChange={(e) => { setPrice(e.target.value) }} value={price} style={{ width: 150 }} /></Col>
-
                     </Row>
                 </TabPane>}
         </Tabs>
@@ -1419,11 +1435,60 @@ function HomeFeature() {
 
 }
 function Home() {
+    const pageStore = PageStore.useContainer()
+    const userStore = UserStore.useContainer()
+
     // @ts-ignore
+    useEffect(()=>{
+        setTimeout(()=>{
+            pageStore.handleTest()
+            
+        }, 2000)
+    }, [])
     return <div className='flex home-page page'>
-        <ModalMultipleAccountSelect />
+        <img src={image_bg} className="page-bg" />
+        <div className="page-clound" />
+        <div className="page-content flex-row-between">
+            <div>
+                <div className="flex">
+                    <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
+                    <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(F12)</span></Button>
+                </div>
+                <div className="m-t-10 flex">
+                    <Switch className="m-r-5" checkedChildren="开启补红" unCheckedChildren="关闭补红" defaultChecked />
+                </div>
+                <div className="m-t-10 flex">
+                    <Switch defaultChecked={pageStore.isChilan} onChange={(e) => {
+                                pageStore.handleChangeIsChilan(e)}} checkedChildren="开启补蓝" unCheckedChildren="关闭补蓝" />
+                </div>
+                <div className="m-t-10 flex" style={{width: '130px'}}>
+                    <Input size="small" defaultValue={pageStore.maxBaotu} onBlur={(e)=>{
+                        pageStore.setMaxBaotu(Number(e.target.value));
+                        pageStore.handleSetMaxBaotu(Number(e.target.value))
+                    }} addonAfter="张停止"/>
+                </div> 
+                <br/> 
+                <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>
+            </div>
+            <div>
+                <div className="m-l-15 page-log-area">
+                    {pageStore.logs.map(item=>{
+                        return <div>{item}</div>
+                    })}
+                </div>
+                <div style={{marginLeft: '60px'}} className="m-t-15">
+                    <Button size="small" type="primary" icon={<EnvironmentOutlined />}>
+                        vip到期时间: {userStore.user?.vipCard && moment(userStore.user?.vipCard?.endTime * 1000).format('YYYY-MM-DD')}
+                    </Button>
+                </div>
+            </div>
+            <div className="home-feature-panel">
+                {pageStore.watuInfo && <ChMhMapTool cangkuPath={pageStore.cangkuPath} deviceId={1} mapName={pageStore.watuInfo.mapName} points={pageStore.watuInfo.points}></ChMhMapTool>}
+            </div>
+        </div>
+        {/* <ModalMultipleAccountSelect />
         <HomeGameArea />
-        <HomeFeature />
+        <HomeFeature /> */}
     </div>
 }
 export default Home

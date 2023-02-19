@@ -3,7 +3,7 @@ import resourcePaths from "../../../electron/resourcePaths";
 
 export const getJiangjunCode = (body: Object) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_START_GAME, JSON.stringify(body))
 export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_LOGIN_GAME, body)
-export const doTest = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [])
+export const doTest = (userid: string, maxBaotu: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [userid, maxBaotu])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
 export const doGetWatuInfo = (isChilan: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_GET_WATU_INFO, [isChilan])

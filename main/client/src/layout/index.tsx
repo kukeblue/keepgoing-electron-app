@@ -141,11 +141,11 @@ function Layout(props: LayoutProps) {
     })
     
     // @ts-ignore
-    return userStore.isLogin ? <ChLayout header={<Header />} adminIcon={<img style={{ borderRadius: '50%', width: '60px', height: 'auto' }} src={image_robot} />} sider={sider}>
+    return userStore.isLogin ? 
         <div className='app-content'>
             {props.children}
         </div>
-    </ChLayout> : <Login />
+    : <Login />
 }
 
 export default (props: LayoutProps) => {
