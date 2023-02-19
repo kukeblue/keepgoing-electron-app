@@ -9,7 +9,7 @@ import requests
 import logUtil
 from urllib import parse
 import win32api,win32con
-host = 'http://42.51.41.129:3000/api/client/'
+host = 'http://42.51.41.129:3001/api/client/'
 suanHost = ''
 
 

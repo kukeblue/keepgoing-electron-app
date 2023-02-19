@@ -169,7 +169,7 @@ def move(x, y):
 
 def getGameVerificationCode():
     try:
-        hwnd = op.findWindow('', '乾坤辅助平台')
+        hwnd = op.findWindow('', '摸金辅助')
         ret = op.bindWindow(hwnd, "normal", "normal", "normal", 0)
         print(ret)
         op.Capture(140, 180, 350, 223, "screen.bmp")

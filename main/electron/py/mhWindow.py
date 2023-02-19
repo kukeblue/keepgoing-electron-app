@@ -1286,10 +1286,16 @@ class MHWindow:
         time.sleep(1)
         self.F_关闭对话()
         while True:
-            self.F_小地图寻路器([464, 16], None, 是否关闭对话=False)
-            pyautogui.press('f9')
-            time.sleep(1)
-            self.F_移动到游戏区域坐标(301, 297)
+            if(a == 1):
+                self.F_小地图寻路器([461, 203], None, 是否关闭对话=False)
+                pyautogui.press('f9')
+                time.sleep(1)
+                self.F_移动到游戏区域坐标(321, 307)
+            else:
+                self.F_小地图寻路器([464, 16], None, 是否关闭对话=False)
+                pyautogui.press('f9')
+                time.sleep(1)
+                self.F_移动到游戏区域坐标(301, 297)
             utils.click()
             time.sleep(1)
             point = self.findImgInWindow('all-zbsg.png')
@@ -2982,7 +2988,6 @@ class MHWindow:
                 if (ret != None):
                     print(result)
                 if(ret != None and result != None):
-                    print('?????')
                     top = ret[1] - result[1]
                     left = ret[0] - result[0]
                     print(left)
