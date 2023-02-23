@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from "react";
-import { Drawer, Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
+import { Drawer, Checkbox,Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
 import { TDevice, TGameAccount, TGameRole, TWatuGroup } from "../../typing";
 import "./index.less";
 const request = ChUtils.Ajax.request
@@ -10,6 +10,18 @@ import { setClickMode, setOption ,doKillProcess, doStartGame, doTest, doTest2, M
 
 
 import { createContainer } from 'unstated-next'
+
+const options = [
+    { label: '30', value: '30' },
+    { label: '40', value: '40' },
+  ];
+
+  const options2 = [
+    { label: '30', value: '30' },
+    { label: '40', value: '40' },
+    { label: '50', value: '50' },
+  ];
+
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 // @ts-ignore
@@ -66,14 +78,18 @@ export function usePageStore() {
         }).catch(() => {
             setLock(false)
         })
-            setTimeout(()=>{
-                const id = userStore.user?.id
-                if(id) {
-                setOption(id)
-            }
-            }, 1000)
+        // setTimeout(()=>{
+        //     const id = userStore.user?.id
+        //     if(id) {
+        //     setOption(id)
+        // }
+        // }, 1000)
+        setTimeout(()=>{
+            handleTest()
+        }, 2000)
         
     }, [])
+
     const [showLog, setShowLog] = useState<boolean>(false)
     const [logs, setLogs] = useState<string[]>([])
     useEffect(() => {
@@ -88,13 +104,19 @@ export function usePageStore() {
     const [modalMultipleAccountSelectShow, setModalMultipleAccountSelectShow] = useState(false)
     const [currentPhoneUrl, setCurrentPhoneUrl] = useState('');
     const [featureTabIndex, setFeatureTabIndex] = useState("2");
+    const [finishTodo, setFinishTodo] = useState<number>(1)
     const [isTasking, setIsTasking] = useState<boolean>(false)
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
     // 是否吃蓝
     const [isChilan, setIsChilan] = useState<boolean>(true)
+    const [isChiHong, setIsChiHong] = useState<boolean>(true)
+    const [tieLevels, setTieLevels] = useState<string[]>([])
+    const [shuLevels, setShuLevels] = useState<string[]>([])
+
     // 开启硬件模拟
     const [isYinjian, setIsYinjian] = useState<boolean>(false)
+    const [maxBaotu, setMaxBaotu] = useState<number>(10000)
     const [isBigGhost, setIsBigGhost] = useState<boolean>(true)
     const [isAccept, setIsAccept] = useState<boolean>(true)
     const [cangkuPath, setCangkuPath] = useState<string>('建邺城');
@@ -105,6 +127,14 @@ export function usePageStore() {
     const [showSelectDeviceModal, setShowSelectDeviceModal] = useState<boolean>(false)
     const { optionsMap: deviceMap, options: deviceOptions } = useOptionFormListHook({ url: '/api/device/get_device_list', query: {} })
     const { optionsMap: accountMap, options: accountOptions, list: accountList } = useOptionFormListHook({ url: '/api/game_account/get_game_account_options', query: {} })
+    const handleSetTieAndLevels = (tieLevels: string[], shuLevels: string[]) => checkIsTasking(() => {
+        setTimeout(()=>{
+            const res = doTest(userStore.user.id + '', maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo)
+            setLogs(["设置保留书铁等级成功"])
+        , 1000})
+        setIsTasking(false)
+    })
+    
     const handlePushLog = (log: string) => {
         setLogs((logs) => [...logs, log])
     }
@@ -234,10 +264,11 @@ export function usePageStore() {
     const handleTest = () => checkIsTasking(() => {
         setCurrentTask('test')
         setIsTasking(true)
-        setShowLog(true)
-        const res = doTest()
+        // setShowLog(true)
+        const res = doTest(userStore.user.id + '', maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo)
         if (res.status == 0) {
             message.success('连接成功')
+            // setLogs(["初始化成功"])
             setIsTasking(false)
         }
     })
@@ -283,8 +314,13 @@ export function usePageStore() {
         setIsChilan(check);
         // @ts-ignore
         window.isChilan = check;
-        // @ts-ignore
-        print(window.isChilan)
+        doTest(userStore.user.id + '', maxBaotu, tieLevels, shuLevels, isChiHong, check, finishTodo)
+        setLogs(['设置蓝碗成功'])
+        // setIsChilan(check);
+        // // @ts-ignore
+        // window.isChilan = check;
+        // // @ts-ignore
+        // print(window.isChilan)
     }
 
     const connector = () => {
@@ -316,7 +352,18 @@ export function usePageStore() {
             setClickMode(1)
         }
     }
+    const handleChangeFinishTodo = (finishTodo: number) => {
+        doTest(userStore.user.id + '', maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo)
+    }
+    const handleSetMaxBaotu = (maxBaotu2: number) => checkIsTasking(() => {
+        doTest(userStore.user.id + '', maxBaotu2, tieLevels, shuLevels, isChiHong, isChilan, finishTodo)
+    })
     return {
+        handleChangeFinishTodo,
+        handleSetMaxBaotu,
+        setTieLevels,
+        setShuLevels,
+        handleSetTieAndLevels,
         doTaskAuth,
         handleChangeIsChilan,
         setIsChilan,
@@ -334,6 +381,8 @@ export function usePageStore() {
         setFeatureTabIndex,
         setsShowHanhu,
         isShowHanhu,
+        tieLevels,
+        shuLevels,
         setCangkuPath,
         cangkuPath,
         zhandou,
@@ -374,7 +423,9 @@ export function usePageStore() {
         getTaskLoading,
         handleGetWatuInfo,
         handleChangeIsBeen,
-        hanghua
+        hanghua,
+        maxBaotu,
+        setMaxBaotu,
     }
 }
 export const PageStore = createContainer(usePageStore)
@@ -1212,30 +1263,65 @@ function HomeWatu() {
                 <Row>
                     <Col><div style={{ 'marginLeft': '10px' }}>挖图配置:</div></Col>
                     <Col>
-                        <Select size="small" style={{ marginLeft: 5 }} placeholder='请选择仓库位置' defaultValue={pageStore.cangkuPath} onChange={(v) => {
-                            // @ts-ignore
-                            window.cangkuPath = v; pageStore.setCangkuPath(v)
-                        }}>
-                            <Select.Option value="长安城">长安城</Select.Option>
-                            <Select.Option value="建邺城">建邺城</Select.Option>
-                        </Select>
-                    </Col>
-                    <Col>
-                        <div style={{ marginLeft: 20 }}>
-                            <span style={{ color: '#000' }}>补蓝</span>： <Switch size="small" checked={pageStore.isChilan} onChange={(e) => {
-                                pageStore.handleChangeIsChilan(e)
-                                // pageStore.handleChangeIsBeen(e);
-                            }} />
+                        <div style={{ marginLeft: 20 }} className="flex-center">
+                            <span style={{ color: '#000' }}>补蓝</span>： 
+                            <Switch size="small" defaultChecked={pageStore.isChilan} onChange={(e) => {
+                                                pageStore.handleChangeIsChilan(e)}}/>
                         </div>
                     </Col>
-                    {/* <Col>
-                        <div style={{ marginLeft: 20 }}>
-                            <span style={{ color: '#000' }}>联动模式</span>： <Switch size="small" onChange={(e) => {
-                                pageStore.handleChangeIsBeen(e);
-                            }} />
-                        </div>
-                    </Col> */}
+                            
                 </Row>
+                <br/>
+                <Row>
+                    <Col>
+                        &nbsp;&nbsp;
+                        <Button size="small" type="primary">
+                                保留铁等级
+                        </Button>
+                        &nbsp;&nbsp;
+                        <Checkbox.Group options={options} defaultValue={pageStore.tieLevels} onChange={(e)=>{ 
+                            console.log(e)
+                            // @ts-ignore
+                            pageStore.setTieLevels(e)
+                            // @ts-ignore
+                            pageStore.handleSetTieAndLevels(e, pageStore.shuLevels)
+                        }} />
+                        <Button size="small" type="primary">
+                            保留书等级
+                        </Button>
+                        &nbsp;&nbsp;
+                        <Checkbox.Group 
+                            options={options2} 
+                            defaultValue={pageStore.shuLevels} 
+                            onChange={(e)=>{ 
+                                // @ts-ignore
+                                pageStore.setShuLevels(e)
+                                // @ts-ignore
+                                pageStore.handleSetTieAndLevels(pageStore.tieLevels, e)
+                            }} 
+                        />
+                    </Col>
+                </Row>
+                {
+                userStore.user.username == 'kuke' && <Row>
+                    <Col>
+                        <div className="m-t-10 flex" style={{width: '230px'}}>
+                            &nbsp;&nbsp;
+                            <Input size="small" defaultValue={pageStore.maxBaotu} onBlur={(e)=>{
+                                pageStore.setMaxBaotu(Number(e.target.value));
+                                pageStore.handleSetMaxBaotu(Number(e.target.value))
+                            }} addonAfter={<Select 
+                            onChange={(e)=>{
+                                pageStore.handleChangeFinishTodo(Number(e)) 
+                            }}
+                            size="small" defaultValue="1">
+                            <Select.Option value="1">张停止</Select.Option>
+                            <Select.Option value="2">张下线</Select.Option>
+                        </Select>}/>
+                        </div>
+                    </Col>
+                    </Row>
+                }
                 <br />
                 <Row>
                     <Col>
@@ -1247,12 +1333,6 @@ function HomeWatu() {
                         <Button onClick={() => {
                             pageStore.handleGetWatuInfo(1)
                         }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12 m-l-10'>重新扫描</Button>
-                    </Col>
-                    <Col className="m-l-10">
-                        <Button onClick={() => { pageStore.sellEquipment() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>卖装备</Button>
-                    </Col>
-                    <Col className="m-l-10">
-                        <Button onClick={() => { pageStore.throwLitter() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>丢垃圾</Button>
                     </Col>
                 </Row>
                 <br />
@@ -1347,18 +1427,17 @@ function HomeFeature() {
         <Tabs onChange={(v) => pageStore.setFeatureTabIndex(v)} type="card" defaultActiveKey={pageStore.featureTabIndex} style={{ marginBottom: 32 }}>
             <TabPane tab="通用功能" key="1">
                 <Row className="m-b-20">
-                    <Col>
+                    {/* <Col>
                         <span style={{ color: '#000' }}>开启硬件驱动</span>： <Switch size="small" checked={pageStore.isYinjian} onChange={(e) => {
                             pageStore.handleChangeIsYinjian(e)
                             // pageStore.handleChangeIsBeen(e);
                         }} />
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Row>
-                    <Col>
+                    {/* <Col>
                         <Button type='primary' onClick={() => { pageStore.handleTest() }} loading={pageStore.getTaskLoading('test')} icon={<ToolOutlined />} size='small' className='fs-12'>驱动服务</Button>
-                    </Col>
-                    
+                    </Col> */}
                     <Col className="m-l-10">
                         <Button onClick={() => { pageStore.connector() }} icon={<DownCircleOutlined />} type='primary' size='small' className='fs-12'>连点器</Button>
                     </Col>
@@ -1420,6 +1499,7 @@ function HomeFeature() {
 }
 function Home() {
     // @ts-ignore
+    
     return <div className='flex home-page page'>
         <ModalMultipleAccountSelect />
         <HomeGameArea />
