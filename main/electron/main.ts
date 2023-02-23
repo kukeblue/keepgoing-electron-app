@@ -42,6 +42,9 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+app.on('will-quit', () => {
+    runPyScript('closeAllMhTask2', [])
+  })
 app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();

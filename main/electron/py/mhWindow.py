@@ -58,6 +58,7 @@ class MHWindow:
     handle = ''
     gameServer=''
     roleName=''
+    config=None
 
     def __init__(self, screenUnit):
         print('init')
@@ -490,6 +491,8 @@ class MHWindow:
                     'all_hongwan.png', area=(0, 469, 296, 80))
                 if(point == None):
                     self.F_行囊拿红蓝('all_hongwan.png')
+                    point = self.findImgInWindow(
+                        'all_hongwan.png', area=(0, 469, 296, 80))
                 if point != None:
                     self.pointMove(point[0], point[1])
                     utils.rightClick()
@@ -505,6 +508,8 @@ class MHWindow:
                 'all_lanwan.png', area=(0, 479, 286, 60))
             if(point == None):
                 self.F_行囊拿红蓝('all_lanwan.png')
+                point = self.findImgInWindow(
+                'all_lanwan.png', area=(0, 479, 286, 60))
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.rightClick()
@@ -821,15 +826,32 @@ class MHWindow:
         return 是否战斗
 
     def F_判断人物宝宝低红蓝位(self, 是否吃蓝=True, 是否战斗=True):
+        是否吃红 = True
+        if(self.config == None):
+            fp = open(r"C:\config.txt", 'a+')
+            fp.seek(0, 0)
+            config = json.loads(fp.read())
+            self.config = config
+            fp.close()
+        print(self.config)
+        if(self.config["isChiHong"] == "false"):
+            是否吃红 = False
+        if(self.config["isChilan"] == "false"):
+            是否吃蓝 = False
         红蓝充足 = True
         self.F_打开道具()
         pyautogui.press('f7')
         # 检查红
-        ret = baiduApi.op.FindMultiColor(
-            self.windowArea[0] + 775, self.windowArea[1] + 10, self.windowArea[0] + 775 + 25, self.windowArea[1] + 10 + 7, 'b89090', '2|0|b89090,2|2|885450', 0.6, 0)
-        if(ret[1] > 0):
-            红蓝充足 = self.F_吃红()
-            print('人物缺红')
+        if(是否吃红==True):
+            if(是否战斗==True):
+                红蓝充足 = self.F_吃红()
+                print('人物缺红')
+            else:
+                ret = baiduApi.op.FindMultiColor(
+                    self.windowArea[0] + 775, self.windowArea[1] + 10, self.windowArea[0] + 775 + 25, self.windowArea[1] + 10 + 7, 'b89090', '2|0|b89090,2|2|885450', 0.6, 0)
+                if(ret[1] > 0):
+                    红蓝充足 = self.F_吃红()
+                    print('人物缺红2')
         # 检查蓝
         if(是否吃蓝):
             ret = baiduApi.op.FindMultiColor(
@@ -840,7 +862,7 @@ class MHWindow:
         if(是否战斗==True):
             point = self.findImgInWindow(
                 'all-baobao-hong.png', confidence=0.90, area=(650, 0, 20, 20))
-            if point != None:
+            if point != None:   
                 self.F_移动到游戏区域坐标(620, 100)
                 self.F_移动到游戏区域坐标(620, 50)
                 self.F_移动到游戏区域坐标(630, 12)
@@ -1038,6 +1060,12 @@ class MHWindow:
         self.pointMove(firstBlockX + left, firstBlockY + height)
 
     def 丢垃圾铁(self):
+        if(self.config == None):
+            fp = open(r"C:\config.txt", 'a+')
+            fp.seek(0, 0)
+            config = json.loads(fp.read())
+            self.config = config
+            fp.close()
         self.F_打开道具()
         self.focusWindow()
         points = self.findImgsInWindow('all-daoju-tie.png')
@@ -1049,15 +1077,30 @@ class MHWindow:
                           self.windowArea[0] + 600, self.windowArea[1] + 600]
                 ret = baiduApi.F_查找等级(宝图位置信息)
                 if(ret != '' and ret != None and int(ret) < 50):
-                    utils.click()
-                    self.F_移动到游戏区域坐标(562, 417)
-                    time.sleep(0.2)
-                    utils.click()
-                    self.F_移动到游戏区域坐标(351, 342)
-                    time.sleep(1)
-                    utils.click()
+                    if(ret in self.config['tieLevels']):
+                        print('跳过')
+                    else:
+                        utils.click()
+                        self.F_移动到游戏区域坐标(562, 417)
+                        time.sleep(0.2)
+                        utils.click()
+                        for i in range(5):
+                            time.sleep(1)
+                            point = self.findImgInWindow('all-cuihui.png', 0.85, [self.windowArea[0] + 283, self.windowArea[1]+232,
+                                                                70, 70])
+                            if(point != None): 
+                                break
+                        self.F_移动到游戏区域坐标(351, 342)
+                        time.sleep(0.3)
+                        utils.click()
 
     def 丢垃圾书(self):
+        if(self.config == None):
+            fp = open(r"C:\config.txt", 'a+')
+            fp.seek(0, 0)
+            config = json.loads(fp.read())
+            self.config = config
+            fp.close()
         self.F_打开道具()
         points = self.findImgsInWindow('all-daoju-shu.png')
         for point in points:
@@ -1068,15 +1111,19 @@ class MHWindow:
                           self.windowArea[0] + 600, self.windowArea[1] + 600]
                 ret = baiduApi.F_查找等级(宝图位置信息)
                 if(ret != '' and ret != None and int(ret) < 60):
-                    utils.click()
-                    self.F_移动到游戏区域坐标(562, 417)
-                    utils.click()
-                    self.F_移动到游戏区域坐标(351, 342)
-                    time.sleep(1)
-                    utils.click()
-                    if(int(ret) == 50):
+                    
+                    if(ret in self.config['shuLevels']):
+                        print('跳过')
+                    else:
+                        utils.click()
+                        self.F_移动到游戏区域坐标(562, 417)
+                        utils.click()
+                        self.F_移动到游戏区域坐标(351, 342)
                         time.sleep(1)
                         utils.click()
+                        if(int(ret) == 50):
+                            time.sleep(1)
+                            utils.click()
 
     def 统计扫货(self):
         point = self.findImgInWindow('all-tie-big.png',  0.85, [self.windowArea[0] + 80, self.windowArea[1],
@@ -1918,7 +1965,8 @@ class MHWindow:
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 25, self.windowArea[1] + 441)
         utils.click()
-        time.sleep(1.5)
+        time.sleep(1)
+        self.F_关闭对话()
 
     def F_导航到酒店门口(self):
         self.F_使用长安城飞行棋('红色长安城导标旗坐标_酒店')
@@ -3082,5 +3130,6 @@ if __name__ == '__main__':
     window = MHWindow(1)
     window.findMhWindow()
     # window.F_使用长安城飞行棋('红色长安城导标旗坐标_杂货店')
-    point = window.F_卖装备()
+    红蓝充足 = window.F_判断人物宝宝低红蓝位(False, True)
+    print(红蓝充足)
     
