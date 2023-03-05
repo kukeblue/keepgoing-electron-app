@@ -1,7 +1,6 @@
 # coding=utf-8
 from tkinter import NO
 import baiduApi
-
 import logUtil
 import mhWindow
 import re
@@ -12,6 +11,7 @@ import time
 import fire
 import pyautogui
 import utils
+from winsound import PlaySound
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -73,10 +73,10 @@ def 找梦魔(window, 任务):
         pyautogui.press('f9')
         pyautogui.hotkey('alt', 'h')
         time.sleep(0.5)
-        window.F_点击战斗()
+        window.F_点击铃铛战斗()
         time.sleep(0.5)
         window.F_移动到游戏区域坐标(275, 340)
-        time.sleep(3)
+        time.sleep(1)
         utils.click()
         time.sleep(0.5)
         window.F_自动战斗2()
@@ -102,7 +102,7 @@ def 使用招魂(window, 任务):
     window.focusWindow()
     utils.click()
     time.sleep(1)
-    window.F_点击战斗()
+    window.F_点击铃铛战斗()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(275, 338)
     utils.click()
@@ -123,7 +123,7 @@ def 找巧智(window, 任务):
         pyautogui.press('f9')
         pyautogui.hotkey('alt', 'h')
         time.sleep(0.5)
-        window.F_点击战斗()
+        window.F_点击铃铛战斗()
         time.sleep(1)
         window.F_移动到游戏区域坐标(275, 338)
         utils.click()
@@ -146,14 +146,15 @@ def 找怯弱妖(window, 任务):
         pyautogui.press('f9')
         pyautogui.hotkey('alt', 'h')
         time.sleep(0.5)
-        window.F_点击战斗(True)
-        time.sleep(0.5)
-        window.F_移动到游戏区域坐标(275, 340)
-        time.sleep(3)
-        utils.click()
-
-        time.sleep(0.5)
-        window.F_自动战斗()
+        time.sleep(1)
+        PlaySound("C:\\y913.wav", flags=1)
+        # window.F_点击铃铛战斗(True)
+        # time.sleep(0.5)
+        # window.F_移动到游戏区域坐标(275, 340)
+        # time.sleep(3)
+        # utils.click()
+        # time.sleep(0.5)
+        window.F_手动战斗()
         utils.click()
 
 
@@ -170,27 +171,27 @@ def 找迷幻妖(window, 任务):
         pyautogui.press('f9')
         pyautogui.hotkey('alt', 'h')
         time.sleep(1)
-        window.F_点击战斗(True)
-        time.sleep(1)
-        window.F_移动到游戏区域坐标(275, 340)
-        time.sleep(3)
-        utils.click()
-        time.sleep(0.5)
-        window.F_自动战斗()
+        PlaySound("C:\\y913.wav", flags=1)
+        # window.F_点击铃铛战斗(True)
+        # time.sleep(1)
+        # window.F_移动到游戏区域坐标(275, 340)
+        # time.sleep(3)
+        # utils.click()
+        # time.sleep(0.5)
+        window.F_手动战斗()
         utils.click()
 
 
 def 杀虫(window, 任务):
     ret = window.F_获取任务位置和坐标(任务)
-    window.F_任务导航器(ret[0], ret[1])
     window.F_小地图寻路器(ret[1], None)
     pyautogui.press('f9')
     pyautogui.hotkey('alt', 'h')
     time.sleep(0.5)
-    window.F_点击战斗()
+    window.F_点击铃铛战斗()
     time.sleep(0.5)
     window.F_移动到游戏区域坐标(275, 340)
-    time.sleep(3)
+    time.sleep(1)
     utils.click()
     time.sleep(0.5)
     window.F_自动战斗2()

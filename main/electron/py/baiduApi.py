@@ -7,6 +7,8 @@ import win32api
 import sys
 import os
 import logUtil
+import pyautogui
+
 # import easyocr
 # reader = easyocr.Reader(['ch_sim', 'en'])
 ocr = CnOcr()
@@ -191,3 +193,46 @@ def F_大漠坐标文字识别(area):
                  "ffffff-000000|f8f8f8-000000", 1.0)
     print(ret)
     return ret
+
+
+# ======================== 碗子山巡逻识别 ===============================
+# region = (0, 0, 800, 600)
+# def F_碗子山_蝎子():
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-xz-1.png', confidence=0.7, region=region)
+#     if(point != None):
+#         return point
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-xz-2.png', confidence=0.7, region=region)
+#     if(point != None):
+#         return point
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-xz-3.png', confidence=0.7, region=region)
+#     if(point != None):
+#         return point
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-xz-4.png', confidence=0.7, region=region)
+#     if(point != None):
+#         return point
+   
+   
+    
+# def F_碗子山_猫():
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-mm-1.png', confidence=0.7, region=region)
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-mm-4.png', confidence=0.7, region=region)
+#     print(point)
+#     print()
+    
+# def F_碗子山_混沌():
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-hd-4.png', confidence=0.7, region=region)
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-hd-3.png', confidence=0.7, region=region)
+#     print(point)
+    
+# def F_碗子山_葫芦():
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-hl-1.png', confidence=0.7, region=region)
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-hl-4.png', confidence=0.7, region=region)
+#     print(point)
+
+# def F_碗子山_豹子():  
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-kb-2.png', confidence=0.7, region=region)
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-kb-4.png', confidence=0.7, region=region)
+#     point = pyautogui.locateOnScreen(pyZhikuDir2 + '\\' + 'all-wzs-kb-1.png', confidence=0.7, region=region)
+#     print(point)
+
+# print(F_碗子山_混沌())

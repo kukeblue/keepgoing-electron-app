@@ -13,6 +13,7 @@ import re
 import pointUtil
 import win32gui
 import json
+from winsound import PlaySound
 
 
 mapCangkuDict = {
@@ -481,7 +482,7 @@ class MHWindow:
     def F_吃红(self):
         try:
             point = self.findImgInWindow(
-                'all-shuidi.png', confidence=0.9, area=(0, 479, 286, 60))
+                'all-shuidi.png', confidence=0.9, area=(76, 432, 60, 60))
             if point != None:
                 self.pointMove(point[0], point[1])
                 utils.rightClick()
@@ -769,6 +770,42 @@ class MHWindow:
                 坐标 = 坐标2
             time.sleep(date)
 
+    def F_点击铃铛战斗(self, 多次点击=False, 右键点击=False):
+        pathMaybe = [[5, 78], [38, 74], [-20, 74], [-10, 74]]
+        for i in range(4):
+            self.F_移动到游戏区域坐标(574, 442)
+            pyautogui.hotkey('alt', 'a')
+            utils.rightClick()
+            pathMaybeItem = pathMaybe[i]
+            point = self.findImgInWindow('all-duibiao.png')
+            if(point == None):
+                point = self.findImgInWindow('all-lingdan-zhandou.png')
+            if(point != None):
+                pyautogui.hotkey('alt', '7')
+                utils.rightClick()
+                time.sleep(0.5)
+                self.pointMove(point[0]+pathMaybeItem[0],
+                               point[1] + pathMaybeItem[1])
+                time.sleep(0.5)
+                if(右键点击 == False):
+                    pyautogui.hotkey('alt', 'a')
+                    time.sleep(0.1)
+                if(多次点击 == True):
+                    pyautogui.keyDown('alt')
+                    pyautogui.keyDown('a')
+                    mouse.double_click()
+                    pyautogui.keyUp('a')
+                    pyautogui.keyUp('alt')
+                else:
+                    utils.click()
+                time.sleep(1)
+                point = self.findImgInWindow('all-close.png', confidence=0.9)
+                if(self.F_是否在战斗() or point != None):
+                    break
+                else:
+                    utils.rightClick()
+            time.sleep(0.5)
+
     def F_点击战斗(self, 多次点击=False, 右键点击=False):
         pathMaybe = [[5, 78], [38, 74], [-20, 74], [-10, 74]]
         for i in range(4):
@@ -810,9 +847,9 @@ class MHWindow:
         # self.F_识别4小人()
         是否续自动 = False
         for i in range(3):
-            print('F_自动战斗：等待进入战斗:' + str(i))
             time.sleep(0.3)
             if(self.F_是否在战斗()):
+                是否战斗 = True
                 if(是否续自动 == False):
                     是否续自动 = True
                     self.F_点击自动()
@@ -820,10 +857,29 @@ class MHWindow:
                 while(True):
                     time.sleep(1)
                     if(self.F_是否结束战斗()):
-                        是否战斗 = True
                         print('F_自动战斗：结束战斗')
                         break
         return 是否战斗
+
+    def F_手动战斗(self):
+        是否战斗 = False
+        是否战斗完成 = False
+        # self.F_识别4小人()
+        是否续自动 = False
+        while(是否战斗 == False):
+            time.sleep(1)
+            if(self.F_是否在战斗()):
+                是否战斗 = True
+                if(是否续自动 == False):
+                    是否续自动 = True
+                    self.F_点击自动()
+                print('F_自动战斗：进入战斗')
+                while(True):
+                    time.sleep(1)
+                    if(self.F_是否结束战斗()):
+                        print('F_自动战斗：结束战斗')
+                        是否战斗完成 = True
+                        break
 
     def F_判断人物宝宝低红蓝位(self, 是否吃蓝=True, 是否战斗=True):
         是否吃红 = True
@@ -845,7 +901,6 @@ class MHWindow:
         if(是否吃红==True):
             if(是否战斗==True):
                 红蓝充足 = self.F_吃红()
-                print('人物缺红')
             else:
                 ret = baiduApi.op.FindMultiColor(
                     self.windowArea[0] + 775, self.windowArea[1] + 10, self.windowArea[0] + 775 + 25, self.windowArea[1] + 10 + 7, 'b89090', '2|0|b89090,2|2|885450', 0.6, 0)
@@ -937,7 +992,6 @@ class MHWindow:
         while(finish == False):
             time.sleep(1)
             if(self.F_是否在战斗()):
-
                 while(True):
                     print('进入战斗')
                     time.sleep(1)
@@ -947,7 +1001,9 @@ class MHWindow:
 
     def F_抓鬼自动战斗(self):
         finish = False
+        count = 0
         while(finish == False):
+            count = count + 1
             time.sleep(1)
             if(self.F_是否在战斗()):
                 time.sleep(2)
@@ -963,6 +1019,10 @@ class MHWindow:
                     if(self.F_是否结束战斗()):
                         finish = True
                         break
+            else:
+                if(count == 3):
+                    PlaySound("C:\\y913.wav", flags=1)
+            
 
     def F_导航到女娲神迹(self):
         point = self.findImgInWindow('all-map-nvsj.png')
@@ -1077,19 +1137,20 @@ class MHWindow:
                           self.windowArea[0] + 600, self.windowArea[1] + 600]
                 ret = baiduApi.F_查找等级(宝图位置信息)
                 if(ret != '' and ret != None and int(ret) < 50):
-                    if(ret in self.config['tieLevels']):
+                    if(ret in str(self.config['tieLevels'])):
                         print('跳过')
                     else:
                         utils.click()
                         self.F_移动到游戏区域坐标(562, 417)
                         time.sleep(0.2)
                         utils.click()
+                        time.sleep(1)
                         for i in range(5):
-                            time.sleep(1)
                             point = self.findImgInWindow('all-cuihui.png', 0.85, [self.windowArea[0] + 283, self.windowArea[1]+232,
                                                                 70, 70])
                             if(point != None): 
                                 break
+                            time.sleep(0.5)
                         self.F_移动到游戏区域坐标(351, 342)
                         time.sleep(0.3)
                         utils.click()
@@ -1101,6 +1162,7 @@ class MHWindow:
             config = json.loads(fp.read())
             self.config = config
             fp.close()
+        print(str(self.config['shuLevels']))
         self.F_打开道具()
         points = self.findImgsInWindow('all-daoju-shu.png')
         for point in points:
@@ -1111,8 +1173,7 @@ class MHWindow:
                           self.windowArea[0] + 600, self.windowArea[1] + 600]
                 ret = baiduApi.F_查找等级(宝图位置信息)
                 if(ret != '' and ret != None and int(ret) < 60):
-                    
-                    if(ret in self.config['shuLevels']):
+                    if(ret in str(self.config['shuLevels'])):
                         print('跳过')
                     else:
                         utils.click()
@@ -1330,7 +1391,9 @@ class MHWindow:
         while True:
             self.F_小地图寻路器([461, 203], None, 是否关闭对话=False)
             pyautogui.press('f9')
-            time.sleep(1)
+            time.sleep(0.5)
+            pyautogui.hotkey('alt', 'h')
+            time.sleep(0.5)
             self.F_移动到游戏区域坐标(321, 307)
             utils.click()
             time.sleep(1)
@@ -1479,7 +1542,7 @@ class MHWindow:
         else:
             return
 
-    def F_使用飞行符(self, path):
+    def F_使用飞行符(self, path, 是否检查弹出=False):
         判断飞行符 = False
         desLocation = ""
         if(path == '傲来国'):
@@ -1534,6 +1597,13 @@ class MHWindow:
                     time.sleep(1)
                     break
                 else:
+                    if(是否检查弹出):
+                        point = self.findImgInWindow("all-shi.png", 0.75, area=(320, 320, 86, 51))
+                        if(point != None):
+                            self.pointMove(point[0], point[1])
+                            time.sleep(0.2)
+                            utils.click()
+                            time.sleep(1)
                     if(判断飞行符 == False):
                         self.F_判断是否有飞行符()
                         判断飞行符 = True
@@ -2141,17 +2211,8 @@ class MHWindow:
 
     def F_导航到海底迷宫(self):
         self.F_导航到花果山()
-        self.F_小地图寻路器([107, 7], True)
-        pyautogui.press('f9')
-        self.F_移动到游戏区域坐标(260, 457)
-        utils.click()
-        self.F_移动到游戏区域坐标(210, 334)
-        utils.click()
-        time.sleep(2)
-
-    def F_导航到海底迷宫(self):
-        self.F_导航到花果山()
-        self.F_小地图寻路器([107, 7], True)
+        self.F_小地图寻路器([107, 7])
+        time.sleep(3)
         pyautogui.press('f9')
         self.F_移动到游戏区域坐标(260, 457)
         utils.click()
@@ -2768,7 +2829,7 @@ class MHWindow:
                     utils.click()
                     time.sleep(1)
         else:
-            self.F_使用飞行符('建邺城')
+            self.F_使用飞行符('建邺城', 是否检查弹出=True)
             time.sleep(0.2)
             pyautogui.press('f9')
             time.sleep(0.2)
@@ -3129,7 +3190,9 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    # window.F_使用长安城飞行棋('红色长安城导标旗坐标_杂货店')
-    红蓝充足 = window.F_判断人物宝宝低红蓝位(False, True)
-    print(红蓝充足)
-    
+    window.F_导航到海底迷宫()
+    # window.F_使用飞行符('建邺城', 是否检查弹出=True)
+
+
+
+
