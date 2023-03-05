@@ -23,11 +23,7 @@ tcp_client_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if(pyZhikuDir2[0] == ":"):
     pyZhikuDir2 = "C" + pyZhikuDir2
 
-with open(pyZhikuDir2 + '/temp/915.txt', "r", encoding='utf-8') as f:
-    mode = f.read()
-    if(mode == "2"):
-        tcp_client_1.connect(("127.0.0.1", 61234))
-    f.close()
+tcp_client_1.connect(("127.0.0.1", 61234))
 
 def bindOp():
     real = pyautogui.position()

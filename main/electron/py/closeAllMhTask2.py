@@ -37,9 +37,9 @@ def show(par):
 
 
 
-def findKill(par):
-    tmp1 = monirtor('pythonw.exe',par)
-    tmp2 = monirtor('python.exe',par)
+def findKill():
+    tmp1 = monirtor('pythonw.exe')
+    tmp2 = monirtor('python.exe')
     for v in tmp1:
         printCmd(v)
     for v in tmp2:
@@ -57,4 +57,4 @@ def help():
     print('\t-lk par 终止查询到的程序')
 
 if __name__ == "__main__":
-   findKill('mh')
+   findKill()

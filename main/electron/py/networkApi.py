@@ -8,7 +8,7 @@ import time
 import requests
 import logUtil
 from urllib import parse
-import win32api,win32con
+
 host = 'http://42.51.41.129:3001/api/client/'
 suanHost = ''
 
@@ -64,6 +64,7 @@ def checkGameId(gameId, level, gameServer, name):
     fp = open(r"C:\config.txt", 'a+')
     fp.seek(0, 0)
     config = json.loads(fp.read())
+    fp.close()
     userId = str(config["userId"])
     url = host + "check_account_and_role2"
     payload = "{\"userId\": \"" + userId + "\", \"name\": \"" + name + "\", \"gameId\": \"" + gameId + "\", \"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
@@ -78,7 +79,7 @@ def checkGameId(gameId, level, gameServer, name):
     res = json.loads(response.text)
     if(res.get('status') != 0):
         sys.exit(0)
-    fp.close()
+   
  
     
 
@@ -110,7 +111,8 @@ def sendWatuProfit(nickName, note):
         baotuCount = res.get('data').get('monitor').get('baotuCount')
         fp.close()
         if(int(baotuCount) > int(maxBaotu)):
-            win32api.MessageBox(0, "已经完成最大挖图数", "提醒",win32con.MB_OK)
+           
+            return True
     time.sleep(3)   
 
 def 获取空闲接货人ID(gameId, work):

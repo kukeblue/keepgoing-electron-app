@@ -14,26 +14,66 @@ def killport(port):
         " | awk '{print $7}' | awk -F'/' '{{ print $1 }}')"
     os.system(command)
 
-def start(userid, maxBaotu = 0):
+def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo, isDiuhuo):
+    finishTodo = str(finishTodo)
+    tieLevels = str(tieLevels)
+    shuLevels = str(shuLevels)
+    if(tieLevels == "0"):
+           tieLevels = []
+    else:
+        tieLevels  = tieLevels.split(",")
+    if(shuLevels == "0"):
+        shuLevels  = []
+    else:
+        shuLevels  = shuLevels.split(",")
+    print(tieLevels);
+    print(shuLevels);
     if(os.path.exists(r"C:\config.txt")):
+    
         fp = open(r"C:\config.txt", 'a+')
         fp.seek(0, 0)
-        config = json.loads(fp.read())
-        if(config['userId'] != userid):
-            config['userId'] = userid
-        print(maxBaotu)
-        print(config['maxBaotu'])
-        if(config['maxBaotu'] != maxBaotu):
-            config['maxBaotu'] = maxBaotu
-        configNew = json.dumps(config, ensure_ascii=False)
-        fp.truncate(0)
-        fp.write(configNew)
+        try:
+            config = json.loads(fp.read())
+            if(config['userId'] != userid):
+                config['userId'] = userid
+            if(config['maxBaotu'] != maxBaotu):
+                config['maxBaotu'] = maxBaotu
+            config['tieLevels'] = tieLevels
+            config['shuLevels'] = shuLevels
+            config['isChiHong'] = isChiHong
+            config['isDiuhuo'] = isDiuhuo
+            config['isChilan'] = isChilan
+            config['finishTodo'] = finishTodo
+            configNew = json.dumps(config, ensure_ascii=False)
+            fp.truncate(0)
+            fp.write(configNew)
+        except:
+            fp.seek(0, 0)
+            config = {
+                "userId": userid,
+                "maxBaotu": maxBaotu,
+                "tieLevels": tieLevels,
+                "shuLevels": shuLevels,
+                "isChiHong": isChiHong, 
+                "isDiuhuo": isDiuhuo,
+                "isChilan":  isChilan,
+                "finishTodo": finishTodo,
+            }
+            configStr = json.dumps(config, ensure_ascii=False)
+            fp.write(configStr)
+        fp.close()
     else:
         print('生成配置文件')
         fp = open(r"C:\config.txt", "w+")
         config = {
             "userId": userid,
             "maxBaotu": maxBaotu,
+            "tieLevels": tieLevels,
+            "shuLevels": shuLevels,
+            "isChiHong": isChiHong, 
+            "isDiuhuo": isDiuhuo,
+            "isChilan":  isChilan,
+            "finishTodo": finishTodo,
         }
         configStr = json.dumps(config, ensure_ascii=False)
         fp.write(configStr)

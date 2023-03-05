@@ -15,13 +15,13 @@ let mainWindow: Electron.BrowserWindow;
 fs.truncate('app.log', 0, function () { console.log('clear log success') })
 
 function createWindow(): void {
-    Menu.setApplicationMenu(null)
+    // Menu.setApplicationMenu(null)
     mainWindow = new BrowserWindow({
         maximizable: false,
         x: 0,
         y: 0,
         icon: path.join(__dirname, 'public/icon/favicon.ico'),
-        height: 340,
+        height: 342,
         webPreferences: {
             // nodeIntegration: true,
             contextIsolation: false,
@@ -61,6 +61,7 @@ app.on('will-quit', () => {
    
     // 注销所有快捷键
     globalShortcut.unregisterAll()
+    runPyScript('closeAllMhTask2', [])
   })
 app.on('activate', () => {
     if (mainWindow === null) {

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from "react";
-import { Radio, Space, Drawer, Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
+import { Checkbox, Radio, Space, Drawer, Button, Col, Input, message, Modal, Popover, Row, Select, Switch, Tabs, Collapse, Divider, Badge, Tag } from 'antd'
 import { TDevice, TGameAccount, TGameRole, TWatuGroup } from "../../typing";
 import "./index.less";
 const request = ChUtils.Ajax.request
@@ -13,6 +13,7 @@ import moment from 'moment'
 import { createContainer } from 'unstated-next'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
+const { Option } = Select;
 // @ts-ignore
 const { confirm } = Modal;
 import {
@@ -32,6 +33,7 @@ import Account from "../account";
 import TextArea from "antd/lib/input/TextArea";
 import Item from "antd/lib/list/Item";
 import { userInfo } from "os";
+import { version } from "react-dom";
 
 type TPanelTask = 'test' | 'test2' | 'login' | ''
 const { useOptionFormListHook, usePage } = ChUtils.chHooks
@@ -95,9 +97,16 @@ export function usePageStore() {
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
     const [maxBaotu, setMaxBaotu] = useState<number>(300)
+    const [tieLevels, setTieLevels] = useState<string[]>([])
+    const [shuLevels, setShuLevels] = useState<string[]>([])
+    const [finishTodo, setFinishTodo] = useState<number>(1)
 
     // 是否吃蓝
     const [isChilan, setIsChilan] = useState<boolean>(true)
+    const [isChiHong, setIsChiHong] = useState<boolean>(true)
+
+    const [isDiuhuo, setIsDiuhuo] = useState<boolean>(true)
+
     // 开启硬件模拟
     const [isYinjian, setIsYinjian] = useState<boolean>(false)
     const [isBigGhost, setIsBigGhost] = useState<boolean>(true)
@@ -243,16 +252,24 @@ export function usePageStore() {
         setCurrentTask('test')
         setIsTasking(true)
         setShowLog(true)
-        const res = doTest(userStore.user.id + '', maxBaotu)
-        if (res.status == 0) {
-            // // message.success('连接成功')
-            setLogs(["初始化成功"])
-            setIsTasking(false)
-        }
+        deTestPoy({})
+        setLogs(["初始化成功"])
+    })
+    const handleSetTieAndLevels = (tieLevels: string[], shuLevels: string[]) => checkIsTasking(() => {
+        setTimeout(()=>{
+            deTestPoy({
+                tieLevels,
+                shuLevels
+            })
+            setLogs(["设置保留书铁等级成功"])
+        , 1000})
+        setIsTasking(false)
     })
     const handleSetMaxBaotu = (maxBaotu2: number) => checkIsTasking(() => {
             setTimeout(()=>{
-                const res = doTest(userStore.user.id + '', maxBaotu2)
+                deTestPoy({
+                    maxBaotu2: maxBaotu,
+                })
                 setLogs(["设置最大挖图数成功"])
             , 1000})
             setIsTasking(false)
@@ -295,11 +312,55 @@ export function usePageStore() {
         window.isBee = check;
     }
 
-    const handleChangeIsChilan = (check: boolean) => {
-        setIsChilan(check);
+    const handleChangeFinishTodo = (finishTodo: number) => {
+        setFinishTodo(finishTodo)
+        deTestPoy({
+            finishTodo
+        })
+        setLogs(['设置挖图停止操作成功'])
+    }
+
+    const handleChangeIsChilan = (isChilan: boolean) => {
+        setIsChilan(isChilan);
         // @ts-ignore
-        window.isChilan = check;
+        window.isChilan = isChilan;
+        deTestPoy({
+            isChilan
+        })
         setLogs(['设置蓝碗成功'])
+    }
+
+    const handleChangeIsChiHong = (isChiHong: boolean) => {
+        setIsChiHong(isChiHong);
+        // @ts-ignore
+        deTestPoy({
+            isChiHong
+        })
+        setLogs(['设置红碗成功'])
+    }
+    
+    const deTestPoy = (data: any) => {
+        let config: any = {
+            userid: userStore.user.id,
+            maxBaotu,
+            tieLevels,
+            shuLevels,
+            isChiHong,
+            isChilan,
+            finishTodo,
+            isDiuhuo,
+        }
+        Object.assign(config, data)
+        doTest(config.userid, config.maxBaotu, config.tieLevels, config.shuLevels, config.isChiHong, config.isChilan, config.finishTodo, config.isDiuhuo)
+    }
+
+    const handleChangeIsDiuhuo = (v: boolean) => {
+        setIsDiuhuo(v);
+        // @ts-ignore
+        deTestPoy({
+            isDiuhuo:v
+        })
+        setLogs(['设置是否丢货成功'])
     }
 
     const connector = () => {
@@ -334,8 +395,10 @@ export function usePageStore() {
     return {
         doTaskAuth,
         handleChangeIsChilan,
+        handleChangeIsChiHong,
         setIsChilan,
         isYinjian,
+        handleChangeFinishTodo,
         setIsYinjian,
         handleChangeIsYinjian,
         isChilan,
@@ -369,6 +432,10 @@ export function usePageStore() {
         setMaxBaotu,
         maxBaotu,
         logs,
+        tieLevels,
+        setTieLevels,
+        shuLevels,
+        setShuLevels,
         setLogs,
         isTasking,
         logAllAccount,
@@ -393,7 +460,10 @@ export function usePageStore() {
         getTaskLoading,
         handleGetWatuInfo,
         handleChangeIsBeen,
-        hanghua
+        hanghua,
+        handleSetTieAndLevels,
+        isDiuhuo,
+        handleChangeIsDiuhuo,
     }
 }
 export const PageStore = createContainer(usePageStore)
@@ -1434,6 +1504,19 @@ function HomeFeature() {
     </div>
 
 }
+
+const options = [
+    { label: '30', value: '30' },
+    { label: '40', value: '40' },
+  ];
+
+  const options2 = [
+    { label: '30', value: '30' },
+    { label: '40', value: '40' },
+    { label: '50', value: '50' },
+  ];
+
+
 function Home() {
     const pageStore = PageStore.useContainer()
     const userStore = UserStore.useContainer()
@@ -1450,22 +1533,64 @@ function Home() {
         <div className="page-clound" />
         <div className="page-content flex-row-between">
             <div>
-                <div className="flex">
-                    <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
-                    <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(F12)</span></Button>
+                    <div className="flex">
+                        <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
+                        <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
+                    </div>
+                    
+                    <div className="m-t-10 flex">
+                        <Switch onChange={(e) => {
+                                    pageStore.handleChangeIsChiHong(e)}} className="m-r-5" checkedChildren="开启补红" unCheckedChildren="关闭补红" defaultChecked />
+                        <Switch defaultChecked={pageStore.isChilan} onChange={(e) => {
+                                    pageStore.handleChangeIsChilan(e)}} checkedChildren="开启补蓝" unCheckedChildren="关闭补蓝" />
+                    </div>
+                <br/> 
+                <div>
+                    <div className="m-b-5">
+                        <Button size="small" type="primary">
+                        保留铁等级
+                        </Button>
+                    </div>
+                    <Checkbox.Group options={options} defaultValue={pageStore.tieLevels} onChange={(e)=>{ 
+                        console.log(e)
+                        // @ts-ignore
+                        pageStore.setTieLevels(e)
+                        // @ts-ignore
+                        pageStore.handleSetTieAndLevels(e, pageStore.shuLevels)
+                    }} />
                 </div>
-                <div className="m-t-10 flex">
-                    <Switch className="m-r-5" checkedChildren="开启补红" unCheckedChildren="关闭补红" defaultChecked />
-                </div>
-                <div className="m-t-10 flex">
-                    <Switch defaultChecked={pageStore.isChilan} onChange={(e) => {
-                                pageStore.handleChangeIsChilan(e)}} checkedChildren="开启补蓝" unCheckedChildren="关闭补蓝" />
+                <div>
+                    <div className="m-b-5">
+                        <Button size="small" type="primary">
+                            保留书等级
+                        </Button>
+                        &nbsp;&nbsp;
+                        <Switch defaultChecked={pageStore.isDiuhuo} onChange={(e) => {
+                                    pageStore.handleChangeIsDiuhuo(e)}} checkedChildren="开启卖丢货" unCheckedChildren="关闭卖丢货" />
+                    </div>
+                    <Checkbox.Group 
+                        options={options2} 
+                        defaultValue={pageStore.shuLevels} 
+                        onChange={(e)=>{ 
+                            // @ts-ignore
+                            pageStore.setShuLevels(e)
+                            // @ts-ignore
+                            pageStore.handleSetTieAndLevels(pageStore.tieLevels, e)
+                        }} 
+                    />
                 </div>
                 <div className="m-t-10 flex" style={{width: '130px'}}>
                     <Input size="small" defaultValue={pageStore.maxBaotu} onBlur={(e)=>{
                         pageStore.setMaxBaotu(Number(e.target.value));
                         pageStore.handleSetMaxBaotu(Number(e.target.value))
-                    }} addonAfter="张停止"/>
+                    }} addonAfter={<Select 
+                    onChange={(e)=>{
+                        pageStore.handleChangeFinishTodo(Number(e)) 
+                    }}
+                    size="small" defaultValue="1">
+                    <Option value="1">张停止</Option>
+                    <Option value="2">张下线</Option>
+                  </Select>}/>
                 </div> 
                 <br/> 
                 <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>

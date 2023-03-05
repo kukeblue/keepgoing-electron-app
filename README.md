@@ -12,3 +12,6 @@
 -  异常重启
 
 python .\blurb.py F:\project\keepgoing-electron-app\main\electron\py\ F:\project\keepgoing-electron-app\main\electron\temp\
+
+python .\blurb.py F:\project\keepgoing-w\main\electron\py\ F:\project\keepgoing-w\main\electron\temp\
+
