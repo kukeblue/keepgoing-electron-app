@@ -1525,14 +1525,25 @@ function Home() {
     useEffect(()=>{
         setTimeout(()=>{
             pageStore.handleTest()
-            
         }, 2000)
     }, [])
     return <div className='flex home-page page'>
         <img src={image_bg} className="page-bg" />
         <div className="page-clound" />
         <div className="page-content flex-row-between">
-            <div>
+            {userStore.user?.vipCard.type == 3 && <div  className="pgae-budian"> 
+                <div className="flex">
+                    <Button size="small" type="primary" onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动抓鬼</span></Button>
+                    <Button size="small" onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
+                </div>
+            </div>}
+            {userStore.user?.vipCard.type == 2 && <div  className="pgae-budian"> 
+                <div className="flex">
+                    <Button size="small" type="primary" onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动补店</span></Button>
+                    <Button size="small" onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
+                </div>
+            </div>}
+            {userStore.user?.vipCard.type == 1 && <div>
                     <div className="flex">
                         <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
                         <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
@@ -1594,7 +1605,7 @@ function Home() {
                 </div> 
                 <br/> 
                 <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>
-            </div>
+            </div>}
             <div>
                 <div className="m-l-15 page-log-area">
                     {pageStore.logs.map(item=>{
