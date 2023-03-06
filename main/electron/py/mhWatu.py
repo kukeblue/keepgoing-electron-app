@@ -176,7 +176,20 @@ def 挖图导航(window, map):
     elif(map == '五庄观'):
         window.F_导航到五庄观()
 
+def F_取出宝图(window):
+    # points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(120, 219, 258, 206))
+    # for point in points:
+    #     window.pointMove(point[0], point[1])
+    #     utils.rightClick()
+    #     utils.rightClick()
+    # window.F_关闭仓库()
+    window.F_打开道具()
+    for i in range(20):
+        window.F_选中道具格子(i + 1)
+        utils.rightClick()
 
+
+ 
 def 识别位置信息(window, point):
     window.pointMove(point[0], point[1])
     time.sleep(0.2)
@@ -458,10 +471,16 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
             time.sleep(10)
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    fire.Fire({
-        'info': F_获取宝图信息,
-        'clickMap': F_点击小地图,
-        'bee': F_小蜜蜂模式
-    })
+#     fire.Fire({
+#         'info': F_获取宝图信息,
+#         'clickMap': F_点击小地图,
+#         'bee': F_小蜜蜂模式
+#     })
+if __name__ == '__main__':
+    time.sleep(3)
+    MHWindow = mhWindow.MHWindow
+    window = MHWindow(1)
+    window.findMhWindow()
+    F_取出宝图(window)

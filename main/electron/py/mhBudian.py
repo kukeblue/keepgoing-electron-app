@@ -307,8 +307,10 @@ def F_补店(prices):
     window = MHWindow(1)
     window.findMhWindow()
     map = window.获取当前地图()
-    if map == '长安城':
-        window.F_卖体力()
+    window.F_注册挖图角色()
+    window.F_关闭对话()
+    # if map == '长安城':
+    #     window.F_卖体力()
     res = F_检查女娲技能(window)
     if(res == True):
         F_回商会(window)

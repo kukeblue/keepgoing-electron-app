@@ -181,9 +181,17 @@ class MHWindow:
             point[1] = point[1] - self.windowArea[1]
             return point
 
-    def findImgsInWindow(self, img, confidence=0.95):
+    def findImgsInWindow(self, img, confidence=0.95, area=(0,0,0,0)):
+        if(area[0] == 0 and area[3] == 0):
+            region = self.windowAreaGui
+        else:
+            x = self.windowAreaGui[0] + area[0]
+            y = self.windowAreaGui[1] + area[1]
+            width = area[2]
+            height = area[3]
+            region = (x, y, width, height)
         locations = pyautogui.locateAllOnScreen(
-            self.pyImageDir + self.F_获取设备图片(img), region=self.windowAreaGui, grayscale=False, confidence=confidence)
+            self.pyImageDir + self.F_获取设备图片(img), region=region, grayscale=False, confidence=confidence)
         ponits = []
         for location in locations:
             ponits.append([int(location.left / self.screenUnit), int(location.top / self.screenUnit),
@@ -1003,10 +1011,10 @@ class MHWindow:
         time.sleep(1)
 
     def F_打开道具(self):
-        self.focusWindow()
         while True:
             point = self.findImgInWindow('daoju_top.png')
             if(point == None):
+                self.focusWindow()
                 pyautogui.hotkey('alt', 'e')
                 time.sleep(0.5)
             else:
@@ -1015,6 +1023,10 @@ class MHWindow:
                                    50, point[0] + 3 + 250, point[1] + 50 + 205]
                 break
 
+    def F_关闭仓库(self):
+        self.F_移动到游戏区域坐标(689, 143)
+        utils.click()
+    
     def F_关闭道具(self):
         self.focusWindow()
         while True:
@@ -1028,23 +1040,30 @@ class MHWindow:
 
     def F_选中道具格子(self, num):
         self.F_打开道具()
-        self.focusWindow()
+        point = None
         while True:
-            point = self.findImgInWindow('daoju_top.png')
-            if(point == None):
-                pyautogui.hotkey('alt', 'e')
-                time.sleep(0.5)
-            else:
+            if(self.daojuArea[0] != 0):
+                point = self.daojuArea
                 break
+            else:
+                point = self.findImgInWindow('daoju_top.png')
+                if(point == None):
+                    pyautogui.hotkey('alt', 'e')
+                    time.sleep(0.5)
+                    self.focusWindow()
+                else:
+                    self.daojuArea = [point[0] + 3, point[1] + 50, 250, 205]
+                    self.daojuArea2 = [point[0] + 3, point[1] +
+                                   50, point[0] + 3 + 250, point[1] + 50 + 205]
+                    break
         firstBlockX = point[0] + 26
-        firstBlockY = point[1] + 83
+        firstBlockY = point[1] + 26
         left = ((num-1) % 5) * 50
         height = math.floor((num-1) / 5) * 50
         self.pointMove(firstBlockX + left, firstBlockY + height)
         return
 
     def F_选中道具格子2(self, num):
-
         point = self.findImgInWindow('daoju_top.png')
         if(point != None):
             firstBlockX = point[0] + 26
@@ -1055,6 +1074,13 @@ class MHWindow:
 
     def F_选中仓库道具格子(self, num):
         firstBlockX = self.windowArea[0] + 453
+        firstBlockY = self.windowArea[1] + 248
+        left = ((num-1) % 5) * 50
+        height = math.floor((num-1) / 5) * 50
+        self.pointMove(firstBlockX + left, firstBlockY + height)
+
+    def F_选中仓库格子(self, num):
+        firstBlockX = self.windowArea[0] + 143
         firstBlockY = self.windowArea[1] + 248
         left = ((num-1) % 5) * 50
         height = math.floor((num-1) / 5) * 50
@@ -2692,6 +2718,8 @@ class MHWindow:
 
     当前仓库 = 0
 
+    
+
     def F_选择仓库号(self, num):
         if(self.当前仓库 == num):
             return
@@ -2816,6 +2844,32 @@ class MHWindow:
         pyautogui.hotkey('alt', 'e')
         self.F_移动到游戏区域坐标(720, 35)
         utils.rightClick()
+    
+    def F_点击长安仓库管理员(self):
+        map = self.获取当前地图()
+        if(map != '长安城'):
+            self.F_使用飞行符('长安城')
+            time.sleep(1)
+            pyautogui.hotkey('alt', 'e')
+            time.sleep(1)
+        while True:
+            point = self.findImgInWindowReturnWindowPoint(
+                'all_tiantai_text.png')
+            if(point):
+                self.F_移动到游戏区域坐标(227, 373)
+                utils.click()
+                time.sleep(1)
+                break
+            else:
+                self.F_小地图寻路器([354, 247], True)
+                pyautogui.press('f9')
+                pyautogui.hotkey('alt', 'h')
+                self.F_移动到游戏区域坐标(286, 333)
+                utils.click()
+                utils.click()
+                time.sleep(1)
+        
+
 
     def F_回仓库丢小号(self, 接货id, 仓库地点='建邺城'):
         if(self.config == None):
@@ -3210,9 +3264,9 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_回仓库丢小号("123456")
+    window.F_选中道具格子(1)
     # time.sleep(5)
     # window.F_吃红()
-    os._exit(1)
+    # os._exit(1)
 
     

@@ -1520,7 +1520,7 @@ const options = [
 function Home() {
     const pageStore = PageStore.useContainer()
     const userStore = UserStore.useContainer()
-
+    const [price, setPrice] = useState('25555')
     // @ts-ignore
     useEffect(()=>{
         setTimeout(()=>{
@@ -1539,9 +1539,24 @@ function Home() {
             </div>}
             {userStore.user?.vipCard.type == 2 && <div  className="pgae-budian"> 
                 <div className="flex">
-                    <Button size="small" type="primary" onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动补店</span></Button>
+                    <Button size="small" type="primary" onClick={()=>{
+                        pageStore.setLogs(['脚本启动成功！'])
+                        doBudianTask(price)
+                    }} className="start-button"><span className="fs-11">启动补店</span></Button>
                     <Button size="small" onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
                 </div>
+                &nbsp;&nbsp;
+                <Row>
+                        <Col>
+                            <div className="flex">
+                                <Button size="small" type="primary">价格</Button>&nbsp;
+                                <Input onChange={(e) => { setPrice(e.target.value)  }} value={price} style={{ width: 150 }} />
+                            </div>
+                        </Col>
+                 </Row>
+                 <br/>
+                 <br/>
+                 <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>
             </div>}
             {userStore.user?.vipCard.type == 1 && <div>
                     <div className="flex">

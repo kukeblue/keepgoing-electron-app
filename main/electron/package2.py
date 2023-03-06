@@ -3,7 +3,7 @@ import os
 import time
 
 
-path = r'F:\project\keepgoing-w\main\electron\temp\__pycache__'
+path = r'D:\project\keepgoing-w\main\electron\temp\__pycache__'
 file_names = os.listdir(path)  # 创建一个所有文件名的列表
 
 for name in file_names:
@@ -14,7 +14,7 @@ for name in file_names:
 
 compileall.compile_dir('./temp', force=True)
 
-path = r'F:\project\keepgoing-w\main\electron\temp\__pycache__'
+path = r'D:\project\keepgoing-w\main\electron\temp\__pycache__'
 file_names = os.listdir(path)  # 创建一个所有文件名的列表
 
 for name in file_names:
