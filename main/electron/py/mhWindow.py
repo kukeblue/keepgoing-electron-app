@@ -309,7 +309,7 @@ class MHWindow:
                 time.sleep(1)
                 isFirstMove = 0
 
-    def F_是否在战斗(self):
+    def F_是否在战斗(self):  
         try:
             point = self.findImgInWindow(
                 'window_zhandou_mask.png', area=(441, 561, 40, 40))
@@ -2845,31 +2845,60 @@ class MHWindow:
         self.F_移动到游戏区域坐标(720, 35)
         utils.rightClick()
     
-    def F_点击长安仓库管理员(self):
-        map = self.获取当前地图()
-        if(map != '长安城'):
-            self.F_使用飞行符('长安城')
-            time.sleep(1)
-            pyautogui.hotkey('alt', 'e')
-            time.sleep(1)
-        while True:
-            point = self.findImgInWindowReturnWindowPoint(
-                'all_tiantai_text.png')
-            if(point):
-                self.F_移动到游戏区域坐标(227, 373)
-                utils.click()
+    def F_点击仓库管理员(self, 仓库地点='建邺城'):
+        if(仓库地点 == "长安城"):
+            map = self.获取当前地图()
+            if(map != '长安城'):
+                self.F_使用飞行符('长安城')
                 time.sleep(1)
-                break
-            else:
-                self.F_小地图寻路器([354, 247], True)
-                pyautogui.press('f9')
-                pyautogui.hotkey('alt', 'h')
-                self.F_移动到游戏区域坐标(286, 333)
-                utils.click()
-                utils.click()
+                pyautogui.hotkey('alt', 'e')
                 time.sleep(1)
-        
+            while True:
+                point = self.findImgInWindowReturnWindowPoint(
+                    'all_tiantai_text.png')
+                if(point):
+                    self.F_移动到游戏区域坐标(227, 373)
+                    utils.click()
+                    time.sleep(1)
+                    break
+                else:
+                    self.F_小地图寻路器([354, 247], True)
+                    pyautogui.press('f9')
+                    pyautogui.hotkey('alt', 'h')
+                    self.F_移动到游戏区域坐标(286, 333)
+                    utils.click()
+                    utils.click()
+                    time.sleep(1)
+        else:
+            map = self.获取当前地图()
+            if(map != '建邺城'):
+                self.F_使用飞行符('建邺城')
+                time.sleep(0.2)
+            while True:
+                point = self.findImgInWindowReturnWindowPoint(
+                    'all_tiantai_text.png')
+                if(point):
+                    self.F_移动到游戏区域坐标(227, 373)
+                    utils.click()
+                    time.sleep(1)
+                    break
+                else:
+                    self.F_小地图寻路器([59, 28], True)
+                    pyautogui.press('f9')
+                    pyautogui.hotkey('alt', 'h')
+                    self.F_移动到游戏区域坐标(300, 190)
+                    utils.click()
+                    utils.click()
+                    time.sleep(1)
 
+    def F_获取配置(self):
+        if(self.config == None):
+            fp = open(r"C:\config.txt", 'a+')
+            fp.seek(0, 0)
+            config = json.loads(fp.read())
+            self.config = config
+            fp.close()
+        return self.config
 
     def F_回仓库丢小号(self, 接货id, 仓库地点='建邺城'):
         if(self.config == None):
@@ -3264,7 +3293,7 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_选中道具格子(1)
+    window.F_点击仓库管理员()
     # time.sleep(5)
     # window.F_吃红()
     # os._exit(1)
