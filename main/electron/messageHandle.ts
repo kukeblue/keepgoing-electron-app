@@ -184,6 +184,17 @@ const init = (mainWindow: Electron.BrowserWindow) => {
             status: 0
         }
     })
+
+    // 仓库取图模式
+    ipcMain.on(resourcePaths.METHOD_CANGKU_MODE, (event, args) => {
+        logger.info('run py script: METHOD_CANGKU_MODE')
+        const result = runPyScript('mhWatu', ['cangkuWatu'])
+        event.returnValue = {
+            code: result,
+            status: 0
+        }
+    })
+
     // 点击小地图
     ipcMain.on(resourcePaths.METHOD_CLICK_WATU_MAP, (event, args) => {
         logger.info('run py script: METHOD_CLICK_WATU_MAP')

@@ -55,12 +55,13 @@ class MHWindow:
     daojuArea = [0, 0, 0, 0]
     daojuArea2 = [0, 0, 0, 0]
     pyHome = __file__.strip('mhWindow.pyc')
-    pyImageDir = pyHome + '\config\images'
+    pyImageDir = pyHome + 'config\images'
     gameId = ''
     handle = ''
     gameServer=''
     roleName=''
     config=None
+    gameLevel=0
 
     def __init__(self, screenUnit):
         print('init')
@@ -126,6 +127,7 @@ class MHWindow:
         path = self.F_窗口区域截图('temp_orc_info.png', 角色等级位置)
         ret = baiduApi.cnocr文字识别2(path)
         pyautogui.hotkey('alt', 'w')
+        self.gameLevel = int(ret)
         return ret
 
     def focusWindow(self):
@@ -356,6 +358,8 @@ class MHWindow:
         num = 18
         if(pic == 'all_hongwan.png'):
             num = 17
+        if(pic == 'all-caqi.png'):
+            num = 16
         self.F_打开道具()
         self.F_选中道具格子(num)
         time.sleep(1)
@@ -399,6 +403,7 @@ class MHWindow:
             utils.click()
             time.sleep(0.2)
             utils.rightClick()
+            return True
 
     def F_中途加油(self, 是否补蓝):
         point = self.获取当前坐标()
@@ -431,23 +436,25 @@ class MHWindow:
         if ((self.findImgInWindow(
                     'all-caqi.png', area=(27, 274, 300, 250)) or  self.findImgInWindow(
                     'all-caqi2.png', area=(27, 274, 300, 250))) == None):
-            networkApi.doUpdateRoleStatus(self.gameId, '补旗')
-            self.F_打开道具()
-            while True:
-                time.sleep(1)
-                result = (self.findImgInWindow(
-                    'all-caqi.png', area=(27, 274, 300, 250)) or  self.findImgInWindow(
-                    'all-caqi2.png', area=(27, 274, 300, 250)))
-                if (result != None):
-                    self.pointMove(result[0], result[1])
-                    time.sleep(0.2)
-                    utils.click()
-                    time.sleep(0.2)
-                    self.F_选中道具格子(16)
-                    time.sleep(0.2)
-                    utils.click()
-                    time.sleep(0.2)
-                    break
+            ret = self.F_行囊拿红蓝('all-caqi.png')
+            if(ret == None):
+                networkApi.doUpdateRoleStatus(self.gameId, '补旗')
+                self.F_打开道具()
+                while True:
+                    time.sleep(1)
+                    result = (self.findImgInWindow(
+                        'all-caqi.png', area=(27, 274, 300, 250)) or  self.findImgInWindow(
+                        'all-caqi2.png', area=(27, 274, 300, 250)))
+                    if (result != None):
+                        self.pointMove(result[0], result[1])
+                        time.sleep(0.2)
+                        utils.click()
+                        time.sleep(0.2)
+                        self.F_选中道具格子(16)
+                        time.sleep(0.2)
+                        utils.click()
+                        time.sleep(0.2)
+                        break
         是否有红 = True
         if(是否吃红):
             是否有红 = self.F_吃红()
@@ -1340,7 +1347,9 @@ class MHWindow:
                 os._exit(1)
 
             else:
-                networkApi.doUpdateRoleStatus(self.gameId, '空闲')
+                config = self.F_获取配置()
+                if(config["liandong"] == "true"):
+                    networkApi.doUpdateRoleStatus(self.gameId, '空闲')
         if(len(有货格子) > 0):
             logUtil.chLog('有货格子循环')
             print(math.ceil(len(有货格子)/3))
@@ -1409,9 +1418,9 @@ class MHWindow:
                         self.退出游戏()
                     os._exit(1)
                 else:
-                    networkApi.doUpdateRoleStatus(self.gameId, '空闲')
-
-
+                    config = self.F_获取配置()
+                    if(config["liandong"] == "true"):
+                        networkApi.doUpdateRoleStatus(self.gameId, '空闲')
     def F_卖装备(self):
         a = random.choice((-1, 1))
         if(a == 1):
@@ -2854,10 +2863,9 @@ class MHWindow:
                 pyautogui.hotkey('alt', 'e')
                 time.sleep(1)
             while True:
-                point = self.findImgInWindowReturnWindowPoint(
-                    'all_tiantai_text.png')
+                point = self.findImgInWindow('all_tiantai_text.png')
                 if(point):
-                    self.F_移动到游戏区域坐标(227, 373)
+                    self.pointMove(point[0]+10, point[1] + 5)
                     utils.click()
                     time.sleep(1)
                     break
@@ -2875,10 +2883,9 @@ class MHWindow:
                 self.F_使用飞行符('建邺城')
                 time.sleep(0.2)
             while True:
-                point = self.findImgInWindowReturnWindowPoint(
-                    'all_tiantai_text.png')
+                point = self.findImgInWindow('all_tiantai_text.png')
                 if(point):
-                    self.F_移动到游戏区域坐标(227, 373)
+                    self.pointMove(point[0]+10, point[1] + 5)
                     utils.click()
                     time.sleep(1)
                     break
@@ -3055,7 +3062,7 @@ class MHWindow:
         map = ""
         if("花果山" in str):
             map = "花果山"
-        if("宝象国" in str):
+        elif("宝象国" in str):
             map = "宝象国"
         elif("五庄观" in str or '庄观' in str):
             map = "五庄观"
@@ -3213,9 +3220,6 @@ class MHWindow:
                     utils.click()
 
 
-    
-
-
 def 挖图导航(window, map):
     if(map == '江南野外'):
         window.F_导航到江南野外()
@@ -3249,8 +3253,6 @@ def 挖图导航(window, map):
         window.F_导航到大唐境外()
     elif(map == '五庄观'):
         window.F_导航到五庄观()
-
-
 
 class EventStrand:
     isFinish = False

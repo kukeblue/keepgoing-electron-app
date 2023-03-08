@@ -6,7 +6,7 @@ import "./index.less";
 const request = ChUtils.Ajax.request
 import { ChForm, ChTablePanel, ChUtils, FormItemType } from "ch-ui";
 import { useForm } from "antd/es/form/Form";
-import { setClickMode, setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
+import { setClickMode, setOption ,doKillProcess, doStartGame, doTest, doTest2, MainThread, doGetWatuInfo, doZhuaGuiTask, doBee, doCangkuWatu, doGetWatuClickMap, doCloseAllTask, doThrowLitter, doSellEquipment, doConnector, doZhandou, doHanghua, doUpdatePy, doBudianTask } from "../../call";
 import image_bg from '../../assets/images/bg2.png'
 import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment'
@@ -104,6 +104,9 @@ export function usePageStore() {
     // 是否吃蓝
     const [isChilan, setIsChilan] = useState<boolean>(true)
     const [isChiHong, setIsChiHong] = useState<boolean>(true)
+    // 是否联动
+    const [liandong, setLiandong] = useState<boolean>(true)
+    const [cangkuScran, setCangkuScan] = useState<boolean>(false)
 
     const [isDiuhuo, setIsDiuhuo] = useState<boolean>(true)
 
@@ -141,14 +144,13 @@ export function usePageStore() {
     }
     const handleGetWatuInfo = (restart = 0) => {
         if (isBee) {
-            setShowLog(true)
-           
-            // message.success('执行成功')
-            // @ts-ignore
-            doBee(cangkuPath, restart, window.isChilan)
+            if(liandong) {
+                // @ts-ignore
+                doBee(cangkuPath, restart, window.isChilan)
+            }else {
+                doCangkuWatu()
+            }
         } else {
-            setShowLog(true)
-            // message.success('执行成功')
             // @ts-ignore
             doGetWatuInfo(window.isChilan)
         }
@@ -330,6 +332,25 @@ export function usePageStore() {
         setLogs(['设置蓝碗成功'])
     }
 
+    const handleChangeCangkuScran = (cangkuScran: boolean) => {
+        setCangkuScan(cangkuScran);
+        // @ts-ignore
+        deTestPoy({
+            cangkuScran
+        })
+        setLogs(['设置仓库扫描成功'])
+    }
+
+    const handleChangeLiandong = (liandong: boolean) => {
+        console.log(liandong)
+        setLiandong(liandong);
+        // @ts-ignore
+        deTestPoy({
+            liandong
+        })
+        setLogs(['设置联动成功'])
+    }
+
     const handleChangeIsChiHong = (isChiHong: boolean) => {
         setIsChiHong(isChiHong);
         // @ts-ignore
@@ -349,9 +370,13 @@ export function usePageStore() {
             isChilan,
             finishTodo,
             isDiuhuo,
+            liandong,   // 联动
+            cangkuScran // 仓库扫描
         }
         Object.assign(config, data)
-        doTest(config.userid, config.maxBaotu, config.tieLevels, config.shuLevels, config.isChiHong, config.isChilan, config.finishTodo, config.isDiuhuo)
+        doTest(config.userid, config.maxBaotu, config.tieLevels, 
+            config.shuLevels, config.isChiHong, config.isChilan, 
+            config.finishTodo, config.isDiuhuo, config.liandong, config.cangkuScran)
     }
 
     const handleChangeIsDiuhuo = (v: boolean) => {
@@ -396,6 +421,9 @@ export function usePageStore() {
         doTaskAuth,
         handleChangeIsChilan,
         handleChangeIsChiHong,
+        handleChangeLiandong,
+        liandong,
+        handleChangeCangkuScran,
         setIsChilan,
         isYinjian,
         handleChangeFinishTodo,
@@ -1563,7 +1591,13 @@ function Home() {
                         <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
                         <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
                     </div>
-                    
+                    <div className="m-t-10 flex">
+                        <Switch defaultChecked onChange={(e) => {
+                                    pageStore.handleChangeLiandong(e)}} className="m-r-5" checkedChildren="联动挖图" unCheckedChildren="仓库挖图"/>
+                        {pageStore.liandong == false && <Switch onChange={(e) => {
+                                    pageStore.handleChangeCangkuScran(e)}} checkedChildren="扫描仓库" unCheckedChildren="直接挖图" />
+                        }
+                        </div>
                     <div className="m-t-10 flex">
                         <Switch onChange={(e) => {
                                     pageStore.handleChangeIsChiHong(e)}} className="m-r-5" checkedChildren="开启补红" unCheckedChildren="关闭补红" defaultChecked />

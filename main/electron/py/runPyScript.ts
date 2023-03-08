@@ -32,20 +32,20 @@ export function runPyScript(name, args = []) {
         logger.info('pid: ' + process.pid)
 
         if (name == 'mhWatu') {
-            setTimeout(() => {
-                const command = `python ${resolve('./')}/main/electron/py/__pycache__/mhShouhu.pyc`
-                // logger.info('run py script ' + command)
-                const process = exec(command, (error, stdout, stderr) => {
-                    const runningPyProcess = state.runningPyProcess
-                    if (error) {
-                        logger.info(`exec error: ${error}`);
-                        return;
-                    } else {
-                        logger.info(`${name} run finish pid ${runningPyProcess[name]}`)
-                    }
-                    delete runningPyProcess[name]
-                })
-            }, 1000)
+            // setTimeout(() => {
+            //     const command = `python ${resolve('./')}/main/electron/py/__pycache__/mhShouhu.pyc`
+            //     // logger.info('run py script ' + command)
+            //     const process = exec(command, (error, stdout, stderr) => {
+            //         const runningPyProcess = state.runningPyProcess
+            //         if (error) {
+            //             logger.info(`exec error: ${error}`);
+            //             return;
+            //         } else {
+            //             logger.info(`${name} run finish pid ${runningPyProcess[name]}`)
+            //         }
+            //         delete runningPyProcess[name]
+            //     })
+            // }, 1000)
         }
 
         return 0

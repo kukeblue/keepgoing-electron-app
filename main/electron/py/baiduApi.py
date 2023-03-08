@@ -20,12 +20,7 @@ pyZhikuDir2 = pyHome + 'config\images'
 APP_ID = '25713120'
 API_KEY = 'GOkNrLxVH3cV8I7DVpXx67mh'
 SECRET_KEY = '9MTEeMd2nNcm457CsGTGNV5ddkISAuI1'
-client = None
-with open(pyZhikuDir2 + '\\temp\\913.txt', "r", encoding='utf-8') as f:
-    data = f.read()
-    textAppData = data.split(',')
-    f.close()
-    client = AipOcr('28169102', 'TlqWuTLLPyVnoMAILQQnhQU1',
+client = AipOcr('28169102', 'TlqWuTLLPyVnoMAILQQnhQU1',
                     '3T2wyhRHS7pH7euXSefHRR6gjcE1h1I2')
 
 """ 读取图片 """

@@ -3,8 +3,8 @@ import resourcePaths from "../../../electron/resourcePaths";
 
 export const getJiangjunCode = (body: Object) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_START_GAME, JSON.stringify(body))
 export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_LOGIN_GAME, body)
-export const doTest = (userid: string, maxBaotu: number, tieLevels: string[], shuLevels: string[], isChiHong: boolean, isChilan: boolean, finishTodo: number, isDiuhuo: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [
-    userid, maxBaotu, tieLevels.toString() || 0, shuLevels.toString() || 0, isChiHong, isChilan, finishTodo, isDiuhuo
+export const doTest = (userid: string, maxBaotu: number, tieLevels: string[], shuLevels: string[], isChiHong: boolean, isChilan: boolean, finishTodo: number, isDiuhuo: boolean, liandong: boolean, cangkuScran: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [
+    userid, maxBaotu, tieLevels.toString() || 0, shuLevels.toString() || 0, isChiHong, isChilan, finishTodo, isDiuhuo, liandong, cangkuScran
 ])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])
@@ -35,6 +35,7 @@ export const setClickMode = (v: number) => {
 export const doSyncImages = (files: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_SYNC_IMAGES, files)
 export const doGetWatuClickMap = (mapName: string, x: number, y: number, ox: number, oy: number, index: number, otherPoint?: string, isBeen?: boolean, cangkuPath?: string, isChilan?: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CLICK_WATU_MAP, [mapName, x, y, ox, oy, index, otherPoint, isBeen, cangkuPath, isChilan])
 export const doBee = (cangkuPath: string, restart = 0, isChilan: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_BEE_MODE, [cangkuPath, restart, isChilan])
+export const doCangkuWatu = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_CANGKU_MODE, [])
 
 
 const init = () => {

@@ -15,6 +15,8 @@ import mouse
 import os
 import win32api,win32con
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
+import ctypes, sys
+
 
 
 def 挖图分图组(list):
@@ -48,7 +50,7 @@ def F_获取任务位置和坐标(str, roPoint):
     map = ""
     if("花果山" in str):
         map = "花果山"
-    if("宝象国" in str):
+    elif("宝象国" in str):
         map = "宝象国"
     elif("五庄观" in str):
         map = "五庄观"
@@ -118,12 +120,31 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
     time.sleep(1)
     points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75)
     res = []
+    仓库取图数据 = []
+    是否仓库取图识别 = False
+    currentFile = "C:\\"+ window.gameId + "_current.txt"
+    config = window.F_获取配置()
+    if(config["liandong"] == "false"):
+        if(os.path.exists(currentFile)):
+            fp = open(currentFile, "a+")
+            fp.seek(0, 0)
+            仓库取图数据 = json.loads(fp.read())
+            fp.close()
+    if(config["liandong"] == "false" and (len(仓库取图数据) == len(points))):
+        是否仓库取图识别 = True
+    index = 0
     for point in points:
-        mapAndpoint = 识别位置信息(window, point)
-        if(mapAndpoint != None or mapAndpoint[1][0] == 0):
+        mapAndpoint = None
+        if(是否仓库取图识别 == True):
+            #[map, [0, 0], roPoint, cangkuNum]
+            mapAndpoint = 仓库取图数据[index]
+            mapAndpoint[2] = point
+        else:
             mapAndpoint = 识别位置信息(window, point)
-        print(mapAndpoint)
+            if(mapAndpoint != None or mapAndpoint[1][0] == 0):
+                mapAndpoint = 识别位置信息(window, point)
         res.append(mapAndpoint)
+        index = index + 1
     jsonArr = json.dumps(res, ensure_ascii=False)
     pyautogui.hotkey('alt', 'e')
     map = ''
@@ -144,7 +165,7 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
                 mapName = key
         map = mapName
         res[0][0] = mapName
-    if(map == ''):
+    if(map == '' or (window.gameLevel < 90 and map == "麒麟山")  or (window.gameLevel < 45 and map == "北俱芦洲")):
         接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
         if(接货id != None):
             window.F_回仓库丢小号(接货id, '建邺城')
@@ -152,7 +173,7 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
             window.F_回仓库放东西(map, '建邺城')
         config = window.F_获取配置()
         if(config["liandong"] == "false"):
-            F_取图挖图()
+            F_取图挖图(window)
         else:
             F_小蜜蜂模式('建邺城', 0, window, isChilan)
 
@@ -210,87 +231,129 @@ def 挖图导航(window, map):
     elif(map == '五庄观'):
         window.F_导航到五庄观()
 
-def F_取图挖图(window):
+def F_取图挖图(window=None):
+    if(window == None):
+        if(window == None):
+            logUtil.chLog('开始发车')
+            MHWindow = mhWindow.MHWindow
+            window = MHWindow(1)
+            window.findMhWindow()
+            window.F_注册挖图角色()
+            window.F_关闭对话()
+            window.F_关闭对话()
+        else:
+            logUtil.chLog('继续取图挖图')
+            window.F_关闭对话()
+            window.focusWindow()
+    config = window.F_获取配置()
+    if(config["cangkuScran"] == "true"):
+        F_取出开宝图(window)
+        return
     window.F_打开道具()
     time.sleep(0.5)
     point = window.findImgInWindow('daoju_baotu.png')
+    window.F_关闭道具()
     if(point != None and point[0] > 0):
-        F_小蜜蜂模式('建邺城', 1, window, isChilan=是否吃蓝)
+        currentFile = "C:\\"+ window.gameId + "_current.txt"  
+        if(os.path.exists(currentFile)):
+            os.remove(currentFile)
+        logUtil.chLog('have last baotu!')
+        F_小蜜蜂模式('建邺城', 1, window, isChilan=None)
     else:
         configFile = "C:\\"+ window.gameId + ".txt"
         拿出部分图 = []
         if(os.path.exists(configFile)):
-            fp = open(configFile)
-            fp.seek(0, 0)
-            watuConfig = json.loads(fp.read())
-            for key, value in watuConfig.items():
-                a = len(value)
-                if(a > 0):
-                    if(a > 15):
-                        拿出部分图 = value[0: 15]
-                        剩余部分图 = value[15, a]
-                        watuConfig[key] = 剩余部分图
-                    else:
-                        拿出部分图 = value
-                        watuConfig[key] = []
-                    break
-            fp.close()
-            os.remove(configFile)
-            fp = open(configFile, "w+")
-            fp.seek(0, 0)
-            watuConfigStr = json.dumps(watuConfig, ensure_ascii=False)
-            fp.truncate(0)
-            fp.write(watuConfigStr)
-            fp.close()
-            if(len(拿出部分图) == 0):
-                win32api.MessageBox(0, "已经完成最大挖图数", "提醒", win32con.MB_OK)
-                os._exit(1)
-                return
-            window.F_点击仓库管理员()
-            for item in 拿出部分图:
-                cankuNum = item[3]
-                位置 = item[2]
-                window.F_选择仓库号(cankuNum)
-                window.pointMove(位置[0], 位置[1])
-                utils.rightClick()
-            window.F_关闭仓库()
-            if(window.config == None):
-                fp = open(r"C:\config.txt", 'a+')
+            while True:
+                fp = open(configFile)
                 fp.seek(0, 0)
-                config = json.loads(fp.read())
-                window.config = config
+                watuConfig = json.loads(fp.read())
+                for key, value in watuConfig.items():
+                    a = len(value)
+                    if(a > 0):
+                        if(a > 15):
+                            拿出部分图 = value[0: 15]
+                            剩余部分图 = value[15, a]
+                            watuConfig[key] = 剩余部分图
+                        else:
+                            拿出部分图 = value
+                            watuConfig[key] = []
+                        break
+                print(拿出部分图)
                 fp.close()
-            if(window.config["isChilan"] == "false"):
-                是否吃蓝 = False
+                os.remove(configFile)
+                fp = open(configFile, "w+")
+                fp.seek(0, 0)
+                watuConfigStr = json.dumps(watuConfig, ensure_ascii=False)
+                fp.truncate(0)
+                fp.write(watuConfigStr)
+                fp.close()
+                # 写入当前挖的数据
+                currentFile = "C:\\"+ window.gameId + "_current.txt"  
+                if(os.path.exists(currentFile)):
+                    os.remove(currentFile)
+                if(len(拿出部分图) != 0):
+                    fp = open(currentFile, "w+")
+                    fp.seek(0, 0)
+                    watuCurrentStr = json.dumps(拿出部分图, ensure_ascii=False)
+                    fp.truncate(0)
+                    fp.write(watuCurrentStr)
+                    fp.close()
+                if(len(拿出部分图) == 0):
+                    win32api.MessageBox(0, "已经完成最大挖图数", "提醒", win32con.MB_OK)
+                    os._exit(1)
+                    return
+                window.F_点击仓库管理员()
+                for item in 拿出部分图:
+                    cankuNum = item[3]
+                    位置 = item[2]
+                    window.F_选择仓库号(cankuNum)
+                    window.pointMove(位置[0], 位置[1])
+                    utils.rightClick()
+                window.F_关闭仓库()
+                window.F_打开道具()
+                point = window.findImgInWindow('daoju_baotu.png')
+                if(point != None and point[0] > 0):
+                    break
             window.医宝宝()
-            F_小蜜蜂模式('建邺城', 1, window, isChilan=是否吃蓝)
+            F_小蜜蜂模式('建邺城', 1, window, isChilan=None)
         else:
             print("未找到挖图识别文件")
 
-def F_取出开宝图(window):
+def F_取出开宝图(window=None):
+    if(window == None):
+        if(window == None):
+            logUtil.chLog('开始发车')
+            MHWindow = mhWindow.MHWindow
+            window = MHWindow(1)
+            window.findMhWindow()
+            window.F_注册挖图角色()
+            window.F_关闭对话()
     仓库宝图存档 = []
     window.F_点击仓库管理员()
-    for cankuNum in range(1):
+    for _cankuNum in range(25):
+        cankuNum = _cankuNum + 1
         window.F_选择仓库号(cankuNum)
-        points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(120, 219, 258, 206))
-        for point in points:
-            window.pointMove(point[0], point[1])
-            utils.rightClick()
-            utils.rightClick()
-        window.F_打开道具()
-        points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(29, 275, 260, 221))
-        for point in points:
-            window.pointMove(point[0], point[1])
-            utils.rightClick()
-            utils.rightClick()
-        window.F_关闭道具()
         time.sleep(1)
-        points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(426, 220, 260, 221))
-        for point in points:
-            window.pointMove(point[0], point[1])
-            utils.rightClick()
-            utils.rightClick()
-        仓库宝图存档 = F_仓库识图(window, cankuNum)
+        points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(120, 219, 258, 206))
+        if(len(points) > 0 ):
+            for point in points:
+                window.pointMove(point[0], point[1])
+                utils.rightClick()
+                utils.rightClick()
+            window.F_打开道具()
+            points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(29, 275, 260, 221))
+            for point in points:
+                window.pointMove(point[0], point[1])
+                utils.rightClick()
+                utils.rightClick()
+            window.F_关闭道具()
+            time.sleep(1)
+            points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(426, 220, 260, 221))
+            for point in points:
+                window.pointMove(point[0], point[1])
+                utils.rightClick()
+                utils.rightClick()
+            仓库宝图存档.extend(F_仓库识图(window, cankuNum))
     分组 = 挖图分图组(仓库宝图存档)
     configFile = "C:\\"+ window.gameId + ".txt"
     if(os.path.exists(configFile)):
@@ -313,7 +376,7 @@ def F_仓库识图(window, cankuNum):
                 window.windowArea[0] + 600, window.windowArea[1] + 600]
         ret = window.F_宝图文字识别(宝图位置信息)
         cangkuBaotu = F_获取任务位置和坐标(ret, point)
-        cangkuBaotu.append(cankuNum + 1)
+        cangkuBaotu.append(cankuNum)
         仓库宝图存档.append(cangkuBaotu)
     return 仓库宝图存档
 
@@ -512,7 +575,7 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
             if(isBeen):
                 config = window.F_获取配置()
                 if(config["liandong"] == "false"):
-                    F_取图挖图()
+                    F_取图挖图(window)
                 else:
                     F_小蜜蜂模式('建邺城', 0, window, isChilan)
 
@@ -538,10 +601,6 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
     首次启动 = False
     if(window == None):
         首次启动 = True
-    if(isChilan == 'true'):
-        isChilan = True
-    else:
-        isChilan = False
     time.sleep(1)
     if(window == None):
         logUtil.chLog('开始发车')
@@ -556,14 +615,21 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
         logUtil.chLog('继续发车')
         window.F_关闭对话()
         window.focusWindow()
-
-    _restart = 0;
-    window.F_打开道具()
-    time.sleep(0.5)
-    point = window.findImgInWindow('daoju_baotu.png')
-    if(point != None and point[0] > 0):
+    isChilan = window.F_获取配置()["isChilan"]
+    if(isChilan == 'true'):
+        isChilan = True
+    else:
+        isChilan = False
+    if(restart == 1):
         _restart = 1
-    window.F_关闭道具()
+    else:
+        _restart = 0
+        window.F_打开道具()
+        time.sleep(0.5)
+        point = window.findImgInWindow('daoju_baotu.png')
+        if(point != None and point[0] > 0):
+            _restart = 1
+        window.F_关闭道具()
     if(_restart != 1 and 首次启动 == True):
         接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
         if(接货id != None):
@@ -588,7 +654,7 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
         if(point != None and point[0] > 0):
             if(_restart != 1):
                 time.sleep(10)
-            window.F_使用酒肆和打坐()
+            # window.F_使用酒肆和打坐()
             window.F_发车检查(isChilan)
             networkApi.doUpdateRoleStatus(window.gameId, '忙碌')
             window.F_吃香()
@@ -601,16 +667,14 @@ def F_小蜜蜂模式(仓库位置, restart=0, window=None, isChilan='true', han
             time.sleep(10)
 
 
-# if __name__ == '__main__':
-
-#     fire.Fire({
-#         'info': F_获取宝图信息,
-#         'clickMap': F_点击小地图,
-#         'bee': F_小蜜蜂模式
-#     })
 if __name__ == '__main__':
-    time.sleep(3)
-    MHWindow = mhWindow.MHWindow
-    window = MHWindow(1)
-    window.findMhWindow()
-    F_取图挖图(window)
+    fire.Fire({
+        'info': F_获取宝图信息,
+        'clickMap': F_点击小地图,
+        'bee': F_小蜜蜂模式,
+        'cangkuWatu': F_取图挖图,
+        'cangkuSaotu': F_取出开宝图
+    })
+
+    
+  

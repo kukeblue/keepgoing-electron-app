@@ -9,7 +9,7 @@ import requests
 import logUtil
 from urllib import parse
 
-host = 'http://192.168.22.104:3000/api/client/'
+host = 'http://192.168.22.101:3000/api/client/'
 suanHost = ''
 
 

@@ -16,7 +16,8 @@ const resourcePaths = {
     METHOD_GET_WATU_INFO: 'method_get_watu_info', // 获取挖图地图消息
     METHOD_CLICK_WATU_MAP: 'method_click_watu_map', // 点击挖图位置
     METHOD_SYNC_IMAGES: 'method_sync_images', // 同步任务图片
-    METHOD_BEE_MODE: 'method_bee_mode', // 同步任务图片
+    METHOD_BEE_MODE: 'method_bee_mode',
+    METHOD_CANGKU_MODE: 'method_cangku_mode',
     METHOD_ZHUAGUI_TASK: 'method_zhuagui_task',
     METHOD_BUDIAN_TASK: 'method_budian_task',
     METHOD_CLOSE_ALL_TASK: 'method_close_all_task',

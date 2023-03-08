@@ -5,6 +5,9 @@ import time
 import os
 import json
 import fire
+import ctypes, sys
+
+
 
 print("Load DD!")
 pyHome = __file__.strip('ddServer.pyc')
@@ -14,7 +17,7 @@ def killport(port):
         " | awk '{print $7}' | awk -F'/' '{{ print $1 }}')"
     os.system(command)
 
-def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo, isDiuhuo):
+def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo, isDiuhuo, liandong, cangkuScran):
     finishTodo = str(finishTodo)
     tieLevels = str(tieLevels)
     shuLevels = str(shuLevels)
@@ -44,6 +47,9 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
             config['isDiuhuo'] = isDiuhuo
             config['isChilan'] = isChilan
             config['finishTodo'] = finishTodo
+            config['liandong'] = liandong
+            config['cangkuScran'] = cangkuScran
+
             configNew = json.dumps(config, ensure_ascii=False)
             fp.truncate(0)
             fp.write(configNew)
@@ -58,6 +64,8 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
                 "isDiuhuo": isDiuhuo,
                 "isChilan":  isChilan,
                 "finishTodo": finishTodo,
+                "liandong": liandong,
+                "cangkuScran": cangkuScran
             }
             configStr = json.dumps(config, ensure_ascii=False)
             fp.write(configStr)
@@ -74,6 +82,8 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
             "isDiuhuo": isDiuhuo,
             "isChilan":  isChilan,
             "finishTodo": finishTodo,
+            "liandong": liandong,
+            "cangkuScran": cangkuScran
         }
         configStr = json.dumps(config, ensure_ascii=False)
         fp.write(configStr)
@@ -127,8 +137,15 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
         except:
             print('error')
 
+
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+        
 if __name__ == '__main__':
     fire.Fire({
         'start': start,
     })
-    
+  
