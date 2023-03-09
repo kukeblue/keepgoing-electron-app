@@ -402,7 +402,8 @@ class MHWindow:
             time.sleep(0.2)
             utils.click()
             time.sleep(0.2)
-            utils.rightClick()
+            if(pic != 'all-caqi.png'):
+                utils.rightClick()
             return True
 
     def F_中途加油(self, 是否补蓝):
@@ -1427,9 +1428,16 @@ class MHWindow:
             self.F_使用飞行符('长安城')
         else:
             self.F_使用长安城飞行棋('江南野外出口')
+        
         time.sleep(1)
         self.F_关闭对话()
         while True:
+            map = self.获取当前地图()
+            if map != '长安城':
+                if(a == 1):
+                    self.F_使用飞行符('长安城')
+                else:
+                    self.F_使用长安城飞行棋('江南野外出口')
             if(a == 1):
                 self.F_小地图寻路器([461, 203], None, 是否关闭对话=False)
                 pyautogui.press('f9')
@@ -2644,18 +2652,18 @@ class MHWindow:
             self.F_打开好友信息页面(id)
 
     def 医宝宝(self):
-        a = random.choice((-1, 1))
-        if(a == 1):
-            self.F_使用飞行符('朱紫国')
-            self.F_小地图寻路器([14, 90])
-            pyautogui.press('f9')
-            pyautogui.hotkey('alt', 'h')
-            self.F_移动到游戏区域坐标(172, 314)
-        else:
-            self.F_小地图寻路器([100, 57])
-            pyautogui.press('f9')
-            pyautogui.hotkey('alt', 'h')
-            self.F_移动到游戏区域坐标(488, 309)
+        # a = random.choice((-1, 1))
+        # if(a == 1):
+        #     self.F_使用飞行符('朱紫国')
+        #     self.F_小地图寻路器([14, 90])
+        #     pyautogui.press('f9')
+        #     pyautogui.hotkey('alt', 'h')
+        #     self.F_移动到游戏区域坐标(172, 314)
+        # else:
+        self.F_小地图寻路器([100, 57])
+        pyautogui.press('f9')
+        pyautogui.hotkey('alt', 'h')
+        self.F_移动到游戏区域坐标(488, 309)
         utils.click()
         time.sleep(1)
         self.F_移动到游戏区域坐标(295, 400)
@@ -2885,12 +2893,14 @@ class MHWindow:
             while True:
                 point = self.findImgInWindow('all_tiantai_text.png')
                 if(point):
-                    self.pointMove(point[0]+10, point[1] + 5)
+                    self.pointMove(point[0]+10, point[1] + 8)
+                    time.sleep(0.2)
                     utils.click()
                     time.sleep(1)
                     break
                 else:
                     self.F_小地图寻路器([59, 28], True)
+                    self.F_关闭对话()
                     pyautogui.press('f9')
                     pyautogui.hotkey('alt', 'h')
                     self.F_移动到游戏区域坐标(300, 190)

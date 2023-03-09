@@ -78,7 +78,7 @@ function TaskConfig() {
                 },
                 {
                     type: FormItemType.upload,
-                    uploadurl: 'http://192.168.22.101:3000/api/upload/upload_file',
+                    uploadurl: 'http://42.51.41.129:3001/api/upload/upload_file',
                     uploadname: 'file',
                     uploadType: 'picture',
                     uploadheader: {

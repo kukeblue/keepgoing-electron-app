@@ -143,18 +143,22 @@ export function usePageStore() {
         // message.success('执行成功')
     }
     const handleGetWatuInfo = (restart = 0) => {
+        setLogs(['启动脚本成功！'])
         if (isBee) {
             if(liandong) {
                 // @ts-ignore
                 doBee(cangkuPath, restart, window.isChilan)
             }else {
-                doCangkuWatu()
+                deTestPoy({})
+                setLogs(['准备发车'])
+                setTimeout(()=>{
+                    doCangkuWatu()
+                }, 2000)
             }
         } else {
             // @ts-ignore
             doGetWatuInfo(window.isChilan)
         }
-        setLogs(['启动脚本成功！'])
     }
     const doTaskAuth = (callback: Function) => {
         request({
@@ -1586,7 +1590,7 @@ function Home() {
                  <br/>
                  <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>
             </div>}
-            {userStore.user?.vipCard.type == 1 && <div>
+            {(userStore.user?.vipCard.type == 1  || !userStore.user?.vipCard.type) && <div>
                     <div className="flex">
                         <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
                         <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>

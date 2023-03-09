@@ -15,7 +15,7 @@ let mainWindow: Electron.BrowserWindow;
 fs.truncate('app.log', 0, function () { console.log('clear log success') })
 
 function createWindow(): void {
-    // Menu.setApplicationMenu(null)
+    Menu.setApplicationMenu(null)
     mainWindow = new BrowserWindow({
         maximizable: false,
         x: 0,
