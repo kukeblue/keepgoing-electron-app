@@ -3,8 +3,13 @@ import resourcePaths from "../../../electron/resourcePaths";
 
 export const getJiangjunCode = (body: Object) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_START_GAME, JSON.stringify(body))
 export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_LOGIN_GAME, body)
-export const doTest = (userid: string, maxBaotu: number, tieLevels: string[], shuLevels: string[], isChiHong: boolean, isChilan: boolean, finishTodo: number, isDiuhuo: boolean, liandong: boolean, cangkuScran: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [
-    userid, maxBaotu, tieLevels.toString() || 0, shuLevels.toString() || 0, isChiHong, isChilan, finishTodo, isDiuhuo, liandong, cangkuScran
+export const doTest = (userid: string, maxBaotu: number, 
+    tieLevels: string[], shuLevels: string[], isChiHong: boolean, 
+    isChilan: boolean, finishTodo: number, isDiuhuo: boolean, liandong: boolean, 
+    cangkuScran: string, jieTu: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [
+    userid, maxBaotu, tieLevels.toString() || 0, 
+    shuLevels.toString() || 0, isChiHong, isChilan, 
+    finishTodo, isDiuhuo, liandong, cangkuScran, jieTu
 ])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])

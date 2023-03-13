@@ -17,7 +17,9 @@ def killport(port):
         " | awk '{print $7}' | awk -F'/' '{{ print $1 }}')"
     os.system(command)
 
-def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTodo, isDiuhuo, liandong, cangkuScran):
+def start(userid, maxBaotu, tieLevels, shuLevels, 
+isChiHong, isChilan, finishTodo, isDiuhuo, liandong, 
+cangkuScran, jieTu):
     finishTodo = str(finishTodo)
     tieLevels = str(tieLevels)
     shuLevels = str(shuLevels)
@@ -49,6 +51,8 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
             config['finishTodo'] = finishTodo
             config['liandong'] = liandong
             config['cangkuScran'] = cangkuScran
+            config['jieTu'] = jieTu
+
 
             configNew = json.dumps(config, ensure_ascii=False)
             fp.truncate(0)
@@ -65,7 +69,8 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
                 "isChilan":  isChilan,
                 "finishTodo": finishTodo,
                 "liandong": liandong,
-                "cangkuScran": cangkuScran
+                "cangkuScran": cangkuScran,
+                "jieTu": jieTu,
             }
             configStr = json.dumps(config, ensure_ascii=False)
             fp.write(configStr)
@@ -83,7 +88,8 @@ def start(userid, maxBaotu, tieLevels, shuLevels, isChiHong, isChilan, finishTod
             "isChilan":  isChilan,
             "finishTodo": finishTodo,
             "liandong": liandong,
-            "cangkuScran": cangkuScran
+            "cangkuScran": cangkuScran,
+            "jieTu": jieTu,
         }
         configStr = json.dumps(config, ensure_ascii=False)
         fp.write(configStr)

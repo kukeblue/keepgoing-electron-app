@@ -2,6 +2,7 @@
 import logUtil
 import pyautogui
 import utils
+import atexit
 import baiduApi
 import networkApi
 import time
@@ -118,7 +119,35 @@ class MHWindow:
     
     def F_注册挖图角色(self):
         networkApi.checkGameId(self.gameId, self.F_获取角色等级(), self.gameServer, self.roleName)
-        
+
+    def F_离线(self):
+        logUtil.chLog('lost game success')
+        networkApi.doUpdateRoleStatus(self.gameId, '离线')
+
+    def F_接宝图(self):
+        atexit.register(self.F_离线)
+        networkApi.checkGameId(self.gameId, self.F_获取角色等级(), self.gameServer, self.roleName, "发图")
+        networkApi.doUpdateRoleStatus(self.gameId, '空闲')
+        self.F_点击仓库管理员()
+        num = 1
+        while True:
+            points = self.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(426, 220, 260, 221))
+            if(len(points) > 0):
+                self.F_选择仓库号(num)
+                if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area=(323, 370, 49, 49)) == None):
+                    print("仓库已满，寻找空仓库")
+                    num = num + 1
+                else:
+                    for x in range(20):
+                        self.F_选中仓库道具格子(x + 1)
+                        utils.rightClick()
+                    networkApi.doUpdateRoleStatus(self.gameId, '空闲')
+            if(num==25):
+                networkApi.doUpdateRoleStatus(self.gameId, '离线')
+                break 
+            time.sleep(10)
+        self.F_关闭仓库()   
+            
 
     def F_获取角色等级(self):
         pyautogui.hotkey('alt', 'w')
@@ -2515,8 +2544,6 @@ class MHWindow:
             if(循环次数 > 30):
                 break
             point = self.F_获取小地图寻路坐标()
-            print(目标坐标)
-            print(point)
             if(point == None or len(point) < 2):
                 错误次数 = 错误次数 + 1
                 self.focusWindow()
@@ -3274,7 +3301,7 @@ class EventStrand:
     
     def compareImg(self ,name, confidence=0.75, area=(0, 0, 0, 0), checkFinish=False):
         if(self.isFinish == False):
-            point = window.findImgInWindow(name, confidenc=confidence, area=area)
+            point = self.findImgInWindow(name, confidenc=confidence, area=area)
             if(checkFinish and point != None):
                 self.isFinish = True
         return self
@@ -3305,7 +3332,7 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_点击仓库管理员()
+    window.F_接宝图()
     # time.sleep(5)
     # window.F_吃红()
     # os._exit(1)

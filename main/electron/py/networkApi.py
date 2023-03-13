@@ -60,14 +60,14 @@ def sendWatuInfoLogo(nickName, taskCount):
     if(res.get('status') != 0):
         sys.exit(0)
 
-def checkGameId(gameId, level, gameServer, name):
+def checkGameId(gameId, level, gameServer, name, work="挖图"):
     fp = open(r"C:\config.txt", 'a+')
     fp.seek(0, 0)
     config = json.loads(fp.read())
     fp.close()
     userId = str(config["userId"])
     url = host + "check_account_and_role2"
-    payload = "{\"userId\": \"" + userId + "\", \"name\": \"" + name + "\", \"gameId\": \"" + gameId + "\", \"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
+    payload = "{\"work\": \"" + work + "\", \"userId\": \"" + userId + "\", \"name\": \"" + name + "\", \"gameId\": \"" + gameId + "\", \"level\": \"" + level + "\", \n\t\"gameServer\": \""+gameServer+"\"\n}"
     headers = {
         'content-type': "application/json",
         'cache-control': "no-cache",

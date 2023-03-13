@@ -106,7 +106,8 @@ export function usePageStore() {
     const [isChiHong, setIsChiHong] = useState<boolean>(true)
     // 是否联动
     const [liandong, setLiandong] = useState<boolean>(true)
-    const [cangkuScran, setCangkuScan] = useState<boolean>(false)
+    const [cangkuScran, setCangkuScan] = useState<string>('false')
+    const [jieTu, setJieTu] = useState<boolean>(false)
 
     const [isDiuhuo, setIsDiuhuo] = useState<boolean>(true)
 
@@ -271,15 +272,14 @@ export function usePageStore() {
         , 1000})
         setIsTasking(false)
     })
-    const handleSetMaxBaotu = (maxBaotu2: number) => checkIsTasking(() => {
+    const handleSetMaxBaotu = (maxBaotu2: number) => {
             setTimeout(()=>{
                 deTestPoy({
-                    maxBaotu2: maxBaotu,
+                    maxBaotu: maxBaotu2,
                 })
                 setLogs(["设置最大挖图数成功"])
             , 1000})
-            setIsTasking(false)
-    })
+    }
     const handleTest2 = () => checkIsTasking(() => {
         setCurrentTask('test2')
         setIsTasking(true)
@@ -336,13 +336,22 @@ export function usePageStore() {
         setLogs(['设置蓝碗成功'])
     }
 
-    const handleChangeCangkuScran = (cangkuScran: boolean) => {
+    const handleChangeCangkuScran = (cangkuScran: string) => {
         setCangkuScan(cangkuScran);
         // @ts-ignore
         deTestPoy({
             cangkuScran
         })
         setLogs(['设置仓库扫描成功'])
+    }
+
+    const handleChangeJieTu = (jieTu: boolean) => {
+        setJieTu(jieTu);
+        // @ts-ignore
+        deTestPoy({
+            jieTu
+        })
+        setLogs(['设置仓库接图成功'])
     }
 
     const handleChangeLiandong = (liandong: boolean) => {
@@ -375,12 +384,13 @@ export function usePageStore() {
             finishTodo,
             isDiuhuo,
             liandong,   // 联动
-            cangkuScran // 仓库扫描
+            cangkuScran, // 仓库扫描
+            jieTu // 接图
         }
         Object.assign(config, data)
         doTest(config.userid, config.maxBaotu, config.tieLevels, 
             config.shuLevels, config.isChiHong, config.isChilan, 
-            config.finishTodo, config.isDiuhuo, config.liandong, config.cangkuScran)
+            config.finishTodo, config.isDiuhuo, config.liandong, config.cangkuScran, config.jieTu)
     }
 
     const handleChangeIsDiuhuo = (v: boolean) => {
@@ -428,6 +438,8 @@ export function usePageStore() {
         handleChangeLiandong,
         liandong,
         handleChangeCangkuScran,
+        handleChangeJieTu,
+        jieTu,
         setIsChilan,
         isYinjian,
         handleChangeFinishTodo,
@@ -1591,17 +1603,58 @@ function Home() {
                  <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>
             </div>}
             {(userStore.user?.vipCard.type == 1  || !userStore.user?.vipCard.type) && <div>
+                    <Select
+                        defaultValue="联动挖图"
+                        style={{ width: 210, marginBottom: 10 }}
+                        size="small"
+                        onChange={(v)=>{
+                           if(v == "1") {
+                                pageStore.handleChangeJieTu(false)
+                                pageStore.handleChangeLiandong(true)
+                           }else {
+                                pageStore.handleChangeLiandong(false)
+                                if(v == "5") {
+                                    pageStore.handleChangeJieTu(true)
+                                    pageStore.handleChangeCangkuScran('false')
+                                    return 
+                                }
+                                pageStore.handleChangeJieTu(false)
+                                if(v == "4" || v == "3") {
+                                    if(v == "4") {
+                                        pageStore.handleChangeCangkuScran('true')
+                                    }else {
+                                        pageStore.handleChangeCangkuScran('off')
+                                    }
+                                }else {
+                                    pageStore.handleChangeCangkuScran('false')
+                                }
+                           }
+                        }}
+                        options={[
+                            { value: '1', label: '联动挖图' },
+                            { value: '2', label: '仓库挖图' },
+                            { value: '3', label: '仓库挖图(扫描)' },
+                            { value: '4', label: '仓库挖图(开图扫描)'},
+                            { value: '5', label: '接图'},
+                        ]}
+                    />
                     <div className="flex">
                         <Button onClick={()=>{pageStore.handleGetWatuInfo()}} className="start-button"><span className="fs-11">启动脚本</span></Button>
                         <Button  onClick={() => { pageStore.closeAllTask() }} className="m-l-10"><span className="fs-11">停止(ctrl+q)</span></Button>
                     </div>
-                    <div className="m-t-10 flex">
+                    
+                    {/* <div className="m-t-10 flex">
                         <Switch defaultChecked onChange={(e) => {
                                     pageStore.handleChangeLiandong(e)}} className="m-r-5" checkedChildren="联动挖图" unCheckedChildren="仓库挖图"/>
-                        {pageStore.liandong == false && <Switch onChange={(e) => {
+                        {pageStore.liandong == false && 
+                        
+                        <Switch size="small" onChange={(e) => {
                                     pageStore.handleChangeCangkuScran(e)}} checkedChildren="扫描仓库" unCheckedChildren="直接挖图" />
                         }
-                        </div>
+                    </div>
+                    {pageStore.liandong == false && <Switch size="small" onChange={(e) => {
+                                    pageStore.handleChangeJieTu(e)}} checkedChildren="开启接图" unCheckedChildren="关闭接图" />
+                        } */}
                     <div className="m-t-10 flex">
                         <Switch onChange={(e) => {
                                     pageStore.handleChangeIsChiHong(e)}} className="m-r-5" checkedChildren="开启补红" unCheckedChildren="关闭补红" defaultChecked />
@@ -1612,7 +1665,7 @@ function Home() {
                 <div>
                     <div className="m-b-5">
                         <Button size="small" type="primary">
-                        保留铁等级
+                            保留铁等级
                         </Button>
                     </div>
                     <Checkbox.Group options={options} defaultValue={pageStore.tieLevels} onChange={(e)=>{ 
