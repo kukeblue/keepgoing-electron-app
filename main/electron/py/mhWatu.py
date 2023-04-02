@@ -169,12 +169,21 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
         if(mapName == map):
             filtterRes.append(item)
     jsonArr = json.dumps(filtterRes, ensure_ascii=False)
-    if(map == '' or (window.gameLevel < 90 and map == "麒麟山")  or (window.gameLevel < 45 and map == "北俱芦洲")):
+    print('------ current gameLevel --------')
+    print(window.gameLevel)
+    gameLevel = window.gameLevel
+    levelConfigFile = "C:\\levelConfig.txt"
+    if(os.path.exists(levelConfigFile)):
+        fp = open(levelConfigFile, "a+")
+        fp.seek(0, 0)
+        gameLevel = int(fp.read())
+        fp.close()
+    if(map == '' or (gameLevel < 90 and map == "麒麟山")  or (gameLevel < 45 and map == "北俱芦洲")):
         接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
         if(接货id != None):
             window.F_回仓库丢小号(接货id, '建邺城')
         else:
-            window.F_回仓库放东西(map, '建邺城')
+            window.F_回仓库放东西()
         config = window.F_获取配置()
         if(config["liandong"] == "false"):
             F_取图挖图(window)
@@ -280,9 +289,21 @@ def F_取图挖图(window=None):
             fp.seek(0, 0)
             watuConfig = json.loads(fp.read())
             fp.close()
+            print('------ current gameLevel --------')
+            print(window.gameLevel)
+            gameLevel = window.gameLevel
+            levelConfigFile = "C:\\levelConfig.txt"
+            if(os.path.exists(levelConfigFile)):
+                fp = open(levelConfigFile, "a+")
+                fp.seek(0, 0)
+                gameLevel = int(fp.read())
+                fp.close()
             while True:
                 window.F_点击仓库管理员()
                 for key, value in watuConfig.items():
+                    map = key
+                    if(map == '' or (gameLevel < 90 and map == "麒麟山")  or (gameLevel < 45 and map == "北俱芦洲")):
+                        continue
                     a = len(value)
                     if(a > 2):
                         if(a > 15):
@@ -310,12 +331,22 @@ def F_取图挖图(window=None):
                     win32api.MessageBox(0, "仓库已经没有宝图或者卡点（重新扫描）", "提醒", win32con.MB_OK)
                     os._exit(1)
                     return
+                
                 for item in 拿出部分图:
                     cankuNum = item[3]
                     位置 = item[2]
                     window.F_选择仓库号(cankuNum)
                     window.pointMove(位置[0], 位置[1])
                     utils.rightClick()
+                emptyFile = "C:\\"+ window.gameId + "_empty.txt"
+                if(os.path.exists(emptyFile)):
+                    os.remove(emptyFile)
+                ep = open(emptyFile, "w+")
+                ep.seek(0, 0)
+                epStr = json.dumps(拿出部分图, ensure_ascii=False)
+                ep.truncate(0)
+                ep.write(epStr)
+                ep.close()
                 window.F_关闭仓库()
                 window.F_打开道具()
                 point = window.findImgInWindow('daoju_baotu.png')
@@ -349,7 +380,6 @@ def F_取出开宝图(window=None):
     for _cankuNum in range(25):
         cankuNum = _cankuNum + 1
         window.F_选择仓库号(cankuNum)
-        time.sleep(1)
         
         points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(120, 219, 258, 206))
         if(len(points) > 0 ):
@@ -388,9 +418,12 @@ def F_取出开宝图(window=None):
 def F_仓库识图(window, cankuNum):
     仓库宝图存档 = []
     points = window.findImgsInWindow('daoju_baotu.png', confidence=0.75, area=(120, 219, 258, 206))
+    config = window.F_获取配置()
     for point in points:
         window.pointMove(point[0], point[1])
         time.sleep(0.2)
+        if(config["yanshi"] > 0):
+            time.sleep(config["yanshi"])
         宝图位置信息 = [window.windowArea[0], window.windowArea[1],
                 window.windowArea[0] + 600, window.windowArea[1] + 600]
         ret = window.F_宝图文字识别(宝图位置信息)
@@ -401,8 +434,11 @@ def F_仓库识图(window, cankuNum):
 
  
 def 识别位置信息(window, point):
+    config = window.F_获取配置()
     window.pointMove(point[0], point[1])
-    time.sleep(0.2)
+    if(config["yanshi"] > 0):
+        time.sleep(config["yanshi"])
+        time.sleep(0.2)
     宝图位置信息 = [window.windowArea[0], window.windowArea[1],
               window.windowArea[0] + 600, window.windowArea[1] + 600]
     ret = window.F_宝图文字识别(宝图位置信息)
@@ -473,6 +509,9 @@ def F_点击宝图(window, userId, map, x, y, ox, oy, num):
     window.F_打开道具()
     window.pointMove(orPoint[0], orPoint[1])
     utils.rightClick()
+    config = self.F_获取配置()
+    if(config["yanshi"] > 0):
+        time.sleep(1)
     window.F_自动战斗()
     # window.F_吃药()
     pyautogui.hotkey('alt', 'e')
@@ -590,7 +629,7 @@ def F_点击小地图(map, x, y, ox, oy, num, other, isBeen, 仓库位置='长�
             if(接货id != None):
                 window.F_回仓库丢小号(接货id, 仓库位置)
             else:
-                window.F_回仓库放东西(map, 仓库位置)
+                window.F_回仓库放东西()
             if(isBeen):
                 config = window.F_获取配置()
                 if(config["liandong"] == "false"):

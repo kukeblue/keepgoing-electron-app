@@ -6,10 +6,10 @@ export const doStartGame = (body: string[]) => (window as any).ipcRenderer.sendS
 export const doTest = (userid: string, maxBaotu: number, 
     tieLevels: string[], shuLevels: string[], isChiHong: boolean, 
     isChilan: boolean, finishTodo: number, isDiuhuo: boolean, liandong: boolean, 
-    cangkuScran: string, jieTu: boolean) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [
+    cangkuScran: string, jieTu: boolean, yanshi: number) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST, [
     userid, maxBaotu, tieLevels.toString() || 0, 
     shuLevels.toString() || 0, isChiHong, isChilan, 
-    finishTodo, isDiuhuo, liandong, cangkuScran, jieTu
+    finishTodo, isDiuhuo, liandong, cangkuScran, jieTu, yanshi
 ])
 export const doTest2 = () => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_TEST2, [])
 export const doKillProcess = (pid: string) => (window as any).ipcRenderer.sendSync(resourcePaths.METHOD_KILL_PROCESS, [pid])

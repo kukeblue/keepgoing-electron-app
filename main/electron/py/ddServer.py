@@ -19,7 +19,7 @@ def killport(port):
 
 def start(userid, maxBaotu, tieLevels, shuLevels, 
 isChiHong, isChilan, finishTodo, isDiuhuo, liandong, 
-cangkuScran, jieTu):
+cangkuScran, jieTu, yanshi):
     finishTodo = str(finishTodo)
     tieLevels = str(tieLevels)
     shuLevels = str(shuLevels)
@@ -34,67 +34,28 @@ cangkuScran, jieTu):
     print(tieLevels);
     print(shuLevels);
     if(os.path.exists(r"C:\config.txt")):
-    
-        fp = open(r"C:\config.txt", 'a+')
-        fp.seek(0, 0)
-        try:
-            config = json.loads(fp.read())
-            if(config['userId'] != userid):
-                config['userId'] = userid
-            if(config['maxBaotu'] != maxBaotu):
-                config['maxBaotu'] = maxBaotu
-            config['tieLevels'] = tieLevels
-            config['shuLevels'] = shuLevels
-            config['isChiHong'] = isChiHong
-            config['isDiuhuo'] = isDiuhuo
-            config['isChilan'] = isChilan
-            config['finishTodo'] = finishTodo
-            config['liandong'] = liandong
-            config['cangkuScran'] = cangkuScran
-            config['jieTu'] = jieTu
-
-
-            configNew = json.dumps(config, ensure_ascii=False)
-            fp.truncate(0)
-            fp.write(configNew)
-        except:
-            fp.seek(0, 0)
-            config = {
-                "userId": userid,
-                "maxBaotu": maxBaotu,
-                "tieLevels": tieLevels,
-                "shuLevels": shuLevels,
-                "isChiHong": isChiHong, 
-                "isDiuhuo": isDiuhuo,
-                "isChilan":  isChilan,
-                "finishTodo": finishTodo,
-                "liandong": liandong,
-                "cangkuScran": cangkuScran,
-                "jieTu": jieTu,
-            }
-            configStr = json.dumps(config, ensure_ascii=False)
-            fp.write(configStr)
-        fp.close()
-    else:
-        print('生成配置文件')
-        fp = open(r"C:\config.txt", "w+")
-        config = {
-            "userId": userid,
-            "maxBaotu": maxBaotu,
-            "tieLevels": tieLevels,
-            "shuLevels": shuLevels,
-            "isChiHong": isChiHong, 
-            "isDiuhuo": isDiuhuo,
-            "isChilan":  isChilan,
-            "finishTodo": finishTodo,
-            "liandong": liandong,
-            "cangkuScran": cangkuScran,
-            "jieTu": jieTu,
-        }
-        configStr = json.dumps(config, ensure_ascii=False)
-        fp.write(configStr)
-        fp.close()
-    
+         os.remove(r"C:\config.txt")
+    print('生成配置文件')
+    fp = open(r"C:\config.txt", "w+")
+    config = {
+        "userId": userid,
+        "maxBaotu": maxBaotu,
+        "tieLevels": tieLevels,
+        "shuLevels": shuLevels,
+        "isChiHong": isChiHong, 
+        "isDiuhuo": isDiuhuo,
+        "isChilan":  isChilan,
+        "finishTodo": finishTodo,
+        "liandong": liandong,
+        "cangkuScran": cangkuScran,
+        "jieTu": jieTu,
+        "yanshi": yanshi,
+    }
+    fp.seek(0, 0)
+    fp.truncate(0)
+    configStr = json.dumps(config, ensure_ascii=False)
+    fp.write(configStr)
+    fp.close()
     with os.popen('netstat -aon|findstr "61234"') as res:
         res = res.read().split('\n')
         result = []

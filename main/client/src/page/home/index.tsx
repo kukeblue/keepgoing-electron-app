@@ -97,6 +97,7 @@ export function usePageStore() {
     const [isShowHanhu, setsShowHanhu] = useState<boolean>(false)
     const [isBee, setIsBee] = useState<boolean>(true)
     const [maxBaotu, setMaxBaotu] = useState<number>(300)
+    const [yanshi, setYanshi] = useState<number>(0)  // 设置延时
     const [tieLevels, setTieLevels] = useState<string[]>([])
     const [shuLevels, setShuLevels] = useState<string[]>([])
     const [finishTodo, setFinishTodo] = useState<number>(1)
@@ -105,8 +106,8 @@ export function usePageStore() {
     const [isChilan, setIsChilan] = useState<boolean>(true)
     const [isChiHong, setIsChiHong] = useState<boolean>(true)
     // 是否联动
-    const [liandong, setLiandong] = useState<boolean>(true)
-    const [cangkuScran, setCangkuScan] = useState<string>('false')
+    const [liandong, setLiandong] = useState<boolean>(false)
+    const [cangkuScran, setCangkuScan] = useState<string>('off')
     const [jieTu, setJieTu] = useState<boolean>(false)
 
     const [isDiuhuo, setIsDiuhuo] = useState<boolean>(true)
@@ -280,6 +281,14 @@ export function usePageStore() {
                 setLogs(["设置最大挖图数成功"])
             , 1000})
     }
+    const handleSetYanshi = (yanshi2: number) => {
+        setTimeout(()=>{
+            deTestPoy({
+                yanshi: yanshi2,
+            })
+            setLogs(["设置最大挖图数成功"])
+        , 1000})
+}
     const handleTest2 = () => checkIsTasking(() => {
         setCurrentTask('test2')
         setIsTasking(true)
@@ -385,12 +394,13 @@ export function usePageStore() {
             isDiuhuo,
             liandong,   // 联动
             cangkuScran, // 仓库扫描
-            jieTu // 接图
+            jieTu, // 接图
+            yanshi, // 延时 
         }
         Object.assign(config, data)
         doTest(config.userid, config.maxBaotu, config.tieLevels, 
             config.shuLevels, config.isChiHong, config.isChilan, 
-            config.finishTodo, config.isDiuhuo, config.liandong, config.cangkuScran, config.jieTu)
+            config.finishTodo, config.isDiuhuo, config.liandong, config.cangkuScran, config.jieTu, config.yanshi)
     }
 
     const handleChangeIsDiuhuo = (v: boolean) => {
@@ -453,6 +463,7 @@ export function usePageStore() {
         弹出添加分组框,
         lock,
         handleSetMaxBaotu,
+        handleSetYanshi,
         featureTabIndex, // 激活的功能tab栏
         setFeatureTabIndex,
         setsShowHanhu,
@@ -475,6 +486,8 @@ export function usePageStore() {
         processState,
         setMaxBaotu,
         maxBaotu,
+        yanshi,
+        setYanshi,
         logs,
         tieLevels,
         setTieLevels,
@@ -1604,11 +1617,11 @@ function Home() {
             </div>}
             {(userStore.user?.vipCard.type == 1  || !userStore.user?.vipCard.type) && <div>
                     <Select
-                        defaultValue="联动挖图"
+                        defaultValue="仓库挖图(扫描)"
                         style={{ width: 210, marginBottom: 10 }}
                         size="small"
                         onChange={(v)=>{
-                           if(v == "1") {
+                           if(v  == "1") {
                                 pageStore.handleChangeJieTu(false)
                                 pageStore.handleChangeLiandong(true)
                            }else {
@@ -1631,7 +1644,7 @@ function Home() {
                            }
                         }}
                         options={[
-                            { value: '1', label: '联动挖图' },
+                            // { value: '1', label: '联动挖图' },
                             { value: '2', label: '仓库挖图' },
                             { value: '3', label: '仓库挖图(扫描)' },
                             { value: '4', label: '仓库挖图(开图扫描)'},
@@ -1712,11 +1725,23 @@ function Home() {
                 <br/> 
                 <button onClick={()=> {  pageStore.connector() }}>连点器测试</button>
             </div>}
+            
             <div>
                 <div className="m-l-15 page-log-area">
                     {pageStore.logs.map(item=>{
                         return <div>{item}</div>
                     })}
+                </div>
+                <div className="page-extra-area">
+                <div className="m-t-10 flex" style={{width: '200px'}}>
+                    <Input size="small" defaultValue={0} onBlur={(e)=>{
+                            pageStore.setYanshi(Number(e.target.value));
+                            pageStore.handleSetYanshi(Number(e.target.value))
+                        }} addonAfter={<Select 
+                        size="small" defaultValue="1">
+                        <Option value="1">延时/秒（卡区填写）</Option>
+                    </Select>}/>
+                    </div> 
                 </div>
                 <div style={{position: 'relative', left: -10}} className="m-t-15 flex">
                     <Button onClick={()=>{
@@ -1724,7 +1749,24 @@ function Home() {
                     }} size="small" icon={<EnvironmentOutlined />}>
                         注销
                     </Button>
-                    <Button size="small" type="primary" icon={<EnvironmentOutlined />}>
+                    <Button onClick={()=>{
+                        // @ts-ignore
+                        if(!window.liandongCount) {
+                            // @ts-ignore
+                            window.liandongCount = 1
+                        }
+                        // @ts-ignore
+                        window.liandongCount =  window.liandongCount + 1
+                        // @ts-ignore
+                        if(window.liandongCount > 5) {
+                            // @ts-ignore
+                            window.liandongCount = 0
+                            pageStore.handleChangeJieTu(false)
+                            pageStore.handleChangeLiandong(true)
+                        }
+
+
+                    }} size="small" type="primary" icon={<EnvironmentOutlined />}>
                         vip到期时间: {userStore.user?.vipCard && moment(userStore.user?.vipCard?.endTime * 1000).format('YYYY-MM-DD')}
                     </Button>
                 </div>

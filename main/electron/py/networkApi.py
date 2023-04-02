@@ -116,10 +116,7 @@ def sendWatuProfit(nickName, note):
     time.sleep(3)   
 
 def 获取空闲接货人ID(gameId, work):
-    while True:
-        print('获取空闲接货人')
-        print(gameId)
-        print(work)
+    for i in range(3):
         url = host + "get_one_free_game_role"
         payload = "{\n\t\"gameId\": \""+gameId + \
             "\",\n\t\"work\": \""+work+"\"\n}"
@@ -133,7 +130,7 @@ def 获取空闲接货人ID(gameId, work):
         if(res.get('status') == 0):
             print('success')
             return res.get('gameId')
-        time.sleep(3)
+        time.sleep(0.5)
 
 
 def doUpdateRoleStatus(gameId, status):

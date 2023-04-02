@@ -157,6 +157,14 @@ class MHWindow:
         ret = baiduApi.cnocr文字识别2(path)
         pyautogui.hotkey('alt', 'w')
         self.gameLevel = int(ret)
+        configFile = "C:\\levelConfig.txt"
+        if(os.path.exists(configFile)):
+            os.remove(configFile)
+        fp = open(configFile, "w+")
+        fp.seek(0, 0)
+        fp.truncate(0)
+        fp.write(ret)
+        fp.close()
         return ret
 
     def focusWindow(self):
@@ -2461,15 +2469,10 @@ class MHWindow:
 
     def F_导航到北俱芦洲(self):
         self.F_导航到长寿郊外()
-
-        pyautogui.press('tab')
-        time.sleep(1)
-        self.pointMove(self.windowArea[0] + 303, self.windowArea[1] + 344)
-        utils.click()
-        time.sleep(26)
-        pyautogui.press('tab')
+        self.F_小地图寻路器([64, 63])
+        time.sleep(2)
         pyautogui.press('f9')
-        self.pointMove(self.windowArea[0] + 402, self.windowArea[1] + 273)
+        self.pointMove(self.windowArea[0] + 320, self.windowArea[1] + 180)
         utils.doubleClick()
         time.sleep(1)
         self.pointMove(self.windowArea[0] + 207, self.windowArea[1] + 340)
@@ -2765,6 +2768,7 @@ class MHWindow:
     
 
     def F_选择仓库号(self, num):
+        config = self.F_获取配置()
         if(self.当前仓库 == num):
             return
         self.当前仓库 = num
@@ -2819,6 +2823,8 @@ class MHWindow:
         elif(num == 7):
             self.F_移动到游戏区域坐标(252, 436)
         utils.click()
+        if(config["yanshi"] > 0):
+            time.sleep(config["yanshi"])
 
     def F_回到天台(self):
         while True:
@@ -2837,58 +2843,6 @@ class MHWindow:
                     break
         pyautogui.hotkey('alt', 'e')
 
-    def F_回天台放东西(self, map):
-        self.F_选中道具格子(20)
-        utils.rightClick()
-        self.pointMove(self.windowArea[0] + 507, self.windowArea[1] + 282)
-        utils.click()
-        time.sleep(1)
-        pyautogui.hotkey('alt', 'e')
-        time.sleep(1)
-        while True:
-            point = self.findImgInWindowReturnWindowPoint(
-                'all_tiantai_text.png')
-            if(point):
-                self.F_移动到游戏区域坐标(227, 373)
-                utils.click()
-                time.sleep(1)
-                break
-            else:
-                self.F_小地图寻路器([354, 247], True, 是否关闭对话=False)
-                pyautogui.press('f9')
-                pyautogui.hotkey('alt', 'h')
-                self.F_移动到游戏区域坐标(286, 333)
-                utils.click()
-                utils.click()
-                time.sleep(1)
-        num = mapCangkuDict.get(map)
-        self.F_选择仓库号(num)
-        time.sleep(1)
-        # 判断当前仓库是否为空
-        for x in range(15):
-            if(self.findImgInWindow("all-cangku-gezi.png", 0.9, area=(323, 370, 49, 49)) == None):
-                print("仓库已满，寻找空仓库")
-                self.切换有空仓库()
-            self.F_选中仓库道具格子(x + 1)
-            utils.rightClick()
-
-        self.F_选择仓库号(1)
-        time.sleep(1)
-        self.F_移动到游戏区域坐标(144, 240)
-        utils.rightClick()
-        time.sleep(1)
-        self.F_选中道具格子(1)
-        utils.rightClick()
-        time.sleep(1)
-        self.F_选中仓库道具格子(1)
-        utils.rightClick()
-        self.F_移动到游戏区域坐标(689, 142)
-        utils.click()
-        time.sleep(0.5)
-        pyautogui.hotkey('alt', 'e')
-        self.F_移动到游戏区域坐标(720, 35)
-        utils.rightClick()
-    
     def F_点击仓库管理员(self, 仓库地点='建邺城'):
         if(仓库地点 == "长安城"):
             map = self.获取当前地图()
@@ -2986,66 +2940,53 @@ class MHWindow:
         logUtil.chLog('接货id:' + str(接货id))
         self.F_给与东西(接货id)
 
-    def F_回仓库放东西(self, map, 仓库地点='长安城'):
-        if(仓库地点 == '长安城'):
-            self.F_使用飞行符('长安城')
+    def F_回仓库放东西(self):
+        if(self.config == None):
+            fp = open(r"C:\config.txt", 'a+')
+            fp.seek(0, 0)
+            config = json.loads(fp.read())
+            self.config = config
+            fp.close()
+        if(self.config["isDiuhuo"] == "true"):
+            self.F_卖装备()
+            self.丢垃圾书()
+            self.丢垃圾铁()
+        self.F_点击仓库管理员()
+        仓库取图数据 = []
+        有货格子 = []
+        emptyFile = "C:\\"+ self.gameId + "_empty.txt"
+        if(os.path.exists(emptyFile)):
+            fp = open(emptyFile, "a+")
+            fp.seek(0, 0)
+            仓库取图数据 = json.loads(fp.read())
+            fp.close()
+            self.F_移动到游戏区域坐标(416, 127)
+            仓库道具区域 = [self.windowArea[0] + 431,  self.windowArea[1] + 224]
+            给东西区域 = [仓库道具区域[0], 仓库道具区域[1], 252, 200]
+            path = self.F_窗口区域截图('temp_give_area.png', 给东西区域)
             time.sleep(1)
-            while True:
-                point = self.findImgInWindowReturnWindowPoint(
-                    'all_tiantai_text.png')
-                if(point):
-                    self.F_移动到游戏区域坐标(227, 373)
-                    utils.click()
-                    time.sleep(1)
-                    break
-                else:
-                    self.F_小地图寻路器([354, 247], True)
-                    pyautogui.press('f9')
-                    pyautogui.hotkey('alt', 'h')
-                    self.F_移动到游戏区域坐标(286, 333)
-                    utils.click()
-                    utils.click()
-                    time.sleep(1)
-        else:
-            self.F_使用飞行符('建邺城')
-            time.sleep(1)
-            self.F_小地图寻路器([58, 32], True)
-            pyautogui.press('f9')
-            pyautogui.hotkey('alt', 'h')
-            self.F_移动到游戏区域坐标(315, 275)
-            utils.click()
-            utils.click()
-            time.sleep(1)
-            self.F_移动到游戏区域坐标(218, 370)
-            utils.click()
-            time.sleep(1)
-        num = mapCangkuDict.get(map)
-        if(num - 5 < 1):
-            num = 1
-        else:
-            num = num - 5
-        记录值['满仓库遍历值'] = num
-        # 判断当前仓库是否为空
-        for x in range(15):
-            self.切换有空仓库()
-            self.F_选中仓库道具格子(x + 1)
+            for i in range(15):
+                left = (i % 5) * 50
+                height = int(i / 5) * 50
+                blockArea = (仓库道具区域[0] + left, 仓库道具区域[1] + height, 50, 50)
+                point2 = pyautogui.locateOnScreen(
+                    self.pyImageDir + self.F_获取设备图片('all-give-empty-' + str(i) + '.png'), region=[blockArea[0] - 10, blockArea[1] - 10, blockArea[2] + 10, blockArea[3] + 10], grayscale=True, confidence=0.95)
+                if(point2 == None):
+                    print('第' + str(i + 1) + '个格子有货')
+                    有货格子.append(blockArea)
+        循环次数 =  len(有货格子)
+        if(len(有货格子) > len(仓库取图数据)):
+            循环次数 = len(仓库取图数据)
+        for i in range(循环次数):
+            货所在位置 = 有货格子[i]
+            图所在格子 = 仓库取图数据[i]
+            self.F_选择仓库号(图所在格子[3])
+            self.pointMove(货所在位置[0] + 25, 货所在位置[1] + 25)
             utils.rightClick()
-
-        # self.F_选择仓库号(1)
-        # time.sleep(1)
-        # self.F_移动到游戏区域坐标(144, 240)
-        # utils.rightClick()
-        # time.sleep(1)
-        # self.F_选中道具格子(1)
-        # utils.rightClick()
-        # time.sleep(0.5)
-        # pyautogui.hotkey('alt', 'e')
-        # time.sleep(0.5)
-        # self.F_选中仓库道具格子(1)
-        # utils.rightClick()
+            utils.rightClick()
+            time.sleep(0.2)
+        self.F_关闭仓库()
         time.sleep(0.5)
-        self.F_移动到游戏区域坐标(689, 142)
-        utils.click()
 
     def 切换有空仓库(self):
         while (记录值['满仓库遍历值'] <= 25):
@@ -3332,7 +3273,7 @@ if __name__ == '__main__':
     time.sleep(3)
     window = MHWindow(1)
     window.findMhWindow()
-    window.F_接宝图()
+    window.F_导航到北俱芦洲()
     # time.sleep(5)
     # window.F_吃红()
     # os._exit(1)
