@@ -12,6 +12,7 @@ import pyautogui
 import utils
 import networkApi
 import mouse
+import os
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
@@ -95,7 +96,7 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
             mapAndpoint = 识别位置信息(window, point)
         print(mapAndpoint)
         res.append(mapAndpoint)
-    jsonArr = json.dumps(res, ensure_ascii=False)
+    
     pyautogui.hotkey('alt', 'e')
     map = ''
     if(len(res) > 0):
@@ -115,7 +116,22 @@ def F_获取宝图信息(window=None, restart=0, isChilan=True):
                 mapName = key
         map = mapName
         res[0][0] = mapName
-    if(map == ''):
+    filtterRes = []
+    for item in res:
+        mapName = item[0]
+        if(mapName == map):
+            filtterRes.append(item)
+    jsonArr = json.dumps(res, ensure_ascii=False)
+    print('------ current gameLevel --------')
+    print(window.gameLevel)
+    gameLevel = window.gameLevel
+    levelConfigFile = "C:\\levelConfig.txt"
+    if(os.path.exists(levelConfigFile)):
+        fp = open(levelConfigFile, "a+")
+        fp.seek(0, 0)
+        gameLevel = int(fp.read())
+        fp.close()
+    if(map == '' or gameLevel < 90 and map == "麒麟山" or gameLevel < 45 and map == "北俱芦洲"):
         接货id = networkApi.获取空闲接货人ID(window.gameId, '接货')
         if(接货id != None):
             window.F_回仓库丢小号(接货id, '建邺城')
