@@ -11,5 +11,5 @@
 -  挖图不用顺序排列
 -  异常重启
 
-python .\blurb.py F:\autoFoot\keepgoing-g\main\electron\py\ F:\autoFoot\keepgoing-g\main\electron\temp\
+python .\blurb.py D:\project\keepgoing-electron-app\main\electron\py\ D:\project\keepgoing-electron-app\main\electron\temp\
 

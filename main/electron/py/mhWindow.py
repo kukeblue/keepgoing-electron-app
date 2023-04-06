@@ -807,14 +807,20 @@ class MHWindow:
         #     utils.rightClick()
 
     def F_是否结束寻路(self, date=0.2, 寻路结束坐标="", 是否关闭对话=True):
+        logUtil.chLog('F_是否结束寻路')
         坐标 = self.获取当前坐标()
         if(寻路结束坐标 == "" and 是否关闭对话==True):
             self.F_关闭对话()
         count = 0
+        noneCount = 0
+        lastCount = 0
         while(True):
-            # if(self.F_是否在战斗()):
-            #     break
+            lastCount = lastCount + 1
+            if(lastCount == 300):
+                logUtil.chLog('等到坐标超时')
+                break
             坐标2 = self.获取当前坐标()
+            logUtil.chLog(坐标2 + ":" + str(count))
             if(寻路结束坐标 != "" and 寻路结束坐标 == 坐标2):
                 break
             if(坐标2 != None and 坐标 != None and 坐标 == 坐标2):
@@ -824,6 +830,13 @@ class MHWindow:
             else:
                 count = 0
                 坐标 = 坐标2
+            if(坐标2 == None):
+                logUtil.chLog('识别坐标失败')
+                noneCount = noneCount + 1
+                time.sleep(1)
+                if(noneCount == 10):
+                    print("F_finish xunlu")
+                    break
             time.sleep(date)
 
     def F_点击铃铛战斗(self, 多次点击=False, 右键点击=False):
@@ -2970,7 +2983,7 @@ class MHWindow:
 
     def 获取当前坐标(self):
         ret = baiduApi.F_大漠坐标文字识别([self.windowArea[0], self.windowArea[1],
-                                   self.windowArea[0] + 143,  self.windowArea[1] + 47])
+                                   self.windowArea[0] + 145,  self.windowArea[1] + 47])
         if(ret != None):
             str = ret.replace(",", "")
             return str
